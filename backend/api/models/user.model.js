@@ -2,10 +2,17 @@ const mongoose = require('mongoose')
 
 const options = { discriminatoryKey: 'kind', collection: 'users' }
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: { 
     type: String, 
-    required: true 
+    required: [true, 'Email is required.'],
+    unique: [true, 'Email already exists.'],
+    validate: {
+      validator: function(value) {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+      }
+    },
+    message: 'Invalid email format' 
   },
   email: { 
     type: String, 
@@ -27,6 +34,6 @@ const userSchema = new mongoose.Schema({
   }]
 }, options)
 
-const User = mongoose.model('User', userSchema)
+const UserModel = mongoose.model('user', UserSchema)
 
-module.exports = User
+module.exports = UserModel

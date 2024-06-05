@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const User = require('./user.model')
 
-const companySchema = new mongoose.Schema({
+const CompanySchema = new mongoose.Schema({
   company_name: { 
     type: String, 
     required: true 
@@ -19,9 +19,12 @@ const companySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Event' 
   }],
-  subscription: { type: String }
+  subscription: { 
+    type: String,
+    enum: ['basic', 'gold', 'premium']
+  }
 })
 
-const Company = User.discriminator('Company', companySchema)
+const CompanyModel = User.discriminator('company', CompanySchema)
 
-module.exports = Company
+module.exports = CompanyModel
