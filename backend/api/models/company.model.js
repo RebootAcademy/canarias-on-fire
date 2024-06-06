@@ -6,22 +6,29 @@ const CompanySchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  sector: { type: String },
-  contact_info: [{
-    company_email: { type: String },
-    phone: { type: String }
-  }],
+  company_email: { 
+    type: String, 
+    required: true 
+  },
+  phone: { 
+    type: String, 
+    required: true 
+  },
+  sector: { 
+    type: String 
+  },
   preferred_locations: [{ 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Location' 
+    ref: 'location' 
   }],
   events: [{ 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Event' 
+    ref: 'event' 
   }],
   subscription: { 
     type: String,
-    enum: ['basic', 'gold', 'premium']
+    enum: ['basic', 'gold', 'premium'],
+    default: 'basic'
   }
 })
 

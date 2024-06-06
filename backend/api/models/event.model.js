@@ -9,8 +9,9 @@ const EventSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  type: { 
-    type: String, 
+  category: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'category',
     required: true 
   },
   date: { 
@@ -20,12 +21,12 @@ const EventSchema = new mongoose.Schema({
   imgUrl: { type: String },
   location: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Location' 
+    ref: 'location' 
   },
   url: { type: String },
   company_id: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Company' 
+    ref: 'company' 
   },
   private: { 
     type: Boolean, 

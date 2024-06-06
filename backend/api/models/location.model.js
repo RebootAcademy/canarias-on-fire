@@ -13,6 +13,10 @@ const LocationSchema = new mongoose.Schema({
   },
   municipality: {
     type: String
+  },
+  island: {
+    type: String,
+    enum: ['La Palma', 'El Hierro', 'La Gomera', 'Tenerife', 'Gran Canaria', 'Lanzarote', 'Fuerteventura', 'La Graciosa']
   }
 })
 

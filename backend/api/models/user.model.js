@@ -1,9 +1,13 @@
 const mongoose = require('mongoose')
 
-const options = { discriminatoryKey: 'kind', collection: 'users' }
+const options = { discriminatoryKey: 'role', collection: 'users' }
 
 const UserSchema = new mongoose.Schema({
   username: { 
+    type: String, 
+    required: true 
+  },
+  email: { 
     type: String, 
     required: [true, 'Email is required.'],
     unique: [true, 'Email already exists.'],
@@ -14,23 +18,20 @@ const UserSchema = new mongoose.Schema({
     },
     message: 'Invalid email format' 
   },
-  email: { 
-    type: String, 
-    required: true 
-  },
   password: { 
     type: String, 
     required: true 
   },
-  rol: { 
+  role: { 
     type: String, 
     required: true,
-    enum: ['admin', 'company', 'basic'] 
+    enum: ['admin', 'company', 'basic'],
+    default: 'basic'
   },
   preferences: { type: Object },
   saved_events: [{ 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Event' 
+    ref: 'event' 
   }]
 }, options)
 
