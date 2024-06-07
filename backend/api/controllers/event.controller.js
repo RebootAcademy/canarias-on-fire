@@ -4,8 +4,7 @@ const Location = require('../models/location.model')
 
 const createEvent = async (req, res) => {
   try {
-    const newEvent = new Event(req.body)
-    await newEvent.save()
+    const newEvent = await Event.create(req.body)
     res.status(201).json({
       success: true,
       message: 'Event successfully created.',
