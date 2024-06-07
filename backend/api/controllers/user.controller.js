@@ -4,16 +4,24 @@ const Company = require('../models/company.model')
 // Create user
 const createUser = async (req, res) => {
   try {
-    let user
+    let newUser
     if (req.body.role === 'company') {
-      user = new Company(req.body)
+      newUser = await Company.create(req.body)
     } else {
-      user = new User(req.body)
+      newUser = await User.create(req.body)
     }
-    await user.save()
-    res.status(201).json(user)
+    res.status(201).json({
+      success: true,
+      message: 'User succesfully created.',
+      result: newUser
+    })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error creating user.',
+      description: error.message,
+    })
   }
 }
 
@@ -21,9 +29,18 @@ const createUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find()
-    res.status(200).json(users)
+    res.status(200).json({
+      success: true,
+      message: 'Users succesfully fetched.',
+      result: users,
+    })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: 'Error getting users.',
+      description: error.message,
+    })
   }
 }
 
@@ -31,10 +48,25 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-    if (!user) return res.status(404).json({ message: 'User not found' })
-    res.status(200).json(user)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User successfully fetched.',
+      result: user,
+    })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting user.',
+      description: error.message,
+    })
   }
 }
 
@@ -45,10 +77,26 @@ const updateUser = async (req, res) => {
       new: true,
       runValidators: true,
     })
-    if (!user) return res.status(404).json({ message: 'User not found' })
-    res.status(200).json(user)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User successfully updated.',
+      result: user,
+    })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating user.',
+      description: error.message,
+    })
   }
 }
 
@@ -56,10 +104,25 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id)
-    if (!user) return res.status(404).json({ message: 'User not found' })
-    res.status(200).json({ message: 'User deleted' })
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User successfully deleted.',
+      result: user
+    })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error deleting user.',
+      description: error.message
+    })
   }
 }
 
@@ -68,5 +131,5 @@ module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
 }

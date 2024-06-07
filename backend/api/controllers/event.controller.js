@@ -1,75 +1,124 @@
-import express from 'express'
-import Event from '../models/Event'
+const Event = require('../models/event.model')
+const Category = require('../models/category.model')
+const Location = require('../models/location.model')
 
-const router = express.Router()
-
-// Obtener todos los eventos
-router.get('/', async (req, res) => {
+const createEvent = async (req, res) => {
   try {
-    const events = await Event.find()
-    res.json(events)
+    const newEvent = new Event(req.body)
+    await newEvent.save()
+    res.status(201).json({
+      success: true,
+      message: 'Event successfully created.',
+      result: newEvent,
+    })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error creating event.',
+      description: error.message,
+    })
   }
-})
+}
 
-// Crear un nuevo evento
-router.post('/', async (req, res) => {
-  const event = new Event({
-    eventName: req.body.eventName,
-    place: req.body.place,
-    date: req.body.date,
-    image: req.body.image,
-  })
-
+const getAllEvents = async (req, res) => {
   try {
-    const newEvent = await event.save()
-    res.status(201).json(newEvent)
+    const events = await Event.find().populate('category location company_id')
+    res.status(200).json({
+      success: true,
+      message: 'Events successfully fetched.',
+      result: events,
+    })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: 'Error getting events.',
+      description: error.message,
+    })
   }
-})
-
-// Obtener un evento por ID
-router.get('/:id', async (req, res) => {
+}
+const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
-    if (!event) return res.status(404).json({ message: 'Event not found' })
-    res.json(event)
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-})
+    const event = await Event.findById(req.params.id).populate('category location company_id')
 
-// Actualizar un evento
-router.put('/:id', async (req, res) => {
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Event successfully fetched.',
+      result: event,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting event.',
+      description: error.message,
+    })
+  }
+}
+const updateEvent = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
-    if (!event) return res.status(404).json({ message: 'Event not found' })
+    const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    })
 
-    event.eventName = req.body.eventName || event.eventName
-    event.place = req.body.place || event.place
-    event.date = req.body.date || event.date
-    event.image = req.body.image || event.image
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      })
+    }
 
-    const updatedEvent = await event.save()
-    res.json(updatedEvent)
+    res.status(200).json({
+      success: true,
+      message: 'Event successfully updated.',
+      result: event,
+    })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating event.',
+      description: error.message,
+    })
   }
-})
-
-// Eliminar un evento
-router.delete('/:id', async (req, res) => {
+}
+const deleteEvent = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
-    if (!event) return res.status(404).json({ message: 'Event not found' })
+    const event = await Event.findByIdAndDelete(req.params.id)
 
-    await event.remove()
-    res.json({ message: 'Event deleted' })
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found.',
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Event successfully deleted.',
+      result: event,
+    })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error deleting event.',
+      description: error.message,
+    })
   }
-})
+}
 
-export default router
+module.exports = {
+  createEvent,
+  getAllEvents,
+  getEventById,
+  updateEvent,
+  deleteEvent,
+}

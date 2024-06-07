@@ -24,7 +24,6 @@ const UserSchema = new mongoose.Schema({
   },
   role: { 
     type: String, 
-    required: true,
     enum: ['admin', 'company', 'basic'],
     default: 'basic'
   },
@@ -32,7 +31,8 @@ const UserSchema = new mongoose.Schema({
   saved_events: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'event' 
-  }]
+  }],
+  profile_img: { type: String },
 }, options)
 
 const UserModel = mongoose.model('user', UserSchema)

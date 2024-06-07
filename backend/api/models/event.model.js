@@ -1,13 +1,12 @@
 const mongoose = require('mongoose')
 
 const EventSchema = new mongoose.Schema({
-  title: { 
+  name: { 
     type: String, 
     required: true 
   },
   description: { 
-    type: String, 
-    required: true 
+    type: String
   },
   category: { 
     type: mongoose.Schema.Types.ObjectId,
@@ -18,22 +17,23 @@ const EventSchema = new mongoose.Schema({
     type: Date, 
     required: true 
   },
-  imgUrl: { type: String },
+  img_url: { type: String },
   location: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
   },
-  url: { type: String },
+  event_url: { type: String },
   company_id: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'company' 
+    ref: 'company',
+    required: true 
   },
   private: { 
     type: Boolean, 
     default: false 
   },
   price: { type: Number },
-  visibility_level: { type: String },
+  visibility_level: { type: String }, // Echarle un repaso
   status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'] 

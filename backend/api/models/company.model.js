@@ -8,11 +8,24 @@ const CompanySchema = new mongoose.Schema({
   },
   company_email: { 
     type: String, 
-    required: true 
+    required: [true, 'Email is required.'],
+    unique: [true, 'Email already exists.'],
+    validate: {
+      validator: function(value) {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+      }
+    },
+    message: 'Invalid email format' 
   },
   phone: { 
     type: String, 
-    required: true 
+    required: true,
+    validate: {
+      validator: function(value) {
+        return /^\+?[1-9]\d{1,14}$/.test(value); // Ejemplo de validación para números de teléfono en formato E.164
+      },
+      message: 'Invalid phone number format'
+    }
   },
   sector: { 
     type: String 

@@ -1,5 +1,6 @@
 const router = require('express').Router()
 
+const { isAuth, checkRole } = require('../middlewares')
 const { 
   createUser,
   getAllUsers,
@@ -10,9 +11,9 @@ const {
 
 router
   .post('/', createUser)
-  .get('/', getAllUsers)
-  .get('/:id', getUserById)
-  .patch('/:id', updateUser)
-  .delete('/:id', deleteUser)
+  .get('/', isAuth, checkRole('admin'), getAllUsers)
+  .get('/:id', isAuth, checkRole('admin'), getUserById)
+  .patch('/:id', isAuth, checkRole('admin'), updateUser)
+  .delete('/:id', isAuth, checkRole('admin'), deleteUser)
 
 module.exports = router
