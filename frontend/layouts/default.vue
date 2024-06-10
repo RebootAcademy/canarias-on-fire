@@ -10,6 +10,6 @@
 
 <script setup>
 useHead({
-  title: 'Evently.com'
+  title: 'CanariasONFIRE'
 })
 </script>

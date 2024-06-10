@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <main>
+  <div class="flex flex-col min-h-screen">
+    <main class="flex-grow w-full flex items-center">
       <NuxtPage />
     </main>
     <Footer />

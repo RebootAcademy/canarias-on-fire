@@ -17,5 +17,11 @@ export default defineNuxtConfig({
   shadcn: {
     prefix: '',
     componentDir: './components/ui'
+  },
+  runtimeConfig: {
+    public: {
+      auth0Domain: process.env.AUTH0_DOMAIN,
+      auth0ClientId: process.env.AUTH0_CLIENT_ID
+    }
   }
 })
