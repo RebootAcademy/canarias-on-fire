@@ -14,5 +14,4 @@
 
 const { data: events } = await useFetch('api/events/')
 
-console.log(events.value)
 </script>
