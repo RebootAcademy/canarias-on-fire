@@ -12,8 +12,8 @@ const {
 router
   .post('/', isAuth, checkRole('admin'), createCategory)
   .get('/', isAuth, getAllCategories)
-  .get('/:id', authenticate, getCategoryById)
-  .patch('/:id', authenticate, checkRole('admin'), updateCategory)
-  .delete('/:id', authenticate, checkRole('admin'), deleteCategory)
+  .get('/:id', isAuth, getCategoryById)
+  .patch('/:id', isAuth, checkRole('admin'), updateCategory)
+  .delete('/:id', isAuth, checkRole('admin'), deleteCategory)
 
 module.exports = router
