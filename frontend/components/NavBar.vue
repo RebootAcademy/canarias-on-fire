@@ -5,9 +5,19 @@
         Canarias<span class="text-sm text-black">onFire</span>
       </NuxtLink>
     </div>
-    <div class="text-sm font-bold">
-      <button @click="login">Log in</button>
-      <button @click="handleLogout">Log out</button>
+    <div class="text-sm font-bold flex gap-2">
+      <button 
+        @click="login"
+        class="hover:underline"
+      >
+        Log in
+      </button>
+      <button 
+        @click="handleLogout"
+        class="hover:underline"
+      >
+        Log out
+      </button>
       <NuxtLink to="/dashboard">
         <Avatar v-if="isAuthenticated">
           <AvatarImage :src="user.picture" alt="@radix-vue" />

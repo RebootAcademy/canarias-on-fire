@@ -1,25 +1,35 @@
 <template>
   <div>
-    <h1>My Dashboard</h1>
-    <pre v-if="isAuthenticated">
-      <code>{{ user }}</code>
-    </pre>
+    <Profile v-if="roles.includes('basic')" />
+    <AdminDashboard v-if="roles.includes('admin')" />
+    <CompanyDashboard v-if="roles.includes('company')" />
   </div>
 </template>
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
-const { user, isAuthenticated } = useAuth0()
+import { ref, onMounted } from 'vue'
+
+const roles = ref([])
+
+let user
+let isAuthenticated
+
+onMounted(() => {
+  const auth0 = useAuth0() 
+  user = auth0.user
+  isAuthenticated = auth0.isAuthenticated
+
+  if (isAuthenticated.value && user.value) {
+    roles.value = user.value['https://localhost:3000/roles'] || [];
+  }
+})
 
 definePageMeta({
-  middleware: 'auth',
-  layout: 'default',
+  layout: 'default'
 })
 
 useHead({
   title: 'Dashboard'
 })
-
 </script>
-
-/* Continuamos. Ya hace el flujo básico de login y logout de la aplicación. Ahora viene el siguiente paso. Conectarlo con mi backend.  */
