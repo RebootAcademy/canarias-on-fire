@@ -35,6 +35,35 @@ const login = async (req, res) => {
   }
 }
 
+const register = async (req, res) => {
+  const { email, role } = req.body
+
+  try {
+    const user = await User.findOne({ email })
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' })
+    }
+
+    user = await User.create({
+      email,
+      role
+    })
+
+    return res.status(200).json({
+      success: true,
+      message: 'User registered successfully',
+      result: user
+    })
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: 'Error registering user',
+      description: error.message
+    })
+  } 
+}
+
 module.exports = {
-  login
+  login,
+  register
 }

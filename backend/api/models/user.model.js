@@ -4,8 +4,7 @@ const options = { discriminatoryKey: 'role', collection: 'users' }
 
 const UserSchema = new mongoose.Schema({
   username: { 
-    type: String, 
-    required: true 
+    type: String
   },
   email: { 
     type: String, 
