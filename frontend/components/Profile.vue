@@ -18,12 +18,6 @@ useHead({
   title: 'My Profile'
 })
 
-let user
-let isAuthenticated
+const { user, isAuthenticated } = useAuth0()
 
-onMounted(() => {
-  const auth0 = useAuth0()
-  isAuthenticated = auth0.isAuthenticated
-  user = auth0.user
-})
 </script>
