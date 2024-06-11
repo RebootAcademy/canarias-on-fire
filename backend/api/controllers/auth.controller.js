@@ -36,7 +36,7 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-  const { email, role } = req.body
+  const { email, username, role } = req.body
 
   try {
     const user = await User.findOne({ email })
@@ -46,6 +46,7 @@ const register = async (req, res) => {
 
     user = await User.create({
       email,
+      username,
       role
     })
 

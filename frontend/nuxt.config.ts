@@ -25,7 +25,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     }
   },
-  csurf: {
+/*   csurf: {
     ignorePaths: ['api/auth/register']
-  }
+  } */
 })

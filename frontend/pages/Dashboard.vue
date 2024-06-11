@@ -15,15 +15,16 @@ const roles = ref([])
 const config = useRuntimeConfig()
 const { user, isAuthenticated } = useAuth0()
 
-console.log('https://dev-p4k5rijt4cde3pip.us.auth0.com/oauth/token')
-
 onMounted(async () => {
   if (isAuthenticated.value && user.value) {
+    console.log('User:', user.value)
     roles.value = user.value['https://localhost:3000/roles'] || []
+    console.log('Roles:', roles.value)
 
     const userData = {
       email: user.value.email,
-      role: 'basic' // O el rol que desees asignar
+      username: user.value.nickname,
+      role: 'basic'
     }
 
     try {
@@ -34,8 +35,6 @@ onMounted(async () => {
           'Content-Type': 'application/json'
         }
       })
-
-      console.log(data)
 
       if (error.value) {
         console.error('Error registering user in the backend:', error.value)

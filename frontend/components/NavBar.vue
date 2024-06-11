@@ -41,7 +41,7 @@ let logout
 let user
 let isAuthenticated
 
-onMounted(() => {
+onMounted(async () => {
   const auth0 = useAuth0()
   isAuthenticated = auth0.isAuthenticated
   user = auth0.user
