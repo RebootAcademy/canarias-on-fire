@@ -25,7 +25,16 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
     }
   },
-/*   csurf: {
-    ignorePaths: ['api/auth/register']
-  } */
+   csurf: {
+    https: false,
+    cookieKey: 'csrf',
+    cookie: {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'strict'
+    },
+    methodsToProtect: ['POST', 'PATCH'],
+    encryptSecret: process.env.CSRF_SECRET,
+    addCsrfTokenToEventCtx: true
+  }
 })

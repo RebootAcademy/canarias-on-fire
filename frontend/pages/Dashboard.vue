@@ -18,13 +18,14 @@ const config = useRuntimeConfig()
 if (isAuthenticated.value && user.value) {
   roles.value = user.value['https://localhost:3000/roles'] || []
 
+  
   const userData = {
     email: user.value.email,
     username: user.value.nickname,
     role: 'basic'
   }
-
-  const { data, error } = await useAsyncData('registerUser', () => $fetch(`${config.public.apiBaseUrl}/auth/register`, {
+  
+  const { data, error } = await useAsyncData('registerUser', () => useCsrfFetch(`${config.public.apiBaseUrl}/auth/register`, {
     method: 'POST',
     body: JSON.stringify(userData),
     headers: {
