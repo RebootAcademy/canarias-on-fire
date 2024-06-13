@@ -23,7 +23,7 @@ if (isAuthenticated.value && user.value) {
     role: 'basic'
   }
 
-  const { data, error } = await useAsyncData('registerUser', () => useCsrfFetch(`${config.public.apiBaseUrl}/api/auth/register`, {
+  const { data, error } = await useAsyncData('registerUser', () => $fetch(`${config.public.apiBaseUrl}/auth/register`, {
     method: 'POST',
     body: JSON.stringify(userData),
     headers: {
