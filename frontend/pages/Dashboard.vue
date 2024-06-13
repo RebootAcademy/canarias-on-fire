@@ -8,7 +8,6 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
-import { useRuntimeConfig, useAsyncData } from '#app'
 
 const { user, isAuthenticated } = useAuth0()
 
@@ -17,15 +16,14 @@ const config = useRuntimeConfig()
 
 if (isAuthenticated.value && user.value) {
   roles.value = user.value['https://localhost:3000/roles'] || []
-
   
   const userData = {
     email: user.value.email,
     username: user.value.nickname,
     role: 'basic'
   }
-  
-  const { data, error } = await useAsyncData('registerUser', () => useCsrfFetch(`${config.public.apiBaseUrl}/auth/register`, {
+
+  const { data, error } = await useAsyncData('registerUser', () => useCsrfFetch(`${config.public.apiBaseUrl}/api/auth/register`, {
     method: 'POST',
     body: JSON.stringify(userData),
     headers: {
@@ -40,7 +38,6 @@ if (isAuthenticated.value && user.value) {
   }
 }
 
-
 definePageMeta({
   layout: 'default'
 })
@@ -48,4 +45,5 @@ definePageMeta({
 useHead({
   title: 'Dashboard'
 })
+
 </script>
