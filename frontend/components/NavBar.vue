@@ -6,6 +6,7 @@
       </NuxtLink>
     </div>
     <div class="text-sm font-bold flex gap-2">
+      <Button />
       <button 
         @click="login"
         class="hover:underline"
