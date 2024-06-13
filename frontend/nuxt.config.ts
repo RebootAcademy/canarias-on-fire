@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     },
     methodsToProtect: ['POST', 'PATCH'],
     encryptSecret: process.env.CSRF_SECRET,
+    encryptAlgorithm: 'AES-CBC',
     addCsrfTokenToEventCtx: true
   }
 })
