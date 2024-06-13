@@ -11,6 +11,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { useRuntimeConfig, useAsyncData } from '#app'
 
 const { user, isAuthenticated } = useAuth0()
+
 const roles = useState('roles', () => [])
 const config = useRuntimeConfig()
 

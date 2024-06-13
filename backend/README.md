@@ -72,7 +72,7 @@
 
 ### Location
 | Method | Endpoint               | Description                  | Returns                                                    | Permissions        |
-|--------|------------------------|------------------------------||-----------------------------------------------------------|--------------------|
+|--------|------------------------|------------------------------|------------------------------------------------------------|--------------------|
 | POST   | `/api/locations`       | Creates new location         | { success: Boolean, message: String, result: newLocation } | admin <br> company |
 | GET    | `/api/locations`       | Retrieves all locations      | { success: Boolean, message: String, result: locations }   | No                 |
 | GET    | `/api/locations/:id`   | Retrieves a location by ID   | { success: Boolean, message: String, result: location }    | No                 |
