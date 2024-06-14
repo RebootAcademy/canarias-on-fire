@@ -23,9 +23,10 @@ export default defineNuxtConfig({
       auth0Domain: process.env.AUTH0_DOMAIN,
       auth0ClientId: process.env.AUTH0_CLIENT_ID,
       apiBaseUrl: process.env.API_BASE_URL,
+      auth0Audience: process.env.AUTH0_AUDIENCE
     }
   },
-   csurf: {
+/*    csurf: {
     https: false,
     cookieKey: 'csrf',
     cookie: {
@@ -37,5 +38,5 @@ export default defineNuxtConfig({
     encryptSecret: process.env.CSRF_SECRET,
     encryptAlgorithm: 'AES-CBC',
     addCsrfTokenToEventCtx: true
-  }
+  } */
 })

@@ -9,7 +9,7 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 
-const { user, isAuthenticated } = useAuth0()
+const { user, isAuthenticated, getAccessTokenSilently } = useAuth0()
 
 const roles = useState('roles', () => [])
 const config = useRuntimeConfig()
@@ -23,12 +23,17 @@ if (isAuthenticated.value && user.value) {
     role: 'basic'
   }
 
+/*   const token = await getAccessTokenSilently().catch(error => {
+    console.error('Token obtaining process failed:', error)
+  }) */
+
   const { data, error } = await useAsyncData('registerUser', () => $fetch(`${config.public.apiBaseUrl}/auth/register`, {
     method: 'POST',
     body: JSON.stringify(userData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+/*     headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    } */
   })) 
 
   if (error.value) {

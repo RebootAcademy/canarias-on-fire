@@ -22,9 +22,9 @@ const config = {
 app
   .use(auth(config))
   .use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:8080',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type']
   }))
   .use(morgan('dev'))
   .use(express.json())
