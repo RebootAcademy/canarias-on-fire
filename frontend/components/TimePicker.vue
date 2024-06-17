@@ -1,7 +1,7 @@
 <template>
   <div class="w-1/5">
     <Label :for="id" class="text-xs ml-1">{{ label }}</Label>
-    <Input v-model="time" :id="id" type="time" class="p-2 border rounded" />
+    <Input v-model="time" :id="id" type="time" class="p-2 border rounded-md flex flex-row-reverse" />
   </div>
 </template>
 

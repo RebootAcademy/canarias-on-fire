@@ -27,7 +27,7 @@ const { data, error } = await useAsyncData('categories', () => $fetch(`${config.
 if (error.value) {
   console.error('Error geting categories from database:', error.value)
 } else {
-  console.log('Categories fetched from databse', data.value)
+  // console.log('Categories fetched from databse', data.value)
 }
 
 const categories = data.value?.result || []
