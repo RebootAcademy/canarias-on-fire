@@ -6,7 +6,7 @@ const morgan = require('morgan')
 
 const dbConnect = require('./api/config/db')
 
-const { auth } = require('express-openid-connect')
+// const { auth } = require('express-openid-connect')
 
 const app = express()
 
@@ -20,11 +20,11 @@ const config = {
 }
 
 app
-  .use(auth(config))
+  // .use(auth(config))
   .use(cors({
-    origin: 'http://localhost:8080',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'Authorization']
   }))
   .use(morgan('dev'))
   .use(express.json())
