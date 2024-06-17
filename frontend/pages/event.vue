@@ -8,12 +8,14 @@
       <div class="flex flex-col mt-4 gap-4">
         <div class="flex flex-col gap-2">
           <div class="font-semibold">Select category</div>
-          <div class="flex gap-2">
+          <div class="flex flex-wrap gap-2">
             <Badge 
               v-for="category in categories"
               :key="category.id"
+              :class="{'bg-blue-500' : isSelected(category), 'bg-white' : !isSelected(category)}"
+              @click="toggleCategory(category)"
               variant="secondary"
-              class="p-2 px-4"
+              class="p-2 px-4 cursor-pointer"
             >{{ category.name }}</Badge>
           </div>
         </div>
@@ -26,6 +28,9 @@
 </template>
 
 <script setup>
+import { useEventStore } from '../stores/eventStore'
+
+const eventStore = useEventStore()
 const config = useRuntimeConfig()
 
 const { data, error } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
@@ -40,14 +45,17 @@ if (error.value) {
 
 const categories = data.value?.result || []
 
-/* const { data: discounts, pending } = await useAsyncData('cart-discount', async () => {
-  const [coupons, offers] = await Promise.all([
-    $fetch('/cart/coupons'),
-    $fetch('/cart/offers')
-  ])
+watch(() => {
+  console.log(eventStore.selectedCategories)
+})
 
-  return { coupons, offers }
-}) */
+const toggleCategory = (category) => {
+  eventStore.toggleCategory(category)
+}
+
+const isSelected = (category) => {
+  return eventStore.selectedCategories.some(c => c._id === category._id)
+}
 
 </script>
 
