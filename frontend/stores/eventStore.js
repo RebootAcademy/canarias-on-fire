@@ -2,7 +2,15 @@ import { defineStore } from 'pinia'
 
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
-    selectedCategories: []
+    selectedCategories: [],
+    eventName: '',
+    eventDate: '',
+    eventLocalization: '',
+    eventPrice: 0,
+    eventCapacity: 0,
+    eventDescription: '',
+    startTime: '',
+    endTime: ''
   }),
   actions: {
     toggleCategory(category) {
@@ -12,6 +20,6 @@ export const useEventStore = defineStore('eventStore', {
       } else {
         this.selectedCategories.splice(index, 1)
       }
-    }
+    },
   }
 })
