@@ -65,6 +65,6 @@ const register = async (req, res) => {
 }
 
 module.exports = {
-  login,
+  // login,
   register
 }
