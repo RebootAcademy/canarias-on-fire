@@ -6,6 +6,11 @@
       </NuxtLink>
     </div>
     <div class="text-sm font-bold flex gap-2">
+      <NuxtLink to="/event">
+        <Button>
+          <span class="mr-2 text-lg">+</span>Create Event
+        </Button>
+      </NuxtLink>
       <button 
         @click="login"
         class="hover:underline"
@@ -31,6 +36,7 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 
 const login = () => {
   loginWithRedirect({ appState: { target: '/dashboard' }})

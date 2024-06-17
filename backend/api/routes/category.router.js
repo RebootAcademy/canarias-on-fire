@@ -11,7 +11,7 @@ const {
 
 router
   .post('/', isAuth, checkRole('admin'), createCategory)
-  .get('/', isAuth, getAllCategories)
+  .get('/', getAllCategories)
   .get('/:id', isAuth, getCategoryById)
   .patch('/:id', isAuth, checkRole('admin'), updateCategory)
   .delete('/:id', isAuth, checkRole('admin'), deleteCategory)

@@ -8,11 +8,10 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
-import { useRuntimeConfig, useAsyncData } from '#app'
 
-const { user, isAuthenticated } = useAuth0()
+const { user, isAuthenticated , getAccessTokenSilently} = useAuth0()
+
 const roles = useState('roles', () => [])
-const config = useRuntimeConfig()
 
 if (isAuthenticated.value && user.value) {
   roles.value = user.value['https://localhost:3000/roles'] || []
@@ -20,21 +19,27 @@ if (isAuthenticated.value && user.value) {
   const userData = {
     email: user.value.email,
     username: user.value.nickname,
-    role: 'basic'
+    role: roles.value[0] // Asumimos que el primer rol es el principal
   }
 
-  const { data, error } = await useAsyncData('registerUser', () => $fetch(`${config.public.apiBaseUrl}/auth/register`, {
-    method: 'POST',
-    body: JSON.stringify(userData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })) 
+  try {
+    const token = await getAccessTokenSilently()
+    const response = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(userData)
+    })
 
-  if (error.value) {
-    console.error('Error registering user in the backend:', error.value)
-  } else {
-    console.log('User registered in the backend', data.value)
+    if (!response.ok) {
+      console.log('Failed to register user:', response.statusText)
+    } else {
+      console.log('User registered successfully')
+    }
+  } catch (error) {
+    console.log('Error registering user in the database:', error)
   }
 }
 
@@ -46,4 +51,5 @@ definePageMeta({
 useHead({
   title: 'Dashboard'
 })
+
 </script>

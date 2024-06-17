@@ -11,7 +11,7 @@ const {
 
 router
   .post('/', createUser)
-  .get('/', isAuth, checkRole('admin'), getAllUsers)
+  .get('/', getAllUsers)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/:id', isAuth, checkRole('admin'), updateUser)
   .delete('/:id', isAuth, checkRole('admin'), deleteUser)
