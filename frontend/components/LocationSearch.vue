@@ -1,44 +1,29 @@
 <template>
   <div>
-    <label for="location" class="font-medium">Location</label>
-    <input
+    <Label for="location" class="font-medium">Location</Label>
+    <GMapAutocomplete
+      v-model="eventStore.eventLocation"
       ref="autocompleteInput"
       id="location"
-      type="text"
-      class="p-2 border rounded w-full"
+      class="p-2 border rounded-md w-full"
       placeholder="Enter a location"
-    />
+      @place_changed="setPlace"
+    >
+    </GMapAutocomplete>
   </div>
 </template>
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
-import { Loader } from '@googlemaps/js-api-loader'
 
 const eventStore = useEventStore()
-const autocompleteInput = ref(null)
 
-const initAutocomplete = () => {
-  const loader = new Loader({
-    apiKey: 'YOUR_GOOGLE_API_KEY', // Reemplaza con tu clave de API
-    libraries: ['places']
-  })
-
-  loader.load().then(() => {
-    const autocomplete = new google.maps.places.Autocomplete(autocompleteInput.value, {
-      types: ['geocode']
-    })
-
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace()
-      if (place.geometry) {
-        eventStore.eventLocalization = place.formatted_address
-      }
-    })
-  })
+function setPlace(place) {
+  console.log(place)
+  if (place && place.geometry) {
+    eventStore.setPlaceDetails(place)
+  } else {
+    console.error('No place details available')
+  }
 }
-
-onMounted(() => {
-  initAutocomplete()
-})
 </script>

@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "@auth0/auth0-vue": "^2.3.3",
-    "@googlemaps/js-api-loader": "^1.16.6",
+    "@fawmi/vue-google-maps": "0.9.72",
     "@internationalized/date": "^3.5.4",
+    "@nuxt/image": "^1.7.0",
     "@nuxtjs/proxy": "^2.1.0",
     "@pinia/nuxt": "^0.5.1",
     "@vee-validate/zod": "^4.13.1",
