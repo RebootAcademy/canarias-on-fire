@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const EventSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['event', 'promotion']
+  },
   name: { 
     type: String, 
     required: true 
@@ -13,31 +17,31 @@ const EventSchema = new mongoose.Schema({
     ref: 'category',
     required: true 
   },
-  date: { 
-    type: Date, 
+  event_date: { 
+    type: Object, 
     required: true 
   },
+  start_time: { type: String },
+  end_time: { type: String },
+  price: { type: Number },
+  capacity: { type: Number },
   img_url: { type: String },
+  external_url: { type: String },
   location: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
   },
-  event_url: { type: String },
+  status: { 
+    type: String, 
+    enum: ['draft', 'published', 'closed'],
+    default: ['draft']
+  },
   company_id: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'company',
-    required: true 
+    // required: true 
   },
-  private: { 
-    type: Boolean, 
-    default: false 
-  },
-  price: { type: Number },
-  visibility_level: { type: String }, // Echarle un repaso
-  status: { 
-    type: String, 
-    enum: ['draft', 'published', 'closed'] 
-  }
+  // visibility_level: { type: String }, // Echarle un repaso
 })
 
 const EventModel = mongoose.model('event', EventSchema)
