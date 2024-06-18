@@ -30,13 +30,7 @@
     </div>
 
     <div class="flex flex-col">
-      <Label for="eventLocalization" class="text-xs ml-1 mb-1">Location</Label>
-      <Input
-        v-model="eventStore.eventLocalization"
-        id="eventLocalization"
-        type="text"
-        class="p-2 border rounded-md"
-      />
+      <LocationSearch />
     </div>
 
     <div v-show="eventStore.eventType === 'event'" class="flex items-start gap-8">

@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@pinia/nuxt',
     'nuxt-csurf',
+    "@nuxt/image"
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
@@ -26,6 +27,9 @@ export default defineNuxtConfig({
       auth0Audience: process.env.AUTH0_AUDIENCE
     }
   },
+  build: {
+    transpile: ["@fawmi/vue-google-maps"]
+  }
 /*    csurf: {
     https: false,
     cookieKey: 'csrf',
