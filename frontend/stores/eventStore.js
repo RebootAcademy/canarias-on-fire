@@ -4,9 +4,11 @@ export const useEventStore = defineStore('eventStore', {
   state: () => ({
     selectedCategories: [],
     eventName: '',
+    eventType: '',
     eventDate: '',
     eventLocalization: '',
     eventPrice: 0,
+    isFree: false,
     eventCapacity: 0,
     eventDescription: '',
     startTime: '',
