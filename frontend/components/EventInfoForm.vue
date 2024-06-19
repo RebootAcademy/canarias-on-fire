@@ -53,15 +53,7 @@
     </div>
 
     <div class="flex flex-col">
-      <Label for="eventImg" class="text-xs ml-1 mb-1"
-        >Upload image</Label
-      >
-      <Input
-        v-model="eventStore.eventImg"
-        id="eventImg"
-        type="text"
-        class="p-2 border rounded-md"
-      />
+      <ImageUploader />
     </div>
 
     <div class="flex flex-col">
