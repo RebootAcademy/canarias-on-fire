@@ -5,12 +5,18 @@
         type="file"
         @change="handleFileChange"
       />
-      <Button @click="uploadImage"
-        class="text-xs px-4"
-      >Upload Image</Button>
+      <Button @click="uploadImage" class="text-xs px-4">
+        Upload Image
+      </Button>
     </div>
-    <Label class="text-xs ml-1">Preview</Label>
-    <NuxtImg v-if="eventStore.eventImg" :src="eventStore.eventImg" width="150" />
+    <Label class="text-xs ml-1">
+      Preview
+    </Label>
+    <NuxtImg 
+      v-if="typeof eventStore.eventImg === 'string'" 
+      :src="eventStore.eventImg" 
+      width="150" 
+    />
   </div>
 </template>
 
@@ -21,18 +27,19 @@ const eventStore = useEventStore()
 const cloudName = 'drs1a2bso'
 
 const handleFileChange = (event) => {
-  eventStore.eventImg = event.target.files[0]
+  eventStore.selectedFile = event.target.files[0]
+  console.log(eventStore.selectedFile)
 }
 
 const uploadImage = async () => {
-  if (!eventStore.eventImg) {
+  if (!eventStore.selectedFile) {
     console.error('No file selected')
     return
   }
 
   try {
     const formData = new FormData()
-    formData.append("file", eventStore.eventImg)
+    formData.append("file", eventStore.selectedFile)
     formData.append("upload_preset", "evdhvl07")
 
     const { data, error } = await useFetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {

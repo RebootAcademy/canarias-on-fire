@@ -53,10 +53,6 @@
     </div>
 
     <div class="flex flex-col">
-      <ImageUploader />
-    </div>
-
-    <div class="flex flex-col">
       <Label for="externalUrl" class="text-xs ml-1 mb-1"
         >External site</Label
       >
@@ -67,13 +63,32 @@
         class="p-2 border rounded-md"
       />
     </div>
+
+    <div class="flex flex-col">
+      <ImageUploader />
+    </div>
+
   </div>
+  <Button @click="handleSubmit">Publish</Button>
 </template>
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+const handleSubmit = async () => {
+  const { data } = await useFetch('http://localhost:8080/api/events', {
+    method: 'POST',
+    body: JSON.stringify(eventStore),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  console.log(data)
+}
 
 watch(() => eventStore.eventType, (newType) => {
   if (newType === 'event') {
