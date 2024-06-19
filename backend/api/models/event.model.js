@@ -1,42 +1,63 @@
 const mongoose = require('mongoose')
 
 const EventSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ['event', 'promotion']
-  },
-  name: { 
-    type: String, 
-    required: true 
-  },
-  description: { 
-    type: String
-  },
   category: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'category',
-    required: true 
+    // required: true 
   },
-  event_date: { 
+  eventName: { 
+    type: String, 
+    // required: true 
+  },
+  eventType: {
+    type: String,
+    enum: ['event', 'promotion']
+  },
+  eventDate: { 
     type: Object, 
-    required: true 
+    // required: true 
   },
-  start_time: { type: String },
-  end_time: { type: String },
-  price: { type: Number },
-  capacity: { type: Number },
-  img_url: { type: String },
-  external_url: { type: String },
-  location: { 
+  eventLocation: {
+    type: Object,
+  },
+  eventPrice: { 
+    type: Number 
+  },
+  isFree: {
+    type: Boolean
+  },
+  eventCapacity: { 
+    type: Number 
+  },
+  eventDescription: { 
+    type: String
+  },
+  startTime: { 
+    type: String 
+  },
+  endTime: { 
+    type: String 
+  },
+  externalUrl: { 
+    type: String 
+  },
+  eventImg: { 
+    type: String 
+  },
+  selectedFile: {
+    type: Object
+  },
+/*   location: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
-  },
-  status: { 
+  }, */
+/*   status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'],
     default: ['draft']
-  },
-  company_id: { 
+  }, */
+  companyId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'company',
     // required: true 

@@ -10,7 +10,8 @@ const {
 } = require('../controllers/event.controller')
 
 router
-  .post('/', isAuth, checkRole('admin', 'company'), createEvent)
+  //.post('/', isAuth, checkRole('admin', 'company'), createEvent)
+  .post('/', createEvent)
   .get('/', isAuth, getAllEvents)
   .get('/:id', isAuth, checkRole('admin', 'company', 'basic'), getEventById)
   .patch('/:id', isAuth, checkRole('admin', 'company'), updateEvent)

@@ -14,7 +14,8 @@ export const useEventStore = defineStore('eventStore', {
     startTime: '',
     endTime: '',
     externalUrl: '',
-    eventImg: ''
+    eventImg: '',
+    selectedFile: null
   }),
   actions: {
     toggleCategory(category) {
