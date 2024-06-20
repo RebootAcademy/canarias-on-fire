@@ -22,7 +22,7 @@ const config = {
 app
   // .use(auth(config))
   .use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://66744b6e803efa763bdbf50b--spectacular-lolly-4096f5.netlify.app/',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }))
