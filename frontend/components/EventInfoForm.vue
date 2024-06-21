@@ -76,11 +76,11 @@
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
-const isLoading = ref(false)
-const errorMessage = ref('')
+// const isLoading = ref(false)
+// const errorMessage = ref('')
 
 const handleSubmit = async () => {
-  const { data } = await useFetch('http://localhost:8080/api/events', {
+  const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
     method: 'POST',
     body: JSON.stringify(eventStore),
     headers: {

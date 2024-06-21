@@ -24,7 +24,7 @@ if (isAuthenticated.value && user.value) {
 
   try {
     const token = await getAccessTokenSilently()
-    const response = await fetch('https://canarias-on-fire.onrender.com/api/auth/register', {
+    const response = await fetch(`${config.public.apiBaseUrl}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
