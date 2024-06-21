@@ -81,6 +81,7 @@ const config = useRuntimeConfig()
 // const errorMessage = ref('')
 
 const handleSubmit = async () => {
+  eventStore.status = 'draft'
   const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
     method: 'POST',
     body: eventStore,
@@ -88,6 +89,9 @@ const handleSubmit = async () => {
       'Content-Type': 'application/json'
     }
   })
+  if (data.value) {
+    router.push({ name: 'PaymentOptions', params: { eventId: data.value.id } })
+  }
 }
 
 watch(() => eventStore.eventType, (newType) => {

@@ -23,7 +23,7 @@ app
   // .use(auth(config))
   .use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['https://spectacular-lolly-4096f5.netlify.app']
+      const allowedOrigins = ['https://spectacular-lolly-4096f5.netlify.app', 'http://localhost:3000']
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true)
       } else {
