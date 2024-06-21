@@ -89,6 +89,7 @@ const handleSubmit = async () => {
     }
   })
   console.log(data)
+  console.log(eventStore)
 }
 
 watch(() => eventStore.eventType, (newType) => {
