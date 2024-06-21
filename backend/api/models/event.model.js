@@ -52,11 +52,11 @@ const EventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
   }, */
-/*   status: { 
+  status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'],
     default: ['draft']
-  }, */
+  },
   companyId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'company',
