@@ -24,7 +24,7 @@ if (isAuthenticated.value && user.value) {
 
   try {
     const token = await getAccessTokenSilently()
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
