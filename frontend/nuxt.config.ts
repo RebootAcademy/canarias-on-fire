@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-csurf',
     "@nuxt/image",
+    "@nuxt/devtools"
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
