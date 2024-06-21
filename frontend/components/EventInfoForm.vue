@@ -88,8 +88,6 @@ const handleSubmit = async () => {
       'Content-Type': 'application/json'
     }
   })
-  console.log(data)
-  console.log(eventStore)
 }
 
 watch(() => eventStore.eventType, (newType) => {

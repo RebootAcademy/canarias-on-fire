@@ -1,10 +1,11 @@
 import VueGoogleMaps from "@fawmi/vue-google-maps"
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig()
   nuxtApp.vueApp.use(VueGoogleMaps, {
     load: {
-      key: "AIzaSyCEYGeiUj8NJAqKsh4Eo2kgdnMniVXWZr0",
-      libraries: "places", // This is required if you use the Autocomplete plugin
+      key: config.public.googleMapsApiKey,
+      libraries: "places",
     },
     autobindAllEvents: true,
   })

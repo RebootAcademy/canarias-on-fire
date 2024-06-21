@@ -32,7 +32,8 @@ export default defineNuxtConfig({
       auth0Domain: process.env.AUTH0_DOMAIN,
       auth0ClientId: process.env.AUTH0_CLIENT_ID,
       apiBaseUrl: process.env.API_BASE_URL,
-      auth0Audience: process.env.AUTH0_AUDIENCE
+      auth0Audience: process.env.AUTH0_AUDIENCE,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
     }
   },
   build: {
