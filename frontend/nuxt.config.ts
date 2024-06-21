@@ -8,7 +8,14 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/devtools"
   ],
-  devtools: { enabled: true },
+  vite: {
+    define: {
+      __VUE_PROD_DEVTOOLS__: true
+    }
+  },
+  devtools: { 
+    enabled: true, 
+  },
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -44,5 +51,5 @@ export default defineNuxtConfig({
     '/api/**': { cors: true },
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' }
-  }
+  },
 })
