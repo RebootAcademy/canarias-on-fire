@@ -76,6 +76,7 @@
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
+const config = useRuntimeConfig()
 // const isLoading = ref(false)
 // const errorMessage = ref('')
 
