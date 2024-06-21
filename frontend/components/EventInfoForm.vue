@@ -83,7 +83,7 @@ const config = useRuntimeConfig()
 const handleSubmit = async () => {
   const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
     method: 'POST',
-    body: JSON.stringify(eventStore),
+    body: eventStore,
     headers: {
       'Content-Type': 'application/json'
     }
