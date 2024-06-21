@@ -37,6 +37,7 @@ const getAllEvents = async (req, res) => {
     })
   }
 }
+
 const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id).populate('category location company_id')
@@ -61,6 +62,7 @@ const getEventById = async (req, res) => {
     })
   }
 }
+
 const updateEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndUpdate(req.params.id, req.body, {

@@ -6,11 +6,13 @@
       </NuxtLink>
     </div>
     <div class="text-sm font-bold flex gap-2">
-      <NuxtLink to="/event">
-        <Button>
-          <span class="mr-2 text-lg">+</span>Create Event
-        </Button>
-      </NuxtLink>
+      <div v-show="!isEventOrPaymentRoute">
+        <NuxtLink to="/event">
+          <Button>
+            <span class="mr-2 text-lg">+</span>Create Event
+          </Button>
+        </NuxtLink>
+      </div>
       <button 
         @click="login"
         class="hover:underline"
@@ -35,8 +37,8 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
-import { Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+
+const route = useRoute()
 
 const login = () => {
   loginWithRedirect({ appState: { target: '/dashboard' }})
@@ -60,5 +62,9 @@ const handleLogout = () => {
     returnTo: window.location.origin
   }})
 }
+
+const isEventOrPaymentRoute = computed(() => {
+  return route.path === '/event' || route.path === '/payment-options'
+})
 
 </script>

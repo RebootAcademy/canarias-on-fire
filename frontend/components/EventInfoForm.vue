@@ -74,11 +74,13 @@
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
+import { useRouter, useRoute } from 'vue-router'
 
 const eventStore = useEventStore()
 const config = useRuntimeConfig()
-// const isLoading = ref(false)
-// const errorMessage = ref('')
+
+const router = useRouter()
+const route = useRoute()
 
 const handleSubmit = async () => {
   eventStore.status = 'draft'
@@ -89,8 +91,14 @@ const handleSubmit = async () => {
       'Content-Type': 'application/json'
     }
   })
-  if (data.value) {
-    router.push({ name: 'PaymentOptions', params: { eventId: data.value.id } })
+
+  console.log(data.value.result)
+
+  if (data.value.success) {
+    router.push({
+      name: 'payment-options',
+      query: { id: data.value.result._id, /* eventData: JSON.stringify(eventStore)  */}
+    })
   }
 }
 
