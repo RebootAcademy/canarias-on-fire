@@ -43,18 +43,5 @@ export default defineNuxtConfig({
     '/api/**': { cors: true },
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' }
-  },
-/*   csurf: {
-    https: false,
-    cookieKey: 'csrf',
-    cookie: {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'strict'
-    },
-    methodsToProtect: ['POST', 'PATCH'],
-    encryptSecret: process.env.CSRF_SECRET,
-    encryptAlgorithm: 'AES-CBC',
-    addCsrfTokenToEventCtx: true
-  } */
+  }
 })
