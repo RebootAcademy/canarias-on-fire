@@ -22,7 +22,17 @@ const config = {
 app
   // .use(auth(config))
   .use(cors({
-    origin: 'https://66744b6e803efa763bdbf50b--spectacular-lolly-4096f5.netlify.app/',
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'https://66744b6e803efa763bdbf50b--spectacular-lolly-4096f5.netlify.app/',
+        'https://spectacular-lolly-4096f5.netlify.app/',
+      ];
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('No permitido por CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }))
