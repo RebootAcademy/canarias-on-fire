@@ -22,7 +22,7 @@ const createEvent = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('category location company_id')
+    const events = await Event.find().populate('categories location companyId')
     res.status(200).json({
       success: true,
       message: 'Events successfully fetched.',
@@ -40,7 +40,7 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id).populate('category location company_id')
+    const event = await Event.findById(req.params.id).populate('category location companyId')
 
     if (!event) {
       return res.status(404).json({

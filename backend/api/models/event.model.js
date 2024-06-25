@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
 const EventSchema = new mongoose.Schema({
-  category: { 
+  categories: [{ 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'category',
     // required: true 
-  },
+  }],
   eventName: { 
     type: String, 
     // required: true 
@@ -48,10 +48,10 @@ const EventSchema = new mongoose.Schema({
   selectedFile: {
     type: Object
   },
-/*   location: { 
+  location: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
-  }, */
+  },
   status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'],

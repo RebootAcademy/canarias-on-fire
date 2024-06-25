@@ -84,9 +84,15 @@ const route = useRoute()
 
 const handleSubmit = async () => {
   eventStore.status = 'draft'
+
+  const eventData = {
+    categories: eventStore.selectedCategories,
+    ...eventStore
+  }
+
   const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
     method: 'POST',
-    body: eventStore,
+    body: eventData,
     headers: {
       'Content-Type': 'application/json'
     }

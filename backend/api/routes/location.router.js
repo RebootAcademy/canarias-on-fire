@@ -11,7 +11,7 @@ const {
 } = require('../controllers/location.controller')
 
 router
-  .post('/', isAuth, checkRole('admin', 'company'), createLocation)
+  .post('/', /* isAuth, checkRole('admin', 'company'), */ createLocation)
   .get('/', getAllLocations)
   .get('/:id', getLocationById)
   .patch('/:id', checkRole('admin', 'company'), updateLocation)

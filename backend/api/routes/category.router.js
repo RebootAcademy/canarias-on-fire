@@ -10,10 +10,10 @@ const {
 } = require('../controllers/category.controller')
 
 router
-  .post('/', isAuth, checkRole('admin'), createCategory)
+  .post('/', /* isAuth, checkRole('admin'), */ createCategory)
   .get('/', getAllCategories)
-  .get('/:id', isAuth, getCategoryById)
-  .patch('/:id', isAuth, checkRole('admin'), updateCategory)
-  .delete('/:id', isAuth, checkRole('admin'), deleteCategory)
+  .get('/:id', /* isAuth, */ getCategoryById)
+  .patch('/:id', /* isAuth, checkRole('admin'), */ updateCategory)
+  .delete('/:id', /* isAuth, checkRole('admin'), */ deleteCategory)
 
 module.exports = router

@@ -1,6 +1,11 @@
 <template>
-  <div class="h-[calc(100vh-128px)] w-full flex flex-col items-center bg-gray-100">
-    <EventList class="flex-grow" />
+  <div class="h-[calc(100vh-128px)] bg-gray-100">
+    <div>
+      <FeaturedEvents />
+      <CategoriesFilter />
+      <EventsHeader />
+    </div>
+    <EventList :events="events" class="flex-grow" />
   </div>
 </template>
 
@@ -8,4 +13,13 @@
 definePageMeta({
   title: 'Evently.com - Eventos'
 })
+
+const { data, error } = await useFetch('http://localhost:8080/api/events')
+
+if (error.value) {
+  console.error('Error fetching events:', error.value)
+}
+
+const events = data.value?.result || []
+console.log(events)
 </script>
