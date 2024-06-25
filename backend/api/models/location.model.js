@@ -8,16 +8,12 @@ const LocationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  postalCode: {
+    type: Number
+  },
   coords: {
     type: Array
   },
-  municipality: {
-    type: String
-  },
-  island: {
-    type: String,
-    enum: ['La Palma', 'El Hierro', 'La Gomera', 'Tenerife', 'Gran Canaria', 'Lanzarote', 'Fuerteventura', 'La Graciosa']
-  }
 })
 
 const LocationModel = mongoose.model('location', LocationSchema)

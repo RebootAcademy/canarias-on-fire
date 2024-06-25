@@ -25,12 +25,16 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'company', 'basic'],
     default: 'basic'
   },
-  preferences: { type: Object },
+  preferences: { 
+    type: Object 
+  },
   saved_events: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'event' 
   }],
-  profile_img: { type: String },
+  profileImg: { 
+    type: String 
+  },
 }, options)
 
 const UserModel = mongoose.model('user', UserSchema)

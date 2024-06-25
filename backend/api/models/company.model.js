@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const User = require('./user.model')
 
 const CompanySchema = new mongoose.Schema({
-  company_name: { 
+  companyName: { 
     type: String, 
     required: true 
   },
-  company_email: { 
+  companyEmail: { 
     type: String, 
     required: [true, 'Email is required.'],
     unique: [true, 'Email already exists.'],
@@ -22,7 +22,7 @@ const CompanySchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(value) {
-        return /^\+?[1-9]\d{1,14}$/.test(value); // Ejemplo de validación para números de teléfono en formato E.164
+        return /^\+?[1-9]\d{1,14}$/.test(value) // Ejemplo de validación para números de teléfono en formato E.164
       },
       message: 'Invalid phone number format'
     }
@@ -30,7 +30,7 @@ const CompanySchema = new mongoose.Schema({
   sector: { 
     type: String 
   },
-  preferred_locations: [{ 
+  preferredLocations: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
   }],
@@ -39,9 +39,8 @@ const CompanySchema = new mongoose.Schema({
     ref: 'event' 
   }],
   subscription: { 
-    type: String,
-    enum: ['basic', 'gold', 'premium'],
-    default: 'basic'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'categories'
   }
 })
 
