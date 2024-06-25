@@ -73,10 +73,37 @@ const getUserById = async (req, res) => {
 // Update user
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    let user
+
+    if (req.body.role === 'company') {
+      // Check if user is already a company
+      user = await Company.findById(req.params.id)
+      if (user) {
+        // Update company specific fields
+        user = await Company.findByIdAndUpdate(req.params.id, req.body, {
+          new: true,
+          runValidators: true,
+        })
+      } else {
+        // If user is not a company, create a new one
+        const userData = await User.findById(req.params.id)
+        if (!userData) {
+          return res.status(404).json({
+            success: false,
+            message: 'User not found',
+          })
+        }
+        await User.findByIdAndDelete(req.params.id) // Delete old user
+        user = await Company.create({ ...userData.toObject(),  ...req.body, })
+      }
+    } else {
+      // Update user as usual
+      user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      })
+    }
+    
 
     if (!user) {
       return res.status(404).json({
