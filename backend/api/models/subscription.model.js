@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const SubscriptionSchema = new mongoose.Schema({
   name: {
-    type: String
+    type: String,
+    enum: ['gold', 'premium']
   },
   pricing: {
     type: Number

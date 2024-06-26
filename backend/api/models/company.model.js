@@ -29,7 +29,8 @@ const CompanySchema = new mongoose.Schema({
   },
   sector: { 
     type: String,
-    enum: ['restoration', 'music', 'nightlife'] 
+    enum: ['restoration', 'services', 'nightlife', 'activities'],
+    required: true 
   },
   preferredLocations: [{ 
     type: mongoose.Schema.Types.ObjectId, 
@@ -41,7 +42,7 @@ const CompanySchema = new mongoose.Schema({
   }],
   subscription: { 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'categories'
+    ref: 'subscription'
   }
 })
 
