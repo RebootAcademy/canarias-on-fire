@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Label for="eventCapacity" class="text-xs ml-1">Capacity</Label>
+    <Label for="eventCapacity" class="text-xs text-gray-500">Capacity</Label>
     <div class="relative">
       <Input
         v-model="eventStore.eventCapacity"
@@ -9,7 +9,7 @@
         class="p-2 border rounded-md w-full pr-10"
         @input="validateCapacity"
       />
-      <span class="absolute right-2 top-2 text-gray-500">px</span>
+      <span class="absolute right-2 top-3 text-gray-500 text-sm">px</span>
     </div>
   </div>
 </template>

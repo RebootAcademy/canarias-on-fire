@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Label for="eventPrice" class="text-xs ml-1">Price</Label>
+    <Label for="eventPrice" class="text-xs text-gray-500">Price</Label>
     <div class="relative">
       <Input
         v-model="eventStore.eventPrice"
@@ -12,9 +12,9 @@
       />
       <span class="absolute right-2 top-2 text-gray-500">€</span>
     </div>
-    <div class="flex items-center gap-2 mt-2">
+    <div class="flex items-center gap-2 mt-2 text-gray-500">
       <Switch v-model:checked="eventStore.isFree" id="isFree" />
-      <Label for="isFree">My tickets are free</Label>
+      <Label for="isFree" class="text-xs">My tickets are free</Label>
     </div>
   </div>
 </template>

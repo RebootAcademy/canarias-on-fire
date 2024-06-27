@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 text-gray-500">
     <div class="flex gap-4 w-2/3">
       <Input 
         type="file"

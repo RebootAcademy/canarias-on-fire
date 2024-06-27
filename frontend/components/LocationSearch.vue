@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Label for="location" class="font-medium">Location</Label>
+    <!-- <Label for="location" class="font-medium text-xs text-gray-500">Location</Label> -->
     <GMapAutocomplete
       v-model="eventStore.eventLocation"
       ref="autocompleteInput"
       id="location"
-      class="p-2 border rounded-md w-full"
+      class="text-sm p-2 border rounded-md w-full"
       placeholder="Enter a location"
       @place_changed="setPlace"
     >

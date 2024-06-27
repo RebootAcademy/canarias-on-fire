@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col mt-4 gap-4">
-    <CategorySelector />
     <EventInfoForm />
+    <CategorySelector />
     <Button @click="handleSubmit">Preview</Button>
   </div>
 </template>

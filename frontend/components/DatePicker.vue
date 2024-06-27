@@ -1,6 +1,6 @@
 <template>
   <div class="w-1/2">
-    <Label for="eventDate" class="text-xs ml-1">Event date</Label>
+    <Label for="eventDate" class="text-xs text-gray-500">Date</Label>
     <Popover>
       <PopoverTrigger as-child>
         <Button

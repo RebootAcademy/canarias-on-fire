@@ -3,11 +3,11 @@
     <RadioGroup v-model="eventStore.eventType" default-value="event">
       <div class="flex items-center space-x-2">
         <RadioGroupItem id="r1" value="event" />
-        <Label for="r1">Event</Label>
+        <Label for="r1">Event in a determined date</Label>
       </div>
       <div class="flex items-center space-x-2">
         <RadioGroupItem id="r2" value="promotion" />
-        <Label for="r2">Promotion</Label>
+        <Label for="r2">Recurrent event</Label>
       </div>
     </RadioGroup>
   </div>
