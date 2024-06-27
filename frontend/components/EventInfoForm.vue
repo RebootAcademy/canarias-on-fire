@@ -9,6 +9,7 @@
         id="eventName"
         type="text"
         class="p-2 border rounded-md"
+        required
       />
     </div>
     <div class="flex flex-col">
@@ -63,50 +64,17 @@
         class="p-2 border rounded-md"
       />
     </div>
-
     <div class="flex flex-col">
       <ImageUploader />
     </div>
-
   </div>
-  <Button @click="handleSubmit">Publish</Button>
+
 </template>
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
-import { useRouter, useRoute } from 'vue-router'
 
 const eventStore = useEventStore()
-const config = useRuntimeConfig()
-
-const router = useRouter()
-const route = useRoute()
-
-const handleSubmit = async () => {
-  eventStore.status = 'draft'
-
-  const eventData = {
-    categories: eventStore.selectedCategories,
-    ...eventStore
-  }
-
-  const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
-    method: 'POST',
-    body: eventData,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-
-  console.log(data.value.result)
-
-  if (data.value.success) {
-    router.push({
-      name: 'payment-options',
-      query: { id: data.value.result._id, /* eventData: JSON.stringify(eventStore)  */}
-    })
-  }
-}
 
 watch(() => eventStore.eventType, (newType) => {
   if (newType === 'event') {

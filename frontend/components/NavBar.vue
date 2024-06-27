@@ -64,7 +64,7 @@ const handleLogout = () => {
 }
 
 const isEventOrPaymentRoute = computed(() => {
-  return route.path === '/event' || route.path === '/payment-options'
+  return route.path === '/event' || route.path === '/event-preview' || route.path === '/payment-options'
 })
 
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <div class="p-12">
-    <h1>Choose Your Business Type and Payment Options</h1>
+  <div class="p-12 text-sm">
     <p class="text-xs">Event ID: {{  $route.query.id  }}</p>
-    <p>Event type: {{ eventStore.eventType }}</p>
-    <p>Event date: {{ eventStore.eventDate }}</p>
-    <p>Choose suscription plan:</p>
+    <p>Status: <span class="font-bold">{{ eventStore.status }}</span></p>
+    <p>Event type: <span class="font-bold">{{ eventStore.eventType }}</span></p>
+    <p>Event date: <span class="font-bold">{{ eventStore.eventDate }}</span></p>
+    <p>Choose subscription plan:</p>
     <div>
       <SubscriptionPlans />
     </div>

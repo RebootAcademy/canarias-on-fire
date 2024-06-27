@@ -43,6 +43,9 @@ const CompanySchema = new mongoose.Schema({
   subscription: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'subscription'
+  },
+  companyLogoUrl: {
+    type: String
   }
 })
 
