@@ -1,15 +1,19 @@
 <template>
-  <div class="h-16 bg-blue-400 flex items-end justify-between px-4 py-2">
-    <div class="text-2xl font-extrabold text-white">
-      <NuxtLink to="/">
-        Canarias<span class="text-sm text-black">onFire</span>
+  <div class="h-16 bg-black flex items-end justify-between px-4 py-2 text-white">
+    <div class="flex text-2xl font-extrabold">
+      <NuxtLink to="/" class="flex items-end">
+        <p class="text-white">Canarias</p>
+        <div class="flex items-end">
+          <span class="text-normal text-orange-400 z-10">onFire</span>
+          <!-- <span class="text-orange-600 ml-[-19px] mb-[6px] z-0"><Flame size="22" /></span> -->
+        </div>
       </NuxtLink>
     </div>
-    <div class="text-sm font-bold flex gap-2">
+    <div class="text-sm font-bold flex gap-4">
       <div v-show="!isEventOrPaymentRoute">
         <NuxtLink to="/event">
-          <Button>
-            <span class="mr-2 text-lg">+</span>Create Event
+          <Button variant="secondary">
+            <span class="mr-2 text-lg ">+</span>Create Event
           </Button>
         </NuxtLink>
       </div>
@@ -37,6 +41,7 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
+import { Flame } from 'lucide-vue-next'
 
 const route = useRoute()
 

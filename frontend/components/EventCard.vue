@@ -1,23 +1,30 @@
 <template>
-  <div class="flex items-center w-full justify-between bg-white shadow-md rounded p-4 gap-20">
-    <div class="text-sm">
-      <p class="font-semibold text-gray-800">{{ event.eventName }}</p>
-      <p class="text-gray-600">{{ event.place }}</p>
-    </div>
-    <div class="flex-shrink-0">
-      <img
-        src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-        class="w-16 h-16 object-cover"
-        alt="Event Image"
-      />
+  <div class="w-96 h-80 bg-white shadow-md rounded-md">
+    <NuxtImg :src="event.eventImg" class="w-full h-40 object-cover" />
+    <div class="p-4 flex flex-col justify-between">
+      <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
+      <p class="text-sm text-gray-600">{{ formattedDate() }}</p>
+      <p class="text-sm text-gray-600">{{ event.startTime }} - {{ event.endTime }}</p>
+      <p class="text-sm text-gray-600">{{ event.place }}</p>
+      <p class="text-md font-semibold mt-2">{{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}</p>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <span v-for="category in event.categories" :key="category._id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
+          {{ category.name }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   event: Object
 })
 
+const formattedDate = () => {
+  const { year, month, day } = props.event.eventDate
+  const date = new Date(year, month - 1, day)
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+}
 
 </script>

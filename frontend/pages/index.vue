@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[calc(100vh-128px)] bg-gray-100">
+  <div class="h-full bg-gray-100">
     <div>
       <FeaturedEvents />
       <CategoriesFilter />

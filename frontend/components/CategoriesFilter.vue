@@ -1,12 +1,14 @@
 <template>
-  <div class="flex justify-evenly p-3">
+  <div class="flex justify-evenly mt-4">
     <div 
       v-for="category in categories" 
       :key="category._id"
-      class="flex flex-col items-center justify-center rounded-full border-2 w-24 h-24 hover:bg-slate-200"
+      class="flex flex-col items-center"
     >
+    <span class="text-xs mb-1">{{ capitalizeFirstLetter(category.name) }}</span>
+    <div class="flex flex-col items-center justify-center rounded-full border-2 w-20 h-20 hover:bg-slate-200">
       <component :is="category.icon" class="w-8 h-8"/>
-      <span class="text-xs">{{ category.name }}</span>
+    </div>
     </div>
   </div>
 </template>
@@ -30,5 +32,11 @@ const categories = data.value?.result.map(category => ({
   ...category,
   icon: icons[category.icon]
 })) || []
+
+const capitalizeFirstLetter = (string) => {
+  return string.split(/(\W)/).map(word => {
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  }).join('')
+}
 
 </script>

@@ -1,27 +1,13 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel'
-import { Card, CardContent } from '@/components/ui/card'
-
-const events = ref([
-  { id: 1, name: 'Event 1', description: 'Description for Event 1' },
-  { id: 2, name: 'Event 2', description: 'Description for Event 2' },
-  { id: 3, name: 'Event 3', description: 'Description for Event 3' },
-  { id: 4, name: 'Event 4', description: 'Description for Event 4' },
-  { id: 5, name: 'Event 5', description: 'Description for Event 5' },
-])
-</script>
-
 <template>
-  <div class="relative w-full bg-blue-200">
+  <div class="relative w-full">
     <Carousel class="w-full">
       <CarouselContent>
         <CarouselItem v-for="event in events" :key="event.id">
           <div class="p-1">
             <Card>
-              <CardContent class="flex flex-col items-center justify-center p-6 h-60">
+              <CardContent class="flex flex-col items-center justify-center p-6 h-80">
                 <span class="text-2xl font-semibold">{{ event.name }}</span>
-                <p class="text-sm">{{  event.description }}</p>
+                <p class="text-sm">{{ event.description }}</p>
               </CardContent>
             </Card>
           </div>
@@ -32,3 +18,13 @@ const events = ref([
     </Carousel>
   </div>
 </template>
+
+<script setup lang="ts">
+const events = ref([
+  { id: 1, name: 'Event 1', description: 'Description for Event 1' },
+  { id: 2, name: 'Event 2', description: 'Description for Event 2' },
+  { id: 3, name: 'Event 3', description: 'Description for Event 3' },
+  { id: 4, name: 'Event 4', description: 'Description for Event 4' },
+  { id: 5, name: 'Event 5', description: 'Description for Event 5' },
+])
+</script>
