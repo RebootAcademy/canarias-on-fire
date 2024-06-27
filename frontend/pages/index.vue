@@ -4,8 +4,8 @@
       <FeaturedEvents />
       <CategoriesFilter />
       <EventsHeader />
+      <EventList :events="events" />
     </div>
-    <EventList :events="events" class="flex-grow" />
   </div>
 </template>
 
