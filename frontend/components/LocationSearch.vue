@@ -8,12 +8,20 @@
       @place_changed="setPlace"
     >
     </GMapAutocomplete>
-    <div class="w-60 h-60">
+    <div class="w-full h-60 py-6">
       <GMapMap 
-        :center="{lat: 51.093048, lng: 6.842120}"
-        :zoom="7"
-        class="width: 100%; height: 150%;"
-      />
+        :center="eventStore.mapCenter"
+        :zoom="18"
+        :options="{
+          disableDefaultUI: true,
+          draggable: false,
+          scrollwheel: false,
+          disableDoubleClickZoom: true,
+          zoomControl: false,
+        }"
+      >
+        <GMapMarker :position="eventStore.mapCenter" />
+      </GMapMap>
     </div>
   </div>
 </template>
@@ -27,8 +35,31 @@ const setPlace = (place) => {
   console.log(place)
   if (place && place.geometry) {
     eventStore.setPlaceDetails(place)
+    eventStore.setMapCenter(place.geometry.location.lat(), place.geometry.location.lng())
   } else {
     console.error('No place details available')
   }
 }
+
+const setCurrentLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        eventStore.setMapCenter(position.coords.latitude, position.coords.longitude)
+        eventStore.setMapImageUrl(position.coords.latitude, position.coords.longitude)
+      },
+      (error) => {
+        console.error('Error getting current location:', error)
+      }
+    )
+  } else {
+    console.error('Geolocation is not supported by this browser.')
+  }
+}
+
+onMounted(() => {
+  setCurrentLocation()
+})
+
+
 </script>

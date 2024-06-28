@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <img :src="eventStore.eventImg" alt="Event Image" class="w-full h-96 object-cover" />
+    <NuxtImg :src="eventStore.eventImg" alt="Event Image" class="w-full h-96 object-cover" />
     <div class="flex p-8 gap-2">
       <span v-for="category in eventStore.selectedCategories" :key="category._id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
         {{ category.name }}
@@ -28,9 +28,13 @@
       <p class="mt-4">{{ eventStore.eventDescription }}</p>
     </div>
     <div class="mt-8">
+      <h2 class="text-2xl font-semibold">Location</h2>
+      <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 object-cover mt-4" />
+    </div>
+    <div class="mt-8">
       <h2 class="text-2xl font-semibold">Organizer</h2>
       <div class="flex items-center gap-2 mt-4">
-        <img :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
+        <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
         <span>{{ eventStore.organizerName }}</span>
       </div>
     </div>
