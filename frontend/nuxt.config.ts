@@ -1,12 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
     '@pinia/nuxt',
     'nuxt-csurf',
-    "@nuxt/image",
-    "@nuxt/devtools"
+    '@nuxt/image',
+    '@nuxt/devtools',
+    '@vee-validate/nuxt'
   ],
   vite: {
     define: {
@@ -26,6 +28,15 @@ export default defineNuxtConfig({
   shadcn: {
     prefix: '',
     componentDir: './components/ui'
+  },
+  veeValidate: {
+    autoImports: true,
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage',
+    }
   },
   runtimeConfig: {
     public: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-1/2">
+  <div>
     <Label for="eventDate" class="text-xs text-gray-500">Date</Label>
     <Popover>
       <PopoverTrigger as-child>

@@ -6,28 +6,31 @@
       <Badge 
         v-for="category in categories"
         :key="category._id"
-        :class="{'bg-blue-500' : isSelected(category), 'bg-white' : !isSelected(category)}"
+        :class="{'bg-black text-white' : isSelected(category), 'bg-white' : !isSelected(category)}"
         @click="toggleCategory(category)"
         variant="secondary"
         class="p-2 px-4 cursor-pointer"
       >{{ category.name }}</Badge>
     </div>
+    <span v-if="error" class="text-red-500 text-xs">{{ error }}</span>
   </div>
   <hr class="mb-4">
 </template>
 
 <script setup>
+import { Tags } from 'lucide-vue-next';
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
 const config = useRuntimeConfig()
+const error = ref('')
 
-const { data, error } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
+const { data, error: fetchError } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
   method: 'GET'
 })) 
 
-if (error.value) {
-  console.error('Error geting categories from database:', error.value)
+if (fetchError.value) {
+  console.error('Error geting categories from database:', fetchError.value)
 } else {
   // console.log('Categories fetched from databse', data.value)
 }
@@ -36,10 +39,25 @@ const categories = data.value?.result || []
 
 const toggleCategory = (category) => {
   eventStore.toggleCategory(category)
+  validateCategories()
 }
 
 const isSelected = (category) => {
   return eventStore.selectedCategories.some(c => c._id === category._id)
 }
 
+const validateCategories = () => {
+  const selectedCount = eventStore.selectedCategories.length
+  if (selectedCount < 1) {
+    error.value = 'Must select at least 1 tag.'
+  } else if (selectedCount > 5) {
+    error.value = "Can't select more than 5 tags."
+  } else {
+    error.value = ''
+  }
+}
+
+validateCategories()
+
+watch(() => eventStore.selectedCategories, validateCategories)
 </script>
