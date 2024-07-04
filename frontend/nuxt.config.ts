@@ -11,11 +11,11 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     "@nuxtjs/i18n"
   ],
-  i18n: {
+/*   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'es',
     vueI18n: './i18n.config.ts'
-  },
+  }, */
   vite: {
     define: {
       __VUE_PROD_DEVTOOLS__: true

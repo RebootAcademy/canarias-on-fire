@@ -21,5 +21,5 @@ if (error.value) {
 }
 
 const events = data.value?.result || []
-console.log(events)
+
 </script>
