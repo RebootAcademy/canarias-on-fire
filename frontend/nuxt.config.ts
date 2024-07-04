@@ -8,8 +8,14 @@ export default defineNuxtConfig({
     'nuxt-csurf',
     '@nuxt/image',
     '@nuxt/devtools',
-    '@vee-validate/nuxt'
+    '@vee-validate/nuxt',
+    "@nuxtjs/i18n"
   ],
+  i18n: {
+    locales: ['en', 'es'],
+    defaultLocale: 'es',
+    vueI18n: './i18n.config.ts'
+  },
   vite: {
     define: {
       __VUE_PROD_DEVTOOLS__: true

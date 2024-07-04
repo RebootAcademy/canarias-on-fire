@@ -3,26 +3,26 @@
 
     <!-- EVENT TYPE -->    <hr>
     <div class="flex flex-col">
-      <p class="font-semibold">Event type</p>
-      <p class="text-xs text-gray-500 mb-3">Select the date and time when the event will take place.</p>
+      <p class="font-semibold">{{ $t('eventType') }}</p>
+      <p class="text-xs text-gray-500 mb-3">{{ $t('selectDateTime' ) }}</p>
       <EventTypeRadioGroup />
     </div>
 
     <!-- EVENT IMAGE -->
     <hr>
     <div class="flex flex-col gap-1">
-      <p class="font-semibold">Select image</p>
-      <p class="text-xs text-gray-500 mb-2">Select the image you want to display at the event.</p>
+      <p class="font-semibold">{{ $t('selectImage') }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ $t('selectImageDescription') }}</p>
       <ImageUploader />
     </div>
 
     <!-- EVENT NAME, DATE & TIME -->
     <hr>
     <div class="flex flex-col gap-1">
-      <p class="font-semibold">Name, date and time</p>
-      <p class="text-xs text-gray-500 mb-2">Select the date and time when the event will take place.</p>
+      <p class="font-semibold">{{ $t('eventInfo') }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ $t('eventInfoDescription') }}</p>
       <Label for="eventName" class="text-xs text-gray-500">
-        Event Name
+        {{ $t('eventNameLabel') }}
         <VeeField
           name="Event name"
           rules="required"
@@ -86,8 +86,8 @@
     <!-- EVENT DESCRIPTION -->
     <hr>
     <div class="flex flex-col gap-1">
-      <p class="font-semibold">Description</p>
-      <p class="text-xs text-gray-500 mb-2">Use this space to tell the public about the details of your event. Be sure to include any relevant information that helps them understand the essence of the event and motivates them to participate.</p>
+      <p class="font-semibold">{{ $t('eventDescription') }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ $t('eventDescriptionDescription') }}</p>
       <VeeField
         name="Description"
         rules="required"
@@ -106,8 +106,8 @@
     <!-- EVENT LOCATION -->
     <hr>
     <div class="flex flex-col gap-1">
-      <p class="font-semibold">Location</p>
-      <p class="text-xs text-gray-500 mb-2">Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.</p>
+      <p class="font-semibold">{{ $t('eventLocation') }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ $t('eventLocationDescription') }}</p>
       <VeeField
         name="Location"
         rules="required"
@@ -121,8 +121,8 @@
     <!-- EVENT PRICE & CAPACITY -->
     <hr>
     <div v-show="eventStore.eventType === 'event'" class="flex flex-col gap-1">
-      <p class="font-semibold">Price</p>
-      <p class="text-xs text-gray-500 mb-2">Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.</p>
+      <p class="font-semibold">{{ $t('eventPrice') }}</p>
+      <p class="text-xs text-gray-500 mb-2">{{ $t('eventPriceDescription') }}</p>
       <div class="flex items-start gap-4">
         <div class="w-1/6">
           <VeeField
@@ -143,9 +143,7 @@
     <!-- EXTERNAL URL -->
     <hr>
     <div class="flex flex-col mb-6">
-      <Label for="externalUrl" class="text-xs ml-1 mb-1"
-        >External site</Label
-      >
+      <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
       <Input
         v-model="eventStore.externalUrl"
         id="externalUrl"

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
-    <p class="font-semibold">Tags</p>
-    <p class="text-xs text-gray-500 mb-2">Choose up to five tags that best describe your event. These categories will help users quickly understand the type and focus of your event.</p>
+    <p class="font-semibold">{{ $t('tags') }}</p>
+    <p class="text-xs text-gray-500 mb-2">{{ $t('chooseTags') }}</p>
     <div class="flex flex-wrap gap-2 p-2 mb-4">
       <Badge 
         v-for="category in categories"
@@ -10,7 +10,7 @@
         @click="toggleCategory(category)"
         variant="secondary"
         class="p-2 px-4 cursor-pointer"
-      >{{ category.name }}</Badge>
+      >{{ $t(`values.${category.name}`) }}</Badge>
     </div>
     <span v-if="error" class="text-red-500 text-xs">{{ error }}</span>
   </div>
@@ -18,9 +18,9 @@
 </template>
 
 <script setup>
-import { Tags } from 'lucide-vue-next';
 import { useEventStore } from '../stores/eventStore'
 
+const { t, tm } = useI18n()
 const eventStore = useEventStore()
 const config = useRuntimeConfig()
 const error = ref('')
@@ -49,9 +49,9 @@ const isSelected = (category) => {
 const validateCategories = () => {
   const selectedCount = eventStore.selectedCategories.length
   if (selectedCount < 1) {
-    error.value = 'Must select at least 1 tag.'
+    error.value = t('mustSelectTag')
   } else if (selectedCount > 5) {
-    error.value = "Can't select more than 5 tags."
+    error.value = t('cantSelectMoreTags')
   } else {
     error.value = ''
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Label for="eventCapacity" class="text-xs text-gray-500">Capacity</Label>
+    <Label for="eventCapacity" class="text-xs text-gray-500">{{ $t('capacity') }}</Label>
     <div class="relative">
       <Input
         v-model="eventStore.eventCapacity"

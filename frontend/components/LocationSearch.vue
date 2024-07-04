@@ -4,7 +4,7 @@
       v-model="eventStore.eventLocation"
       ref="autocompleteInput"
       class="text-sm p-2 border rounded-md w-full"
-      placeholder="Enter a location"
+      :placeholder="$t('location')"
       @place_changed="setPlace"
     >
     </GMapAutocomplete>

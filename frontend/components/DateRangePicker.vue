@@ -1,6 +1,6 @@
 <template>
   <div class="w-1/2 text-gray-500">
-    <Label for="eventDate" class="text-xs">Event period</Label>
+    <Label for="eventDate" class="text-xs">{{ $t('eventPeriod') }}</Label>
     <Popover>
       <PopoverTrigger as-child>
         <Button

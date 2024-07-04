@@ -4,7 +4,7 @@
       <EventInfoForm />
       <CategorySelector />
       <VeeErrorMessage name="selectedCategories" class="text-red-500 text-xs" />
-      <Button type="submit">Preview</Button>
+      <Button type="submit">{{ $t('preview') }}</Button>
     </VeeForm>
   </div>
 </template>
@@ -27,12 +27,10 @@ configure({
   }
 })
 
-const schema = yup.object({
-  
-})
+const schema = yup.object({})
 
 const { handleSubmit } = useForm({
-  validationSchema: schema,
+  validationSchema: schema
 })
 
 const onSubmit = handleSubmit((values) => {

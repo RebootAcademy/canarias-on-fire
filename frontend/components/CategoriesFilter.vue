@@ -5,7 +5,7 @@
       :key="category._id"
       class="flex flex-col items-center"
     >
-    <span class="text-xs mb-1">{{ capitalizeFirstLetter(category.name) }}</span>
+    <span class="text-xs mb-1">{{ $t(`values.${category.name}`) }}</span>
     <div class="flex flex-col items-center justify-center rounded-full border-2 w-20 h-20 hover:bg-slate-200">
       <component :is="category.icon" class="w-8 h-8"/>
     </div>

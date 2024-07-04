@@ -1,0 +1,17 @@
+{
+  "tags": "Tags",
+  "chooseTags": "Choose up to five tags that best describe your event. These categories will help users quickly understand the type and focus of your event.",
+  "mustSelectTag": "Must select at least 1 tag.",
+  "cantSelectMoreTags": "Can't select more than 5 tags.",
+  "values": {
+    "music": "Music",
+    "kids": "Kids",
+    "food&drinks": "Food & Drinks",
+    "nightlife": "Nightlife",
+    "services": "Services",
+    "arts": "Arts",
+    "nature": "Nature",
+    "plans": "Plans",
+    "promotions": "Promotions"
+  }
+}

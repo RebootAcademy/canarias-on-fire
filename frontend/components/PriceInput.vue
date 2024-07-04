@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Label for="eventPrice" class="text-xs text-gray-500">Price</Label>
+    <Label for="eventPrice" class="text-xs text-gray-500">{{ $t('eventPrice') }}</Label>
     <div class="relative">
       <Input
         v-model="eventStore.eventPrice"
@@ -14,7 +14,7 @@
     </div>
     <div class="flex items-center gap-2 mt-2 text-gray-500">
       <Switch v-model:checked="eventStore.isFree" id="isFree" />
-      <Label for="isFree" class="text-xs">My tickets are free</Label>
+      <Label for="isFree" class="text-xs">{{ $t('free') }}</Label>
     </div>
   </div>
 </template>

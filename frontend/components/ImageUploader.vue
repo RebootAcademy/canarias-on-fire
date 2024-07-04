@@ -6,11 +6,11 @@
         @change="handleFileChange"
       />
       <Button @click="uploadImage" class="text-xs px-4">
-        Upload Image
+        {{ $t('uploadImage') }}
       </Button>
     </div>
     <Label class="text-xs ml-1">
-      Preview
+      {{ $t('previewImg') }}
     </Label>
     <NuxtImg 
       v-if="typeof eventStore.eventImg === 'string'" 

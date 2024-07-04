@@ -9,26 +9,30 @@
         </div>
       </NuxtLink>
     </div>
+    <div>
+      <LangSelector />
+    </div>
     <div class="text-sm font-bold flex gap-4">
       <div v-show="!isEventOrPaymentRoute">
         <NuxtLink to="/event">
           <Button variant="secondary">
-            <span class="mr-2 text-lg ">+</span>Create Event
+            <span class="mr-2 text-lg ">+</span>
+            {{  $t('createEvent') }}
           </Button>
         </NuxtLink>
       </div>
-      <button 
+      <Button 
         @click="login"
         class="hover:underline"
       >
-        Log in
-      </button>
-      <button 
+        {{ $t('login') }}
+      </Button>
+      <Button 
         @click="handleLogout"
         class="hover:underline"
       >
-        Log out
-      </button>
+        {{ $t('logout') }}
+      </Button>
       <NuxtLink to="/dashboard">
         <Avatar v-if="isAuthenticated">
           <AvatarImage :src="user.picture" alt="@radix-vue" />

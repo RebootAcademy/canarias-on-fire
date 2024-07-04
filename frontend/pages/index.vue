@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-definePageMeta({
-  title: 'Evently.com - Eventos'
+useHead({
+  title: 'Canarias onFIRE - Eventos'
 })
 
 const { data, error } = await useFetch('http://localhost:8080/api/events')
