@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia'
-const config = useRuntimeConfig()
 
-const generateMapImageUrl = (lat, lng) => {
-  const apiKey = config.public.googleMapsApiKey
+const generateMapImageUrl = (lat, lng, apiKey) => {
   return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${apiKey}`
 }
 
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
     selectedCategories: [],
+    selectedCategory: null,
     eventName: '',
     eventType: '',
     eventDate: '',
