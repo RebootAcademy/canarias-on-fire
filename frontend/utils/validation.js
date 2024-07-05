@@ -1,4 +1,3 @@
-import { categories } from '@vueuse/core/metadata.cjs'
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
@@ -17,38 +16,38 @@ const priceRules = () => {
   return eventStore.isFree ? '' : 'required'
 }
 
-const validateEventDate = () => {
+const validateEventDate = (t) => {
   if (!eventStore.eventDate || !eventStore.eventDate.year || !eventStore.eventDate.month || !eventStore.eventDate.day) {
-    return 'Event date is required'
+    return t('eventDateRequired')
   }
   return ''
 }
 
-const validateEventLocation = () => {
+const validateEventLocation = (t) => {
   if (!eventStore.eventLocation || !eventStore.eventLocation.address) {
-    return 'Event location is required'
+    return t('locationRequired')
   }
   return ''
 }
 
-const validateCategories = () => {
+const validateCategories = (t) => {
   const selectedCount = eventStore.selectedCategories.length
   if (selectedCount < 1) {
-    return 'You must select at least one category'
+    return t('categoriesRequired')
   } else if (selectedCount > 5) {
-    return 'You cannot select more than 5 categories'
+    return t('categoriesMax')
   }
   return ''
 }
 
-const validateFields = () => {
-  errors.eventName = eventStore.eventName ? '' : 'Event name is required'
-  errors.eventDate = validateEventDate()
-  errors.startTime = eventStore.startTime ? '' : 'Start time is required'
-  errors.description = eventStore.eventDescription ? '' : 'Description is required'
-  errors.location = validateEventLocation()
-  errors.price = priceRules() === 'required' && !eventStore.eventPrice ? 'Price is required' : ''
-  errors.categories = validateCategories()
+const validateFields = (t) => {
+  errors.eventName = eventStore.eventName ? '' : t('eventNameRequired')
+  errors.eventDate = validateEventDate(t)
+  errors.startTime = eventStore.startTime ? '' : t('startTimeRequired')
+  errors.description = eventStore.eventDescription ? '' : t('descriptionRequired')
+  errors.location = validateEventLocation(t)
+  errors.price = priceRules() === 'required' && !eventStore.eventPrice ? t('priceRequired') : ''
+  errors.categories = validateCategories(t)
 }
 
 export { errors, validateFields }

@@ -129,6 +129,7 @@ import { useEventStore } from '../stores/eventStore'
 import { errors, validateFields } from '../utils/validation'
 
 const eventStore = useEventStore()
+const { t, locale } = useI18n()
 
 watch(
   () => [
@@ -140,7 +141,7 @@ watch(
     eventStore.eventPrice,
     eventStore.isFree
   ],
-  validateFields,
+  () => validateFields(t),
   { immediate: true }
 )
 
@@ -156,5 +157,10 @@ watch(
       eventStore.eventDate = { start: today, end: nextMonth }
     }
   }
+)
+
+watch(
+  () => locale.value,
+  () => validateFields(t)
 )
 </script>

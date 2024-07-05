@@ -1,0 +1,10 @@
+{
+  "eventNameRequired": "Event name is required",
+  "eventDateRequired": "Event date is required",
+  "startTimeRequired": "Start time is required",
+  "descriptionRequired": "Description is required",
+  "locationRequired": "Event location is required",
+  "priceRequired": "Price is required",
+  "categoriesRequired": "You must select at least one category",
+  "categoriesMax": "You cannot select more than 5 categories"
+}

@@ -1,0 +1,10 @@
+{
+  "eventNameRequired": "El nombre del evento es obligatorio",
+  "eventDateRequired": "La fecha del evento es obligatoria",
+  "startTimeRequired": "La hora de inicio es obligatoria",
+  "descriptionRequired": "La descripción es obligatoria",
+  "locationRequired": "La ubicación del evento es obligatoria",
+  "priceRequired": "El precio es obligatorio",
+  "categoriesRequired": "Debe seleccionar al menos una categoría",
+  "categoriesMax": "No puede seleccionar más de 5 categorías"
+}

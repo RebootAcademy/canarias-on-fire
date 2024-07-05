@@ -6,6 +6,8 @@ import indexEn from './locales/en/index.json'
 import indexEs from './locales/es/index.json'
 import eventEn from './locales/en/events.json'
 import eventEs from './locales/es/events.json'
+import validationEn from './locales/en/validation.json'
+import validationEs from './locales/es/validation.json'
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -15,13 +17,15 @@ export default defineI18nConfig(() => ({
       ...navbarEn,
       ...categorySelectorEn,
       ...indexEn,
-      ...eventEn
+      ...eventEn,
+      ...validationEn
     },
     es: {
       ...navbarEs,
       ...categorySelectorEs,
       ...indexEs,
-      ...eventEs
+      ...eventEs,
+      ...validationEs
     }
   }
 }))
