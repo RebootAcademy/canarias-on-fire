@@ -8,6 +8,7 @@ export const useEventStore = defineStore('eventStore', {
   state: () => ({
     selectedCategories: [],
     selectedCategory: null,
+    events: [],
     eventName: '',
     eventType: '',
     eventDate: '',
@@ -57,6 +58,9 @@ export const useEventStore = defineStore('eventStore', {
     },
     setHasTriedSubmit(value) {
       this.hasTriedSubmit = value
+    },
+    setEvents(events) {
+      this.events = events
     }
   }
 })
