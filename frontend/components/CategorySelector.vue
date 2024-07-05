@@ -12,18 +12,18 @@
         class="p-2 px-4 cursor-pointer"
       >{{ $t(`values.${category.name}`) }}</Badge>
     </div>
-    <span v-if="error" class="text-red-500 text-xs">{{ error }}</span>
+    <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.categories }}</span>
   </div>
   <hr class="mb-4">
 </template>
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
+import { errors, validateFields } from '../utils/validation'
 
-const { t, tm } = useI18n()
 const eventStore = useEventStore()
 const config = useRuntimeConfig()
-const error = ref('')
+const { t } = useI18n()
 
 const { data, error: fetchError } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
   method: 'GET'
@@ -37,27 +37,20 @@ if (fetchError.value) {
 
 const categories = data.value?.result || []
 
-const toggleCategory = (category) => {
-  eventStore.toggleCategory(category)
-  validateCategories()
-}
-
 const isSelected = (category) => {
   return eventStore.selectedCategories.some(c => c._id === category._id)
 }
 
-const validateCategories = () => {
-  const selectedCount = eventStore.selectedCategories.length
-  if (selectedCount < 1) {
-    error.value = t('mustSelectTag')
-  } else if (selectedCount > 5) {
-    error.value = t('cantSelectMoreTags')
+const toggleCategory = (category) => {
+  const index = eventStore.selectedCategories.findIndex(c => c._id === category._id)
+  if (index === -1) {
+    eventStore.selectedCategories.push(category)
   } else {
-    error.value = ''
+    eventStore.selectedCategories.splice(index, 1)
   }
+  validateFields()
 }
 
-validateCategories()
 
-watch(() => eventStore.selectedCategories, validateCategories)
+watch(() => eventStore.selectedCategories)
 </script>

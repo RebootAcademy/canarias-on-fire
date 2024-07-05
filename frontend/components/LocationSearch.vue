@@ -32,11 +32,12 @@ import { useEventStore } from '../stores/eventStore'
 const eventStore = useEventStore()
 
 const setPlace = (place) => {
-  console.log(place)
   if (place && place.geometry) {
     eventStore.setPlaceDetails(place)
     eventStore.setMapCenter(place.geometry.location.lat(), place.geometry.location.lng())
+    eventStore.eventLocation.address = place.formatted_address 
   } else {
+    eventStore.eventLocation.address = ''
     console.error('No place details available')
   }
 }

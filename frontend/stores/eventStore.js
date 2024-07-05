@@ -28,6 +28,7 @@ export const useEventStore = defineStore('eventStore', {
     eventImg: '',
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
+    hasTriedSubmit: false
   }),
   actions: {
     toggleCategory(category) {
@@ -54,6 +55,9 @@ export const useEventStore = defineStore('eventStore', {
     },
     setMapImageUrl(lat, lng) {
       this.mapImageUrl = generateMapImageUrl(lat, lng)
+    },
+    setHasTriedSubmit(value) {
+      this.hasTriedSubmit = value
     }
   }
 })

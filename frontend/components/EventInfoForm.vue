@@ -25,16 +25,13 @@
       <p class="text-xs text-gray-500 mb-2">{{ $t('eventInfoDescription') }}</p>
       <Label for="eventName" class="text-xs text-gray-500">
         {{ $t('eventNameLabel') }}
-        <VeeField name="Event name" rules="required" v-slot="{ field, errors }">
-          <Input
-            v-bind="field"
-            v-model="eventStore.eventName"
-            id="eventName"
-            type="text"
-            class="p-2 border rounded-md mb-1"
-          />
-          <span class="text-red-500 text-xs font-normal">{{ errors[0] }}</span>
-        </VeeField>
+        <Input
+          v-model="eventStore.eventName"
+          id="eventName"
+          type="text"
+          class="p-2 border rounded-md mb-1"
+        />
+        <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs font-normal">{{ errors.eventName }}</span>
       </Label>
     </div>
     <div
@@ -44,30 +41,23 @@
       <div class="w-full flex">
         <div class="w-full flex flex-col">
           <DatePicker />
-          <span class="text-red-500 text-xs mt-1">{{ validateEventDate() }}</span>
+          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.eventDate }}</span>
         </div>
-        <VeeField name="Start time" rules="required" v-slot="{ field, errors }">
-          <div class="w-full flex flex-col pl-8">
-            <TimePicker
-              v-bind="field"
-              id="startTime"
-              label="Start time"
-              modelValue="startTime"
-            />
-            <span class="text-red-500 text-xs mt-1">{{ errors[0] }}</span>
-          </div>
-        </VeeField>
-        <VeeField name="End time" rules="required" v-slot="{ field, errors }">
-          <div class="w-full flex flex-col pl-8">
-            <TimePicker
-              v-bind="field"
-              id="endTime"
-              label="Ending Time"
-              modelValue="endTime"
-            />
-            <span class="text-red-500 text-xs mt-1">{{ errors[0] }}</span>
-          </div>
-        </VeeField>
+        <div class="w-full flex flex-col pl-8">
+          <TimePicker
+            id="startTime"
+            label="Start time"
+            modelValue="startTime"
+          />
+          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.startTime }}</span>
+        </div>
+        <div class="w-full flex flex-col pl-8">
+          <TimePicker
+            id="endTime"
+            label="Ending Time"
+            modelValue="endTime"
+          />
+        </div>
       </div>
     </div>
 
@@ -82,15 +72,12 @@
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('eventDescriptionDescription') }}
       </p>
-      <VeeField name="Description" rules="required" v-slot="{ field, errors }">
-        <Textarea
-          v-bind="field"
-          v-model="eventStore.eventDescription"
-          id="eventDescription"
-          class="p-2 border rounded-md h-40"
-        ></Textarea>
-        <span class="text-red-500 text-xs">{{ errors[0] }}</span>
-      </VeeField>
+      <Textarea
+        v-model="eventStore.eventDescription"
+        id="eventDescription"
+        class="p-2 border rounded-md h-40"
+      ></Textarea>
+      <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.description }}</span>
     </div>
 
     <!-- EVENT LOCATION -->
@@ -100,10 +87,8 @@
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('eventLocationDescription') }}
       </p>
-      <VeeField name="Location" rules="required" v-slot="{ field, errors }">
-        <LocationSearch v-bind="field" />
-        <span class="text-red-500 text-xs">{{ errors[0] }}</span>
-      </VeeField>
+      <LocationSearch v-model="eventStore.eventLocation" />
+      <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.location }}</span>
     </div>
 
     <!-- EVENT PRICE & CAPACITY -->
@@ -115,10 +100,8 @@
       </p>
       <div class="flex items-start gap-4">
         <div class="w-1/6">
-          <VeeField name="Price" :rules="priceRules" v-slot="{ field, errors }">
-            <PriceInput v-bind="field" />
-            <span class="text-red-500 text-xs">{{ errors[0] }}</span>
-          </VeeField>
+          <PriceInput v-model="eventStore.eventPrice"  />
+          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.price }}</span>
         </div>
         <div class="w-1/6">
           <CapacityInput />
@@ -129,9 +112,7 @@
     <!-- EXTERNAL URL -->
     <hr />
     <div class="flex flex-col mb-6">
-      <Label for="externalUrl" class="text-xs ml-1 mb-1">{{
-        $t('externalUrl')
-      }}</Label>
+      <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
       <Input
         v-model="eventStore.externalUrl"
         id="externalUrl"
@@ -145,19 +126,23 @@
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
+import { errors, validateFields } from '../utils/validation'
 
 const eventStore = useEventStore()
 
-const priceRules = () => {
-  return eventStore.isFree ? '' : 'required'
-}
-
-const validateEventDate = () => {
-  if (!eventStore.eventDate || !eventStore.eventDate.year || !eventStore.eventDate.month || !eventStore.eventDate.day) {
-    return 'Event date is required'
-  }
-  return ''
-}
+watch(
+  () => [
+    eventStore.eventName,
+    eventStore.eventDate,
+    eventStore.startTime,
+    eventStore.eventDescription,
+    eventStore.eventLocation.address,
+    eventStore.eventPrice,
+    eventStore.isFree
+  ],
+  validateFields,
+  { immediate: true }
+)
 
 watch(
   () => eventStore.eventType,
