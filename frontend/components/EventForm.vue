@@ -2,7 +2,6 @@
   <div class="flex flex-col mt-4 gap-4">
     <EventInfoForm />
     <CategorySelector />
-    <VeeErrorMessage name="selectedCategories" class="text-red-500 text-xs" />
     <Button type="submit" @click="onSubmit" >{{ $t('preview') }}</Button>
   </div>
 </template>
@@ -14,11 +13,12 @@ import { errors, validateFields } from '../utils/validation'
 
 const eventStore = useEventStore()
 const router = useRouter()
+const { t } = useI18n()
 
 const onSubmit = () => {
   eventStore.setHasTriedSubmit(true)
   eventStore.status = 'draft'
-  validateFields()
+  validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
     router.push({
       name: 'event-preview'

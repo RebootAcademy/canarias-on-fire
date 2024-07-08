@@ -125,8 +125,8 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
 import { errors, validateFields } from '../utils/validation'
+import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
 const { t, locale } = useI18n()

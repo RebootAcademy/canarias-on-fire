@@ -1,5 +1,4 @@
 import { useEventStore } from '../stores/eventStore'
-
 const eventStore = useEventStore()
 
 const errors = reactive({

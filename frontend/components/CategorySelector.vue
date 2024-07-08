@@ -23,7 +23,6 @@ import { errors, validateFields } from '../utils/validation'
 
 const eventStore = useEventStore()
 const config = useRuntimeConfig()
-const { t } = useI18n()
 
 const { data, error: fetchError } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
   method: 'GET'
