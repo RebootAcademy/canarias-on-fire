@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-col items-center px-10">
-    <div
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 w-full">
+      <EventCard 
         v-for="event in filteredEvents" 
         :key="event._id" 
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 w-full"
-      >
-      <EventCard :event="event" />
+        :event="event" 
+      />
     </div>
+    <p v-if="filteredEvents.length === 0" class="text-gray-500 mt-4">No se encontraron eventos.</p>
   </div>
 </template>
 
@@ -15,16 +16,21 @@ import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
 
-const filteredEvents = computed(() => {
-  if (!eventStore.selectedCategory) {
-    return eventStore.events
-  }
-  return eventStore.events.filter(event => event.category === eventStore.selectedCategory)
-})
-
 const props = defineProps({
   events: {
-    type: Array
+    type: Array,
+    default: () => []
   }
 })
+
+const filteredEvents = computed(() => {
+  const eventsToFilter = props.events.length > 0 ? props.events : eventStore.events
+  if (!eventStore.selectedCategory) {
+    return eventsToFilter
+  }
+  return eventsToFilter.filter(event => 
+    event.categories.some(category => category.name === eventStore.selectedCategory)
+  )
+})
+
 </script>

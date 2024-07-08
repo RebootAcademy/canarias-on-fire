@@ -1,3 +1,25 @@
+<template>
+  <div class="flex justify-evenly mt-4">
+    <div 
+      v-for="category in categories" 
+      :key="category._id"
+      class="flex flex-col items-center cursor-pointer"
+      @click="selectCategory(category)"
+    >
+    <span class="text-xs mb-1">{{ $t(`values.${category.name}`) }}</span>
+    <div
+      :class="{
+        'bg-black text-white': isSelected(category),
+        'bg-white text-black': !isSelected(category)
+      }"
+      class="flex flex-col items-center justify-center rounded-full border-2 w-20 h-20 hover:bg-slate-200"
+    >
+      <component :is="category.icon" class="w-8 h-8" />
+    </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { useEventStore } from '../stores/eventStore'
 import { icons } from 'lucide-vue-next'
@@ -33,25 +55,3 @@ const isSelected = (category) => {
 }
 
 </script>
-
-<template>
-  <div class="flex justify-evenly mt-4">
-    <div 
-      v-for="category in categories" 
-      :key="category._id"
-      class="flex flex-col items-center"
-      @click="selectCategory(category)"
-    >
-    <span class="text-xs mb-1">{{ $t(`values.${category.name}`) }}</span>
-    <div
-      :class="{
-        'bg-black text-white': isSelected(category),
-        'bg-white text-black': !isSelected(category)
-      }"
-      class="flex flex-col items-center justify-center rounded-full border-2 w-20 h-20 hover:bg-slate-200"
-    >
-      <component :is="category.icon" class="w-8 h-8" />
-    </div>
-    </div>
-  </div>
-</template>

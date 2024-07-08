@@ -5,6 +5,8 @@
       <CategoriesFilter />
       <EventsHeader />
       <EventList :events="events" />
+      <p v-if="error" class="text-red-500">{{ error }}</p>
+      <p v-if="pending">Loading events...</p>
     </div>
   </div>
 </template>
@@ -14,12 +16,16 @@ useHead({
   title: 'Canarias onFIRE - Eventos'
 })
 
-const { data, error } = await useFetch('http://localhost:8080/api/events')
+const { data, error, pending } = await useFetch('http://localhost:8080/api/events', {
+  lazy: false,
+  server: false,
+})
+
 
 if (error.value) {
   console.error('Error fetching events:', error.value)
 }
 
-const events = data.value?.result || []
+const events = computed(() => data.value?.result || [])
 
 </script>
