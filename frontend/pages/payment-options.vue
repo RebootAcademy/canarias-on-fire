@@ -38,7 +38,7 @@ const basicPublish = async (eventId) => {
       },
       body: JSON.stringify({ 
         status: 'published',
-/*         userId: userId */
+        userId: userStore.userData.result._id
       })
     })
     if (response.ok) {
