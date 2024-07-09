@@ -5,8 +5,9 @@ const {
   createUser,
   getAllUsers,
   getUserById,
+  getCurrentUser,
   updateUser,
-  deleteUser
+  deleteUser,
 } = require('../controllers/user.controller')
 
 router
@@ -15,5 +16,7 @@ router
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/:id', isAuth, checkRole('admin'), updateUser)
   .delete('/:id', isAuth, checkRole('admin'), deleteUser)
+
+  .get('/current/:email', getCurrentUser)
 
 module.exports = router

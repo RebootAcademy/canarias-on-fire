@@ -57,10 +57,9 @@ const EventSchema = new mongoose.Schema({
     enum: ['draft', 'published', 'closed'],
     default: ['draft']
   },
-  companyId: { 
+  userId: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'company',
-    // required: true 
+    ref: 'user',
   },
   // visibility_level: { type: String }, // Echarle un repaso
 })

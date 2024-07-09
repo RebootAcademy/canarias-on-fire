@@ -11,6 +11,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 
 const { user, isAuthenticated , getAccessTokenSilently} = useAuth0()
 const config = useRuntimeConfig()
+const userStore = useUserStore()
 
 const roles = useState('roles', () => [])
 
@@ -38,6 +39,7 @@ if (isAuthenticated.value && user.value) {
       console.log('Failed to register user:', response.statusText)
     } else {
       console.log('User registered successfully')
+      await userStore.fetchAndSetUser(user.value.email)
     }
   } catch (error) {
     console.log('Error registering user in the database:', error)

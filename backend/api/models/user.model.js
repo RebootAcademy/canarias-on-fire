@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
   profileImg: { 
     type: String 
   },
+  auth0Id: {
+    type: String,
+    unique: true
+  }
 }, options)
 
 const UserModel = mongoose.model('user', UserSchema)

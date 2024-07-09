@@ -20,9 +20,7 @@ const onSubmit = () => {
   eventStore.status = 'draft'
   validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
-    router.push({
-      name: 'event-preview'
-    })
+    router.push('/event-preview')
   }
 }
 

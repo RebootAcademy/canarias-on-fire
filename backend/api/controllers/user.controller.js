@@ -70,6 +70,33 @@ const getUserById = async (req, res) => {
   }
 }
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const { email } = req.params
+    console.log('Email received:', email)
+    const user = await User.findOne({ email })
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User successfully fetched.',
+      result: user,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting current user.',
+      description: error.message,
+    })
+  }
+}
+
 // Update user
 const updateUser = async (req, res) => {
   try {
@@ -157,6 +184,7 @@ module.exports = {
   createUser,
   getAllUsers,
   getUserById,
+  getCurrentUser,
   updateUser,
   deleteUser,
 }

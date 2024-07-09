@@ -49,10 +49,6 @@ import { Flame } from 'lucide-vue-next'
 
 const route = useRoute()
 
-const login = () => {
-  loginWithRedirect({ appState: { target: '/dashboard' }})
-}
-
 let loginWithRedirect
 let logout
 let user
@@ -65,6 +61,10 @@ onMounted(async () => {
   loginWithRedirect = auth0.loginWithRedirect
   logout = auth0.logout
 })
+
+const login = () => {
+  loginWithRedirect({ appState: { target: '/dashboard' }})
+}
 
 const handleLogout = () => {
   logout({ logoutParams: {

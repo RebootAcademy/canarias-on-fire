@@ -52,11 +52,11 @@ const config = useRuntimeConfig()
 
 const handleSubmit = async () => {
   const eventData = {
-    categories: eventStore.selectedCategories,
-    ...eventStore
+    ...eventStore,
+    categories: eventStore.selectedCategories
   }
 
-  const { data } = await useFetch(`${config.public.apiBaseUrl}/events`, {
+  const { data, error } = await useFetch(`${config.public.apiBaseUrl}/events`, {
     method: 'POST',
     body: eventData,
     headers: {
@@ -64,11 +64,16 @@ const handleSubmit = async () => {
     }
   })
 
-  if (data.value.success) {
-    router.push({
-      name: 'payment-options',
-      query: { id: data.value.result._id }
-    })
+  if (error.value) {
+      console.error('Error saving event:', error.value)
+      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+      return
+    }
+
+  if (data.value && data.value.success) {
+    router.push(`/payment-options?id=${data.value.result._id}`)
+  } else {
+    console.error('Error saving event:', data.value.error)
   }
 }
 </script>

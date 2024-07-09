@@ -22,7 +22,7 @@ const createEvent = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('categories location companyId')
+    const events = await Event.find().populate('categories location userId')
     res.status(200).json({
       success: true,
       message: 'Events successfully fetched.',
