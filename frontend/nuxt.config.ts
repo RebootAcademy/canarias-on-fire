@@ -60,4 +60,7 @@ export default defineNuxtConfig({
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' }
   },
+  plugins: [
+    '~/plugins/auth0.js'
+  ]
 })

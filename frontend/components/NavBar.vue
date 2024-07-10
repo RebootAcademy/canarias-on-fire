@@ -14,28 +14,28 @@
     </div>
     <div class="text-sm font-bold flex gap-4">
       <div v-show="!isEventOrPaymentRoute">
-        <NuxtLink to="/event">
-          <Button variant="secondary">
-            <span class="mr-2 text-lg ">+</span>
-            {{  $t('createEvent') }}
-          </Button>
-        </NuxtLink>
+        <Button variant="secondary" @click="handleCreateEvent">
+          <span class="mr-2 text-lg ">+</span>
+          {{  $t('createEvent') }}
+        </Button>
       </div>
       <Button 
+        v-if="!auth0?.isAuthenticated"
         @click="login"
         class="hover:underline"
       >
         {{ $t('login') }}
       </Button>
-      <Button 
+      <Button
+        v-if="auth0?.isAuthenticated"
         @click="handleLogout"
         class="hover:underline"
       >
         {{ $t('logout') }}
       </Button>
       <NuxtLink to="/dashboard">
-        <Avatar v-if="isAuthenticated">
-          <AvatarImage :src="user.picture" alt="@radix-vue" />
+        <Avatar v-if="auth0?.isAuthenticated">
+          <AvatarImage :src="user?.picture" alt="@radix-vue" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </NuxtLink>
@@ -46,30 +46,37 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 import { Flame } from 'lucide-vue-next'
+import auth from '~/middleware/auth';
 
 const route = useRoute()
+const auth0 = ref(null)
 
-let loginWithRedirect
-let logout
-let user
-let isAuthenticated
-
-onMounted(async () => {
-  const auth0 = useAuth0()
-  isAuthenticated = auth0.isAuthenticated
-  user = auth0.user
-  loginWithRedirect = auth0.loginWithRedirect
-  logout = auth0.logout
+onMounted(() => {
+  auth0.value = useAuth0()
 })
 
 const login = () => {
-  loginWithRedirect({ appState: { target: '/dashboard' }})
+  if (auth0.value) {
+    auth0.value.loginWithRedirect({ appState: { target: '/dashboard' }})
+  }
 }
 
 const handleLogout = () => {
-  logout({ logoutParams: {
-    returnTo: window.location.origin
-  }})
+  if (auth0.value) {
+    auth0.value.logout({ logoutParams: {
+      returnTo: window.location.origin
+    }})
+  }
+}
+
+const handleCreateEvent = () => {
+  if (!auth0.value?.isAuthenticated) {
+    auth0.value?.loginWithRedirect({
+      appState: { returnTo: '/event' }
+    })
+  } else {
+    navigateTo('/event')
+  }
 }
 
 const isEventOrPaymentRoute = computed(() => {
