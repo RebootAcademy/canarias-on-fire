@@ -5,7 +5,7 @@
         <CarouselItem v-for="event in events" :key="event.id">
           <div class="p-1">
             <Card>
-              <CardContent class="flex flex-col items-center justify-center p-6 h-80">
+              <CardContent class="flex flex-col items-center justify-center p-6 h-60">
                 <span class="text-2xl font-semibold">{{ event.name }}</span>
                 <p class="text-sm">{{ event.description }}</p>
               </CardContent>
