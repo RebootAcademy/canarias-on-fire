@@ -44,6 +44,14 @@ const articles = ref([
     author: 'Festival Guide',
     authorImage: 'https://via.placeholder.com/50', // Reemplaza con la URL de la imagen del autor
     date: '2024-02-15'
+  },
+  {
+    id: 3,
+    image: 'https://via.placeholder.com/400x200', // Reemplaza con la URL de tu imagen
+    title: 'How to prepare for a music festival',
+    author: 'Festival Guide',
+    authorImage: 'https://via.placeholder.com/50', // Reemplaza con la URL de la imagen del autor
+    date: '2024-02-15'
   }
   // more articles...
 ])

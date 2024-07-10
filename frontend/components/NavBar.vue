@@ -46,7 +46,6 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 import { Flame } from 'lucide-vue-next'
-import auth from '~/middleware/auth';
 
 const route = useRoute()
 const auth0 = ref(null)

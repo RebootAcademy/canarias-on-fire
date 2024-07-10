@@ -1,6 +1,6 @@
 <template>
   <div class="w-96 h-80 bg-white shadow-md rounded-md">
-    <NuxtImg :src="event.eventImg" class="w-full h-40 object-cover" />
+    <NuxtImg :src="event.eventImg || defaultImage" class="w-full h-40 object-cover" />
     <div class="p-4 flex flex-col justify-between">
       <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
       <p class="text-sm text-gray-600">{{ formattedDate() }}</p>
@@ -20,6 +20,8 @@
 const props = defineProps({
   event: Object
 })
+
+const defaultImage = './defaultEvent.jpg'
 
 const formattedDate = () => {
   const { year, month, day } = props.event.eventDate
