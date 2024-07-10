@@ -21,5 +21,8 @@ export const useUserStore = defineStore('userStore', {
         console.error('Error fetching user data:', error)
       }
     }
-  }
+  },
+  persist: {
+    storage: persistedState.localStorage,
+  },
 })
