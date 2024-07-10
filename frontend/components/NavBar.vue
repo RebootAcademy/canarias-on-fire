@@ -26,18 +26,15 @@
       >
         {{ $t('login') }}
       </Button>
-      <Button
+<!--       <Button
         v-if="auth0?.isAuthenticated"
         @click="handleLogout"
         class="hover:underline"
       >
         {{ $t('logout') }}
-      </Button>
-      <NuxtLink to="/dashboard">
-        <Avatar v-if="auth0?.isAuthenticated">
-          <AvatarImage :src="user?.picture" alt="@radix-vue" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+      </Button> -->
+      <NuxtLink to="/dashboard" v-if="auth0?.isAuthenticated">
+        <MenuDropdown />
       </NuxtLink>
     </div>
   </div>
