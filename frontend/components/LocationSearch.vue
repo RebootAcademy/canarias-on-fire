@@ -36,6 +36,11 @@ const setPlace = (place) => {
     eventStore.setPlaceDetails(place)
     eventStore.setMapCenter(place.geometry.location.lat(), place.geometry.location.lng())
     eventStore.eventLocation.address = place.formatted_address 
+
+    eventStore.eventLocation.mapImageUrl = eventStore.generateMapImageUrl(
+      place.geometry.location.lat(),
+      place.geometry.location.lng()
+    )
   } else {
     eventStore.eventLocation.address = ''
     console.error('No place details available')

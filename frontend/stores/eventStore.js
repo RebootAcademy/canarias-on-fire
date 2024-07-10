@@ -1,9 +1,5 @@
 import { defineStore } from 'pinia'
 
-const generateMapImageUrl = (lat, lng, apiKey) => {
-  return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${apiKey}`
-}
-
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
     selectedCategories: [],
@@ -28,7 +24,8 @@ export const useEventStore = defineStore('eventStore', {
     eventImg: '',
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
-    hasTriedSubmit: false
+    hasTriedSubmit: false,
+    googleMapsApiKey: null
   }),
   actions: {
     toggleCategory(category) {
@@ -47,20 +44,29 @@ export const useEventStore = defineStore('eventStore', {
       }
       const postalCodeComponent = place.address_components.find(component => component.types.includes('postal_code'))
       this.eventLocation.postalCode = postalCodeComponent ? postalCodeComponent.long_name : ''
-      this.eventLocation.mapImageUrl = generateMapImageUrl(place.geometry.location.lat(), place.geometry.location.lng())
+      this.eventLocation.mapImageUrl = this.generateMapImageUrl(
+        place.geometry.location.lat(), 
+        place.geometry.location.lng()
+      )
       this.externalUrl = place.website
     },
     setMapCenter(lat, lng) {
       this.mapCenter = { lat, lng }
     },
     setMapImageUrl(lat, lng) {
-      this.mapImageUrl = generateMapImageUrl(lat, lng)
+      this.eventLocation.mapImageUrl = this.generateMapImageUrl(lat, lng)
     },
     setHasTriedSubmit(value) {
       this.hasTriedSubmit = value
     },
     setEvents(events) {
       this.events = events
+    },
+    setGoogleMapsApiKey(key) {
+      this.googleMapsApiKey = key
+    },
+    generateMapImageUrl(lat, lng) {
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     }
   }
 })
