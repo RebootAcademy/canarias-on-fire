@@ -2,15 +2,15 @@
   <div class="px-10">
     <div class="overflow-x-auto">
       <div class="flex space-x-8 pb-4">
-        <EventCard 
-          v-for="event in filteredEvents" 
-          :key="event._id" 
-          :event="event" 
+        <ArticleCard 
+          v-for="article in articles" 
+          :key="article.id" 
+          :article="article" 
           class="flex-shrink-0"
         />
       </div>
     </div>
-    <p v-if="filteredEvents.length === 0" class="text-gray-500 h-60">No se encontraron artículos.</p>
+    <p v-if="articles.length === 0" class="text-gray-500 h-60">No se encontraron artículos.</p>
   </div>
 </template>
 
@@ -20,13 +20,13 @@ import { useEventStore } from '../../stores/eventStore'
 const eventStore = useEventStore()
 
 const props = defineProps({
-  events: {
+  articles: {
     type: Array,
     default: () => []
   }
 })
 
-const filteredEvents = computed(() => {
+/* const filteredEvents = computed(() => {
   const eventsToFilter = props.events.length > 0 ? props.events : eventStore.events
   if (!eventStore.selectedCategory) {
     return eventsToFilter
@@ -34,7 +34,7 @@ const filteredEvents = computed(() => {
   return eventsToFilter.filter(event => 
     event.categories.some(category => category.name === eventStore.selectedCategory)
   )
-})
+}) */
 
 </script>
 
