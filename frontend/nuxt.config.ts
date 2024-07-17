@@ -59,7 +59,8 @@ export default defineNuxtConfig({
     // Add cors headers on API routes
     '/api/**': { cors: true },
     // Redirects legacy urls
-    '/old-page': { redirect: '/new-page' }
+    '/old-page': { redirect: '/new-page' },
+    '/event/:id': { ssr: true }
   },
   plugins: [
     '~/plugins/auth0.js'

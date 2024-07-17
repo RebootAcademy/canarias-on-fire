@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
+    event: null,
     selectedCategories: [],
     selectedCategory: null,
     events: [],
@@ -28,6 +29,9 @@ export const useEventStore = defineStore('eventStore', {
     googleMapsApiKey: null
   }),
   actions: {
+    setEvent(eventData) {
+      this.event = eventData
+    },
     toggleCategory(category) {
       const index = this.selectedCategories.findIndex(c => c._id === category._id)
       if (index === -1) {

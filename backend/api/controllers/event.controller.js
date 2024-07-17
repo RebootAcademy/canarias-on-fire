@@ -40,7 +40,7 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id).populate('category location companyId')
+    const event = await Event.findById(req.params.id).populate('categories location userId')
 
     if (!event) {
       return res.status(404).json({

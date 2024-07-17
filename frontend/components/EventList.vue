@@ -3,6 +3,7 @@
     <div class="overflow-x-auto">
       <div class="flex space-x-8 pb-4">
         <EventCard 
+          v-show="event.status === 'published'"
           v-for="event in filteredEvents" 
           :key="event._id" 
           :event="event" 
