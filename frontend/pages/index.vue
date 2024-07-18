@@ -2,10 +2,10 @@
   <div class="h-full bg-gray-100">
     <div>
       <Hero />
-      <EventsCounter :events="events"/>
+      <EventsCounter />
       <CategoriesFilter />
       <EventsHeader />
-      <EventList :events="events"/>
+      <EventList />
       <FeaturedEvents />
       <ArticlesHeader />
       <ArticlesList :articles="articles"/>
@@ -18,16 +18,7 @@ useHead({
   title: 'Canarias onFIRE - Eventos'
 })
 
-const { data, error } = await useFetch('http://localhost:8080/api/events', {
-  lazy: false,
-  server: false,
-})
 
-if (error.value) {
-  console.error('Error fetching events:', error.value)
-}
-
-const events = computed(() => data.value?.result || [])
 const articles = ref([
 {
     id: 1,

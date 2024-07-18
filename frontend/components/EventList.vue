@@ -17,25 +17,10 @@
 
 <script setup>
 import { useEventStore } from '../../stores/eventStore'
+import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()
-
-const props = defineProps({
-  events: {
-    type: Array,
-    default: () => []
-  }
-})
-
-const filteredEvents = computed(() => {
-  const eventsToFilter = props.events.length > 0 ? props.events : eventStore.events
-  if (!eventStore.selectedCategory) {
-    return eventsToFilter
-  }
-  return eventsToFilter.filter(event => 
-    event.categories.some(category => category.name === eventStore.selectedCategory)
-  )
-})
+const { filteredEvents } = storeToRefs(eventStore)
 
 </script>
 

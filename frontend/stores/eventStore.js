@@ -5,6 +5,7 @@ export const useEventStore = defineStore('eventStore', {
     event: null,
     selectedCategories: [],
     selectedCategory: null,
+    searchQuery: '',
     events: [],
     eventName: '',
     eventType: '',
@@ -26,9 +27,20 @@ export const useEventStore = defineStore('eventStore', {
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
     hasTriedSubmit: false,
-    googleMapsApiKey: null
+    googleMapsApiKey: null,
+    isLoading: false,
+    error: null
   }),
   actions: {
+    setEvents(events) {
+      this.events = events
+    },
+    setSelectedCategory(category) {
+      this.selectedCategory = category
+    },
+    setSearchQuery(query) {
+      this.searchQuery = query
+    },
     setEvent(eventData) {
       this.event = eventData
     },
@@ -71,6 +83,43 @@ export const useEventStore = defineStore('eventStore', {
     },
     generateMapImageUrl(lat, lng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
+    },
+    async fetchEvents() {
+      this.isLoading = true
+      this.error = null
+      try {
+        const data = await $fetch('http://localhost:8080/api/events')
+        this.events = data.result || []
+      } catch (err) {
+        console.error('Error fetching events:', err)
+        this.error = err
+      } finally {
+        this.isLoading = false
+      }
+    }
+  },
+  getters: {
+    filteredEvents() {
+      let filtered = this.events
+
+      if (this.selectedCategory) {
+        filtered = filtered.filter(event => 
+          event.categories.some(category => category.name === this.selectedCategory)
+        )
+      }
+
+      if (this.searchQuery) {
+        const lowercaseQuery = this.searchQuery.toLowerCase()
+        filtered = filtered.filter(event => 
+          event.eventName.toLowerCase().includes(lowercaseQuery) ||
+          event.eventDescription.toLowerCase().includes(lowercaseQuery)
+        )
+      }
+
+      return filtered
+    },
+    eventsCount() {
+      return this.events.length
     }
   }
 })
