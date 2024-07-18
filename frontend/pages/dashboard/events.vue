@@ -36,6 +36,10 @@ definePageMeta({
   layout: 'dashboard',
 })
 
+onMounted(() => {
+  eventStore.resetFilters()
+})
+
 const searchQuery = computed({
   get: () => eventStore.searchQuery,
   set: (value) => eventStore.setSearchQuery(value)

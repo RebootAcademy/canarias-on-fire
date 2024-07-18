@@ -84,6 +84,10 @@ export const useEventStore = defineStore('eventStore', {
     generateMapImageUrl(lat, lng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
+    resetFilters() {
+      this.selectedCategory = null
+      this.searchQuery = ''
+    },
     async fetchEvents() {
       this.isLoading = true
       this.error = null

@@ -18,6 +18,11 @@ useHead({
   title: 'Canarias onFIRE - Eventos'
 })
 
+const eventStore = useEventStore()
+
+onMounted(() => {
+  eventStore.resetFilters()
+})
 
 const articles = ref([
 {
