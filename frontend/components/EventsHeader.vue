@@ -7,9 +7,7 @@
         <p class="text-xs text-gray-500">{{ $t('eventsDesc') }}</p>
       </div>
       <Button>
-        <span class="mr-2 text-lg">
-          <SlidersHorizontal />
-        </span>
+        <SlidersHorizontal class="mr-2 text-lg" />
         {{ $t('filterBtn') }}
       </Button>
     </div>

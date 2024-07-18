@@ -2,8 +2,8 @@
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
       <Avatar>
-        <AvatarImage :src="user?.picture" alt="User Avatar" />
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarImage :src="userProfileImage" alt="User Avatar" />
+        <AvatarFallback>{{ userInitials }}</AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
@@ -25,6 +25,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { useRouter } from 'vue-router'
 
+const userStore = useUserStore()
 const { user, isAuthenticated } = useAuth0()
 const router = useRouter()
 
@@ -32,6 +33,15 @@ const auth0 = ref(null)
 
 onMounted(() => {
   auth0.value = useAuth0()
+})
+
+const userProfileImage = computed(() => {
+  return userStore.userData?.profileImg || user.value?.picture
+})
+
+const userInitials = computed(() => {
+  const name = userStore.userData?.username || user.value?.name || ''
+  return name.split(' ').map(n => n[0]).join('').toUpperCase()
 })
 
 const handleLogout = () => {
