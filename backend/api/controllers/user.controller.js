@@ -13,7 +13,7 @@ const createUser = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'User succesfully created.',
-      result: newUser
+      result: newUser,
     })
   } catch (error) {
     console.error(error)
@@ -99,38 +99,12 @@ const getCurrentUser = async (req, res) => {
 
 // Update user
 const updateUser = async (req, res) => {
+  console.log('updateUser controller called with body:', req.body)
   try {
     let user
 
-    if (req.body.role === 'company') {
-      // Check if user is already a company
-      user = await Company.findById(req.params.id)
-      if (user) {
-        // Update company specific fields
-        user = await Company.findByIdAndUpdate(req.params.id, req.body, {
-          new: true,
-          runValidators: true,
-        })
-      } else {
-        // If user is not a company, create a new one
-        const userData = await User.findById(req.params.id)
-        if (!userData) {
-          return res.status(404).json({
-            success: false,
-            message: 'User not found',
-          })
-        }
-        await User.findByIdAndDelete(req.params.id) // Delete old user
-        user = await Company.create({ ...userData.toObject(),  ...req.body, })
-      }
-    } else {
-      // Update user as usual
-      user = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      })
-    }
-    
+    // Primero, intentamos encontrar al usuario
+    user = await User.findById(req.params.id)
 
     if (!user) {
       return res.status(404).json({
@@ -139,13 +113,35 @@ const updateUser = async (req, res) => {
       })
     }
 
+    if (req.body.role === 'company') {
+      // Si el usuario quiere convertirse en una empresa
+      if (user.role !== 'company') {
+        // Si el usuario no era una empresa antes, creamos una nueva entrada de Company
+        const companyData = { ...user.toObject(), ...req.body }
+        await User.findByIdAndDelete(req.params.id) // Eliminamos el usuario antiguo
+        user = await Company.create(companyData)
+      } else {
+        // Si ya era una empresa, actualizamos los datos
+        user = await Company.findByIdAndUpdate(req.params.id, req.body, {
+          new: true,
+          runValidators: true,
+        })
+      }
+    } else {
+      // Actualización de usuario regular
+      Object.assign(user, req.body)
+      await user.save()
+    }
+
+    console.log('User updated successfully:', user)
+
     res.status(200).json({
       success: true,
       message: 'User successfully updated.',
       result: user,
     })
   } catch (error) {
-    console.error(error)
+    console.error('Error updating user:', error)
     return res.status(500).json({
       success: false,
       message: 'Error updating user.',
@@ -168,14 +164,14 @@ const deleteUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'User successfully deleted.',
-      result: user
+      result: user,
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({
       success: false,
       message: 'Error deleting user.',
-      description: error.message
+      description: error.message,
     })
   }
 }
