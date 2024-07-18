@@ -71,7 +71,7 @@ const handleCreateEvent = () => {
       appState: { returnTo: '/event' }
     })
   } else {
-    navigateTo('/event')
+    navigateTo('/event/create-event')
   }
 }
 
