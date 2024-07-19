@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
     event: null,
+    categories: [],
     selectedCategories: [],
     selectedCategory: null,
     searchQuery: '',
@@ -29,8 +30,19 @@ export const useEventStore = defineStore('eventStore', {
     hasTriedSubmit: false,
     googleMapsApiKey: null,
     isLoading: false,
-    error: null
+    error: null,
+    isFilterModalOpen: false,
+    filters: {
+      islands: [],
+      date: null,
+      startTime: null,
+      endTime: null,
+      categories: []
+    },
+    isLoadingCategories: false,
+    categoriesError: null
   }),
+  
   actions: {
     setEvents(events) {
       this.events = events
@@ -87,7 +99,21 @@ export const useEventStore = defineStore('eventStore', {
     resetFilters() {
       this.selectedCategory = null
       this.searchQuery = ''
+      this.filters = {
+        islands: [],
+        date: null,
+        startTime: null,
+        endTime: null,
+        categories: []
+      }
     },
+    setFilterModalOpen(isOpen) {
+      this.isFilterModalOpen = isOpen
+    },
+    setFilters(filters) {
+      this.filters = { ...this.filters, ...filters }
+    },
+
     async fetchEvents() {
       this.isLoading = true
       this.error = null
@@ -100,8 +126,41 @@ export const useEventStore = defineStore('eventStore', {
       } finally {
         this.isLoading = false
       }
-    }
+    },
+
+    async fetchCategories() {
+      if (this.categories.length > 0) return
+
+      this.isLoadingCategories = true
+      this.categoriesError = null
+
+      try {
+        const config = useRuntimeConfig()
+        const apiUrl = `${config.public.apiBaseUrl}/categories`
+        const response = await fetch(apiUrl)
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+        const data = await response.json()
+
+        if (data.success && Array.isArray(data.result)) {
+          this.categories = data.result.map(category => ({
+            id: category._id,
+            name: category.name,
+            icon: category.icon
+          }))
+        } else {
+          throw new Error('Unexpected data structure or request was not successful')
+        }
+      } catch (error) {
+        this.categoriesError = error
+      } finally {
+        this.isLoadingCategories = false
+      }
+    },
+
   },
+
   getters: {
     filteredEvents() {
       let filtered = this.events
@@ -120,10 +179,43 @@ export const useEventStore = defineStore('eventStore', {
         )
       }
 
+      if (this.filters.islands.length > 0) {
+        filtered = filtered.filter(event => 
+          this.filters.islands.includes(event.island)
+        )
+      }
+
+      if (this.filters.date) {
+        filtered = filtered.filter(event => 
+          new Date(event.eventDate).toDateString() === new Date(this.filters.date).toDateString()
+        )
+      }
+
+      if (this.filters.startTime) {
+        filtered = filtered.filter(event => 
+          new Date(`1970-01-01T${event.startTime}`).getTime() >= new Date(`1970-01-01T${this.filters.startTime}`).getTime()
+        )
+      }
+
+      if (this.filters.endTime) {
+        filtered = filtered.filter(event => 
+          new Date(`1970-01-01T${event.endTime}`).getTime() <= new Date(`1970-01-01T${this.filters.endTime}`).getTime()
+        )
+      }
+
+      if (this.filters.categories.length > 0) {
+        filtered = filtered.filter(event => 
+          event.categories.some(category => this.filters.categories.includes(category.name))
+        )
+      }
+
       return filtered
     },
     eventsCount() {
       return this.events.length
-    }
+    },
+    getCategoryById: (state) => (id) => {
+      return state.categories.find(category => category.id === id)
+    },
   }
 })

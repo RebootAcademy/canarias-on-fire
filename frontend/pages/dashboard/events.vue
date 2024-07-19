@@ -4,9 +4,10 @@
       <h2 class="text-xl font-semibold">Events</h2>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />
-        <Button class="text-sm px-3">
+        <Button @click="openFilterModal" class="text-sm px-3">
           {{ $t('filterBtn') }}
         </Button>
+        <FilterModal />
       </div>
     </div>
     <hr class="mb-4" />
@@ -44,5 +45,9 @@ const searchQuery = computed({
   get: () => eventStore.searchQuery,
   set: (value) => eventStore.setSearchQuery(value)
 })
+
+const openFilterModal = () => {
+  eventStore.setFilterModalOpen(true)
+}
 
 </script>

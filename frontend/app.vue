@@ -11,5 +11,6 @@ const eventStore = useEventStore()
 
 onMounted(async () => {
   await eventStore.fetchEvents()
+  await eventStore.fetchCategories()
 })
 </script>
