@@ -96,6 +96,12 @@ export const useEventStore = defineStore('eventStore', {
     generateMapImageUrl(lat, lng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
+    setFilterModalOpen(isOpen) {
+      this.isFilterModalOpen = isOpen
+    },
+    setFilters(newFilters) {
+      this.filters = { ...this.filters, ...newFilters }
+    },
     resetFilters() {
       this.selectedCategory = null
       this.searchQuery = ''
@@ -106,12 +112,6 @@ export const useEventStore = defineStore('eventStore', {
         endTime: null,
         categories: []
       }
-    },
-    setFilterModalOpen(isOpen) {
-      this.isFilterModalOpen = isOpen
-    },
-    setFilters(filters) {
-      this.filters = { ...this.filters, ...filters }
     },
 
     async fetchEvents() {
@@ -163,59 +163,58 @@ export const useEventStore = defineStore('eventStore', {
 
   getters: {
     filteredEvents() {
-      let filtered = this.events
+      return this.events.filter(event => {
 
-      if (this.selectedCategory) {
-        filtered = filtered.filter(event => 
-          event.categories.some(category => category.name === this.selectedCategory)
-        )
+        // Search
+        if (this.searchQuery) {
+          const lowercaseQuery = this.searchQuery.toLowerCase()
+          filtered = filtered.filter(event => 
+            event.eventName.toLowerCase().includes(lowercaseQuery) ||
+            event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          )
+        }
+        // Filter by Categories
+        if (this.filters.categories.length > 0) {
+          const eventCategoryIds = event.categories.map(cat => cat._id)
+          if (!this.filters.categories.some(id => eventCategoryIds.includes(id))) {
+            return false
+          }
+        }
+  
+        // Filter by islands
+        if (this.filters.islands.length > 0) {
+          filtered = filtered.filter(event => 
+            this.filters.islands.includes(event.island)
+          )
+        }
+  
+        // Filter by Date
+        if (this.filters.date) {
+          const filterDate = this.filters.date
+          const eventDate = event.eventDate // Asumiendo que el evento tiene la misma estructura de fecha
+
+          if (filterDate.year !== eventDate.year ||
+              filterDate.month !== eventDate.month ||
+              filterDate.day !== eventDate.day) {
+            return false
+          }
+        }
+  
+        // Filter by startTime
+        if (this.filters.startTime) {
+          filtered = filtered.filter(event => 
+            new Date(`1970-01-01T${event.startTime}`).getTime() >= new Date(`1970-01-01T${this.filters.startTime}`).getTime()
+          )
+        }
+  
+        return true
+        })
       }
-
-      if (this.searchQuery) {
-        const lowercaseQuery = this.searchQuery.toLowerCase()
-        filtered = filtered.filter(event => 
-          event.eventName.toLowerCase().includes(lowercaseQuery) ||
-          event.eventDescription.toLowerCase().includes(lowercaseQuery)
-        )
-      }
-
-      if (this.filters.islands.length > 0) {
-        filtered = filtered.filter(event => 
-          this.filters.islands.includes(event.island)
-        )
-      }
-
-      if (this.filters.date) {
-        filtered = filtered.filter(event => 
-          new Date(event.eventDate).toDateString() === new Date(this.filters.date).toDateString()
-        )
-      }
-
-      if (this.filters.startTime) {
-        filtered = filtered.filter(event => 
-          new Date(`1970-01-01T${event.startTime}`).getTime() >= new Date(`1970-01-01T${this.filters.startTime}`).getTime()
-        )
-      }
-
-      if (this.filters.endTime) {
-        filtered = filtered.filter(event => 
-          new Date(`1970-01-01T${event.endTime}`).getTime() <= new Date(`1970-01-01T${this.filters.endTime}`).getTime()
-        )
-      }
-
-      if (this.filters.categories.length > 0) {
-        filtered = filtered.filter(event => 
-          event.categories.some(category => this.filters.categories.includes(category.name))
-        )
-      }
-
-      return filtered
     },
     eventsCount() {
       return this.events.length
     },
     getCategoryById: (state) => (id) => {
       return state.categories.find(category => category.id === id)
-    },
-  }
+    }
 })

@@ -10,7 +10,7 @@
       <div>
         <h3 class="font-semibold">Ubication</h3>
         <p class="text-sm text-gray-500 mb-2">Select the island or islands you want to filter events by from the list below.</p>
-        <div class="grid grid-cols-2 gap-2 mb-4">
+        <div class="grid grid-cols-3 gap-2 mb-4">
           <label v-for="island in islands" :key="island" class="flex items-center">
             <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2">
             {{ island }}
@@ -18,28 +18,24 @@
         </div>
         <h3 class="font-semibold">Date and time</h3>
         <p class="text-sm text-gray-500 mb-2">Select the date and time to refine your event search.</p>
-        <div class="grid grid-cols-3 gap-2 mb-4">
-          <DatePicker v-model="selectedDate" placeholder="Date" />
-          <TimePicker v-model="startTime" placeholder="Start time" />
-          <TimePicker v-model="endTime" placeholder="Ending time" />
+        <div class="grid grid-cols-3 gap-2 mb-4 bg-red-200 place-items-end">
+          <DatePicker v-model="selectedDate" />
+          <TimePicker v-model="startTime" />
         </div>
         <h3 class="font-semibold">Categories</h3>
         <p class="text-sm text-gray-500 mb-2">Select up to 3 categories to find events that match your interests.</p>
         <div class="grid grid-cols-3 gap-2 mb-4">
-          <button
-            v-for="category in categories"
-            :key="category"
+          <Button
+            v-for="category in eventStore.categories"
+            :key="category.id"
             @click="toggleCategory(category)"
-            :class="{
-              'bg-black text-white': selectedCategories.includes(category),
-              'bg-white text-black': !selectedCategories.includes(category)
-            }"
-            class="border rounded-full px-4 py-2"
+            :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
+            class="text-xs"
           >
             {{ category.name }}
-          </button>
+          </Button>
         </div>
-        <button @click="applyFilters" class="bg-black text-white px-4 py-2 rounded-lg">APPLY</button>
+        <Button @click="applyFilters">Apply filters</Button>
       </div>
     </div>
   </div>
@@ -50,37 +46,45 @@ import { useEventStore } from '../stores/eventStore'
 import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()
-const { isFilterModalOpen, categories } = storeToRefs(eventStore)
+const { isFilterModalOpen, filters } = storeToRefs(eventStore)
 
-const selectedIslands = ref([])
-const selectedDate = ref(null)
+const selectedIslands = ref(filters.value.islands)
+const selectedDate = ref(filters.value.date || null)
 const startTime = ref(null)
-const endTime = ref(null)
-const selectedCategories = ref([])
+const selectedCategories = ref(filters.value.categories)
 
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
 
-const closeModal = () => {
-  eventStore.setFilterModalOpen(false)
+const toggleCategory = (category) => {
+  const index = selectedCategories.value.indexOf(category.id)
+  if (index === -1) {
+    selectedCategories.value.push(category.id)
+  } else {
+    selectedCategories.value.splice(index, 1)
+  }
 }
 
-const toggleCategory = (category) => {
-  if (selectedCategories.value.includes(category)) {
-    selectedCategories.value = selectedCategories.value.filter(c => c !== category)
-  } else if (selectedCategories.value.length < 3) {
-    selectedCategories.value.push(category)
-  }
+const closeModal = () => {
+  eventStore.setFilterModalOpen(false)
 }
 
 const applyFilters = () => {
   eventStore.setFilters({
     islands: selectedIslands.value,
     date: selectedDate.value,
-    startTime: startTime.value,
-    endTime: endTime.value,
+    // startTime: startTime.value,
     categories: selectedCategories.value
   })
   closeModal()
 }
+
+// Opcional: resetear filtros cuando se abre el modal
+watch(isFilterModalOpen, (newValue) => {
+  if (newValue) {
+    selectedIslands.value = filters.value.islands
+    selectedDate.value = filters.value.date ? { ...filters.value.date } : null
+    selectedCategories.value = [...filters.value.categories]
+  }
+})
 
 </script>
