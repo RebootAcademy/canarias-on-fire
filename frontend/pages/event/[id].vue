@@ -42,43 +42,64 @@
       <h2 class="text-xl font-semibold">Organizador</h2>
       <!-- Aquí puedes agregar la información del organizador si la tienes -->
     </div>
+    <div class="flex gap-2 mt-6 mb-6">
+      <Button class="px-4">
+        <Share2 class="mr-2 h-4 w-4" />
+        Share
+      </Button>
+      <Button 
+        v-if="userStore.userData.role === 'admin'"
+      >
+        <Pencil class="mr-2 h-4 w-4" />
+        Edit
+      </Button>
+      <Button 
+        v-if="userStore.userData.role === 'admin'" 
+        @click="deleteEvent"
+      >
+        <Trash class="mr-2 h-4 w-4" />
+        Delete
+      </Button>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { useEventStore } from '~/stores/eventStore'
+import { Share2, Pencil, Trash } from 'lucide-vue-next'
+
 import { formatEventDate } from '@/utils/dateUtils'
 import { storeToRefs } from 'pinia'
 
-const route = useRoute()
 const eventStore = useEventStore()
+const userStore = useUserStore()
+const route = useRoute()
+
 const { event } = storeToRefs(eventStore)
 const defaultImage = '/defaultEvent.jpg'
 
 const eventId = route.params.id
 
-const { data, error, pending } = await useAsyncData('event', () => 
-  $fetch(`http://localhost:8080/api/events/${eventId}`))
+const { data, error } = await eventStore.fetchEventById(eventId)
 
-if (error.value) {
-  console.error('Error fetching event:', error.value)
-} else {
-  eventStore.setEvent(data.value.result)
+if (error) { console.error('Error fetching event:', error) }
+
+const editEvent = () => {
+
 }
 
-// console.log(event.value.eventLocation.mapImageUrl)
+const deleteEvent = async () => {
+  const success = await eventStore.deleteEvent(event.value._id)
+  if (success) {
+    console.log('Event deleted successfully')
+    navigateTo('/')
+  } else {
+    console.error('Failed to delete event')
+  }
+}
 
 const formattedDate = computed(() => {
   return formatEventDate(event.value?.eventDate)
 })
-
-/* onMounted(() => {
-  watch(data, (newData) => {
-    if (newData) {
-      console.log('Event location:', newData.eventLocation)
-      console.log('Map Image URL:', newData.eventLocation?.mapImageUrl)
-    }
-  }, { immediate: true })
-}) */
 
 </script>

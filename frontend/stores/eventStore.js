@@ -134,6 +134,19 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    async fetchEventById(eventId) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${eventId}`)
+        if (data.value) {
+          this.setEvent(data.value.result)
+        }
+        return { data: data.value, error: null }
+      } catch (error) {
+        console.error('Error fetching event:', error)
+        return { data: null, error }
+      }
+    },
+
     async fetchCategories() {
       if (this.categories.length > 0) return
 

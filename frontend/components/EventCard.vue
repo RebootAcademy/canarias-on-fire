@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { MoreVertical, Pencil, Trash } from 'lucide-vue-next';
+import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -87,10 +87,8 @@ const editEvent = () => {
 const deleteEvent = async () => {
   const success = await eventStore.deleteEvent(props.event._id)
   if (success) {
-    // Opcional: mostrar un mensaje de éxito
     console.log('Event deleted successfully')
   } else {
-    // Opcional: mostrar un mensaje de error
     console.error('Failed to delete event')
   }
 }
