@@ -10,7 +10,11 @@ export const useEventStore = defineStore('eventStore', {
     events: [],
     eventName: '',
     eventType: '',
-    eventDate: '',
+    eventDate: {
+      year: null,
+      month: null,
+      day: null
+    },
     eventLocation: {
       address: '',
       coordinates: { lat: null, lng: null },
@@ -109,7 +113,6 @@ export const useEventStore = defineStore('eventStore', {
         islands: [],
         date: null,
         startTime: null,
-        endTime: null,
         categories: []
       }
     },
@@ -183,29 +186,34 @@ export const useEventStore = defineStore('eventStore', {
   
         // Filter by islands
         if (this.filters.islands.length > 0) {
-          filtered = filtered.filter(event => 
-            this.filters.islands.includes(event.island)
-          )
-        }
-  
-        // Filter by Date
-        if (this.filters.date) {
-          const filterDate = this.filters.date
-          const eventDate = event.eventDate // Asumiendo que el evento tiene la misma estructura de fecha
-
-          if (filterDate.year !== eventDate.year ||
-              filterDate.month !== eventDate.month ||
-              filterDate.day !== eventDate.day) {
+          if (!this.filters.islands.includes(event.eventLocation.island)) {
             return false
           }
         }
   
+/*         // Filter by Date
+        if (this.filters.date) {
+          const filterDate = new Date(this.filters.date)
+          const eventDate = new Date(event.eventDate)
+          
+          if (isNaN(filterDate.getTime()) || isNaN(eventDate.getTime())) {
+            console.error('Invalid date:', this.filters.date, event.eventDate)
+            return false
+          }
+  
+          if (filterDate.getFullYear() !== eventDate.getFullYear() ||
+              filterDate.getMonth() !== eventDate.getMonth() ||
+              filterDate.getDate() !== eventDate.getDate()) {
+            return false
+          }
+        } */
+  
         // Filter by startTime
-        if (this.filters.startTime) {
+/*         if (this.filters.startTime) {
           filtered = filtered.filter(event => 
             new Date(`1970-01-01T${event.startTime}`).getTime() >= new Date(`1970-01-01T${this.filters.startTime}`).getTime()
           )
-        }
+        } */
   
         return true
         })

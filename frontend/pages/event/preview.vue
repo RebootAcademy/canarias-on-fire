@@ -52,9 +52,15 @@ const config = useRuntimeConfig()
 const defaultImage = './defaultEvent.jpg'
 
 const handleSubmit = async () => {
+  const island = getIslandFromPostalCode(eventStore.eventLocation.postalCode)
+
   const eventData = {
     ...eventStore,
-    categories: eventStore.selectedCategories
+    categories: eventStore.selectedCategories,
+    eventLocation: {
+      ...eventStore.eventLocation,
+      island: island
+    }
   }
 
   const { data, error } = await useFetch(`${config.public.apiBaseUrl}/events`, {
@@ -67,7 +73,6 @@ const handleSubmit = async () => {
 
   if (error.value) {
       console.error('Error saving event:', error.value)
-      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
       return
     }
 

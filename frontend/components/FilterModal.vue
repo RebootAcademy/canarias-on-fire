@@ -49,8 +49,9 @@ const eventStore = useEventStore()
 const { isFilterModalOpen, filters } = storeToRefs(eventStore)
 
 const selectedIslands = ref(filters.value.islands)
-const selectedDate = ref(filters.value.date || null)
-const startTime = ref(null)
+// const selectedDate = ref(filters.value.date ? new Date(filters.value.date) : null)
+
+// const startTime = ref(null)
 const selectedCategories = ref(filters.value.categories)
 
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
@@ -71,7 +72,7 @@ const closeModal = () => {
 const applyFilters = () => {
   eventStore.setFilters({
     islands: selectedIslands.value,
-    date: selectedDate.value,
+    // date: selectedDate.value ? selectedDate.value.toISOString() : null,
     // startTime: startTime.value,
     categories: selectedCategories.value
   })
@@ -82,7 +83,7 @@ const applyFilters = () => {
 watch(isFilterModalOpen, (newValue) => {
   if (newValue) {
     selectedIslands.value = filters.value.islands
-    selectedDate.value = filters.value.date ? { ...filters.value.date } : null
+    // selectedDate.value = filters.value.date ? new Date(filters.value.date) : null
     selectedCategories.value = [...filters.value.categories]
   }
 })
