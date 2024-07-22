@@ -60,6 +60,9 @@ export const useEventStore = defineStore('eventStore', {
     setEvent(eventData) {
       this.event = eventData
     },
+    removeEvent(eventId) {
+      this.events = this.events.filter(event => event._id !== eventId)
+    }, 
     toggleCategory(category) {
       const index = this.selectedCategories.findIndex(c => c._id === category._id)
       if (index === -1) {
@@ -159,6 +162,31 @@ export const useEventStore = defineStore('eventStore', {
         this.categoriesError = error
       } finally {
         this.isLoadingCategories = false
+      }
+    },
+
+    async deleteEvent(eventId) {
+      const userStore = useUserStore()
+      const config = useRuntimeConfig()
+      
+      try {
+        const { data } = await useFetch(`${config.public.apiBaseUrl}/events/${eventId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${userStore.token}`,
+          }
+        })
+
+        if (data.value && data.value.success) {
+          this.events = this.events.filter(event => event._id !== eventId)
+          return true
+        } else {
+          console.error('Error deleting event')
+          return false
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        return false
       }
     },
 
