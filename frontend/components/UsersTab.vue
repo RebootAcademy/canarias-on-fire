@@ -1,36 +1,19 @@
 <template>
-  <div v-if="!selectedUser" class="p-4">
-    <div class="flex items-center justify-between w-full mb-6">
-      <h2 class="text-2xl font-semibold">Users List</h2>
-      <Tabs v-model="activeTab" class="w-auto">
-        <TabsList>
-          <TabsTrigger value="companies">Companies</TabsTrigger>
-          <TabsTrigger value="basicUsers">Basic Users</TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </div>
-    <div class="flex justify-end items-center mb-6">
-      <div class="flex gap-4">
-        <SearchInput v-model="searchQuery" placeholder="Search users..." />
-        <Button @click="openAddUserModal" class="text-sm px-3">
-          Add user
-        </Button>
-      </div>
-    </div>
-    <UserTable 
-      :users="filteredUsers"
-      :isCompanyTab="activeTab === 'companies'"
+  <div class="p-4">
+    <h2 class="text-2xl font-semibold mb-6">Users Management</h2>
+    <UsersList 
+      v-if="!selectedUser"
       @userSelected="selectUser"
     />
+    <UserProfile 
+      v-else 
+      :user="selectedUser" 
+      @update="updateUser"
+      @deactivate="deactivateUser"
+      @delete="deleteUser"
+      @back="selectedUser = null"
+    />
   </div>
-  <UserProfile 
-    v-else 
-    :user="selectedUser" 
-    @update="updateUser"
-    @deactivate="deactivateUser"
-    @delete="deleteUser"
-    @back="selectedUser = null"
-  />
 </template>
 
 <script setup>
