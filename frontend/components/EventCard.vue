@@ -73,6 +73,7 @@ import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
+const router = useRouter()
 
 const props = defineProps({
   event: Object,
@@ -81,7 +82,7 @@ const props = defineProps({
 const defaultImage = './defaultEvent.jpg'
 
 const editEvent = () => {
-
+  router.push(`/event/edit/${props.event._id}`)
 }
 
 const deleteEvent = async () => {

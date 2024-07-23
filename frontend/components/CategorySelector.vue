@@ -4,7 +4,7 @@
     <p class="text-xs text-gray-500 mb-2">{{ $t('chooseTags') }}</p>
     <div class="flex flex-wrap gap-2 p-2 mb-4">
       <Badge 
-        v-for="category in categories"
+        v-for="category in eventStore.categories"
         :key="category._id"
         :class="{'bg-black text-white' : isSelected(category), 'bg-white' : !isSelected(category)}"
         @click="toggleCategory(category)"
@@ -18,23 +18,22 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
 import { errors, validateFields } from '../utils/validation'
 
+const props = defineProps({
+  isEditing: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const eventStore = useEventStore()
-const config = useRuntimeConfig()
 
-const { data, error: fetchError } = await useAsyncData('categories', () => $fetch(`${config.public.apiBaseUrl}/categories`, {
-  method: 'GET'
-})) 
-
-if (fetchError.value) {
-  console.error('Error geting categories from database:', fetchError.value)
-} else {
-  // console.log('Categories fetched from databse', data.value)
-}
-
-const categories = data.value?.result || []
+onMounted(async () => {
+  if (props.isEditing && eventStore.event) {
+    eventStore.selectedCategories = eventStore.event.categories
+  }
+})
 
 const isSelected = (category) => {
   return eventStore.selectedCategories.some(c => c._id === category._id)

@@ -126,41 +126,33 @@
 
 <script setup>
 import { errors, validateFields } from '../utils/validation'
-import { useEventStore } from '../stores/eventStore'
+
+const props = defineProps({
+  isEditing: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const eventStore = useEventStore()
 const { t, locale } = useI18n()
 
-watch(
-  () => [
-    eventStore.eventName,
-    eventStore.eventDate,
-    eventStore.startTime,
-    eventStore.eventDescription,
-    eventStore.eventLocation.address,
-    eventStore.eventPrice,
-    eventStore.isFree
-  ],
-  () => validateFields(t),
-  { immediate: true }
-)
-
-watch(
-  () => eventStore.eventType,
-  (newType) => {
-    if (newType === 'event') {
-      eventStore.eventDate = ''
-    } else {
-      const today = new Date()
-      const nextMonth = new Date()
-      nextMonth.setMonth(today.getMonth() + 1)
-      eventStore.eventDate = { start: today, end: nextMonth }
-    }
+onMounted(() => {
+  if (props.isEditing && eventStore.event) {
+    // Populate form fields with existing event data
+    eventStore.eventName = eventStore.event.eventName
+    eventStore.eventType = eventStore.event.eventType
+    eventStore.eventDate = eventStore.event.eventDate
+    eventStore.startTime = eventStore.event.startTime
+    eventStore.endTime = eventStore.event.endTime
+    eventStore.eventDescription = eventStore.event.eventDescription
+    eventStore.eventLocation = eventStore.event.eventLocation
+    eventStore.eventPrice = eventStore.event.eventPrice
+    eventStore.isFree = eventStore.event.isFree
+    eventStore.eventCapacity = eventStore.event.eventCapacity
+    eventStore.externalUrl = eventStore.event.externalUrl
+    eventStore.eventImg = eventStore.event.eventImg
   }
-)
+})
 
-watch(
-  () => locale.value,
-  () => validateFields(t)
-)
 </script>

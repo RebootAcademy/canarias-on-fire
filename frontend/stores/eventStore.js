@@ -178,6 +178,26 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    async updateEvent() {
+      try {
+        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${this.event._id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(this.getEventData()),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.success) {
+          this.setEvent(response.result)
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error('Error updating event:', error)
+        return false
+      }
+    },
+
     async deleteEvent(eventId) {
       const userStore = useUserStore()
       const config = useRuntimeConfig()
@@ -202,6 +222,23 @@ export const useEventStore = defineStore('eventStore', {
         return false
       }
     },
+    getEventData() {
+      return {
+        eventName: this.eventName,
+        eventType: this.eventType,
+        eventDate: this.eventDate,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        eventDescription: this.eventDescription,
+        eventLocation: this.eventLocation,
+        eventPrice: this.isFree ? 0 : this.eventPrice,
+        isFree: this.isFree,
+        eventCapacity: this.eventCapacity,
+        externalUrl: this.externalUrl,
+        eventImg: this.eventImg,
+        categories: this.selectedCategories.map(cat => cat._id)
+      }
+    }
 
   },
 
@@ -265,5 +302,6 @@ export const useEventStore = defineStore('eventStore', {
     },
     getCategoryById: (state) => (id) => {
       return state.categories.find(category => category.id === id)
-    }
+    },
+
 })

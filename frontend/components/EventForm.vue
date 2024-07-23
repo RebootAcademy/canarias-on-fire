@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col mt-4 gap-4">
-    <EventInfoForm />
-    <CategorySelector />
-    <Button type="submit" @click="onSubmit" >{{ $t('preview') }}</Button>
+    <EventInfoForm :isEditing="isEditing" />
+    <CategorySelector :isEditing="isEditing" />
+    <Button type="submit" @click="onSubmit">{{ isEditing ? $t('update') : $t('preview') }}</Button>
   </div>
 </template>
 
@@ -11,16 +11,28 @@ import { useEventStore } from '../stores/eventStore'
 import { useRouter } from 'vue-router'
 import { errors, validateFields } from '../utils/validation'
 
+const props = defineProps({
+  isEditing: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const eventStore = useEventStore()
 const router = useRouter()
 const { t } = useI18n()
 
-const onSubmit = () => {
+const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
-  eventStore.status = 'draft'
   validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
-    router.push('event/preview')
+    if (props.isEditing) {
+      await eventStore.updateEvent()
+      router.push(`/event/${eventStore.event._id}`)
+    } else {
+      eventStore.status = 'draft'
+      router.push('event/preview')
+    }
   }
 }
 

@@ -91,6 +91,7 @@ const updateEvent = async (req, res) => {
     })
   }
 }
+
 const deleteEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndDelete(req.params.id)
