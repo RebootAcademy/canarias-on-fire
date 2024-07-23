@@ -1,10 +1,23 @@
 <template>
   <div v-if="user">
-    <div class="flex items-center mb-6">
-      <Button @click="$emit('back')" class="text-sm px-3" variant="transparent">
-        <ArrowLeft />
-      </Button>
-      <h2 class="text-2xl font-semibold">{{ user.username }}</h2>
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center">
+        <Button @click="$emit('back')" class="text-sm px-3" variant="transparent">
+          <ArrowLeft />
+        </Button>
+        <h2 class="text-2xl font-semibold">        
+          {{ user.role === 'company' ? user.companyName : user.username }}
+        </h2>
+      </div>
+
+      <Tabs v-if="user.role === 'company'" v-model="activeTab" class="w-auto">
+        <TabsList>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="events">Events</TabsTrigger>
+          <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
     </div>
     <hr />
     <div class="p-6">
@@ -12,10 +25,12 @@
         <div
           class="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold text-white"
         >
-          {{ user.username.charAt(0).toUpperCase() }}
+        {{ (user.role === 'company' ? user.companyName : user.username).charAt(0).toUpperCase() }}
         </div>
         <div>
-          <h3 class="text-xl font-semibold">{{ user.username }}</h3>
+          <h3 class="text-xl font-semibold">
+            {{ user.role === 'company' ? user.companyName : user.username }}
+          </h3>
           <p class="text-gray-600">{{ user.email }}</p>
         </div>
       </div>
@@ -49,6 +64,7 @@
         </Select>
       </div>
 
+      <hr class="mb-6">
       <!-- Company-specific fields -->
       <div v-if="selectedRole === 'company'">
         <div class="mb-4">
@@ -117,6 +133,7 @@ const emit = defineEmits(['update', 'deactivate', 'delete', 'back'])
 const userStore = useUserStore()
 const editedUser = ref({ ...props.user })
 const selectedRole = ref(props.user.role)
+const activeTab = ref('profile')
 
 watch(selectedRole, (newRole) => {
   editedUser.value.role = newRole
