@@ -4,19 +4,19 @@
       <TableRow>
         <TableHead>Username</TableHead>
         <TableHead>Email</TableHead>
-        <TableHead>Role</TableHead>
-        <TableHead class="text-right">Actions</TableHead>
+        <TableHead class="text-right">Role</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="user in users" :key="user._id">
+      <TableRow 
+        v-for="user in users" 
+        :key="user._id"
+        @click="$emit('userSelected', user)"
+        class="cursor-pointer"
+      >
         <TableCell>{{ user.username }}</TableCell>
         <TableCell>{{ user.email }}</TableCell>
-        <TableCell>{{ user.role }}</TableCell>
-        <TableCell class="text-right">
-<!--           <Button @click="editUser(user)" class="mr-2">Edit</Button>
-          <Button @click="deleteUser(user)" variant="destructive">Delete</Button> -->
-        </TableCell>
+        <TableCell class="text-right">{{ user.role }}</TableCell>
       </TableRow>
     </TableBody>
   </Table>
@@ -30,14 +30,4 @@ const props = defineProps({
     required: true
   }
 })
-
-const emit = defineEmits(['edit', 'delete'])
-
-const editUser = (user) => {
-  emit('edit', user)
-}
-
-const deleteUser = (user) => {
-  emit('delete', user)
-}
 </script>

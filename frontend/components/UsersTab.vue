@@ -1,5 +1,8 @@
 <template>
-  <div class="p-4">
+  <div
+    v-if="!selectedUser" 
+    class="p-4"
+  >
     <div class="flex items-center justify-between w-full mb-6">
       <h2 class="text-2xl font-semibold">Users List</h2>
       <Tabs v-model="activeTab" class="w-auto">
@@ -18,17 +21,26 @@
       </div>
     </div>
     <UserTable 
-      :users="filteredUsers" 
-      @edit="editUser"
-      @delete="deleteUser"
+      :users="filteredUsers"
+      @userSelected="selectUser"
     />
   </div>
+  <UserProfile 
+    v-else 
+    :user="selectedUser" 
+    @update="updateUser"
+    @deactivate="deactivateUser"
+    @delete="deleteUser"
+    @back="selectedUser = null"
+  />
 </template>
 
 <script setup>
 const userStore = useUserStore()
 const activeTab = ref('companies')
 const searchQuery = ref('')
+const selectedUser = ref(null)
+
 
 onMounted(() => {
   userStore.fetchUsers()
@@ -48,14 +60,19 @@ const filteredUsers = computed(() => {
   )
 })
 
-/* const editUser = (user) => {
-  console.log('Edit user:', user)
+const selectUser = (user) => {
+  selectedUser.value = user
 }
 
-const deleteUser = (user) => {
-  console.log('Delete user:', user)
+const updateUser = async (updatedUser) => {
+  console.log('Updating user:', updatedUser)
 }
 
-const openAddUserModal = () => {
-} */
+const deactivateUser = async (userId) => {
+  console.log('Deactivating user:', userId)
+}
+
+const deleteUser = async (userId) => {
+  console.log('Deleting user:', userId)
+}
 </script>
