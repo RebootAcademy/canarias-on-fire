@@ -97,58 +97,59 @@ const getCurrentUser = async (req, res) => {
   }
 }
 
-// Update user
 const updateUser = async (req, res) => {
-  console.log('updateUser controller called with body:', req.body)
+  console.log('updateUser controller called with body:', req.body);
   try {
-    let user
-
-    // Primero, intentamos encontrar al usuario
-    user = await User.findById(req.params.id)
+    let user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
-      })
+      });
     }
 
-    if (req.body.role === 'company') {
-      // Si el usuario quiere convertirse en una empresa
-      if (user.role !== 'company') {
-        // Si el usuario no era una empresa antes, creamos una nueva entrada de Company
-        const companyData = { ...user.toObject(), ...req.body }
-        await User.findByIdAndDelete(req.params.id) // Eliminamos el usuario antiguo
-        user = await Company.create(companyData)
-      } else {
-        // Si ya era una empresa, actualizamos los datos
-        user = await Company.findByIdAndUpdate(req.params.id, req.body, {
-          new: true,
-          runValidators: true,
-        })
-      }
+    const oldRole = user.role;
+    const newRole = req.body.role;
+
+    if (newRole === 'company' && oldRole !== 'company') {
+      // Cambio a company
+      const companyData = { ...user.toObject(), ...req.body };
+      await User.findByIdAndDelete(req.params.id);
+      user = await Company.create(companyData);
+    } else if (newRole !== 'company' && oldRole === 'company') {
+      // Cambio de company a otro rol
+      const userData = { ...user.toObject(), ...req.body };
+      await Company.findByIdAndDelete(req.params.id);
+      user = await User.create(userData);
+    } else if (newRole === 'company' && oldRole === 'company') {
+      // Actualización de company
+      user = await Company.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
     } else {
       // Actualización de usuario regular
-      Object.assign(user, req.body)
-      await user.save()
+      Object.assign(user, req.body);
+      await user.save();
     }
 
-    console.log('User updated successfully:', user)
+    console.log('User updated successfully:', user);
 
     res.status(200).json({
       success: true,
       message: 'User successfully updated.',
       result: user,
-    })
+    });
   } catch (error) {
-    console.error('Error updating user:', error)
+    console.error('Error updating user:', error);
     return res.status(500).json({
       success: false,
       message: 'Error updating user.',
       description: error.message,
-    })
+    });
   }
-}
+};
 
 // Delete user
 const deleteUser = async (req, res) => {

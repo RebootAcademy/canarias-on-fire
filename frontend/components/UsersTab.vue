@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!selectedUser" 
-    class="p-4"
-  >
+  <div v-if="!selectedUser" class="p-4">
     <div class="flex items-center justify-between w-full mb-6">
       <h2 class="text-2xl font-semibold">Users List</h2>
       <Tabs v-model="activeTab" class="w-auto">
@@ -22,6 +19,7 @@
     </div>
     <UserTable 
       :users="filteredUsers"
+      :isCompanyTab="activeTab === 'companies'"
       @userSelected="selectUser"
     />
   </div>
@@ -65,7 +63,20 @@ const selectUser = (user) => {
 }
 
 const updateUser = async (updatedUser) => {
-  console.log('Updating user:', updatedUser)
+  try {
+    const result = await userStore.updateUserProfile(updatedUser)
+    if (result.success) {
+      const index = userStore.users.findIndex(u => u._id === updatedUser._id)
+      if (index !== -1) {
+        userStore.users[index] = { ...userStore.users[index], ...updatedUser }
+      }
+      selectedUser.value = null 
+    } else {
+      console.error('Failed to update user:', result.message)
+    }
+  } catch (error) {
+    console.error('Error updating user:', error)
+  }
 }
 
 const deactivateUser = async (userId) => {
@@ -73,6 +84,16 @@ const deactivateUser = async (userId) => {
 }
 
 const deleteUser = async (userId) => {
-  console.log('Deleting user:', userId)
+  try {
+    const result = await userStore.deleteUser(userId)
+    if (result.success) {
+      userStore.users = userStore.users.filter(u => u._id !== userId)
+      selectedUser.value = null
+    } else {
+      console.error('Failed to delete user:', result.message)
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error)
+  }
 }
 </script>

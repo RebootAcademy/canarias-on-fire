@@ -15,7 +15,7 @@ router
   .get('/', getAllUsers)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/:id',/*  isAuth, checkRole('admin'), */ updateUser)
-  .delete('/:id', isAuth, checkRole('admin'), deleteUser)
+  .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)
 
   .get('/current/:email', getCurrentUser)
 

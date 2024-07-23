@@ -51,27 +51,19 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async updateUserProfile(profileData) {
-      if (!this.userData || !this.userData._id) {
-        console.error('No user data available')
-        return
-      }
-
       try {
-        console.log('Sending update request with data:', profileData)
-        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${this.userData._id}`, {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
           method: 'PATCH',
           body: profileData
         })
-
-        console.log('Received response:', data.value);
-
-        if (error.value) {
-          throw new Error(error.value.message || 'Error updating user profile')
-        }
-
+    
         if (data.value && data.value.success) {
-          this.userData = { ...this.userData, ...data.value.result }
-          return { success: true, message: 'Profile updated successfully' }
+          const updatedUser = data.value.result
+          const index = this.users.findIndex(u => u._id === updatedUser._id)
+          if (index !== -1) {
+            this.users[index] = updatedUser
+          }
+          return { success: true, message: 'Profile updated successfully', user: updatedUser }
         } else {
           throw new Error(data.value?.message || 'Unknown error occurred')
         }
@@ -80,7 +72,25 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: error.message }
       }
     },
+
+    async deleteUser(userId) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}`, {
+          method: 'DELETE'
+        })
+        if (data.value && data.value.success) {
+          this.users = this.users.filter(user => user._id !== userId)
+          return { success: true, message: 'User deleted successfully' }
+        } else {
+          throw new Error(data.value?.message || 'Unknown error occurred')
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error)
+        return { success: false, message: error.message }
+      }
+    },
   },
+
   getters: {
     filteredUsers() {
       if (!this.searchQuery) {
@@ -93,6 +103,7 @@ export const useUserStore = defineStore('userStore', {
       )
     }
   },
+
   persist: {
     storage: persistedState.localStorage,
   },
