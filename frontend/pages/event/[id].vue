@@ -20,7 +20,7 @@
       </div>
       <div class="flex items-center gap-1">
         <i class="fas fa-euro-sign"></i>
-        <span>{{ event.eventPrice }}€</span>
+        <span>{{ formatPrice }} </span>
       </div>
     </div>
     <div class="mt-6">
@@ -49,6 +49,7 @@
       </Button>
       <Button 
         v-if="userStore.userData.role === 'admin'"
+        @click="editEvent"
       >
         <Pencil class="mr-2 h-4 w-4" />
         Edit
@@ -74,6 +75,7 @@ import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const userStore = useUserStore()
 const route = useRoute()
+const router = useRouter()
 
 const { event } = storeToRefs(eventStore)
 const defaultImage = '/defaultEvent.jpg'
@@ -85,21 +87,20 @@ const { data, error } = await eventStore.fetchEventById(eventId)
 if (error) { console.error('Error fetching event:', error) }
 
 const editEvent = () => {
-
+  router.push(`/event/edit/${eventId}`)
 }
 
 const deleteEvent = async () => {
-  const success = await eventStore.deleteEvent(event.value._id)
-  if (success) {
-    console.log('Event deleted successfully')
-    navigateTo('/')
-  } else {
-    console.error('Failed to delete event')
-  }
+  await eventStore.deleteEvent(event.value._id)
+  router.push('/')
 }
 
 const formattedDate = computed(() => {
   return formatEventDate(event.value?.eventDate)
+})
+
+const formatPrice = computed(() => {
+  return event.value.eventPrice === 0 ? 'Free' : `${event.value.eventPrice} €`
 })
 
 </script>

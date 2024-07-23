@@ -4,7 +4,12 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     userData: null,
     isAuthenticated: false,
+    users: [],
+    searchQuery: '',
+    isLoading: false,
+    error: null
   }),
+
   actions: {
     setUser(data) {
       this.userData = data.result
@@ -14,6 +19,26 @@ export const useUserStore = defineStore('userStore', {
       this.userData = null
       this.isAuthenticated = false
     },
+    setSearchQuery(query) {
+      this.searchQuery = query
+    },
+
+    async fetchUsers() {
+      this.isLoading = true
+      this.error = null
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users`)
+        if (data.value) {
+          this.users = data.value.result
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error)
+        this.error = error
+      } finally {
+        this.isLoading = false
+      }
+    },
+
     async fetchAndSetUser(email) {
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`)
@@ -24,6 +49,7 @@ export const useUserStore = defineStore('userStore', {
         console.error('Error fetching user data:', error)
       }
     },
+
     async updateUserProfile(profileData) {
       if (!this.userData || !this.userData._id) {
         console.error('No user data available')
@@ -55,11 +81,18 @@ export const useUserStore = defineStore('userStore', {
       }
     },
   },
-/*   getters: {
-    isAdmin: (state) => state.userData?.result.role === 'admin',
-    isBasicUser: (state) => state.userData?.result.role === 'basic',
-    isCompany: (state) => state.userData?.result.role === 'company',
-  }, */
+  getters: {
+    filteredUsers() {
+      if (!this.searchQuery) {
+        return this.users
+      }
+      const lowercaseQuery = this.searchQuery.toLowerCase()
+      return this.users.filter(user => 
+        user.username.toLowerCase().includes(lowercaseQuery) ||
+        user.email.toLowerCase().includes(lowercaseQuery)
+      )
+    }
+  },
   persist: {
     storage: persistedState.localStorage,
   },
