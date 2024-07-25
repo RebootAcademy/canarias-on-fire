@@ -63,6 +63,34 @@ const getEventById = async (req, res) => {
   }
 }
 
+const getEventsByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const events = await Event.find({ userId: userId }).populate('categories location')
+
+    if (!events.length) {
+      return res.status(200).json({
+        success: true,
+        message: 'No events found for this user.',
+        result: [],
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Events successfully fetched for the user.',
+      result: events,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting events for the user.',
+      description: error.message,
+    })
+  }
+}
+
 const updateEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
@@ -121,6 +149,7 @@ module.exports = {
   createEvent,
   getAllEvents,
   getEventById,
+  getEventsByUserId,
   updateEvent,
   deleteEvent,
 }

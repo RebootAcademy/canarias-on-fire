@@ -44,7 +44,8 @@ export const useEventStore = defineStore('eventStore', {
       categories: []
     },
     isLoadingCategories: false,
-    categoriesError: null
+    categoriesError: null,
+    userEvents: []
   }),
   
   actions: {
@@ -126,11 +127,26 @@ export const useEventStore = defineStore('eventStore', {
       try {
         const data = await $fetch('http://localhost:8080/api/events')
         this.events = data.result || []
-      } catch (err) {
-        console.error('Error fetching events:', err)
-        this.error = err
+      } catch (error) {
+        console.error('Error fetching events:', error)
+        this.error = error
       } finally {
         this.isLoading = false
+      }
+    },
+
+    async fetchUserEvents(userId) {
+      try {
+        const data = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/user/${userId}`)
+        if (data.success) {
+          this.userEvents = data.result
+        } else {
+          console.error('Error fetching user events:', data.message)
+          this.userEvents = []
+        }
+      } catch (error) {
+        console.error('Error fetching user events:', error)
+        this.userEvents = []
       }
     },
 
@@ -244,15 +260,17 @@ export const useEventStore = defineStore('eventStore', {
 
   getters: {
     filteredEvents() {
+      if (!this.events) return []
+
       return this.events.filter(event => {
 
         // Search
         if (this.searchQuery) {
           const lowercaseQuery = this.searchQuery.toLowerCase()
-          filtered = filtered.filter(event => 
-            event.eventName.toLowerCase().includes(lowercaseQuery) ||
-            event.eventDescription.toLowerCase().includes(lowercaseQuery)
-          )
+          if (!event.eventName.toLowerCase().includes(lowercaseQuery) &&
+              !event.eventDescription.toLowerCase().includes(lowercaseQuery)) {
+            return false
+          }
         }
         // Filter by Categories
         if (this.filters.categories.length > 0) {
@@ -297,6 +315,7 @@ export const useEventStore = defineStore('eventStore', {
         })
       }
     },
+
     eventsCount() {
       return this.events.length
     },

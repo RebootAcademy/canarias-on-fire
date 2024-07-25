@@ -5,6 +5,7 @@ const {
   createEvent,
   getAllEvents,
   getEventById,
+  getEventsByUserId,
   updateEvent,
   deleteEvent
 } = require('../controllers/event.controller')
@@ -14,6 +15,7 @@ router
   .post('/', createEvent)
   .get('/', getAllEvents)
   .get('/:id', /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById)
+  .get('/user/:userId', getEventsByUserId)
   .patch('/:id', /* isAuth, checkRole('admin', 'company'), */ updateEvent)
   .delete('/:id', /* isAuth, checkRole('admin', 'company'), */ deleteEvent)
 

@@ -43,6 +43,9 @@ const filteredUsers = computed(() => {
 
 const selectUser = (user) => {
   selectedUser.value = user
+  if (!user) {
+    eventStore.clearUserEvents()
+  }
 }
 
 const updateUser = async (updatedUser) => {
