@@ -38,6 +38,9 @@ const UserSchema = new mongoose.Schema({
   auth0Id: {
     type: String,
     unique: true
+  },
+  isActive: {
+    type: Boolean
   }
 }, options)
 

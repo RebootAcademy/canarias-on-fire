@@ -128,8 +128,19 @@ const updateUser = async () => {
   }
 }
 
-const deactivateUser = () => {
-  emit('deactivate', props.user._id)
+const deactivateUser = async () => {
+  try {
+    const updatedUser = { ...editedUser.value, isActive: false }
+    const result = await userStore.updateUserProfile(updatedUser)
+    if (result.success) {
+      editedUser.value = result.user
+      emit('update', result.user)
+    } else {
+      console.error('Failed to deactivate user:', result.message)
+    }
+  } catch (error) {
+    console.error('Error deactivating user:', error)
+  }
 }
 
 const deleteUser = async () => {

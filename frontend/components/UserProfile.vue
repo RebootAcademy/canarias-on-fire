@@ -20,7 +20,10 @@
 
     </div>
     <hr />
-    <UserProfileDetails v-if="activeTab === 'profile'" :user="user" />
+    <UserProfileDetails 
+      v-if="activeTab === 'profile'" 
+      :user="user"
+    />
     <UserEvents v-else-if="activeTab === 'events'" :userId="user._id" />
     <UserSubscriptions v-else-if="activeTab === 'subscriptions'" :userId="user._id" />
   </div>
@@ -38,7 +41,6 @@ const props = defineProps({
 
 const emit = defineEmits('back')
 
-const userStore = useUserStore()
 const editedUser = ref({ ...props.user })
 const selectedRole = ref(props.user.role)
 const activeTab = ref('profile')
