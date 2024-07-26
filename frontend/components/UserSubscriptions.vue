@@ -5,8 +5,8 @@
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
         <div class="bg-gray-100 p-4 rounded-lg mt-6">
-          <h3 class="text-lg font-semibold">{{ subscription.plan }}</h3>
-          <p>{{ subscription.price }}€ (next renew {{ subscription.nextRenew }})</p>
+          <h3 class="text-lg font-semibold">{{ userSubscription.name }}</h3>
+          <p>{{ userSubscription.pricing }}€ (next renew {{ subscription.nextRenew }})</p>
         </div>
         <div class="flex gap-4 mt-4">
           <Button @click="explorePlans">Explore Plans</Button>
@@ -58,7 +58,21 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  userId: {
+    type: String,
+    required: true
+  }
+})
+
+const router = useRouter()
 const userStore = useUserStore()
+
+const userSubscription = computed(() => {
+  const user = userStore.users.find(user => user._id === props.userId)
+  console.log(user)
+  return user ? user.subscription : null
+})
 
 const subscription = ref({
   plan: 'Premium',
@@ -78,12 +92,11 @@ const paymentHistory = ref([
   { id: 'INV002', name: 'INV002', status: 'Pending', method: 'PayPal', amount: '$150.00' },
   { id: 'INV003', name: 'INV003', status: 'Unpaid', method: 'Bank Transfer', amount: '$350.00' },
   { id: 'INV004', name: 'INV004', status: 'Paid', method: 'Credit Card', amount: '$450.00' },
-  { id: 'INV005', name: 'INV005', status: 'Paid', method: 'PayPal', amount: '$550.00' },
-  { id: 'INV006', name: 'INV006', status: 'Pending', method: 'Bank Transfer', amount: '$200.00' }
 ])
 
 const explorePlans = () => {
   // Logic to explore plans
+  router.push('/pricing')
 }
 
 const managePlans = () => {

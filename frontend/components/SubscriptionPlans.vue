@@ -1,28 +1,71 @@
 <template>
-  <div class="flex flex-col items-center">
-    <h2 class="text-3xl font-bold mb-8">Our Pricing Table</h2>
-    <div class="flex justify-center gap-8">
-      <div v-for="plan in plans" :key="plan.name" class="bg-white shadow-md rounded-lg p-6 w-64">
-        <div :class="`bg-${plan.color}-500 text-white text-center py-2 rounded-t-lg`">
-          <h3 class="text-xl font-semibold">{{ plan.name }}</h3>
-          <p class="text-4xl font-bold mt-2">
-            <span v-show="plan.price !== 0">$</span>
-            {{ plan.price === 0 ? 'Free' : plan.price }}
-          </p>
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Choose your plan</h2>
+      <p class="mt-4 text-lg text-gray-500">
+        Find the perfect plan that suits your event needs. Whether you're organizing we have flexible options tailored for every occasion.
+      </p>
+    </div>
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center border rounded-lg shadow-sm p-6 pt-12">
+        <h3 class=" text-lg leading-6 font-medium text-gray-900">Basic</h3>
+        <div class="mt-4">
+          <span class="text-4xl font-extrabold text-gray-900">0€</span>
+          <span class="text-base font-medium text-gray-500"> / FREE</span>
         </div>
-        <ul class="mt-4 mb-6">
-          <li v-for="(feature, index) in plan.features" :key="index" class="flex items-center mb-2">
-            <span :class="feature.included ? 'text-green-500' : 'text-red-500'">
-              <i :class="feature.included ? 'fas fa-check' : 'fas fa-times'"></i>
-            </span>
-            <span class="ml-2">{{ feature.text }}</span>
+        <ul class="mt-6 space-y-4">
+          <li class="flex items-start">
+            <svg class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <p class="ml-3 text-base text-gray-700">Event Posting</p>
           </li>
+          <!-- Repite el ítem según sea necesario -->
         </ul>
-        <NuxtLink :to="plan.url">
-          <button @click="selectPlan(plan.name)" class="bg-blue-500 text-white py-2 px-4 rounded-lg w-full hover:bg-blue-400">
-            Buy Now
-          </button>
-        </NuxtLink>
+        <div class="mt-8">
+          <button class="w-full bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg">GET STARTED</button>
+        </div>
+      </div>
+
+      <div class="text-center border rounded-lg shadow-sm p-6 relative">
+        <div class="absolute top-0 left-0 right-0 bg-black text-white text-center py-1 rounded-t-lg">Recommended option</div>
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mt-6">Platinum</h3>
+        <div class="mt-4">
+          <span class="text-4xl font-extrabold text-gray-900">29,99€</span>
+          <span class="text-base font-medium text-gray-500"> / MO</span>
+        </div>
+        <ul class="mt-6 space-y-4">
+          <li class="flex items-start">
+            <svg class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <p class="ml-3 text-base text-gray-700">Event Posting</p>
+          </li>
+          <!-- Repite el ítem según sea necesario -->
+        </ul>
+        <div class="mt-8">
+          <button class="w-full bg-black text-white font-semibold py-2 px-4 rounded-lg">GET STARTED</button>
+        </div>
+      </div>
+
+      <div class="text-center border rounded-lg shadow-sm p-6 pt-12">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Gold</h3>
+        <div class="mt-4">
+          <span class="text-4xl font-extrabold text-gray-900">14,99€</span>
+          <span class="text-base font-medium text-gray-500"> / MO</span>
+        </div>
+        <ul class="mt-6 space-y-4">
+          <li class="flex items-start">
+            <svg class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <p class="ml-3 text-base text-gray-700">Event Posting</p>
+          </li>
+          <!-- Repite el ítem según sea necesario -->
+        </ul>
+        <div class="mt-8">
+          <button class="w-full bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg">GET STARTED</button>
+        </div>
       </div>
     </div>
   </div>
