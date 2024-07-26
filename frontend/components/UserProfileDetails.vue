@@ -131,7 +131,7 @@ watch(() => props.user, (newUser) => {
 
 const updateUser = async () => {
   if (editedUser && editedUser._id) {
-    const result = await userStore.updateUserProfile(editedUser)
+    const result = await userStore.updateUserProfile(toRaw(editedUser))
     if (result.success) {
       Object.assign(editedUser, result.user)
     }
@@ -142,7 +142,7 @@ const updateUser = async () => {
 
 const toggleUserActivation = async () => {
   editedUser.isActive = !editedUser.isActive
-  const result = await userStore.updateUserProfile(editedUser)
+  const result = await userStore.updateUserProfile(toRaw(editedUser))
   if (result.success) {
     Object.assign(editedUser, result.user)
   }

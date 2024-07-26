@@ -52,20 +52,20 @@ export const useUserStore = defineStore('userStore', {
 
     async updateUserProfile(profileData) {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
+        const data = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
           method: 'PATCH',
           body: profileData
         })
     
-        if (data.value && data.value.success) {
-          const updatedUser = data.value.result
+        if (data.value && data.success) {
+          const updatedUser = data.result
           const index = this.users.findIndex(u => u._id === updatedUser._id)
           if (index !== -1) {
             this.users[index] = updatedUser
           }
           return { success: true, message: 'Profile updated successfully', user: updatedUser }
         } else {
-          throw new Error(data.value?.message || 'Unknown error occurred')
+          throw new Error(data?.message || 'Unknown error occurred')
         }
       } catch (error) {
         console.error('Error updating user profile:', error)
