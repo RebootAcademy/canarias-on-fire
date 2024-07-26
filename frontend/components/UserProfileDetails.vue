@@ -104,6 +104,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update'])
+const userStore = useUserStore()
 
 const editedUser = ref({ ...props.user })
 const selectedRole = ref(props.user.role)
