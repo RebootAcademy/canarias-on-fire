@@ -40,7 +40,8 @@ const UserSchema = new mongoose.Schema({
     unique: true
   },
   isActive: {
-    type: Boolean
+    type: Boolean,
+    default: true
   }
 }, options)
 
