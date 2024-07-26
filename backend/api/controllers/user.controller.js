@@ -1,5 +1,6 @@
 const User = require('../models/user.model')
 const Company = require('../models/company.model')
+const Subscription = require('../models/subscription.model')
 
 // Create user
 const createUser = async (req, res) => {
@@ -28,14 +29,20 @@ const createUser = async (req, res) => {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find()
+    const users = await User.find().lean()
+
+    const populatedUsers = await Promise.all(users.map(async (user) => {
+      if (user.subscription) {
+        user.subscription = await Subscription.findById(user.subscription)
+      }
+      return user
+    }))
     res.status(200).json({
       success: true,
       message: 'Users succesfully fetched.',
-      result: users,
+      result: populatedUsers,
     })
   } catch (error) {
-    console.error(error)
     res.status(500).json({
       success: false,
       message: 'Error getting users.',

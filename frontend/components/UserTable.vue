@@ -16,7 +16,7 @@
       >
         <TableCell>{{ user.username }}</TableCell>
         <TableCell>{{ user.email }}</TableCell>
-        <TableCell class="text-right">{{ isCompanyTab ? getSubscriptionName(user.subscription) : user.role }}</TableCell>
+        <TableCell class="text-right">{{ isCompanyTab ? getSubscriptionName(user) : user.role }}</TableCell>
       </TableRow>
     </TableBody>
   </Table>
@@ -35,9 +35,11 @@ const props = defineProps({
   }
 })
 
-const getSubscriptionName = (subscription) => {
-  // Aquí puedes implementar la lógica para obtener el nombre de la suscripción
-  // Por ahora, simplemente devolveremos el ID de la suscripción o "N/A" si no existe
-  return subscription ? subscription.toString() : 'N/A'
+const getSubscriptionName = (user) => {
+  if (!user || !user.subscription) {
+    return 'N/A'
+  }
+  return user.subscription.name
 }
+
 </script>

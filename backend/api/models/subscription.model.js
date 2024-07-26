@@ -8,15 +8,13 @@ const SubscriptionSchema = new mongoose.Schema({
   },
   pricing: {
     type: Number,
-    required: true,
-    min: 0
+    required: true
   },
   characteristics: {
     type: [String], // Cambiado de Array a [String]
-    required: true
   }
 }, {
-  timestamps: true // Añade createdAt y updatedAt
+  timestamps: false // Añade createdAt y updatedAt
 })
 
 const SubscriptionModel = mongoose.model('subscription', SubscriptionSchema)
