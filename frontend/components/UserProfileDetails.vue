@@ -4,94 +4,111 @@
       <div
         class="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold text-white"
       >
-        {{ (user.role === 'company' ? user.companyName : user.username).charAt(0).toUpperCase() }}
+        {{ (editedUser.role === 'company' ? editedUser.companyName : editedUser.username).charAt(0).toUpperCase() }}
       </div>
       <div>
         <h3 class="text-xl font-semibold">
-          {{ user.role === 'company' ? user.companyName : user.username }}
+          {{ editedUser.role === 'company' ? editedUser.companyName : editedUser.username }}
         </h3>
-        <p class="text-gray-600">{{ user.email }}</p>
+        <p class="text-gray-600">{{ editedUser.email }}</p>
+        <p v-if="!editedUser.isActive" class="text-red-500 font-semibold">Deactivated</p>
       </div>
-    </div>
-    <div class="mb-4">
-      <Label for="username">Username</Label>
-      <Input
-        id="username"
-        v-model="editedUser.username"
-        class="mt-1 text-gray-500"
-      />
-    </div>
-    <div class="mb-4">
-      <Label for="email">Email</Label>
-      <Input
-        id="email"
-        v-model="editedUser.email"
-        class="mt-1 text-gray-500"
-      />
-    </div>
-    <div class="mb-4">
-      <Label class="mb-2">Role</Label>
-      <Select v-model="selectedRole">
-        <SelectTrigger>
-          <SelectValue placeholder="Select role" />
-        </SelectTrigger>
-        <SelectContent class="text-gray-500">
-          <SelectItem value="basic">Basic</SelectItem>
-          <SelectItem value="company">Company</SelectItem>
-          <SelectItem value="admin">Admin</SelectItem>
-        </SelectContent>
-      </Select>
     </div>
 
-    <hr class="mb-6">
-    <!-- Company-specific fields -->
-    <div v-if="selectedRole === 'company'">
+    <form @submit.prevent="updateUser">
       <div class="mb-4">
-        <Label for="companyName">Company Name</Label>
+        <Label for="username">Username</Label>
         <Input
-          id="companyName"
-          v-model="editedUser.companyName"
-          class="mt-1 text-gray-500"
+          id="username"
+          v-model="editedUser.username"
+          :disabled="!editedUser.isActive"
         />
       </div>
       <div class="mb-4">
-        <Label for="companyEmail">Company Email</Label>
+        <Label for="email">Email</Label>
         <Input
-          id="companyEmail"
-          v-model="editedUser.companyEmail"
-          class="mt-1 text-gray-500"
+          id="email"
+          v-model="editedUser.email"
+          :disabled="!editedUser.isActive"
         />
       </div>
       <div class="mb-4">
-        <Label for="phone">Phone</Label>
-        <Input
-          id="phone"
-          v-model="editedUser.phone"
-          class="mt-1 text-gray-500"
-        />
-      </div>
-      <div class="mb-4">
-        <Label for="sector">Sector</Label>
-        <Select v-model="editedUser.sector">
+        <Label class="mb-2">Role</Label>
+        <Select 
+          v-model="selectedRole"
+          :disabled="!editedUser.isActive"
+        >
           <SelectTrigger>
-            <SelectValue placeholder="Select sector" />
+            <SelectValue placeholder="Select role" />
           </SelectTrigger>
           <SelectContent class="text-gray-500">
-            <SelectItem value="restoration">Restoration</SelectItem>
-            <SelectItem value="services">Services</SelectItem>
-            <SelectItem value="nightlife">Nightlife</SelectItem>
-            <SelectItem value="activities">Activities</SelectItem>
+            <SelectItem value="basic">Basic</SelectItem>
+            <SelectItem value="company">Company</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
           </SelectContent>
         </Select>
       </div>
-    </div>
-    <div class="flex gap-4 mt-12">
-      <Button @click="deleteUser" class="px-6" variant="outline">
-        Delete
-      </Button>
-      <Button @click="deactivateUser" variant="secondary"> Deactivate </Button>
-      <Button @click="updateUser" class="px-6"> Update </Button>
-    </div>
+  
+      <hr class="mb-6">
+      <!-- Company-specific fields -->
+      <div v-if="selectedRole === 'company'">
+        <div class="mb-4">
+          <Label for="companyName">Company Name</Label>
+          <Input
+            id="companyName"
+            v-model="editedUser.companyName"
+            :disabled="!editedUser.isActive"
+          />
+        </div>
+        <div class="mb-4">
+          <Label for="companyEmail">Company Email</Label>
+          <Input
+            id="companyEmail"
+            v-model="editedUser.companyEmail"
+            :disabled="!editedUser.isActive"
+          />
+        </div>
+        <div class="mb-4">
+          <Label for="phone">Phone</Label>
+          <Input
+            id="phone"
+            v-model="editedUser.phone"
+            :disabled="!editedUser.isActive"
+          />
+        </div>
+        <div class="mb-4">
+          <Label for="sector">Sector</Label>
+          <Select 
+            v-model="editedUser.sector"
+            :disabled="!editedUser.isActive"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select sector" />
+            </SelectTrigger>
+            <SelectContent class="text-gray-500">
+              <SelectItem value="restoration">Restoration</SelectItem>
+              <SelectItem value="services">Services</SelectItem>
+              <SelectItem value="nightlife">Nightlife</SelectItem>
+              <SelectItem value="activities">Activities</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div class="flex gap-4 mt-12">
+        <Button @click="deleteUser" class="px-6" variant="destructive"> Delete </Button>
+        <Button @click="toggleUserActivation" variant="outline">
+          {{ editedUser.isActive ? 'Deactivate' : 'Activate' }}
+        </Button>
+        <Button 
+          @click="updateUser" 
+          :disabled="!editedUser.isActive"
+          class="px-6"
+        >
+          Update 
+        </Button>
+      </div>
+    </form>
+    
   </div>
 </template>
 
@@ -103,57 +120,39 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update'])
 const userStore = useUserStore()
-
-const editedUser = ref({ ...props.user })
 const selectedRole = ref(props.user.role)
+const editedUser = reactive({ ...props.user })
 
-watch(selectedRole, (newRole) => {
-  editedUser.value.role = newRole
-})
+watch(() => props.user, (newUser) => {
+  Object.assign(editedUser, newUser)
+  selectedRole.value = newUser.role
+}, { deep: true })
 
 const updateUser = async () => {
-  try {
-    const result = await userStore.updateUserProfile(editedUser.value)
+  if (editedUser && editedUser._id) {
+    const result = await userStore.updateUserProfile(editedUser)
     if (result.success) {
-      if (result.user._id !== editedUser.value._id) {
-        editedUser.value = { ...result.user }
-      }
-      emit('update', result.user)
-    } else {
-      console.error('Failed to update user:', result.message)
+      Object.assign(editedUser, result.user)
     }
-  } catch (error) {
-    console.error('Error updating user:', error)
+  } else {
+    console.error('Invalid user data for update')
   }
 }
 
-const deactivateUser = async () => {
-  try {
-    const updatedUser = { ...editedUser.value, isActive: false }
-    const result = await userStore.updateUserProfile(updatedUser)
-    if (result.success) {
-      editedUser.value = result.user
-      emit('update', result.user)
-    } else {
-      console.error('Failed to deactivate user:', result.message)
-    }
-  } catch (error) {
-    console.error('Error deactivating user:', error)
+const toggleUserActivation = async () => {
+  editedUser.isActive = !editedUser.isActive
+  const result = await userStore.updateUserProfile(editedUser)
+  if (result.success) {
+    Object.assign(editedUser, result.user)
   }
 }
 
 const deleteUser = async () => {
-  try {
-    const result = await userStore.deleteUser(props.user._id)
-    if (result.success) {
-      emit('delete', props.user._id)
-    } else {
-      console.error('Failed to delete user:', result.message)
-    }
-  } catch (error) {
-    console.error('Error deleting user:', error)
+  const result = await userStore.deleteUser(editedUser._id)
+  if (result.success) {
+    console.log('User deleted successfully')
+    // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
   }
 }
 </script>
