@@ -1,7 +1,7 @@
 // stores/articleStore.js
 import { defineStore } from 'pinia'
 
-export const useArticleStore = defineStore('article', {
+export const useArticleStore = defineStore('articleStore', {
   state: () => ({
     articles: [],
     filteredArticles: [],
@@ -39,8 +39,27 @@ export const useArticleStore = defineStore('article', {
       }
     },
 
+    async deleteArticle(articleId) {
+      const config = useRuntimeConfig()
+
+      try {
+        const data = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
+          method: 'DELETE',
+        })
+        if (data && data.success) {
+          this.articles = this.articles.filter(article => article._id !== articleId)
+          this.updateFilteredArticles()
+          return { success: true, message: 'Article deleted successfully' }
+        } else {
+          throw new Error(response.message || 'Failed to delete article')
+        }
+      } catch (error) {
+        return { success: false, message: error.message }
+      }
+    },
+
     setArticle(articleData) {
-      this.article = articleData
+      this.currentArticle = articleData
     },
 
     setSearchQuery(query) {
@@ -87,14 +106,6 @@ export const useArticleStore = defineStore('article', {
         this.articles[index] = { ...this.articles[index], ...articleData }
         this.updateFilteredArticles()
       }
-    },
-
-    async deleteArticle(articleId) {
-      // Implement API call to delete an article
-      console.log('Deleting article:', articleId)
-      // For now, just remove it from the local state
-      this.articles = this.articles.filter(article => article.id !== articleId)
-      this.updateFilteredArticles()
     }, */
 
     resetFilters() {

@@ -27,7 +27,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../../stores/eventStore'
 import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()

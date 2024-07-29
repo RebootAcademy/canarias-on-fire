@@ -35,7 +35,7 @@ definePageMeta({
 })
 
 onMounted(async () => {
-  await  articleStore.fetchArticles()
+  await articleStore.fetchArticles()
   articleStore.resetFilters()
 })
 

@@ -24,8 +24,6 @@ const props = defineProps({
   }
 })
 
-console.log('Article:', props.article)
-
 const formattedDate = (date) => {
   return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
 }

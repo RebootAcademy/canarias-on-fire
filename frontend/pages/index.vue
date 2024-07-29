@@ -8,7 +8,7 @@
       <EventList />
       <FeaturedEvents />
       <ArticlesHeader />
-      <ArticlesList :articles="articles"/>
+      <ArticlesList :articles="articleStore.articles"/>
     </div>
   </div>
 </template>
@@ -19,37 +19,10 @@ useHead({
 })
 
 const eventStore = useEventStore()
+const articleStore = useArticleStore()
 
 onMounted(() => {
   eventStore.resetFilters()
 })
-
-const articles = ref([
-{
-    id: 1,
-    image: 'https://via.placeholder.com/400x200', // Reemplaza con la URL de tu imagen
-    title: '10 essential items for your festivals',
-    author: 'Canarias 7',
-    authorImage: 'https://via.placeholder.com/50', // Reemplaza con la URL de la imagen del autor
-    date: '2024-01-04'
-  },
-  {
-    id: 2,
-    image: 'https://via.placeholder.com/400x200', // Reemplaza con la URL de tu imagen
-    title: 'How to prepare for a music festival',
-    author: 'Festival Guide',
-    authorImage: 'https://via.placeholder.com/50', // Reemplaza con la URL de la imagen del autor
-    date: '2024-02-15'
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/400x200', // Reemplaza con la URL de tu imagen
-    title: 'How to prepare for a music festival',
-    author: 'Festival Guide',
-    authorImage: 'https://via.placeholder.com/50', // Reemplaza con la URL de la imagen del autor
-    date: '2024-02-15'
-  }
-  // more articles...
-])
 
 </script>
