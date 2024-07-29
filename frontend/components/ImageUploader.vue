@@ -5,7 +5,7 @@
         type="file"
         @change="handleFileChange"
       />
-      <Button @click="uploadImage" class="text-xs px-4">
+      <Button @click.prevent="uploadImage" class="text-xs px-4">
         {{ $t('uploadImage') }}
       </Button>
     </div>
@@ -13,8 +13,8 @@
       {{ $t('previewImg') }}
     </Label>
     <NuxtImg 
-      v-if="typeof eventStore.eventImg === 'string'" 
-      :src="eventStore.eventImg" 
+      v-if="imageUrl" 
+      :src="imageUrl" 
       width="150" 
     />
   </div>
@@ -23,23 +23,24 @@
 <script setup>
 import { useEventStore } from '../stores/eventStore'
 
-const eventStore = useEventStore()
+const emit = defineEmits(['image-uploaded'])
 const cloudName = 'drs1a2bso'
+const selectedFile = ref(null)
+const imageUrl = ref('')
 
 const handleFileChange = (event) => {
-  eventStore.selectedFile = event.target.files[0]
-  console.log(eventStore.selectedFile)
+  selectedFile.value = event.target.files[0]
 }
 
 const uploadImage = async () => {
-  if (!eventStore.selectedFile) {
+  if (!selectedFile.value) {
     console.error('No file selected')
     return
   }
 
   try {
     const formData = new FormData()
-    formData.append("file", eventStore.selectedFile)
+    formData.append("file", selectedFile.value)
     formData.append("upload_preset", "evdhvl07")
 
     const { data, error } = await useFetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
@@ -52,8 +53,8 @@ const uploadImage = async () => {
       return
     }
 
-    eventStore.eventImg = data.value.secure_url
-    console.log('Uploaded Image URL:', eventStore.eventImg)
+    imageUrl.value = data.value.secure_url
+    emit('image-uploaded', imageUrl.value)
   } catch (error) {
     console.error(error)
   }

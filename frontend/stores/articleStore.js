@@ -39,6 +39,26 @@ export const useArticleStore = defineStore('articleStore', {
       }
     },
 
+    async createArticle(articleData) {
+      const config = useRuntimeConfig()
+      try {
+        const data = await $fetch(`${config.public.apiBaseUrl}/articles`, {
+          method: 'POST',
+          body: articleData
+        })
+        if (data && data.success) {
+          this.articles.push(data.result)
+          this.updateFilteredArticles()
+          return { success: true, message: 'Article created successfully' }
+        } else {
+          throw new Error(data.message || 'Failed to create article')
+        }
+      } catch (error) {
+        console.error('Error creating article:', error)
+        return { success: false, message: error.message }
+      }
+    },
+
     async deleteArticle(articleId) {
       const config = useRuntimeConfig()
 
@@ -85,19 +105,7 @@ export const useArticleStore = defineStore('articleStore', {
       })
     },
 
-/*     async createArticle(articleData) {
-      // Implement API call to create a new article
-      console.log('Creating article:', articleData)
-      // For now, just add it to the local state
-      const newArticle = {
-        id: this.articles.length + 1,
-        ...articleData
-      }
-      this.articles.push(newArticle)
-      this.updateFilteredArticles()
-    },
-
-    async updateArticle(articleId, articleData) {
+    /* async updateArticle(articleId, articleData) {
       // Implement API call to update an article
       console.log('Updating article:', articleId, articleData)
       // For now, just update it in the local state
