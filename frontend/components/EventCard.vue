@@ -1,15 +1,15 @@
 <template>
   <div class="w-96 h-80 bg-white shadow-md rounded-md relative">
-    <NuxtLink
-      :to="`/event/${event._id}`"
-    >
-
+    <NuxtLink :to="`/event/${event._id}`">
       <!-- Event status -->
-      <span 
-        v-show="userStore.userData.role === 'admin' && $route.path === '/dashboard/events'" 
+      <span
+        v-show="
+          userStore.userData.role === 'admin' &&
+          $route.path === '/dashboard/events'
+        "
         :class="[
           'absolute top-2 left-2 text-xs font-semibold bg-white rounded-xl px-2 py-1',
-          { 'text-red-500 italic': event.status === 'draft' }
+          { 'text-red-500 italic': event.status === 'draft' },
         ]"
       >
         {{ event.status }}
@@ -27,10 +27,17 @@
           <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
 
           <!-- Options menu -->
-          <div v-show="userStore.userData.role === 'admin' && $route.path === '/dashboard/events'">
+          <div
+            v-show="
+              userStore.userData.role === 'admin' &&
+              $route.path === '/dashboard/events'
+            "
+          >
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <MoreVertical class="h-4 w-4 text-gray-500 hover:text-gray-700" />
+                <MoreVertical
+                  class="h-4 w-4 text-gray-500 hover:text-gray-700"
+                />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem @select="editEvent">
@@ -45,7 +52,7 @@
             </DropdownMenu>
           </div>
         </div>
-        
+
         <p class="text-sm text-gray-600">{{ formattedDate() }}</p>
         <p class="text-sm text-gray-600">
           {{ event.startTime }} - {{ event.endTime }}
