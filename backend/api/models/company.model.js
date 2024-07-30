@@ -8,8 +8,9 @@ const CompanySchema = new mongoose.Schema({
   },
   companyEmail: { 
     type: String, 
-    required: [true, 'Email is required.'],
     unique: [true, 'Email already exists.'],
+    sparse: true,
+    required: [true, 'Email is required.'],
     validate: {
       validator: function(value) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
@@ -48,6 +49,8 @@ const CompanySchema = new mongoose.Schema({
     type: String
   }
 })
+
+CompanySchema.index({ companyEmail: 1 }, { unique: true, sparse: true });
 
 const CompanyModel = User.discriminator('company', CompanySchema)
 

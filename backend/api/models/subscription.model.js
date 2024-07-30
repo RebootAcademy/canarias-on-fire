@@ -4,11 +4,10 @@ const SubscriptionSchema = new mongoose.Schema({
   name: {
     type: String,
     enum: ['gold', 'premium', 'basic'],
-    required: true
+    default: 'basic'
   },
   pricing: {
     type: Number,
-    required: true
   },
   characteristics: {
     type: [String], // Cambiado de Array a [String]

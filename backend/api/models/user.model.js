@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema({
   preferences: { 
     type: Object 
   },
-  saved_events: [{ 
+  savedEvents: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'event' 
   }],

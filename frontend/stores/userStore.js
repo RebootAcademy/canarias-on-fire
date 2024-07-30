@@ -39,6 +39,26 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    async addUser(userData) {
+      this.isLoading = true
+      this.error = null
+      try {
+        console.log('Sending user data:', userData)
+        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users`, {
+          method: 'POST',
+          body: userData
+        })
+        this.users.push(response.user)
+        return response.user
+      } catch (error) {
+        this.error = error.message
+        console.error('Error adding user:', error)
+        throw error
+      } finally {
+        this.isLoading = false
+      }
+    },
+
     async fetchAndSetUser(email) {
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`)

@@ -19,6 +19,7 @@
       :isCompanyTab="activeTab === 'companies'"
       @userSelected="$emit('userSelected', $event)"
     />
+    <AddUserModal :isOpen="isAddUserModalOpen" @close="closeAddUserModal" @userAdded="handleUserAdded" />
   </div>
 </template>
 
@@ -26,27 +27,43 @@
 const userStore = useUserStore()
 const activeTab = ref('companies')
 const searchQuery = ref('')
+const isAddUserModalOpen = ref(false)
 
 onMounted(() => {
   userStore.fetchUsers()
 })
 
 const filteredUsers = computed(() => {
-  const users = activeTab.value === 'companies' 
-    ? userStore.users.filter(user => user.role === 'company')
-    : userStore.users.filter(user => user.role === 'basic')
-  
-  if (!searchQuery.value) return users
-  
-  const query = searchQuery.value.toLowerCase()
-  return users.filter(user => 
-    user.username.toLowerCase().includes(query) ||
-    user.email.toLowerCase().includes(query)
-  )
+  return userStore.users.filter(user => {
+    if (!user || typeof user !== 'object') return false
+    
+    const matchesTab = activeTab.value === 'companies' 
+      ? user.role === 'company' 
+      : user.role && user.role !== 'company'
+    
+    const matchesSearch = (user.username && user.username.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+                          (user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase()))
+    
+    return matchesTab && matchesSearch
+  })
 })
 
 const openAddUserModal = () => {
-  // Implementation
+  isAddUserModalOpen.value = true
+}
+
+const closeAddUserModal = () => {
+  isAddUserModalOpen.value = false
+}
+
+const handleUserAdded = async (userData) => {
+  try {
+    await userStore.addUser(userData)
+    closeAddUserModal()
+    await userStore.fetchUsers()
+  } catch (error) {
+    console.error('Error adding user:', error)
+  }
 }
 
 defineEmits(['userSelected'])
