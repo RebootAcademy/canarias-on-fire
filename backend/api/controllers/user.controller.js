@@ -8,15 +8,27 @@ const createUser = async (req, res) => {
     const { role, ...userData } = req.body
 
     if (role === 'company') {
-      // Asegurarse de que todos los campos requeridos para una compañía estén presentes
       if (!userData.companyName || !userData.phone || !userData.sector) {
         return res.status(400).json({
           success: false,
           message: 'Missing required fields for company user.',
         })
       }
-      // Si no se proporciona companyEmail, usar el email principal
-      userData.companyEmail = userData.companyEmail || userData.email
+      // Si no se proporciona companyEmail, usamos el email principal
+      if (!userData.companyEmail) {
+        userData.companyEmail = userData.email
+      }
+      // Verificar si ya existe una compañía con el mismo companyEmail
+      const existingCompany = await Company.findOne({
+        companyEmail: userData.companyEmail,
+      })
+      if (existingCompany) {
+        return res.status(400).json({
+          success: false,
+          message: 'A company with this email already exists.',
+        })
+      }
+
       newUser = await Company.create({ ...userData, role })
     } else {
       newUser = await User.create({ ...userData, role })

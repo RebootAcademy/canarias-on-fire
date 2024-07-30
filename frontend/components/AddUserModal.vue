@@ -92,8 +92,7 @@ const formData = reactive({
   companyName: '',
   companyEmail: '',
   phone: '',
-  sector: '',
-  subscription: null
+  sector: ''
 })
 
 const isFormValid = computed(() => {

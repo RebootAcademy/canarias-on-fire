@@ -10,7 +10,6 @@ const CompanySchema = new mongoose.Schema({
     type: String, 
     unique: [true, 'Email already exists.'],
     sparse: true,
-    required: [true, 'Email is required.'],
     validate: {
       validator: function(value) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
@@ -50,7 +49,12 @@ const CompanySchema = new mongoose.Schema({
   }
 })
 
-CompanySchema.index({ companyEmail: 1 }, { unique: true, sparse: true });
+CompanySchema.pre('validate', function(next) {
+  if (this.isNew && !this.companyEmail) {
+    this.companyEmail = this.email
+  }
+  next()
+})
 
 const CompanyModel = User.discriminator('company', CompanySchema)
 
