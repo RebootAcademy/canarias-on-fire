@@ -2,28 +2,25 @@
   <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col">
     <h1 class="text-3xl font-bold mb-6">Create New Article</h1>
     <form @submit.prevent="createArticle">
-      <div>
+      <div class="mb-6">
         <h3 class="text-xl font-bold">Title</h3>
-        <p class="text-sm opacity-60">Please enter the title of your article.</p>
+        <p class="text-sm opacity-60 mb-2">Please enter the title of your article.</p>
         <Input id="title" v-model="article.title" required />
       </div>
-      <div>
+      <div class="mb-6">
         <h3 class="text-xl font-bold">Content</h3>
-        <p class="text-sm opacity-60">Please enter the title of your article.</p>
-        <Textarea
-          id="content"
-          v-model="article.content"
-          rows="6"
-          class="w-full p-2 border rounded-md mb-2"
-          required
-        ></Textarea>
+        <p class="text-sm opacity-60 mb-2">Please enter the full content of your article.</p>
+        <client-only>
+          <QuillEditor v-model:content="article.content" contentType="html" theme="snow" />
+        </client-only>
       </div>
-      <div>
+      <div class="mb-6">
         <h3 class="text-xl font-bold">Image</h3>
-        <p class="text-sm opacity-60">Please enter the full content of your article. Include all relevant details, supporting information, and any necessary context to fully convey your message to the readers.</p>
+        <p class="text-sm opacity-60 mb-2">Please upload an image for your article.</p>
         <ImageUploader @image-uploaded="onImageUploaded" />
       </div>
-      <div class="flex bg-red-200">
+      <div class="flex justify-end mt-20 gap-8">
+        <Button @click="cancelCreate" class="bg-gray-300 hover:bg-gray-400 text-gray-800">Cancel</Button>
         <Button type="submit">Crear Artículo</Button>
       </div>
     </form>
@@ -31,8 +28,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-
 const articleStore = useArticleStore()
 const router = useRouter()
 
@@ -53,5 +48,9 @@ const createArticle = async () => {
   } catch (error) {
     console.error('Error creating article:', error)
   }
+}
+
+const cancelCreate = () => {
+  router.push('/')
 }
 </script>

@@ -42,20 +42,43 @@ export const useArticleStore = defineStore('articleStore', {
     async createArticle(articleData) {
       const config = useRuntimeConfig()
       try {
-        const data = await $fetch(`${config.public.apiBaseUrl}/articles`, {
+        const response = await $fetch(`${config.public.apiBaseUrl}/articles`, {
           method: 'POST',
           body: articleData
         })
-        if (data && data.success) {
-          this.articles.push(data.result)
+        if (response && response.result) {
+          this.articles.push(response.result)
           this.updateFilteredArticles()
-          return { success: true, message: 'Article created successfully' }
+          return { success: true, message: response.result }
         } else {
-          throw new Error(data.message || 'Failed to create article')
+          throw new Error(response.message || 'Failed to create article')
         }
       } catch (error) {
         console.error('Error creating article:', error)
-        return { success: false, message: error.message }
+        throw error
+      }
+    },
+
+    async updateArticle(articleId, articleData) {
+      const config = useRuntimeConfig()
+      try {
+        const response = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
+          method: 'PATCH',
+          body: articleData
+        })
+        if (response && response.result) {
+          const index = this.articles.findIndex(article => article._id === articleId)
+          if (index !== -1) {
+            this.articles[index] = response.result
+            this.updateFilteredArticles()
+          }
+          return { success: true, article: response.result }
+        } else {
+          throw new Error(response.message || 'Failed to update article')
+        }
+      } catch (error) {
+        console.error('Error updating article:', error)
+        throw error
       }
     },
 
@@ -63,10 +86,10 @@ export const useArticleStore = defineStore('articleStore', {
       const config = useRuntimeConfig()
 
       try {
-        const data = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
+        const response = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
           method: 'DELETE',
         })
-        if (data && data.success) {
+        if (response && response.success) {
           this.articles = this.articles.filter(article => article._id !== articleId)
           this.updateFilteredArticles()
           return { success: true, message: 'Article deleted successfully' }

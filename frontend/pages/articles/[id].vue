@@ -27,7 +27,7 @@
       </Button>
       <Button 
         v-if="userStore.userData.role === 'admin'"
-        @click="editEvent"
+        @click="editArticle"
       >
         <Pencil class="mr-2 h-4 w-4" />
         Edit
@@ -72,6 +72,10 @@ const otherArticles = computed(() => {
 
 const formattedDate = (date) => {
   return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+const editArticle = () => {
+  router.push(`/articles/edit/${articleId}`)
 }
 
 const deleteArticle = async () => {
