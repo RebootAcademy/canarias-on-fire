@@ -5,12 +5,12 @@
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
         <div class="bg-gray-100 p-4 rounded-lg mt-6">
-          <h3 class="text-lg font-semibold">{{ userSubscription.name }}</h3>
-          <p>{{ userSubscription.pricing }}€ (next renew {{ subscription.nextRenew }})</p>
+          <h3 class="text-lg font-semibold">{{ userSubscription?.name }}</h3>
+          <p>{{ userSubscription?.pricing }}€ (next renew {{ subscription.nextRenew }})</p>
         </div>
         <div class="flex gap-4 mt-4">
-          <Button @click="explorePlans">Explore Plans</Button>
-          <Button @click="managePlans" variant="outline">Manage Plans</Button>
+          <Button @click="managePlans">Manage Plans</Button>
+<!--           <Button @click="managePlans" variant="outline">Manage Plans</Button> -->
         </div>
       </div>
 
@@ -18,7 +18,7 @@
         <h2 class="text-lg font-semibold">Payment method</h2>
         <p class="text-sm opacity-60">Change how you pay your subscription</p>
         <div class="bg-gray-100 p-4 rounded-lg mt-6 flex items-center">
-          <img :src="paymentMethod.image" alt="Payment Method" class="w-12 h-12 mr-4" />
+          <CreditCard size="48" class="mr-3"/>
           <div>
             <p>{{ paymentMethod.name }}</p>
             <p>{{ paymentMethod.type }} .... {{ paymentMethod.last4 }}</p>
@@ -58,8 +58,10 @@
 </template>
 
 <script setup>
+import { CreditCard } from 'lucide-vue-next'
+
 const props = defineProps({
-  userId: {
+  user: {
     type: String,
     required: true
   }
@@ -69,7 +71,7 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const userSubscription = computed(() => {
-  const user = userStore.users.find(user => user._id === props.userId)
+  const user = userStore.users.find(user => user._id === props.user._id)
   console.log(user)
   return user ? user.subscription : null
 })
@@ -94,13 +96,15 @@ const paymentHistory = ref([
   { id: 'INV004', name: 'INV004', status: 'Paid', method: 'Credit Card', amount: '$450.00' },
 ])
 
-const explorePlans = () => {
-  // Logic to explore plans
-  router.push('/pricing')
-}
-
 const managePlans = () => {
-  // Logic to manage plans
+  if (props.user && props.user._id) {
+    router.push({
+      path: '/pricing',
+      query: { userId: props.user._id }
+    })
+  } else {
+    console.error('No user data available for managing plans')
+  }
 }
 
 const deletePaymentMethod = () => {

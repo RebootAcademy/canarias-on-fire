@@ -6,6 +6,7 @@ const EventRouter = require('./event.router')
 const CategoryRouter = require('./category.router')
 const LocationRouter = require('./location.router')
 const ArticleRouter = require('./article.router')
+const SubscriptionRouter = require('./subscription.router')
 
 router
   .use('/auth', AuthRouter)
@@ -14,5 +15,6 @@ router
   .use('/categories', CategoryRouter)
   .use('/locations', LocationRouter)
   .use('/articles', ArticleRouter)
+  .use('/subscriptions', SubscriptionRouter)
 
 module.exports = router

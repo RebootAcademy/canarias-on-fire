@@ -5,17 +5,28 @@
       v-if="!selectedUser"
       @userSelected="selectUser"
     />
-    <UserProfile 
-      v-else 
-      :user="selectedUser" 
-      @back="selectedUser = null"
-    />
+    <template v-else-if="selectedUser">
+      <UserProfile 
+        :user="selectedUser" 
+        @back="selectedUser = null"
+        @tabChange="setActiveTab"
+      />
+      <UserEvents 
+        v-if="selectedUser.role === 'company' && activeTab === 'events'"
+        :user="selectedUser"
+      />
+      <UserSubscriptions 
+        v-if="selectedUser.role === 'company' && activeTab === 'subscriptions'"
+        :user="selectedUser"
+      />
+    </template>
   </div>
 </template>
 
 <script setup>
 const userStore = useUserStore()
 const selectedUser = ref(null)
+const activeTab = ref('profile')
 
 onMounted(() => {
   userStore.fetchUsers()
@@ -23,6 +34,11 @@ onMounted(() => {
 
 const selectUser = (user) => {
   selectedUser.value = user
+  activeTab.value = 'profile'
+}
+
+const setActiveTab = (tab) => {
+  activeTab.value = tab
 }
 
 </script>

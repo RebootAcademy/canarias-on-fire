@@ -85,6 +85,14 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'userAdded'])
 
+const subscriptionStore = useSubscriptionStore()
+const subscriptions = ref([])
+
+onMounted(async () => {
+  await subscriptionStore.fetchSubscriptions()
+  subscriptions.value = subscriptionStore.subscriptions
+})
+
 const formData = reactive({
   username: '',
   email: '',
@@ -109,12 +117,19 @@ const closeModal = () => {
   formData.role = 'basic'
 }
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (isFormValid.value) {
     const userData = { ...formData }
     if (userData.role === 'company') {
       // Si no se proporciona companyEmail, usar el email principal
       userData.companyEmail = userData.companyEmail || userData.email
+      // Encontrar la suscripción básica y asignar su ID
+      const basicSubscription = subscriptionStore.getBasicSubscription()
+      if (basicSubscription) {
+        userData.subscription = basicSubscription._id
+      } else {
+        console.error('Basic subscription not found')
+      }
     } else {
       delete userData.companyName
       delete userData.companyEmail

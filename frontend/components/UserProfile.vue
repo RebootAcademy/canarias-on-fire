@@ -10,7 +10,7 @@
         </h2>
       </div>
 
-      <Tabs v-if="user.role === 'company'" v-model="activeTab" class="w-auto">
+      <Tabs v-if="user.role === 'company'" v-model="activeTab" class="w-auto" @update:modelValue="onTabChange">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
@@ -24,8 +24,6 @@
       v-if="activeTab === 'profile'" 
       :user="user"
     />
-    <UserEvents v-else-if="activeTab === 'events'" :userId="user._id" />
-    <UserSubscriptions v-else-if="activeTab === 'subscriptions'" :userId="user._id" />
   </div>
 </template>
 
@@ -39,13 +37,21 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits('back')
+const emit = defineEmits(['back', 'tabChange'])
 
 const editedUser = ref({ ...props.user })
 const selectedRole = ref(props.user.role)
 const activeTab = ref('profile')
 
+const onTabChange = (newTab) => {
+  emit('tabChange', newTab)
+}
+
 watch(selectedRole, (newRole) => {
   editedUser.value.role = newRole
+})
+
+watch(activeTab, (newTab) => {
+  emit('tabChange', newTab)
 })
 </script>

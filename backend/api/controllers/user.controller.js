@@ -137,7 +137,6 @@ const getCurrentUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  console.log('updateUser controller called with body:', req.body)
   try {
     let user = await User.findById(req.params.id)
 
@@ -172,19 +171,68 @@ const updateUser = async (req, res) => {
       Object.assign(user, req.body)
       await user.save()
     }
-
-    console.log('User updated successfully:', user)
+    // Populate the subscription
+    await user.populate('subscription')
 
     res.status(200).json({
       success: true,
       message: 'User successfully updated.',
       result: user,
     })
+
   } catch (error) {
-    console.error('Error updating user:', error)
     return res.status(500).json({
       success: false,
       message: 'Error updating user.',
+      description: error.message,
+    })
+  }
+}
+
+const updateUserSubscription = async (req, res) => {
+  try {
+    const userId = req.params.id
+    const { subscriptionId } = req.body
+
+    let user = await User.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    if (user.role !== 'company') {
+      return res.status(400).json({
+        success: false,
+        message: 'Only company users can have subscriptions',
+      })
+    }
+
+    user = await Company.findByIdAndUpdate(
+      userId,
+      { subscription: subscriptionId },
+      { new: true, runValidators: true }
+    ).populate('subscription')
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company user not found',
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User subscription successfully updated.',
+      result: user,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating user subscription.',
       description: error.message,
     })
   }
@@ -222,5 +270,6 @@ module.exports = {
   getUserById,
   getCurrentUser,
   updateUser,
+  updateUserSubscription,
   deleteUser,
 }

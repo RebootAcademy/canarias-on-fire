@@ -5,6 +5,7 @@ export const useUserStore = defineStore('userStore', {
     userData: null,
     isAuthenticated: false,
     users: [],
+    selectedUser: null,
     searchQuery: '',
     isLoading: false,
     error: null
@@ -14,6 +15,9 @@ export const useUserStore = defineStore('userStore', {
     setUser(data) {
       this.userData = data.result
       this.isAuthenticated = true
+    },
+    setSelectedUser(user) {
+      this.selectedUser = user
     },
     clearUserId() {
       this.userData = null
@@ -109,6 +113,39 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: error.message }
       }
     },
+
+    async updateUserSubscription(userId, planId) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
+          method: 'PATCH',
+          body: JSON.stringify({ subscriptionId: planId }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (data.value && data.value.success) {
+          const updatedUser = data.value.result
+          // Actualizar el usuario en el array de usuarios
+          const userIndex = this.users.findIndex(user => user._id === userId)
+          if (userIndex !== -1) {
+            this.users[userIndex] = updatedUser
+          }
+
+          // Si el usuario actualizado es el usuario actual, actualizar userData
+          if (this.userData && this.userData._id === userId) {
+            this.userData = updatedUser
+          }
+
+          return { success: true, user: updatedUser }
+        } else {
+          return { success: false, error: data.value?.error || 'Failed to update subscription' }
+        }
+      } catch (error) {
+        console.error('Error updating user subscription:', error)
+        return { success: false, error: 'An error occurred while updating the subscription' }
+      }
+    },
   },
 
   getters: {
@@ -121,7 +158,8 @@ export const useUserStore = defineStore('userStore', {
         user.username.toLowerCase().includes(lowercaseQuery) ||
         user.email.toLowerCase().includes(lowercaseQuery)
       )
-    }
+    },
+    userSubscription: (state) => state.userData?.subscription || null
   },
 
   persist: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex items-center justify-between w-full px-4 mb-4 mt-6">
-      <h2 class="text-xl font-semibold">My Events</h2>
+      <h2 class="text-xl font-semibold">Events for {{ user.companyName || user.username }}</h2>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />
         <Button @click="openFilterModal" class="text-sm px-3">
@@ -27,24 +27,24 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-
 const props = defineProps({
-  userId: {
+  user: {
     type: String,
     required: true
   }
 })
 
 const eventStore = useEventStore()
-const userStore = useUserStore()
-const { filteredEvents, userEvents } = storeToRefs(eventStore)
-
+const events = ref([])
 const searchQuery = ref('')
 
 onMounted(async () => {
-  console.log('Fetching events for user ID:', props.userId)
-  await eventStore.fetchUserEvents(props.userId)
+  try {
+    await eventStore.fetchUserEvents(props.user._id)
+    events.value = eventStore.userEvents
+  } catch (error) {
+    console.error('Error fetching user events:', error)
+  }
 })
 
 const openFilterModal = () => {

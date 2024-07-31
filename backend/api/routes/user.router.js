@@ -8,6 +8,7 @@ const {
   getCurrentUser,
   updateUser,
   deleteUser,
+  updateUserSubscription,
 } = require('../controllers/user.controller')
 
 router
@@ -18,5 +19,6 @@ router
   .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)
 
   .get('/current/:email', getCurrentUser)
+  .patch('/:id/subscription', /* isAuth, checkRole('admin', 'company'), */ updateUserSubscription)
 
 module.exports = router
