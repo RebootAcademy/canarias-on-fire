@@ -8,13 +8,17 @@
         </div>
       </NuxtLink>
     </div>
+    <div>
       <NavMenu />
+    </div>
     <div class="text-sm font-bold flex gap-4">
       <LangSelector />
+      <Notifications />
       <Button 
         v-if="!auth0?.isAuthenticated"
         @click="login"
-        class="hover:underline"
+        class="hover:underline text-white"
+        variant="ghost"
       >
         {{ $t('login') }}
       </Button>

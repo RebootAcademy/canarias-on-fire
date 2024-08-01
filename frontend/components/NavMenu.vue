@@ -2,7 +2,9 @@
   <NavigationMenu>
     <NavigationMenuList>
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Events</NavigationMenuTrigger>
+        <NavigationMenuTrigger class="bg-transparent text-white">
+          Events
+        </NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul class="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
             <li class="row-span-3 flex flex-col justify-end px-2 py-3">
@@ -58,7 +60,9 @@
       </NavigationMenuItem>
       
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Articles</NavigationMenuTrigger>
+        <NavigationMenuTrigger class="bg-transparent text-white">
+          Articles
+        </NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul class="flex gap-3 p-4 w-96">
             <li>
