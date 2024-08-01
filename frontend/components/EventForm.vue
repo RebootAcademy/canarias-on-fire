@@ -28,10 +28,11 @@ const onSubmit = async () => {
   if (Object.values(errors).every(error => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
-      router.push(`/event/${eventStore.event._id}`)
+      router.push(`/events/${eventStore.event._id}`)
     } else {
       eventStore.status = 'draft'
-      router.push('event/preview')
+      //eventStore.selectedCategories = eventStore.selectedCategories.map(category => category._id)
+      router.push('preview')
     }
   }
 }

@@ -5,7 +5,7 @@
     <div v-if="userStore.isAuthenticated">
       <div class="flex items-center mb-4">
         <Avatar>
-          <AvatarImage :src="formData.profileImg || userStore.userData?.picture" alt="User Avatar" />
+          <AvatarImage :src="userStore.userData?.profileImg" alt="User Avatar" />
           <AvatarFallback>{{ formData.username?.charAt(0) }}</AvatarFallback>
         </Avatar>
         <div class="ml-4">
@@ -52,6 +52,7 @@ const { user, isAuthenticated } = useAuth0()
 const userStore = useUserStore()
 
 const formData = reactive({
+  _id: userStore.userData?._id,
   username: userStore.userData?.username || '',
   email: userStore.userData?.email || '',
   profileImg: userStore.userData?.profileImg || ''
@@ -95,7 +96,8 @@ const uploadImage = async () => {
 async function updateProfile() {
   isUpdating.value = true
   try {
-    const result = await userStore.updateUserProfile(formData)
+    const dataToUpdate = { ...formData, _id: userStore.userData?._id }
+    const result = await userStore.updateUserProfile(dataToUpdate)
     if (result.success) {
       console.log('Profile updated successfully')
     } else {

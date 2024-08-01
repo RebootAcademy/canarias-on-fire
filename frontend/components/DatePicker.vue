@@ -5,23 +5,35 @@
       <PopoverTrigger as-child>
         <Button
           variant="outline"
-          :class="cn('w-full justify-start text-left', !eventStore.eventDate && 'text-muted-foreground', )"
+          :class="cn('w-full justify-start text-left', !formattedDate && 'text-muted-foreground')"
         >
-        <CalendarIcon class="mr-2 h-4 w-4" />
-        {{ eventStore.eventDate ? new Date(eventStore.eventDate).toLocaleDateString() : $t('pickDate') }}
+          <CalendarIcon class="mr-2 h-4 w-4" />
+          {{ formattedDate || $t('pickDate') }}
         </Button>
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0">
-        <Calendar v-model="eventStore.eventDate" initial-focus />
+        <Calendar v-model="eventStore.eventDate" initial-focus @update:model-value="updateDate" />
       </PopoverContent>
     </Popover>
+    <span v-if="dateError" class="text-red-500 text-xs mt-1">{{ dateError }}</span>
   </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-vue-next'
 import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
+const dateError = ref('')
+
+const formattedDate = computed(() => {
+  if (!eventStore.eventDate) return ''
+  return new Date(eventStore.eventDate).toLocaleDateString()
+})
+
+const updateDate = (newDate) => {
+  eventStore.eventDate = newDate
+}
 </script>

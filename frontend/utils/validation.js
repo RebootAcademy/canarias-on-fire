@@ -15,12 +15,18 @@ const priceRules = () => {
   return eventStore.isFree ? '' : 'required'
 }
 
-const validateEventDate = (t) => {
-  if (!eventStore.eventDate || !eventStore.eventDate.year || !eventStore.eventDate.month || !eventStore.eventDate.day) {
-    return t('eventDateRequired')
+/* const validateEventDate = (t) => {
+  if (eventStore.eventType === 'event') {
+    if (!eventStore.eventDate || typeof eventStore.eventDate !== 'object' || !eventStore.eventDate.toDateString) {
+      return t('eventDateRequired')
+    }
+  } else if (eventStore.eventType === 'promotion') {
+    if (!eventStore.eventDate || !eventStore.eventDate.start || !eventStore.eventDate.end) {
+      return t('eventDateRequired')
+    }
   }
   return ''
-}
+} */
 
 const validateEventLocation = (t) => {
   if (!eventStore.eventLocation || !eventStore.eventLocation.address) {
@@ -41,7 +47,7 @@ const validateCategories = (t) => {
 
 const validateFields = (t) => {
   errors.eventName = eventStore.eventName ? '' : t('eventNameRequired')
-  errors.eventDate = validateEventDate(t)
+  /* errors.eventDate = validateEventDate(t) */
   errors.startTime = eventStore.startTime ? '' : t('startTimeRequired')
   errors.description = eventStore.eventDescription ? '' : t('descriptionRequired')
   errors.location = validateEventLocation(t)

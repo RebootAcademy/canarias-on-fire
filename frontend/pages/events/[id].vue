@@ -62,7 +62,7 @@
         Delete
       </Button>
     </div>
-
+    <EventsRelated />
   </div>
 </template>
 

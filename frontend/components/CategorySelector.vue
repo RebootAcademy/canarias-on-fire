@@ -30,25 +30,27 @@ const props = defineProps({
 const eventStore = useEventStore()
 
 onMounted(async () => {
-  if (props.isEditing && eventStore.event) {
+  if (props.isEditing && eventStore.event && eventStore.event.categories) {
     eventStore.selectedCategories = eventStore.event.categories
   }
 })
 
 const isSelected = (category) => {
-  return eventStore.selectedCategories.some(c => c._id === category._id)
+  console.log(category)
+  return eventStore.selectedCategories.some(c => c && c.id === category.id)
 }
 
 const toggleCategory = (category) => {
-  const index = eventStore.selectedCategories.findIndex(c => c._id === category._id)
+  const index = eventStore.selectedCategories.findIndex(c => c.id === category.id)
+  let updatedCategories
   if (index === -1) {
-    eventStore.selectedCategories.push(category)
+    updatedCategories = [...eventStore.selectedCategories, category]
   } else {
-    eventStore.selectedCategories.splice(index, 1)
+    updatedCategories = eventStore.selectedCategories.filter(c => c.id !== category.id)
   }
+  eventStore.setSelectedCategories(updatedCategories)
   validateFields()
 }
-
 
 watch(() => eventStore.selectedCategories)
 </script>

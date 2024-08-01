@@ -2,7 +2,7 @@
   <div class="relative">
     <NuxtImg :src="eventStore.eventImg || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
     <div class="flex p-8 gap-2">
-      <span v-for="category in eventStore.selectedCategories" :key="category._id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
+      <span v-for="category in eventStore.selectedCategories" :key="category.id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
         {{ category.name }}
       </span>
     </div>
@@ -38,14 +38,11 @@
         <span>{{ eventStore.organizerName }}</span>
       </div> -->
     </div>
-    <Button @click="handleSubmit" class="mt-8">Registrarse para Publicar</Button>
+    <Button @click="handleSubmit" class="mt-8">Publish</Button>
   </div>
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
-import { useRouter } from 'vue-router'
-
 const eventStore = useEventStore()
 const router = useRouter()
 const config = useRuntimeConfig()
@@ -77,7 +74,7 @@ const handleSubmit = async () => {
     }
 
   if (data.value && data.value.success) {
-    router.push(`/payment-options?id=${data.value.result._id}`)
+    router.push('/')
   } else {
     console.error('Error saving event:', data.value.error)
   }

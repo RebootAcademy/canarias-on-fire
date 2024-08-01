@@ -10,11 +10,7 @@ export const useEventStore = defineStore('eventStore', {
     events: [],
     eventName: '',
     eventType: '',
-    eventDate: {
-      year: null,
-      month: null,
-      day: null
-    },
+    eventDate: null,
     eventLocation: {
       address: '',
       coordinates: { lat: null, lng: null },
@@ -104,6 +100,12 @@ export const useEventStore = defineStore('eventStore', {
     generateMapImageUrl(lat, lng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
+    setStatus(status) {
+      this.status = status
+    },
+    setSelectedCategories(categories) {
+      this.selectedCategories = categories.map(category => category._id)
+    },
     setFilterModalOpen(isOpen) {
       this.isFilterModalOpen = isOpen
     },
@@ -191,6 +193,40 @@ export const useEventStore = defineStore('eventStore', {
         this.categoriesError = error
       } finally {
         this.isLoadingCategories = false
+      }
+    },
+
+    async createEvent() {
+      try {
+        const eventData = {
+          ...this.$state,
+          status: this.status, // Ensure status is a string
+          categories: this.selectedCategories, // Array of category IDs
+        }
+  
+        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events`, {
+          method: 'POST',
+          body: JSON.stringify(eventData),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+  
+        if (error.value) {
+          console.error('Error creating event:', error.value)
+          return false
+        }
+  
+        if (data.value && data.value.success) {
+          // Handle successful creation
+          return true
+        } else {
+          console.error('Error creating event:', data.value?.error)
+          return false
+        }
+      } catch (error) {
+        console.error('Error creating event:', error)
+        return false
       }
     },
 
