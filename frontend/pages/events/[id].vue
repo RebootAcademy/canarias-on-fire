@@ -87,7 +87,7 @@ const { data, error } = await eventStore.fetchEventById(eventId)
 if (error) { console.error('Error fetching event:', error) }
 
 const editEvent = () => {
-  router.push(`/event/edit/${eventId}`)
+  router.push(`/events/edit/${eventId}`)
 }
 
 const deleteEvent = async () => {

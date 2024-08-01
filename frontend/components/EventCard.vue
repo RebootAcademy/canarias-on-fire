@@ -1,6 +1,6 @@
 <template>
   <div class="w-96 h-80 bg-white shadow-md rounded-md relative">
-    <NuxtLink :to="`/event/${event._id}`">
+    <NuxtLink :to="`/events/${event._id}`">
       <!-- Event status -->
       <span
         v-show="
@@ -89,7 +89,7 @@ const props = defineProps({
 const defaultImage = './defaultEvent.jpg'
 
 const editEvent = () => {
-  router.push(`/event/edit/${props.event._id}`)
+  router.push(`/events/edit/${props.event._id}`)
 }
 
 const deleteEvent = async () => {
