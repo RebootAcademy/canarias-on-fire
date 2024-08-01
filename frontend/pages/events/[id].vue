@@ -30,7 +30,7 @@
     <div class="mt-6">
       <h2 class="text-xl font-semibold">Ubicación</h2>
       <img 
-        v-if="data && data.eventLocation && data.eventLocation.mapImageUrl" 
+        v-if="event.eventLocation && event.eventLocation.mapImageUrl" 
         :src="event.eventLocation.mapImageUrl" 
         alt="Event Location" 
         class="w-full h-60 object-cover mt-2" 
@@ -82,7 +82,7 @@ const defaultImage = '/defaultEvent.jpg'
 
 const eventId = route.params.id
 
-const { data, error } = await eventStore.fetchEventById(eventId)
+const { data, pending, error } = await eventStore.fetchEventById(eventId)
 
 if (error) { console.error('Error fetching event:', error) }
 

@@ -10,6 +10,7 @@ export const useEventStore = defineStore('eventStore', {
     events: [],
     eventName: '',
     eventType: '',
+    status: 'draft',
     eventDate: null,
     eventLocation: {
       address: '',
@@ -198,18 +199,11 @@ export const useEventStore = defineStore('eventStore', {
 
     async createEvent() {
       try {
-        const eventData = {
-          ...this.$state,
-          status: this.status, // Ensure status is a string
-          categories: this.selectedCategories, // Array of category IDs
-        }
-  
+        const eventData = this.getEventData()
+        eventData.status = 'draft'
         const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events`, {
           method: 'POST',
-          body: JSON.stringify(eventData),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          body: eventData
         })
   
         if (error.value) {
@@ -218,7 +212,7 @@ export const useEventStore = defineStore('eventStore', {
         }
   
         if (data.value && data.value.success) {
-          // Handle successful creation
+          this.event = data.value.result
           return true
         } else {
           console.error('Error creating event:', data.value?.error)
@@ -250,6 +244,31 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    async updateEventStatus(eventId, status) {
+      try {
+        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${eventId}`, {
+          method: 'PATCH',
+          body: { status },
+        })
+    
+        if (error.value) {
+          console.error('Error updating event status:', error.value)
+          return false
+        }
+    
+        if (data.value && data.value.success) {
+          this.event = data.value.result
+          return true
+        } else {
+          console.error('Error updating event status:', data.value?.error)
+          return false
+        }
+      } catch (error) {
+        console.error('Error updating event status:', error)
+        return false
+      }
+    },
+
     async deleteEvent(eventId) {
       const userStore = useUserStore()
       const config = useRuntimeConfig()
@@ -274,6 +293,7 @@ export const useEventStore = defineStore('eventStore', {
         return false
       }
     },
+    
     getEventData() {
       return {
         eventName: this.eventName,
@@ -288,9 +308,16 @@ export const useEventStore = defineStore('eventStore', {
         eventCapacity: this.eventCapacity,
         externalUrl: this.externalUrl,
         eventImg: this.eventImg,
-        categories: this.selectedCategories.map(cat => cat._id)
+        categories: this.selectedCategories.map(cat => typeof cat === 'object' ? cat.id : cat),
+        status: this.status // Add this line to include the status
       }
-    }
+    },
+
+    normalizeCategories() {
+      this.selectedCategories = this.selectedCategories.map(cat => 
+        typeof cat === 'object' ? cat : this.getCategoryById(cat)
+      ).filter(Boolean) // Remove any undefined categories
+    },
 
   },
 
@@ -322,31 +349,6 @@ export const useEventStore = defineStore('eventStore', {
             return false
           }
         }
-  
-/*         // Filter by Date
-        if (this.filters.date) {
-          const filterDate = new Date(this.filters.date)
-          const eventDate = new Date(event.eventDate)
-          
-          if (isNaN(filterDate.getTime()) || isNaN(eventDate.getTime())) {
-            console.error('Invalid date:', this.filters.date, event.eventDate)
-            return false
-          }
-  
-          if (filterDate.getFullYear() !== eventDate.getFullYear() ||
-              filterDate.getMonth() !== eventDate.getMonth() ||
-              filterDate.getDate() !== eventDate.getDate()) {
-            return false
-          }
-        } */
-  
-        // Filter by startTime
-/*         if (this.filters.startTime) {
-          filtered = filtered.filter(event => 
-            new Date(`1970-01-01T${event.startTime}`).getTime() >= new Date(`1970-01-01T${this.filters.startTime}`).getTime()
-          )
-        } */
-  
         return true
         })
       }
@@ -355,8 +357,9 @@ export const useEventStore = defineStore('eventStore', {
     eventsCount() {
       return this.events.length
     },
+
     getCategoryById: (state) => (id) => {
-      return state.categories.find(category => category.id === id)
+      return state.categories.find(category => category.id === id || category._id === id)
     },
 
 })

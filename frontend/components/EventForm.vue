@@ -7,8 +7,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
-import { useRouter } from 'vue-router'
 import { errors, validateFields } from '../utils/validation'
 
 const props = defineProps({
@@ -31,8 +29,12 @@ const onSubmit = async () => {
       router.push(`/events/${eventStore.event._id}`)
     } else {
       eventStore.status = 'draft'
-      //eventStore.selectedCategories = eventStore.selectedCategories.map(category => category._id)
-      router.push('preview')
+      const result = await eventStore.createEvent()
+      if (result) {
+        router.push(`/events/preview/${eventStore.event._id}`)
+      } else {
+        console.error('Failed to create event')
+      }
     }
   }
 }

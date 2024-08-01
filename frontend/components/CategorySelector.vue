@@ -36,7 +36,6 @@ onMounted(async () => {
 })
 
 const isSelected = (category) => {
-  console.log(category)
   return eventStore.selectedCategories.some(c => c && c.id === category.id)
 }
 
