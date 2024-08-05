@@ -12,7 +12,10 @@
         </Button>
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0">
-        <Calendar v-model="eventStore.eventDate" initial-focus @update:model-value="updateDate" />
+        <Calendar 
+          v-model="eventStore.eventDate" 
+          initial-focus 
+          @update:model-value="updateDate" />
       </PopoverContent>
     </Popover>
     <span v-if="dateError" class="text-red-500 text-xs mt-1">{{ dateError }}</span>
@@ -20,10 +23,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-vue-next'
-import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
 const dateError = ref('')

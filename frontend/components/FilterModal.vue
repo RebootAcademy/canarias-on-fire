@@ -45,11 +45,10 @@
 import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()
-const { isFilterModalOpen, filters } = storeToRefs(eventStore)
+const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
 
 const selectedIslands = ref(filters.value.islands)
-// const selectedDate = ref(filters.value.date ? new Date(filters.value.date) : null)
-
+const selectedDate = ref(eventDate.value)
 // const startTime = ref(null)
 const selectedCategories = ref(filters.value.categories)
 
@@ -71,12 +70,20 @@ const closeModal = () => {
 const applyFilters = () => {
   eventStore.setFilters({
     islands: selectedIslands.value,
-    // date: selectedDate.value ? selectedDate.value.toISOString() : null,
+    date: selectedDate.value ? new Date(selectedDate.value) : null,
     // startTime: startTime.value,
     categories: selectedCategories.value
   })
   closeModal()
 }
+
+watch(eventDate, (newDate) => {
+  selectedDate.value = newDate
+})
+
+watch(selectedDate, (newDate) => {
+  eventStore.eventDate = newDate
+})
 
 // Opcional: resetear filtros cuando se abre el modal
 watch(isFilterModalOpen, (newValue) => {

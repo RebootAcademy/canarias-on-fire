@@ -101,9 +101,25 @@ export const useEventStore = defineStore('eventStore', {
     setFilterModalOpen(isOpen) {
       this.isFilterModalOpen = isOpen
     },
+
     setFilters(newFilters) {
-      this.filters = { ...this.filters, ...newFilters }
+      console.log('Setting filters in store:', newFilters)
+      this.filters = { 
+        ...this.filters, 
+        ...newFilters,
+        date: newFilters.date ? {
+          day: newFilters.date.getDate(),
+          month: newFilters.date.getMonth() + 1,
+          year: newFilters.date.getFullYear()
+        } : null
+      }
+      console.log('Updated filters:', this.filters)
+
+      if (this.filters.date) {
+        console.log('Filter date set to:', `${this.filters.date.year}-${this.filters.date.month}-${this.filters.date.day}`)
+      }
     },
+
     resetFilters() {
       this.selectedCategory = null
       this.searchQuery = ''
@@ -318,6 +334,19 @@ export const useEventStore = defineStore('eventStore', {
             return false
           }
         }
+
+        // Filter by date
+        if (this.filters.date) {
+          const filterDate = this.filters.date
+          const eventDate = event.eventDate
+          if (!eventDate || 
+              eventDate.year !== filterDate.year || 
+              eventDate.month !== filterDate.month || 
+              eventDate.day !== filterDate.day) {
+            return false
+          }
+        }
+
         return true
         })
       }
