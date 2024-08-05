@@ -35,7 +35,10 @@
             {{ category.name }}
           </Button>
         </div>
-        <Button @click="applyFilters">Apply filters</Button>
+        <div class="flex justify-between mt-4">
+          <Button @click="resetFilters" variant="outline">Reset Filters</Button>
+          <Button @click="applyFilters">Apply filters</Button>
+        </div>
       </div>
     </div>
   </div>
@@ -75,6 +78,13 @@ const applyFilters = () => {
     categories: selectedCategories.value
   })
   closeModal()
+}
+
+const resetFilters = () => {
+  selectedIslands.value = []
+  selectedDate.value = null
+  selectedCategories.value = []
+  eventStore.resetFilters()
 }
 
 watch(eventDate, (newDate) => {

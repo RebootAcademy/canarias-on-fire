@@ -103,7 +103,6 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     setFilters(newFilters) {
-      console.log('Setting filters in store:', newFilters)
       this.filters = { 
         ...this.filters, 
         ...newFilters,
@@ -112,11 +111,6 @@ export const useEventStore = defineStore('eventStore', {
           month: newFilters.date.getMonth() + 1,
           year: newFilters.date.getFullYear()
         } : null
-      }
-      console.log('Updated filters:', this.filters)
-
-      if (this.filters.date) {
-        console.log('Filter date set to:', `${this.filters.date.year}-${this.filters.date.month}-${this.filters.date.day}`)
       }
     },
 
@@ -129,6 +123,7 @@ export const useEventStore = defineStore('eventStore', {
         startTime: null,
         categories: []
       }
+      this.eventDate = null
     },
 
     async fetchEvents() {
