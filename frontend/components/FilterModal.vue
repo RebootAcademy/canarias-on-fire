@@ -16,11 +16,11 @@
             {{ island }}
           </label>
         </div>
-        <h3 class="font-semibold">Date and time</h3>
-        <p class="text-sm text-gray-500 mb-2">Select the date and time to refine your event search.</p>
+        <h3 class="font-semibold">Date</h3>
+        <p class="text-sm text-gray-500 mb-2">Select the date to refine your event search.</p>
         <div class="grid grid-cols-3 gap-2 mb-4 place-items-end">
           <DatePicker v-model="selectedDate" />
-          <TimePicker v-model="startTime" />
+          <!-- <TimePicker v-model="startTime" /> -->
         </div>
         <h3 class="font-semibold">Categories</h3>
         <p class="text-sm text-gray-500 mb-2">Select up to 3 categories to find events that match your interests.</p>
@@ -35,9 +35,9 @@
             {{ category.name }}
           </Button>
         </div>
-        <div class="flex justify-between mt-4">
-          <Button @click="resetFilters" variant="outline">Reset Filters</Button>
-          <Button @click="applyFilters">Apply filters</Button>
+        <div class="flex justify-end gap-4 mt-4">
+          <Button @click="resetFilters" variant="outline">Reset</Button>
+          <Button @click="applyFilters">Apply</Button>
         </div>
       </div>
     </div>
@@ -52,8 +52,8 @@ const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
 
 const selectedIslands = ref(filters.value.islands)
 const selectedDate = ref(eventDate.value)
-// const startTime = ref(null)
 const selectedCategories = ref(filters.value.categories)
+// const startTime = ref(null)
 
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
 
@@ -74,8 +74,8 @@ const applyFilters = () => {
   eventStore.setFilters({
     islands: selectedIslands.value,
     date: selectedDate.value ? new Date(selectedDate.value) : null,
-    // startTime: startTime.value,
     categories: selectedCategories.value
+    // startTime: startTime.value,
   })
   closeModal()
 }
@@ -95,11 +95,9 @@ watch(selectedDate, (newDate) => {
   eventStore.eventDate = newDate
 })
 
-// Opcional: resetear filtros cuando se abre el modal
 watch(isFilterModalOpen, (newValue) => {
   if (newValue) {
     selectedIslands.value = filters.value.islands
-    // selectedDate.value = filters.value.date ? new Date(filters.value.date) : null
     selectedCategories.value = [...filters.value.categories]
   }
 })
