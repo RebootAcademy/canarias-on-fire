@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full bg-gray-100">
-    <div>
+  <div class="h-full bg-gray-100 w-full flex flex-col items-center">
+    <div class="w-2/3">
       <Hero />
       <EventsCounter />
       <CategoriesFilter />

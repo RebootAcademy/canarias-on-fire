@@ -18,7 +18,7 @@
         </div>
         <h3 class="font-semibold">Date and time</h3>
         <p class="text-sm text-gray-500 mb-2">Select the date and time to refine your event search.</p>
-        <div class="grid grid-cols-3 gap-2 mb-4 bg-red-200 place-items-end">
+        <div class="grid grid-cols-3 gap-2 mb-4 place-items-end">
           <DatePicker v-model="selectedDate" />
           <TimePicker v-model="startTime" />
         </div>
@@ -42,7 +42,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
 import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()

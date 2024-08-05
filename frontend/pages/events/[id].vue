@@ -84,7 +84,9 @@ const eventId = route.params.id
 
 const { data, pending, error } = await eventStore.fetchEventById(eventId)
 
-if (error) { console.error('Error fetching event:', error) }
+if (error) { 
+  console.error('Error fetching event:', error) 
+}
 
 const editEvent = () => {
   router.push(`/events/edit/${eventId}`)

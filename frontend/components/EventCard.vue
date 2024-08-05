@@ -102,6 +102,9 @@ const deleteEvent = async () => {
 }
 
 const formattedDate = () => {
+  if (!props.event.eventDate) {
+    return 'Date not available';
+  }
   const { year, month, day } = props.event.eventDate
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString(undefined, {

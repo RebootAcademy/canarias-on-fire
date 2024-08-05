@@ -2,15 +2,13 @@ import { defineStore } from 'pinia'
 
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
+    events: [],
     event: null,
     categories: [],
     selectedCategories: [],
-    selectedCategory: null,
     searchQuery: '',
-    events: [],
     eventName: '',
     eventType: '',
-    status: 'draft',
     eventDate: null,
     eventLocation: {
       address: '',
@@ -40,49 +38,48 @@ export const useEventStore = defineStore('eventStore', {
       endTime: null,
       categories: []
     },
-    isLoadingCategories: false,
-    categoriesError: null,
     userEvents: []
   }),
   
   actions: {
-    setEvents(events) {
-      this.events = events
+    updateState(key, value) {
+      this[key] = value
     },
-    setSelectedCategory(category) {
-      this.selectedCategory = category
-    },
-    setSearchQuery(query) {
-      this.searchQuery = query
-    },
-    setEvent(eventData) {
-      this.event = eventData
-    },
+
     removeEvent(eventId) {
       this.events = this.events.filter(event => event._id !== eventId)
     }, 
+
     toggleCategory(category) {
-      const index = this.selectedCategories.findIndex(c => c._id === category._id)
+      const index = this.selectedCategories.findIndex(c => c.id === category.id)
       if (index === -1) {
         this.selectedCategories.push(category)
       } else {
         this.selectedCategories.splice(index, 1)
       }
     },
+
     setPlaceDetails(place) {
-      this.eventLocation.address = place.formatted_address
-      this.eventLocation.coordinates = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
+      const { formatted_address, geometry, address_components, website } = place
+      this.eventLocation = {
+        address: formatted_address,
+        coordinates: {
+          lat: geometry.location.lat(),
+          lng: geometry.location.lng()
+        },
+        postalCode: this.extractPostalCode(address_components),
+        mapImageUrl: this.generateMapImageUrl(geometry.location.lat(), geometry.location.lng())
       }
-      const postalCodeComponent = place.address_components.find(component => component.types.includes('postal_code'))
-      this.eventLocation.postalCode = postalCodeComponent ? postalCodeComponent.long_name : ''
-      this.eventLocation.mapImageUrl = this.generateMapImageUrl(
-        place.geometry.location.lat(), 
-        place.geometry.location.lng()
-      )
-      this.externalUrl = place.website
+      this.externalUrl = website
     },
+
+    extractPostalCode(addressComponents) {
+      const postalCodeComponent = addressComponents.find(component => 
+        component.types.includes('postal_code')
+      )
+      return postalCodeComponent ? postalCodeComponent.long_name : ''
+    },
+
     setMapCenter(lat, lng) {
       this.mapCenter = { lat, lng }
     },
@@ -92,20 +89,14 @@ export const useEventStore = defineStore('eventStore', {
     setHasTriedSubmit(value) {
       this.hasTriedSubmit = value
     },
-    setEvents(events) {
-      this.events = events
-    },
     setGoogleMapsApiKey(key) {
       this.googleMapsApiKey = key
     },
     generateMapImageUrl(lat, lng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
-    setStatus(status) {
-      this.status = status
-    },
     setSelectedCategories(categories) {
-      this.selectedCategories = categories.map(category => category._id)
+      this.selectedCategories = categories
     },
     setFilterModalOpen(isOpen) {
       this.isFilterModalOpen = isOpen
@@ -125,45 +116,45 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     async fetchEvents() {
-      this.isLoading = true
-      this.error = null
-      try {
-        const data = await $fetch('http://localhost:8080/api/events')
-        this.events = data.result || []
-      } catch (error) {
-        console.error('Error fetching events:', error)
-        this.error = error
-      } finally {
-        this.isLoading = false
+      const { data, error } = await useFetch('/events', {
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
+
+      if (error.value) {
+        console.error('Error fetching events:', error.value)
+        return { error: error.value }
       }
+
+      this.events = data.value?.result || []
+      return { data: this.events }
+    },
+
+    async fetchEventById(id) {
+      const { data, error } = await useFetch(`/events/${id}`, {
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
+
+      if (error.value) {
+        console.error('Error fetching event:', error.value)
+        return { error: error.value }
+      }
+
+      this.event = data.value?.result
+      return { data: this.event }
     },
 
     async fetchUserEvents(userId) {
-      try {
-        const data = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/user/${userId}`)
-        if (data.success) {
-          this.userEvents = data.result
-        } else {
-          console.error('Error fetching user events:', data.message)
-          this.userEvents = []
-        }
-      } catch (error) {
-        console.error('Error fetching user events:', error)
-        this.userEvents = []
-      }
-    },
+      const { data, error } = await useFetch(`/events/user/${userId}`, {
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
 
-    async fetchEventById(eventId) {
-      try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${eventId}`)
-        if (data.value) {
-          this.setEvent(data.value.result)
-        }
-        return { data: data.value, error: null }
-      } catch (error) {
-        console.error('Error fetching event:', error)
-        return { data: null, error }
+      if (error.value) {
+        console.error('Error fetching user events:', error.value)
+        return { error: error.value }
       }
+
+      this.userEvents = data.value?.result || []
+      return { data: this.userEvents }
     },
 
     async fetchCategories() {
@@ -197,101 +188,69 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async createEvent() {
-      try {
-        const eventData = this.getEventData()
-        eventData.status = 'draft'
-        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events`, {
-          method: 'POST',
-          body: eventData
-        })
-  
-        if (error.value) {
-          console.error('Error creating event:', error.value)
-          return false
-        }
-  
-        if (data.value && data.value.success) {
-          this.event = data.value.result
-          return true
-        } else {
-          console.error('Error creating event:', data.value?.error)
-          return false
-        }
-      } catch (error) {
-        console.error('Error creating event:', error)
-        return false
+    async saveEvent(isNew = true) {
+      const eventData = this.getEventData()
+      const url = isNew ? '/events' : `/events/${this.event._id}`
+      const method = isNew ? 'POST' : 'PATCH'
+
+      const { data, error } = await useFetch(url, {
+        method,
+        body: eventData,
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
+
+      if (error.value) {
+        console.error(`Error ${isNew ? 'creating' : 'updating'} event:`, error.value)
+        return { error: error.value }
       }
+
+      this.event = data.value?.result
+      return { data: this.event }
     },
 
-    async updateEvent() {
-      try {
-        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${this.event._id}`, {
-          method: 'PATCH',
-          body: JSON.stringify(this.getEventData()),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        if (response.success) {
-          this.setEvent(response.result)
-          return true
-        }
-        return false
-      } catch (error) {
-        console.error('Error updating event:', error)
-        return false
-      }
+    createEvent() {
+      return this.saveEvent(true)
+    },
+
+    updateEvent() {
+      return this.saveEvent(true)
     },
 
     async updateEventStatus(eventId, status) {
-      try {
-        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/events/${eventId}`, {
-          method: 'PATCH',
-          body: { status },
-        })
-    
-        if (error.value) {
-          console.error('Error updating event status:', error.value)
-          return false
-        }
-    
-        if (data.value && data.value.success) {
-          this.event = data.value.result
-          return true
-        } else {
-          console.error('Error updating event status:', data.value?.error)
-          return false
-        }
-      } catch (error) {
-        console.error('Error updating event status:', error)
-        return false
+      const { data, error } = await useFetch(`/events/${eventId}`, {
+        method: 'PATCH',
+        body: { status },
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
+
+      if (error.value) {
+        console.error('Error updating event status:', error.value)
+        return { error: error.value }
+      }
+
+      if (data.value?.success) {
+        this.event = data.value.result
+        return { data: this.event }
+      } else {
+        const customError = new Error(data.value?.error || 'Failed to update event status')
+        console.error('Error updating event status:', customError)
+        return { error: customError }
       }
     },
 
-    async deleteEvent(eventId) {
-      const userStore = useUserStore()
-      const config = useRuntimeConfig()
-      
-      try {
-        const { data } = await useFetch(`${config.public.apiBaseUrl}/events/${eventId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${userStore.token}`,
-          }
-        })
+    async deleteEvent(id) {
+      const { error } = await useFetch(`/events/${id}`, {
+        method: 'DELETE',
+        baseURL: useRuntimeConfig().public.apiBaseUrl
+      })
 
-        if (data.value && data.value.success) {
-          this.events = this.events.filter(event => event._id !== eventId)
-          return true
-        } else {
-          console.error('Error deleting event')
-          return false
-        }
-      } catch (error) {
-        console.error('Error:', error)
-        return false
+      if (error.value) {
+        console.error('Error deleting event:', error.value)
+        return { error: error.value }
       }
+
+      this.events = this.events.filter(event => event._id !== id)
+      return { success: true }
     },
     
     getEventData() {
@@ -326,7 +285,6 @@ export const useEventStore = defineStore('eventStore', {
       if (!this.events) return []
 
       return this.events.filter(event => {
-
         // Search
         if (this.searchQuery) {
           const lowercaseQuery = this.searchQuery.toLowerCase()
@@ -342,10 +300,21 @@ export const useEventStore = defineStore('eventStore', {
             return false
           }
         }
-  
+
+        // Filtrar por categorías seleccionadas
+        if (this.selectedCategories.length > 0) {
+          const eventCategoryIds = event.categories.map(c => c._id)          
+          const hasMatchingCategory = this.selectedCategories.some(sc => eventCategoryIds.includes(sc.id))
+          
+          if (!hasMatchingCategory) {
+            return false
+          }
+        }
+
         // Filter by islands
         if (this.filters.islands.length > 0) {
-          if (!this.filters.islands.includes(event.eventLocation.island)) {
+          const eventIsland = getIslandFromPostalCode(event.eventLocation.postalCode)
+          if (!this.filters.islands.includes(eventIsland)) {
             return false
           }
         }

@@ -2,9 +2,9 @@
   <div class="relative">
     <NuxtImg :src="eventStore.eventImg || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
     <div class="flex p-8 gap-2">
-      <span v-for="category in eventStore.selectedCategories" :key="category.id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
+<!--       <span v-for="category in eventStore.selectedCategories" :key="category.id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
         {{ category.name }}
-      </span>
+      </span> -->
     </div>
   </div>
   <div class="px-8">

@@ -1,42 +1,34 @@
 <template>
-  <div class="flex justify-evenly mt-4">
-    <div 
-      v-for="category in eventStore.categories" 
-      :key="category.id"
-      class="flex flex-col items-center cursor-pointer"
-      @click="selectCategory(category)"
-    >
-    <span class="text-xs mb-1">{{ $t(`values.${category.name}`) }}</span>
+  <div class="flex justify-evenly flex-wrap gap-2.5">
     <div
-      :class="{
-        'bg-black text-white': isSelected(category),
-        'bg-white text-black': !isSelected(category)
-      }"
-      class="flex flex-col items-center justify-center rounded-full border-2 w-20 h-20 hover:bg-slate-200"
+      v-for="category in categories"
+      :key="category.id"
+      class="flex flex-col items-center cursor-pointer p-2.5 rounded-lg transition-colors duration-300"
+      :class="{ 'bg-gray-200': isSelected(category) }"
+      @click="toggleCategory(category)"
     >
-      <component :is="getIcon(category.icon)" class="w-8 h-8" />
-    </div>
+      <component :is="getIcon(category.icon)" class="w-6 h-6" />
+      <span class="mt-1.5 text-xs">{{ $t(`values.${category.name}`) }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
 import { storeToRefs } from 'pinia'
 import * as LucideIcons from 'lucide-vue-next'
 
 const eventStore = useEventStore()
-const { selectedCategory } = storeToRefs(eventStore)
+const { categories, selectedCategories } = storeToRefs(eventStore)
 
 const getIcon = (iconName) => {
-  return LucideIcons[iconName] || LucideIcons.HelpCircle // Icono por defecto si no se encuentra
+  return LucideIcons[iconName] || LucideIcons.HelpCircle
 }
 
-const selectCategory = (category) => {
-  eventStore.setSelectedCategory(category.name === selectedCategory.value ? null : category.name)
+const isSelected = (category) => {
+  return selectedCategories.value.some(c => c.id === category.id)
 }
 
-const isSelected = (category) => selectedCategory.value === category.name
-
-
+const toggleCategory = (category) => {
+  eventStore.toggleCategory(category)
+}
 </script>

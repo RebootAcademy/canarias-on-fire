@@ -5,7 +5,7 @@
     <div class="flex flex-wrap gap-2 p-2 mb-4">
       <Badge 
         v-for="category in eventStore.categories"
-        :key="category._id"
+        :key="category.id"
         :class="{'bg-black text-white' : isSelected(category), 'bg-white' : !isSelected(category)}"
         @click="toggleCategory(category)"
         variant="secondary"
@@ -40,16 +40,39 @@ const isSelected = (category) => {
 }
 
 const toggleCategory = (category) => {
-  const index = eventStore.selectedCategories.findIndex(c => c.id === category.id)
+  console.log('Category received:', category)
+
+  if (!category || !category.id) {
+    console.error('Invalid category:', category)
+    return
+  }
+
+  if (!Array.isArray(eventStore.selectedCategories)) {
+    console.error('selectedCategories is not an array:', eventStore.selectedCategories)
+    eventStore.setSelectedCategories([])
+  }
+
+  console.log('Current selectedCategories:', eventStore.selectedCategories)
+
+  const index = eventStore.selectedCategories.findIndex(c => c && c.id === category.id)
+
+  console.log('Found index:', index)
+
   let updatedCategories
   if (index === -1) {
     updatedCategories = [...eventStore.selectedCategories, category]
   } else {
-    updatedCategories = eventStore.selectedCategories.filter(c => c.id !== category.id)
+    updatedCategories = eventStore.selectedCategories.filter(c => c && c.id !== category.id)
   }
+
+  console.log('Updated categories:', updatedCategories)
+
   eventStore.setSelectedCategories(updatedCategories)
   validateFields()
 }
 
-watch(() => eventStore.selectedCategories)
+watch(() => eventStore.selectedCategories, (newValue) => {
+  console.log('selectedCategories changed:', newValue)
+}, { deep: true })
+
 </script>
