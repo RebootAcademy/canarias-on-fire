@@ -1,5 +1,5 @@
 <template>
-  <div class="flex max-w-6xl mx-auto px-4 py-8">
+  <div class="flex max-w-6xl mx-auto px-4 py-8 bg-black">
     <div class="flex-grow">
       <div v-if="article" class="max-w-4xl">
         <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>

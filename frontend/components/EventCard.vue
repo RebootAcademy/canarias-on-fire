@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
-    <div class="relative w-[300px] h-[389px] rounded-lg border">
+    <div class="relative w-[300px] h-[332px] rounded-lg border">
       <!-- Event status -->
       <span
         v-show="userStore.userData.role === 'admin' && $route.path === '/dashboard/events'"
@@ -15,7 +15,7 @@
       <!-- Event Image -->
       <NuxtImg
         :src="event.eventImg || defaultImage"
-        class="w-full h-56 object-cover rounded-t-lg"
+        class="w-full h-40 object-cover rounded-t-lg"
       />
       <!-- Main content -->
       <div class="px-3 py-2 flex justify-between">
@@ -52,14 +52,9 @@
       </div>
       <div class="flex flex-col justify-between items-start px-3">
         <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
-        <p class="text-sm text-gray-600">{{ formattedDate() }}</p>
-        <p class="text-sm text-gray-600">
-          {{ event.startTime }} - {{ event.endTime }}
-        </p>
-        <p class="text-sm text-gray-600">{{ event.place }}</p>
-        <p class="text-md font-semibold mt-2">
-          {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
-        </p>
+        <p class="text-sm text-gray-600">{{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}</p>
+        <p class="text-sm text-gray-600 line-clamp-2">{{ event.eventLocation.address }}</p>
+        <p class="text-md font-semibold mt-2">{{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}</p>
       </div>
 
     </div>

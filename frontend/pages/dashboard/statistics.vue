@@ -1,6 +1,5 @@
 <template>
   <div class="p-6">
-    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <StatCard title="Total Revenue" value="$45,231.89" change="+20.1%" icon="dollar-sign" />

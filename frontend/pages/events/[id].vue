@@ -1,13 +1,13 @@
 <template>
-  <div class="relative">
+  <div class="relative bg-black">
     <NuxtImg :src="event.eventImg || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
     <div class="flex p-8 gap-2">
-      <span v-for="category in event.categories" :key="category._id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
+      <span v-for="category in event.categories" :key="category._id" class="bg-gray-500 text-white text-xs font-semibold px-4 py-1 rounded-xl">
         {{ category.name }}
       </span>
     </div>
   </div>
-  <div class="px-8">
+  <div class="px-8 bg-black">
     <h1 class="text-2xl font-bold">{{ event.eventName }}</h1>
     <div class="flex flex-col gap-1 mt-2 text-gray-600">
       <div class="flex items-center gap-1">

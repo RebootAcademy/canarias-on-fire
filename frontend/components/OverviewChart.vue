@@ -1,5 +1,7 @@
 <template>
-  <AreaChart :data="data" index="name" :categories="['total', 'predicted']" />
+  <div class="bg-gray-500 p-12 rounded-lg text-white">
+    <AreaChart :data="data" index="name" :categories="['total', 'predicted']" />
+  </div>
 </template>
 
 <script setup>
