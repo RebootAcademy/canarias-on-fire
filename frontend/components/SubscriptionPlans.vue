@@ -11,15 +11,18 @@
           <span class="text-base font-medium text-gray-500"> / MO</span>
         </div>
 
-        <ul class="mt-6 space-y-4">
-          <li v-for="(key, value) in plan.features" :key="key" class="flex items-start">
-              <svg v-if="key" class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <svg v-else class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <p class="ml-3 text-base text-gray-700">{{ featureDescriptions[value] }}</p>
+        <ul class="mt-6 space-y-4 text-left">
+          <li v-for="(key, value) in plan.features" :key="key" class="flex justify-between">
+            <p v-if="value" class="ml-3 text-base text-gray-700">{{ featureDescriptions[value] }}</p>
+            <svg v-if="key" class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <svg v-else class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </li>
+          <li v-for="key in plan.features" v-show="typeof key === 'number'">
+            <p class="ml-3 text-base text-gray-700">Prioridad de lectura: <span class="font-semibold">{{ getReadingPriorityText(key) }}</span></p>
           </li>
         </ul>
 
@@ -68,14 +71,10 @@ const featureDescriptions = {
 
 const getReadingPriorityText = (value) => {
   switch (value) {
-    case 1:
-      return 'Prioridad de lectura: Alta';
-    case 2:
-      return 'Prioridad de lectura: Media';
-    case 3:
-      return 'Prioridad de lectura: Baja';
-    default:
-      return 'Prioridad de lectura: No especificada';
+    case 1: return 'Alta'
+    case 2: return 'Media'
+    case 3: return 'Baja'
+    default: return 'No especificada'
   }
 }
 
