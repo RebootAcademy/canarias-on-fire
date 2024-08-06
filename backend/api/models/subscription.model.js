@@ -9,11 +9,41 @@ const SubscriptionSchema = new mongoose.Schema({
   pricing: {
     type: Number,
   },
-  characteristics: {
-    type: [String], // Cambiado de Array a [String]
+  features: {
+    eventPublication: { 
+      type: Boolean, 
+      default: true 
+    },
+    eventPhotos: { 
+      type: Boolean, 
+      default: false 
+    },
+/*     infoButtonSize: { 
+      type: String, 
+      enum: ['normal', 'normal +1', 'normal +2'], 
+      default: 'normal' 
+    }, */
+    readPriority: { 
+      type: Number,
+      min: 1, 
+      max: 3, 
+    },
+    rssPublication: { 
+      type: Boolean, 
+      default: false 
+    },
+    increasedCharacterLimit: { 
+      type: Boolean, default: false 
+    },
+    websiteLink: { 
+      type: Boolean, 
+      default: false 
+    },
+    offerPublication: { 
+      type: Boolean, 
+      default: false 
+    }
   }
-}, {
-  timestamps: false // Añade createdAt y updatedAt
 })
 
 const SubscriptionModel = mongoose.model('subscription', SubscriptionSchema)
