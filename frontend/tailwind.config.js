@@ -49,6 +49,8 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        black: '#1C1F1F',
+        white: '#FAFAFA',
       },
       borderRadius: {
       	xl: "calc(var(--radius) + 4px)",
@@ -85,7 +87,7 @@ module.exports = {
         'md': '768px',
         'lg': '1024px',
         'xl': '1280px',
-      }
+      },
     },
   },
   plugins: [animate],

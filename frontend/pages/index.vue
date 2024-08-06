@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full bg-gray-100 w-full flex flex-col items-center">
+  <div class="h-full bg-black w-full flex flex-col items-center">
+    <Hero />
     <div class="w-2/3">
-      <Hero />
       <EventsCounter />
       <CategoriesFilter />
       <EventsHeader />
@@ -15,7 +15,7 @@
 
 <script setup>
 useHead({
-  title: 'Canarias onFIRE - Eventos'
+  title: 'Evente - Home'
 })
 
 const eventStore = useEventStore()

@@ -1,14 +1,11 @@
 <template>
-  <div class="w-96 h-80 bg-white shadow-md rounded-md relative">
-    <NuxtLink :to="`/events/${event._id}`">
+  <NuxtLink :to="`/events/${event._id}`">
+    <div class="relative w-[300px] h-[389px] rounded-lg border">
       <!-- Event status -->
       <span
-        v-show="
-          userStore.userData.role === 'admin' &&
-          $route.path === '/dashboard/events'
-        "
+        v-show="userStore.userData.role === 'admin' && $route.path === '/dashboard/events'"
         :class="[
-          'absolute top-2 left-2 text-xs font-semibold bg-white rounded-xl px-2 py-1',
+          'absolute top-2 left-2 text-xs font-semibold bg-white rounded-xl px-2 py-1 text-black',
           { 'text-red-500 italic': event.status === 'draft' },
         ]"
       >
@@ -18,41 +15,43 @@
       <!-- Event Image -->
       <NuxtImg
         :src="event.eventImg || defaultImage"
-        class="w-full h-40 object-cover"
+        class="w-full h-56 object-cover rounded-t-lg"
       />
-
       <!-- Main content -->
-      <div class="p-4 flex flex-col justify-between">
-        <div class="flex justify-between items-center">
-          <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
-
-          <!-- Options menu -->
-          <div
-            v-show="
-              userStore.userData.role === 'admin' &&
-              $route.path === '/dashboard/events'
-            "
+      <div class="px-3 py-2 flex justify-between">
+      <!-- Categories -->
+        <div class="flex flex-wrap gap-2">
+          <span
+            v-for="category in event.categories"
+            :key="category._id"
+            class="bg-gray-700 text-white text-xs font-normal px-2.5 py-0.5 rounded-xl self-center"
           >
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <MoreVertical
-                  class="h-4 w-4 text-gray-500 hover:text-gray-700"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem @select="editEvent">
-                  <Pencil class="mr-2 h-4 w-4" />
-                  <span>Edit</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem @select="deleteEvent">
-                  <Trash class="mr-2 h-4 w-4" />
-                  <span>Delete</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+            {{ category.name }}
+          </span>
         </div>
-
+        <!-- Options menu -->
+        <div v-show="userStore.userData.role === 'admin'">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <MoreVertical
+                class="h-4 w-4 text-gray-500 hover:text-gray-700"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem @select="editEvent">
+                <Pencil class="mr-2 h-4 w-4" />
+                <span>Edit</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem @select="deleteEvent">
+                <Trash class="mr-2 h-4 w-4" />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <div class="flex flex-col justify-between items-start px-3">
+        <h3 class="text-xl font-semibold">{{ event.eventName }}</h3>
         <p class="text-sm text-gray-600">{{ formattedDate() }}</p>
         <p class="text-sm text-gray-600">
           {{ event.startTime }} - {{ event.endTime }}
@@ -61,18 +60,10 @@
         <p class="text-md font-semibold mt-2">
           {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
         </p>
-        <div class="flex flex-wrap gap-2 mt-2">
-          <span
-            v-for="category in event.categories"
-            :key="category._id"
-            class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl"
-          >
-            {{ category.name }}
-          </span>
-        </div>
       </div>
-    </NuxtLink>
-  </div>
+
+    </div>
+  </NuxtLink>
 </template>
 
 <script setup>
@@ -103,7 +94,7 @@ const deleteEvent = async () => {
 
 const formattedDate = () => {
   if (!props.event.eventDate) {
-    return 'Date not available';
+    return 'Date not available'
   }
   const { year, month, day } = props.event.eventDate
   const date = new Date(year, month - 1, day)
@@ -114,3 +105,4 @@ const formattedDate = () => {
   })
 }
 </script>
+

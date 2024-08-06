@@ -1,5 +1,5 @@
 <template>
-  <div class="px-10">
+  <div class="px-6">
     <div class="overflow-x-auto">
       <div class="flex space-x-8 pb-4">
         <EventCard 
@@ -16,7 +16,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../../stores/eventStore'
 import { storeToRefs } from 'pinia'
 
 const eventStore = useEventStore()

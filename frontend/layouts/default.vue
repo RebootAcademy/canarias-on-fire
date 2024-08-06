@@ -7,9 +7,3 @@
     <Footer />
   </div>
 </template>
-
-<script setup>
-useHead({
-  title: 'CanariasONFIRE'
-})
-</script>

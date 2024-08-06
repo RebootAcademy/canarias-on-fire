@@ -2,10 +2,7 @@
   <div class="h-16 bg-black flex items-end justify-between px-4 py-2">
     <div class="flex text-3xl ml-1 font-extrabold">
       <NuxtLink to="/" class="flex items-end">
-        <p class="text-blue-400">e</p>
-        <div class="flex items-end">
-          <span class="text-normal text-white z-10">venTe</span>
-        </div>
+        <NuxtImg src="logo_color.png" class="w-36" />
       </NuxtLink>
     </div>
     <div>
