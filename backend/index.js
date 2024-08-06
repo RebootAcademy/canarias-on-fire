@@ -3,8 +3,8 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-
 const dbConnect = require('./api/config/db')
+const stripeWebhookRouter = require('./api/routes/stripeWebhook.router')
 
 // const { auth } = require('express-openid-connect')
 
@@ -36,6 +36,8 @@ app
   .use(morgan('dev'))
   .use(express.json())
   .use('/api', require('./api/routes'))
+  .use('/api/stripe-webhook', express.raw({ type: 'application/json' }))
+  .use('/api/stripe-webhook', stripeWebhookRouter)
   .listen(process.env.PORT, async (error) => {
     if (error) throw new Error(error)
     await dbConnect()

@@ -12,14 +12,23 @@
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
-          <li v-for="(key, value) in plan.features" :key="key" class="flex justify-between">
-            <p v-if="value" class="ml-3 text-base text-gray-700">{{ featureDescriptions[value] }}</p>
-            <svg v-if="key" class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <svg v-else class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+          <li 
+            v-for="(key, value) in plan.features" 
+            :key="key" 
+          >
+            <div 
+              v-if="value && typeof key !== 'number'"
+              class="flex justify-between"
+            >
+              <p class="ml-3 text-base text-gray-700">{{ featureDescriptions[value] }}</p>
+              <svg v-if="key" class="flex-shrink-0 h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <svg v-else class="flex-shrink-0 h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+
           </li>
           <li v-for="key in plan.features" v-show="typeof key === 'number'">
             <p class="ml-3 text-base text-gray-700">Prioridad de lectura: <span class="font-semibold">{{ getReadingPriorityText(key) }}</span></p>
@@ -27,16 +36,22 @@
         </ul>
 
         <div class="mt-8">
-          <button 
-            @click="selectPlan(plan)"
-            :class="[
-              isSelected(plan) 
-                ? 'bg-gray-200 text-gray-900' 
-                : 'bg-black text-white',
-              'w-full font-semibold py-2 px-4 rounded-lg'
-            ]"
+          <NuxtLink 
+            v-if="!isSelected(plan)"
+            :to="plan.paymentLink"
+            target="_blank"
+            rel="noopener noreferrer"
+            external
+            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
           >
-            {{ isSelected(plan) ? 'Current Plan' : 'Select Plan' }}
+            Select Plan
+          </NuxtLink>
+          <button
+            v-else
+            disabled
+            class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
+          >
+            Current Plan
           </button>
         </div>
       </div>
