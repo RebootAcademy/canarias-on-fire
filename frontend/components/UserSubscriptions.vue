@@ -114,7 +114,7 @@ const managePlans = () => {
 
 onMounted(() => {
   if (props.user?._id) {
-    userStore.fetchUsers() // Asumiendo que este método existe y obtiene todos los usuarios
+    userStore.fetchUsers()
   }
   subscriptionStore.fetchSubscriptions()
 })

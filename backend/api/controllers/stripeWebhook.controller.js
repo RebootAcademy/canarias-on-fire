@@ -4,16 +4,7 @@ const stripeEventHandlers = require('../services/stripeEventHandlers')
 exports.handleWebhook = async (req, res) => {
   const sig = req.headers['stripe-signature']
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
-
-/*   // Convertir el buffer a string y luego a JSON para imprimirlo
-  const rawBodyString = req.body.toString('utf8')
-  try {
-    const parsedBody = JSON.parse(rawBodyString)
-    console.log('Raw body as JSON:', JSON.stringify(parsedBody, null, 2))
-  } catch (err) {
-    console.error('Error parsing raw body:', err)
-  } */
-
+  
   let event
 
   try {
