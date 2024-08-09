@@ -2,9 +2,9 @@
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
       <div v-for="plan in plans" :key="plan._id" 
-           class="text-center border rounded-lg shadow-sm p-6 pt-12 relative"
+           class="text-center bg-white border rounded-lg shadow-sm p-6 pt-12 relative"
            :class="{ 'border-black': isSelected(plan) }">
-        <div v-if="plan.name === 'Platinum'" class="absolute top-0 left-0 right-0 bg-black text-white text-center py-1 rounded-t-lg">Recommended option</div>
+        <div v-if="plan.name === 'premium'" class="absolute top-0 left-0 right-0 bg-black text-center py-1 rounded-t-lg">Recommended option</div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ plan.name }}</h3>
         <div class="mt-4">
           <span class="text-4xl font-extrabold text-gray-900">{{ plan.pricing }}€</span>

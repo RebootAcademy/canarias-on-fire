@@ -17,29 +17,31 @@
 
     <form @submit.prevent="updateUser">
       <div class="mb-4">
-        <Label for="username">Username</Label>
+        <Label for="username" class="text-gray-300">Username</Label>
         <Input
           id="username"
           v-model="editedUser.username"
           :disabled="!editedUser.isActive"
+          class="text-gray-500"
         />
       </div>
       <div class="mb-4">
-        <Label for="email">Email</Label>
+        <Label for="email" class="text-gray-300">Email</Label>
         <Input
           id="email"
           v-model="editedUser.email"
           :disabled="!editedUser.isActive"
+          class="text-gray-500"
         />
       </div>
       <div class="mb-4">
-        <Label class="mb-2">Role</Label>
+        <Label class="mb-2 text-gray-300">Role</Label>
         <Select 
           v-model="selectedRole"
           :disabled="!editedUser.isActive"
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select role" />
+            <SelectValue placeholder="Select role" class="text-gray-500" />
           </SelectTrigger>
           <SelectContent class="text-gray-500">
             <SelectItem value="basic">Basic</SelectItem>
@@ -53,37 +55,40 @@
       <!-- Company-specific fields -->
       <div v-if="selectedRole === 'company'">
         <div class="mb-4">
-          <Label for="companyName">Company Name</Label>
+          <Label for="companyName" class="text-gray-300">Company Name</Label>
           <Input
             id="companyName"
             v-model="editedUser.companyName"
             :disabled="!editedUser.isActive"
+            class="text-gray-500"
           />
         </div>
         <div class="mb-4">
-          <Label for="companyEmail">Company Email</Label>
+          <Label for="companyEmail" class="text-gray-300">Company Email</Label>
           <Input
             id="companyEmail"
             v-model="editedUser.companyEmail"
             :disabled="!editedUser.isActive"
+            class="text-gray-500"
           />
         </div>
         <div class="mb-4">
-          <Label for="phone">Phone</Label>
+          <Label for="phone" class="text-gray-300">Phone</Label>
           <Input
             id="phone"
             v-model="editedUser.phone"
             :disabled="!editedUser.isActive"
+            class="text-gray-500"
           />
         </div>
         <div class="mb-4">
-          <Label for="sector">Sector</Label>
+          <Label for="sector" class="text-gray-300">Sector</Label>
           <Select 
             v-model="editedUser.sector"
             :disabled="!editedUser.isActive"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select sector" />
+              <SelectValue placeholder="Select sector" class="text-gray-500" />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
               <SelectItem value="restoration">Restoration</SelectItem>
@@ -96,7 +101,7 @@
       </div>
       <div class="flex gap-4 mt-12">
         <Button @click="deleteUser" class="px-6" variant="destructive"> Delete </Button>
-        <Button @click="toggleUserActivation" variant="outline">
+        <Button @click="toggleUserActivation" variant="outline" class="text-gray-500">
           {{ editedUser.isActive ? 'Deactivate' : 'Activate' }}
         </Button>
         <Button 

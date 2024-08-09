@@ -4,7 +4,7 @@
       <div>
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
-        <div class="bg-gray-100 p-4 rounded-lg mt-6">
+        <div class="bg-gray-500 p-4 rounded-lg mt-6">
           <h3 class="text-lg font-semibold">{{ userSubscription?.name }}</h3>
           <p>{{ userSubscription?.pricing }}€ (next renew {{ subscription.nextRenew }})</p>
         </div>
@@ -17,14 +17,14 @@
       <div>
         <h2 class="text-lg font-semibold">Payment method</h2>
         <p class="text-sm opacity-60">Change how you pay your subscription</p>
-        <div class="bg-gray-100 p-4 rounded-lg mt-6 flex items-center">
+        <div class="bg-gray-500 p-4 rounded-lg mt-6 flex items-center">
           <CreditCard size="48" class="mr-3"/>
           <div>
             <p>{{ paymentMethod.name }}</p>
             <p>{{ paymentMethod.type }} .... {{ paymentMethod.last4 }}</p>
           </div>
           <div class="ml-auto">
-            <Button @click="deletePaymentMethod" variant="outline">Delete</Button>
+            <Button @click="deletePaymentMethod" variant="secondary">Delete</Button>
             <Button @click="changePaymentMethod" class="ml-2">Change</Button>
           </div>
         </div>

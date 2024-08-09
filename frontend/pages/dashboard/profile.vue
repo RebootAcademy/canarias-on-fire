@@ -14,17 +14,17 @@
       </div>
       <form @submit.prevent="updateProfile">
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-700">Profile Image</Label>
+          <Label class="block text-sm font-medium text-gray-300">Profile Image</Label>
           <Input type="file" @change="handleFileChange" accept="image/*" />
           <Button type="button" @click="uploadImage" class="mt-2">Upload Image</Button>
         </div>
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-700">Username</Label>
-          <Input class="mt-1 block w-full" v-model="formData.username" />
+          <Label class="block text-sm font-medium text-gray-300">Username</Label>
+          <Input class="mt-1 block w-full text-gray-500" v-model="formData.username" />
         </div>
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-700">Email</Label>
-          <Input class="mt-1 block w-full" v-model="formData.email" />
+          <Label class="block text-sm font-medium text-gray-300">Email</Label>
+          <Input class="mt-1 block w-full text-gray-500" v-model="formData.email"  />
         </div>
         <Button type="submit" :disabled="isUpdating">
         {{ isUpdating ? 'Updating...' : 'Update profile' }}

@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col">
+  <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col bg-black">
     <h1 class="text-3xl font-bold mb-6">Create New Article</h1>
     <form @submit.prevent="createArticle">
       <div class="mb-6">
