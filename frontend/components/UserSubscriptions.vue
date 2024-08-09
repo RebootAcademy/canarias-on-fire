@@ -4,31 +4,16 @@
       <div>
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
-        <div class="bg-gray-500 p-4 rounded-lg mt-6">
-          <h3 class="text-lg font-semibold">{{ userSubscription?.name }}</h3>
-          <p>{{ userSubscription?.pricing }}€ (next renew {{ subscription.nextRenew }})</p>
+        <div v-if="userSubscription" class="bg-gray-500 p-4 rounded-lg mt-6">
+          <h3 class="text-lg font-semibold">{{ userSubscription.name }}</h3>
+          <p>{{ userSubscription.pricing }} € (Next Renew {{ userSubscription.nextRenew }})</p>
+        </div>
+        <div v-else class="bg-gray-500 p-4 rounded-lg mt-6">
+          <p>No active subscription</p>
         </div>
         <div class="flex gap-4 mt-4">
           <Button @click="managePlans">Manage Plans</Button>
-<!--           <Button @click="managePlans" variant="outline">Manage Plans</Button> -->
         </div>
-      </div>
-
-      <div>
-        <h2 class="text-lg font-semibold">Payment method</h2>
-        <p class="text-sm opacity-60">Change how you pay your subscription</p>
-        <div class="bg-gray-500 p-4 rounded-lg mt-6 flex items-center">
-          <CreditCard size="48" class="mr-3"/>
-          <div>
-            <p>{{ paymentMethod.name }}</p>
-            <p>{{ paymentMethod.type }} .... {{ paymentMethod.last4 }}</p>
-          </div>
-          <div class="ml-auto">
-            <Button @click="deletePaymentMethod" variant="secondary">Delete</Button>
-            <Button @click="changePaymentMethod" class="ml-2">Change</Button>
-          </div>
-        </div>
-        <p class="text-xs mt-2">Notes: Please be careful on choosing your payment method, because we will automatically cut your balance</p>
       </div>
     </div>
 
@@ -38,17 +23,26 @@
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
+            <TableHead>ID</TableHead>
+            <TableHead>Payment date</TableHead>
+            <TableHead>Invoice pdf</TableHead>
             <TableHead class="text-right">Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow v-for="invoice in paymentHistory" :key="invoice.id">
-            <TableCell>{{ invoice.name }}</TableCell>
-            <TableCell>{{ invoice.status }}</TableCell>
-            <TableCell>{{ invoice.method }}</TableCell>
+            <TableCell>{{ invoice.id }}</TableCell>
+            <TableCell>{{ invoice.paymentDate }}</TableCell>
+            <TableCell>
+              <NuxtLink 
+                :to="invoice.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="text-primary hover:underline"
+              >
+              See PDF
+            </NuxtLink>
+            </TableCell>
             <TableCell class="text-right">{{ invoice.amount }}</TableCell>
           </TableRow>
         </TableBody>
@@ -58,43 +52,54 @@
 </template>
 
 <script setup>
-import { CreditCard } from 'lucide-vue-next'
-
 const props = defineProps({
   user: {
-    type: String,
+    type: Object,
     required: true
   }
 })
 
 const router = useRouter()
 const userStore = useUserStore()
+const subscriptionStore = useSubscriptionStore()
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const currentUser = computed(() => 
+  userStore.users.find(u => u._id === props.user._id)
+)
 
 const userSubscription = computed(() => {
-  const user = userStore.users.find(user => user._id === props.user._id)
-  console.log(user)
-  return user ? user.subscription : null
+  const activeSubscription = currentUser.value?.activeSubscription
+  if (!activeSubscription) return null
+
+  const subscription = subscriptionStore.subscriptions.find(s => s._id === activeSubscription.plan)
+  if (!subscription) return null
+
+  return {
+    name: subscription.name,
+    pricing: subscription.pricing,
+    nextRenew: activeSubscription.currentPeriodEnd ? new Date(activeSubscription.currentPeriodEnd).toLocaleDateString() : 'N/A'
+  }
 })
 
-const subscription = ref({
-  plan: 'Premium',
-  price: '30,99',
-  nextRenew: '01 July 2024'
-})
-
-const paymentMethod = ref({
-  name: 'Pepechuga de Jesús Ramírez Alonso',
-  type: 'Débito',
-  last4: '9856',
-  image: 'path/to/visa/image.png'
-})
-
-const paymentHistory = ref([
-  { id: 'INV001', name: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' },
-  { id: 'INV002', name: 'INV002', status: 'Pending', method: 'PayPal', amount: '$150.00' },
-  { id: 'INV003', name: 'INV003', status: 'Unpaid', method: 'Bank Transfer', amount: '$350.00' },
-  { id: 'INV004', name: 'INV004', status: 'Paid', method: 'Credit Card', amount: '$450.00' },
-])
+const paymentHistory = computed(() => 
+  currentUser.value?.invoices
+    ? currentUser.value.invoices.map(invoice => ({
+        id: invoice.id,
+        pdf: invoice.pdf,
+        paymentDate: formatDate(invoice.date),
+        amount: `$${(invoice.amount / 100).toFixed(2)}`
+      }))
+    : []
+)
 
 const managePlans = () => {
   if (props.user && props.user._id) {
@@ -107,15 +112,10 @@ const managePlans = () => {
   }
 }
 
-const deletePaymentMethod = () => {
-  // Logic to delete payment method
-}
-
-const changePaymentMethod = () => {
-  // Logic to change payment method
-}
-
 onMounted(() => {
-  // Fetch subscription, payment method, and payment history from the store or API
+  if (props.user?._id) {
+    userStore.fetchUsers() // Asumiendo que este método existe y obtiene todos los usuarios
+  }
+  subscriptionStore.fetchSubscriptions()
 })
 </script>

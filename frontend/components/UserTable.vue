@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+const subscriptionStore = useSubscriptionStore()
 
 const props = defineProps({
   users: {
@@ -36,10 +37,13 @@ const props = defineProps({
 })
 
 const getSubscriptionName = (user) => {
-  if (!user || !user.subscription) {
+  if (!user || !user.activeSubscription || !user.activeSubscription.plan) {
     return 'N/A'
   }
-  return user.subscription.name
+  const subscription = subscriptionStore.subscriptions.find(
+    sub => sub._id === user.activeSubscription.plan
+  )
+  return subscription ? subscription.name : 'Unknown'
 }
 
 </script>
