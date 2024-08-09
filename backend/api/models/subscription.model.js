@@ -21,11 +21,6 @@ const SubscriptionSchema = new mongoose.Schema({
       type: Boolean, 
       default: false 
     },
-/*     infoButtonSize: { 
-      type: String, 
-      enum: ['normal', 'normal +1', 'normal +2'], 
-      default: 'normal' 
-    }, */
     readPriority: { 
       type: Number,
       min: 1, 
@@ -45,7 +40,10 @@ const SubscriptionSchema = new mongoose.Schema({
     offerPublication: { 
       type: Boolean, 
       default: false 
-    }
+    },
+  },
+  stripe: {
+    planId: String
   }
 })
 

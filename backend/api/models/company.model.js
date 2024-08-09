@@ -40,10 +40,26 @@ const CompanySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'event' 
   }],
-  subscription: { 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'subscription'
+  activeSubscription: {
+    status: String,
+    currentPeriodStart: Date,
+    currentPeriodEnd: Date,
+    lastInvoice: {
+      id: String,
+      amount: Number,
+      pdf: String
+    },
+    plan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'subscription'
+    }
   },
+  invoices: [{
+    id: String,
+    amount: Number,
+    pdf: String,
+    date: Date
+  }],
   companyLogoUrl: {
     type: String
   }
