@@ -147,6 +147,13 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, error: 'An error occurred while updating the subscription' }
       }
     },
+
+    async updateUserSubscriptionStatus(userId, newStatus) {
+      const userIndex = this.users.findIndex(user => user._id === userId)
+      if (userIndex !== -1) {
+        this.users[userIndex].activeSubscription.status = newStatus
+      }
+    },
   },
 
   getters: {

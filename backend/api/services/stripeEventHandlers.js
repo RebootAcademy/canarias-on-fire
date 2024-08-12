@@ -3,10 +3,26 @@
   // Implementa la lógica para manejar el evento de cargo exitoso
 } */
 
-/* const handleCheckoutSessionCompleted = async (session) => {
+const handleCheckoutSessionCompleted = async (session) => {
   console.log('Checkout session completed:', session.id)
-  // Implementa la lógica para manejar la sesión completada
-} */
+  const company = await Company.findOne({
+    'stripe.customerId': session.customer,
+  })
+  if (!company) {
+    console.error('Company not found for customer:', session.customer)
+    return
+  }
+
+  company.activeSubscription = {
+    stripeSubscriptionId: session.subscription,
+    status: 'active',
+    currentPeriodStart: new Date(session.current_period_start * 1000),
+    currentPeriodEnd: new Date(session.current_period_end * 1000),
+  }
+
+  await company.save()
+  console.log('Company subscription updated:', company._id)
+}
 
 /* const handlePaymentMethodAttached = async (paymentMethod) => {
   console.log('Payment method attached:', paymentMethod.id)
@@ -84,6 +100,9 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
 
       if (!company) {
         console.error('Company not found for customer email:', customer.email)
+        // Cancel the subscription or refund the payment here
+        await stripe.subscriptions.del(invoice.subscription)
+        console.log('Subscription cancelled due to unmatched user')
         return
       }
 
@@ -97,6 +116,9 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     const company = await Company.findById(userId)
     if (!company) {
       console.error('Company not found for user ID:', userId)
+      // Cancel the subscription or refund the payment here
+      await stripe.subscriptions.del(invoice.subscription)
+      console.log('Subscription cancelled due to non-existent company')
       return
     }
 
@@ -125,16 +147,16 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     }
 
     company.activeSubscription = {
-      status: status,
-      currentPeriodStart: period_start,
-      currentPeriodEnd: period_end,
+      status: 'active',
+      currentPeriodStart: new Date(period_start * 1000),
+      currentPeriodEnd: new Date(period_end * 1000),
       lastInvoice: newInvoice,
       plan: subscription._id,
     }
 
     company.invoices.push(newInvoice)
 
-    company.subscription = subscription._id
+    company.stripe.subscriptionId = invoice.subscription // Asegúrate de guardar el subscriptionId
 
     await company.save()
     console.log(
@@ -146,23 +168,14 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       'Error updating company active subscription and invoices:',
       error
     )
+    // Consider cancelling the subscription here as well
+    await stripe.subscriptions.del(invoice.subscription)
+    console.log('Subscription cancelled due to error')
   }
   // Implementa la lógica para manejar el pago de la factura
 }
 
 module.exports = {
-  /*   'charge.succeeded': handleChargeSucceeded,
   'checkout.session.completed': handleCheckoutSessionCompleted,
-  'payment_method.attached': handlePaymentMethodAttached,
-  'customer.created': handleCustomerCreated,
-  'customer.updated': handleCustomerUpdated,
-  'customer.subscription.created': handleCustomerSubscriptionCreated,
-  'customer.subscription.updated': handleCustomerSubscriptionUpdated,
-  'payment_intent.succeeded': handlePaymentIntentSucceeded,
-  'payment_intent.created': handlePaymentIntentCreated,
-  'invoice.created': handleInvoiceCreated,
-  'invoice.finalized': handleInvoiceFinalized,
-  'invoice.updated': handleInvoiceUpdated,
-  'invoice.paid': handleInvoicePaid, */
-  'invoice.payment_succeeded': handleInvoicePaymentSucceeded, // Añadir este manejador
+  'invoice.payment_succeeded': handleInvoicePaymentSucceeded,
 }

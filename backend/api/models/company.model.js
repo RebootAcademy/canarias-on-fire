@@ -41,9 +41,18 @@ const CompanySchema = new mongoose.Schema({
     ref: 'event' 
   }],
   activeSubscription: {
-    status: String,
+    status: {
+      type: String,
+      enum: ['active', 'canceling', 'canceled', 'past_due', 'unpaid'],
+      default: 'active'
+    },
     currentPeriodStart: Date,
     currentPeriodEnd: Date,
+    cancelAtPeriodEnd: {
+      type: Boolean,
+      default: false
+    },
+    canceledAt: Date,
     lastInvoice: {
       id: String,
       amount: Number,
@@ -53,6 +62,10 @@ const CompanySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'subscription'
     }
+  },
+  stripe: {
+    customerId: String,
+    subscriptionId: String
   },
   invoices: [{
     id: String,
