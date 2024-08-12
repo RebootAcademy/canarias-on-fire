@@ -7,6 +7,9 @@ const morgan = require('morgan')
 const dbConnect = require('./api/config/db')
 const stripeWebhookRouter = require('./api/routes/stripeWebhook.router.js')
 
+const cron = require('node-cron')
+const { updateExpiredSubscriptions } = require('./api/services/subscriptionService')
+
 // const { auth } = require('express-openid-connect')
 
 const app = express()
@@ -48,6 +51,12 @@ app.listen(process.env.PORT, async (error) => {
 
     console.info(`Events app API running on PORT ${process.env.PORT}`)
   })
+
+// Ejecutar la revisión todos los días a la medianoche
+cron.schedule('0 0 * * *', () => {
+  console.log('Running subscription expiration check')
+  updateExpiredSubscriptions()
+})
 
 module.exports = app
 

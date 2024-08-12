@@ -19,6 +19,19 @@ const isAuth = async (req, res, next) => {
         message: 'Unauthorized.'
       })
     }
+
+    // Verificar y actualizar el estado de la suscripción si es una empresa
+    if (user.role === 'company' && user.activeSubscription) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (user.activeSubscription.currentPeriodEnd <= today && 
+          ['active', 'canceling'].includes(user.activeSubscription.status)) {
+        user.activeSubscription.status = 'canceled';
+        user.role = 'basic';
+        await user.save();
+      }
+    }
+
     res.locals.user = user
     next()
   } catch (error) {
@@ -29,7 +42,6 @@ const isAuth = async (req, res, next) => {
     })
   }
 }
-
 
 const checkRole = (...roles) => {
   return (req, res, next) => {

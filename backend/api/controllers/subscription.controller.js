@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const Company = require('../models/company.model')
 const Subscription = require('../models/subscription.model')
 const { createStripeCustomer } = require('../services/stripeService')
@@ -54,8 +54,8 @@ const createSubscription = async (req, res) => {
     })
 
     // Guardar el subscriptionId en la base de datos
-    company.stripe.subscriptionId = session.subscription;
-    await company.save();
+    company.stripe.subscriptionId = session.subscription
+    await company.save()
 
     res.status(200).json({ sessionId: session.id })
   } catch (error) {
@@ -136,6 +136,29 @@ const reactivateSubscription = async (req, res) => {
   } catch (error) {
     console.error('Error reactivating subscription:', error)
     res.status(500).json({ error: 'Error reactivating subscription' })
+  }
+}
+
+const updateExpiredSubscriptions = async () => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  try {
+    const expiredCompanies = await Company.find({
+      'activeSubscription.currentPeriodEnd': { $lte: today },
+      'activeSubscription.status': { $in: ['active', 'canceling'] },
+    })
+
+    for (const company of expiredCompanies) {
+      company.activeSubscription.status = 'canceled'
+      company.role = 'basic'
+      await company.save()
+      console.log(
+        `Company ${company._id} subscription expired and role set to basic`
+      )
+    }
+  } catch (error) {
+    console.error('Error updating expired subscriptions:', error)
   }
 }
 

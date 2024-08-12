@@ -1,3 +1,7 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const Company = require('../models/company.model')
+const Subscription = require('../models/subscription.model')
+
 /* const handleChargeSucceeded = async (charge) => {
   console.log('Charge succeeded:', charge.id)
   // Implementa la lógica para manejar el evento de cargo exitoso
@@ -14,11 +18,12 @@ const handleCheckoutSessionCompleted = async (session) => {
   }
 
   company.activeSubscription = {
-    stripeSubscriptionId: session.subscription,
     status: 'active',
     currentPeriodStart: new Date(session.current_period_start * 1000),
     currentPeriodEnd: new Date(session.current_period_end * 1000),
   }
+
+  company.stripe.subscriptionId = session.subscription
 
   await company.save()
   console.log('Company subscription updated:', company._id)
@@ -79,9 +84,6 @@ const handleCheckoutSessionCompleted = async (session) => {
   // Implementa la lógica para manejar el pago de la factura
 } */
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
-const Company = require('../models/company.model')
-const Subscription = require('../models/subscription.model')
 
 const handleInvoicePaymentSucceeded = async (invoice) => {
   console.log('Invoice payment succeeded:', invoice.id)

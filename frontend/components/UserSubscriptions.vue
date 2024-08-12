@@ -5,9 +5,10 @@
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
         <div v-if="userSubscription" class="bg-gray-500 p-4 rounded-lg mt-6">
-          <h3 class="text-lg font-semibold">{{ userSubscription.name }}</h3>
+          <h3 class="text-lg font-semibold">{{ userSubscription.name.toUpperCase() }}</h3>
           <p>
-            {{ userSubscription.pricing }} € (Next Renew
+            {{ userSubscription.pricing }} € 
+            ({{ userSubscription.status === 'canceling' ? 'Ending at' : 'Next Renew' }}
             {{ userSubscription.nextRenew }})
           </p>
         </div>
