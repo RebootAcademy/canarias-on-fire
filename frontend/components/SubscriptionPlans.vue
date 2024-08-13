@@ -68,7 +68,6 @@ const props = defineProps({
   }
 })
 
-const subscriptionStore = useSubscriptionStore()
 const emit = defineEmits(['planSelected'])
 
 const featureDescriptions = {
@@ -92,10 +91,5 @@ const getReadingPriorityText = (value) => {
 
 const isSelected = (plan) => {
   return props.selectedPlan && props.selectedPlan._id === plan._id
-}
-
-const selectPlan = (plan) => {
-  subscriptionStore.setSelectedPlan(plan)
-  emit('planSelected', plan)
 }
 </script>

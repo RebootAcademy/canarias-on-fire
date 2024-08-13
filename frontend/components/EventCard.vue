@@ -5,10 +5,7 @@
       <div class="relative z-10 w-full h-full rounded-lg">
         <!-- Event status -->
         <span
-          v-show="
-            userStore.userData.role === 'admin' &&
-            $route.path === '/dashboard/events'
-          "
+          v-show="userStore.userData && userStore.userData.role === 'admin'"
           :class="[
             'absolute top-2 left-2 text-xs font-semibold bg-white rounded-xl px-2 py-1 text-black',
             { 'text-red-500 italic': event.status === 'draft' },
@@ -35,7 +32,7 @@
             </span>
           </div>
           <!-- Options menu -->
-          <div v-show="userStore.userData.role === 'admin'">
+          <div v-show="userStore.userData && userStore.userData.role === 'admin'">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <MoreVertical

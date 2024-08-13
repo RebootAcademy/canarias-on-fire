@@ -39,17 +39,11 @@ const props = defineProps({
 
 const emit = defineEmits(['back', 'tabChange'])
 
-const editedUser = ref({ ...props.user })
-const selectedRole = ref(props.user.role)
 const activeTab = ref('profile')
 
 const onTabChange = (newTab) => {
   emit('tabChange', newTab)
 }
-
-watch(selectedRole, (newRole) => {
-  editedUser.value.role = newRole
-})
 
 watch(activeTab, (newTab) => {
   emit('tabChange', newTab)

@@ -8,7 +8,7 @@
     <template v-else-if="selectedUser">
       <UserProfile 
         :user="selectedUser" 
-        @back="selectedUser = null"
+        @back="clearSelectedUser"
         @tabChange="setActiveTab"
       />
       <UserEvents 
@@ -24,9 +24,12 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
+
 const userStore = useUserStore()
 const selectedUser = ref(null)
 const activeTab = ref('profile')
+const route = useRoute()
 
 onMounted(() => {
   userStore.fetchUsers()
@@ -34,11 +37,23 @@ onMounted(() => {
 
 const selectUser = (user) => {
   selectedUser.value = user
+  userStore.selectedUser = user // Actualizar el store con el usuario seleccionado
   activeTab.value = 'profile'
+}
+
+const clearSelectedUser = () => {
+  selectedUser.value = null
+  userStore.selectedUser = null // Limpiar el usuario seleccionado en el store
 }
 
 const setActiveTab = (tab) => {
   activeTab.value = tab
 }
 
+// Watch for route changes to clear selectedUser
+watch(route, () => {
+  if (route.name !== 'UsersTab') {
+    clearSelectedUser()
+  }
+})
 </script>

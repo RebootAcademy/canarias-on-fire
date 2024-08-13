@@ -7,8 +7,6 @@ export const useUserStore = defineStore('userStore', {
     users: [],
     selectedUser: null,
     searchQuery: '',
-    isLoading: false,
-    error: null
   }),
 
   actions: {
@@ -28,8 +26,6 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async fetchUsers() {
-      this.isLoading = true
-      this.error = null
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users`)
         if (data.value) {
@@ -37,15 +33,10 @@ export const useUserStore = defineStore('userStore', {
         }
       } catch (error) {
         console.error('Error fetching users:', error)
-        this.error = error
-      } finally {
-        this.isLoading = false
       }
     },
 
     async addUser(userData) {
-      this.isLoading = true
-      this.error = null
       try {
         console.log('Sending user data:', userData)
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users`, {
@@ -55,11 +46,8 @@ export const useUserStore = defineStore('userStore', {
         this.users.push(response.user)
         return response.user
       } catch (error) {
-        this.error = error.message
         console.error('Error adding user:', error)
         throw error
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -81,13 +69,11 @@ export const useUserStore = defineStore('userStore', {
           body: profileData
         })
 
-        // Asumimos que la respuesta exitosa contiene directamente los datos del usuario actualizado
         const updatedUser = response
         const index = this.users.findIndex(u => u._id === updatedUser._id)
         if (index !== -1) {
           this.users[index] = updatedUser
         }
-        // Actualizamos también userData si es el usuario actual
         if (this.userData && this.userData._id === updatedUser._id) {
           this.userData = updatedUser
         }
@@ -127,13 +113,11 @@ export const useUserStore = defineStore('userStore', {
 
         if (data.value && data.value.success) {
           const updatedUser = data.value.result
-          // Actualizar el usuario en el array de usuarios
           const userIndex = this.users.findIndex(user => user._id === userId)
           if (userIndex !== -1) {
             this.users[userIndex] = updatedUser
           }
 
-          // Si el usuario actualizado es el usuario actual, actualizar userData
           if (this.userData && this.userData._id === userId) {
             this.userData = updatedUser
           }
@@ -167,10 +151,5 @@ export const useUserStore = defineStore('userStore', {
         user.email.toLowerCase().includes(lowercaseQuery)
       )
     },
-    userSubscription: (state) => state.userData?.subscription || null
-  },
-
-  persist: {
-    storage: persistedState.localStorage,
   },
 })

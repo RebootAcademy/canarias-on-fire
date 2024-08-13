@@ -3,7 +3,7 @@
     v-if="isOpen"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
   >
-    <div class="bg-white rounded-lg p-6 w-11/12 max-w-md">
+    <div class="bg-gray-600 rounded-lg p-6 w-11/12 max-w-md">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Add New User</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -14,11 +14,11 @@
         <div class="grid gap-4 py-4">
           <div class="gap-4">
             <Label for="username">Username</Label>
-            <Input id="username" v-model="formData.username" required />
+            <Input id="username" v-model="formData.username" required class="text-gray-500" />
           </div>
           <div class="gap-4">
             <Label for="email">Email</Label>
-            <Input id="email" v-model="formData.email" type="email" required />
+            <Input id="email" v-model="formData.email" type="email" required class="text-gray-500" />
           </div>
           <div class="gap-4">
             <Label for="role">Role</Label>
@@ -36,7 +36,7 @@
           <template v-if="formData.role === 'company'">
             <div class="gap-4">
               <Label for="companyName">Company Name</Label>
-              <Input id="companyName" v-model="formData.companyName" required />
+              <Input id="companyName" v-model="formData.companyName" required class="text-gray-500" />
             </div>
             <div class="gap-4">
               <Label for="companyEmail">Company Email</Label>
@@ -45,11 +45,12 @@
                 v-model="formData.companyEmail"
                 type="email"
                 required
+                class="text-gray-500"
               />
             </div>
             <div class="gap-4">
               <Label for="phone">Phone</Label>
-              <Input id="phone" v-model="formData.phone" />
+              <Input id="phone" v-model="formData.phone" class="text-gray-500"/>
             </div>
             <div class="gap-4">
               <Label for="sector">Sector</Label>
