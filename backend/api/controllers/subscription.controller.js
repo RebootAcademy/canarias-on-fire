@@ -139,6 +139,84 @@ const reactivateSubscription = async (req, res) => {
   }
 }
 
+const upgradeSubscription = async (req, res) => {
+  const { companyId } = req.params
+  const { newPlanId } = req.body
+
+  try {
+    const company = await Company.findById(companyId)
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' })
+    }
+
+    // Verificar si existe una suscripción activa en Stripe
+    let stripeSubscription
+    if (company.stripe && company.stripe.customerId) {
+      const subscriptions = await stripe.subscriptions.list({
+        customer: company.stripe.customerId,
+        status: 'active',
+        limit: 1,
+      })
+
+      if (subscriptions.data.length > 0) {
+        stripeSubscription = subscriptions.data[0]
+      }
+    }
+
+    if (!stripeSubscription) {
+      // If no active subscription, create a new one
+      const paymentLink = await stripe.paymentLinks.create({
+        line_items: [{ price: newPlanId, quantity: 1 }],
+        after_completion: { type: 'redirect', redirect: { url: `${process.env.BASE_URL}subscription/success` } },
+      })
+
+
+      return res.json({
+        success: true,
+        message: 'Payment link created for new subscription',
+        paymentLink: paymentLink.url,
+      })
+    } else {
+      // Caso 2: El usuario tiene una suscripción activa
+      const updatedSubscription = await stripe.subscriptions.update(
+        stripeSubscription.id,
+        {
+          items: [{ id: stripeSubscription.items.data[0].id, price: newPlanId }],
+          proration_behavior: 'always_invoice',
+          payment_behavior: 'pending_if_incomplete',
+        }
+      )
+
+      // Actualizar la información del usuario
+      company.activeSubscription = {
+        status: 'active',
+        plan: newPlanId,
+        currentPeriodStart: new Date(
+          updatedSubscription.current_period_start * 1000
+        ),
+        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+      }
+      company.stripe.subscriptionId = updatedSubscription.id
+      company.stripe.subscriptionItemId = updatedSubscription.items.data[0].id
+      await company.save()
+  
+      res.json({
+        success: true,
+        message: 'Subscription upgraded successfully',
+        subscription: updatedSubscription,
+      })
+    }
+  } catch (error) {
+    console.error('Error upgrading subscription:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Error upgrading subscription',
+      message: error.message
+    })
+  }
+}
+
 const updateExpiredSubscriptions = async () => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -167,4 +245,6 @@ module.exports = {
   createSubscription,
   cancelSubscription,
   reactivateSubscription,
+  upgradeSubscription,
+  updateExpiredSubscriptions,
 }

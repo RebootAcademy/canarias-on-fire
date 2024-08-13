@@ -24,6 +24,26 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
       return this.subscriptions.find(sub => sub.name === 'basic')
     },
 
+    async upgradeSubscription(userId, newPlanId) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${userId}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ newPlanId }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (data.value) {
+          return { success: true, ...data.value }
+        } else {
+          return { success: false, error: 'No data received from server' }
+        }
+      } catch (error) {
+        console.error('Error upgrading subscription:', error)
+        return { success: false, error: 'Failed to upgrade subscription' }
+      }
+    },
+
     async cancelSubscription(companyId) {
       try {
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/cancel/${companyId}`, {

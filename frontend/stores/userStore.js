@@ -132,6 +132,37 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    async updateSelectedUserSubscription(userId, planId) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
+          method: 'PATCH',
+          body: JSON.stringify({ subscriptionId: planId }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+    
+        if (data.value && data.value.success) {
+          const updatedUser = data.value.result
+          const userIndex = this.users.findIndex(user => user._id === userId)
+          if (userIndex !== -1) {
+            this.users[userIndex] = updatedUser
+          }
+    
+          if (this.selectedUser && this.selectedUser._id === userId) {
+            this.selectedUser = updatedUser
+          }
+    
+          return { success: true, user: updatedUser }
+        } else {
+          return { success: false, error: data.value?.error || 'Failed to update subscription' }
+        }
+      } catch (error) {
+        console.error('Error updating user subscription:', error)
+        return { success: false, error: 'An error occurred while updating the subscription' }
+      }
+    },
+
     async updateUserSubscriptionStatus(userId, newStatus) {
       const userIndex = this.users.findIndex(user => user._id === userId)
       if (userIndex !== -1) {

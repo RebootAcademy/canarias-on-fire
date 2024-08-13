@@ -38,7 +38,7 @@
         <div class="mt-8">
           <NuxtLink 
             v-if="!isSelected(plan)"
-            :to="plan.paymentLink"
+            @click="upgradeToPlan(plan)"
             class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
           >
             Select Plan
@@ -68,6 +68,9 @@ const props = defineProps({
   }
 })
 
+const userStore = useUserStore()
+const subscriptionStore = useSubscriptionStore()
+
 const emit = defineEmits(['planSelected'])
 
 const featureDescriptions = {
@@ -91,5 +94,45 @@ const getReadingPriorityText = (value) => {
 
 const isSelected = (plan) => {
   return props.selectedPlan && props.selectedPlan._id === plan._id
+}
+
+const upgradeToPlan = async (plan) => {
+  if (userStore.userData && userStore.userData.role === 'admin') {
+    if (userStore.selectedUser && userStore.selectedUser._id) {
+      const result = await subscriptionStore.upgradeSubscription(userStore.selectedUser._id, plan.stripe.planId)
+      if (result && result.success) {
+        if (result.paymentLink) {
+          // Redirigir al usuario al enlace de pago
+          window.location.href = result.paymentLink
+        } else {
+          // Actualizar el usuario seleccionado en el store
+          userStore.updateSelectedUserSubscription(userStore.selectedUser._id, plan._id)
+          console.log('Subscription upgraded successfully')
+        }
+      } else {
+        console.log(result?.error || 'Failed to upgrade subscription')
+      }
+    } else {
+      console.error('No selected user data available for upgrading subscription')
+    }
+  } else {
+    if (userStore.userData && userStore.userData._id) {
+      const result = await subscriptionStore.upgradeSubscription(userStore.userData._id, plan.stripe.planId)
+      if (result && result.success) {
+        if (result.paymentLink) {
+          // Redirigir al usuario al enlace de pago
+          window.location.href = result.paymentLink
+        } else {
+          // Actualizar el usuario en el store
+          userStore.updateUserSubscription(userStore.userData._id, plan._id)
+          console.log('Subscription upgraded successfully')
+        }
+      } else {
+        console.log(result?.error || 'Failed to upgrade subscription')
+      }
+    } else {
+      console.error('No user data available for upgrading subscription')
+    }
+  }
 }
 </script>

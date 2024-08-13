@@ -43,7 +43,7 @@ const CompanySchema = new mongoose.Schema({
   activeSubscription: {
     status: {
       type: String,
-      enum: ['active', 'canceling', 'canceled', 'past_due', 'unpaid'],
+      enum: ['active', 'canceling', 'canceled'],
       default: 'active'
     },
     currentPeriodStart: Date,
@@ -65,7 +65,8 @@ const CompanySchema = new mongoose.Schema({
   },
   stripe: {
     customerId: String,
-    subscriptionId: String
+    subscriptionId: String,
+    subscriptionItemId: String
   },
   invoices: [{
     id: String,
