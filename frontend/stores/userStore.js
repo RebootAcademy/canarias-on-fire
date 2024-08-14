@@ -64,9 +64,22 @@ export const useUserStore = defineStore('userStore', {
 
     async updateUserProfile(profileData) {
       try {
+        const updateData = {
+          username: profileData.username,
+          email: profileData.email,
+          role: profileData.role,
+          // Include company fields only if the role is 'company'
+          ...(profileData.role === 'company' && {
+            companyName: profileData.companyName,
+            companyEmail: profileData.companyEmail,
+            phone: profileData.phone,
+            sector: profileData.sector,
+          }),
+        };
+
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
           method: 'PATCH',
-          body: profileData
+          body: updateData
         })
 
         const updatedUser = response
@@ -77,10 +90,16 @@ export const useUserStore = defineStore('userStore', {
         if (this.userData && this.userData._id === updatedUser._id) {
           this.userData = updatedUser
         }
-        return { success: true, message: 'Profile updated successfully', user: updatedUser }
+        return { 
+          success: true, 
+          message: 'Profile updated successfully', 
+          user: updatedUser 
+        }
       } catch (error) {
-        console.error('Error updating user profile:', error)
-        return { success: false, message: error.message || 'Failed to update profile' }
+        return { 
+          success: false, 
+          message: error.message || 'Failed to update profile' 
+        }
       }
     },
 

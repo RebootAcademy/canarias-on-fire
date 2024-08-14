@@ -112,7 +112,6 @@ const getUserById = async (req, res) => {
 const getCurrentUser = async (req, res) => {
   try {
     const { email } = req.params
-    console.log('Email received:', email)
     const user = await User.findOne({ email })
 
     if (!user) {
@@ -150,37 +149,48 @@ const updateUser = async (req, res) => {
     const oldRole = user.role
     const newRole = req.body.role
 
+    // Filtrar campos válidos para actualización
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector'];
+    const updateData = Object.keys(req.body)
+      .filter(key => validFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = req.body[key]
+        return obj
+      }, {})
+
+    if (newRole === 'company') {
+      // Agregar campos de compañía si el nuevo rol es 'company'
+      ;['companyName', 'companyEmail', 'phone', 'sector'].forEach((field) => {
+        if (req.body[field]) updateData[field] = req.body[field]
+      })
+    }
+
     if (newRole === 'company' && oldRole !== 'company') {
       // Cambio a company
-      const companyData = { ...user.toObject(), ...req.body }
       await User.findByIdAndDelete(req.params.id)
-      user = await Company.create(companyData)
+      user = await Company.create({ ...user.toObject(), ...updateData })
     } else if (newRole !== 'company' && oldRole === 'company') {
       // Cambio de company a otro rol
-      const userData = { ...user.toObject(), ...req.body }
       await Company.findByIdAndDelete(req.params.id)
-      user = await User.create(userData)
-    } else if (newRole === 'company' && oldRole === 'company') {
-      // Actualización de company
-      user = await Company.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      })
+      user = await User.create({ ...user.toObject(), ...updateData })
     } else {
-      // Actualización de usuario regular
-      Object.assign(user, req.body)
+      // Actualización de usuario regular o company
+      Object.assign(user, updateData)
       await user.save()
     }
-    // Populate the subscription
-    await user.populate('subscription')
+
+    // Si es una compañía y tiene un plan de suscripción activo, lo poblamos
+    if (user.role === 'company' && user.activeSubscription && user.activeSubscription.plan) {
+      await user.populate('activeSubscription.plan');
+    }
 
     res.status(200).json({
       success: true,
       message: 'User successfully updated.',
       result: user,
     })
-
   } catch (error) {
+    console.error('Error updating user:', error);
     return res.status(500).json({
       success: false,
       message: 'Error updating user.',

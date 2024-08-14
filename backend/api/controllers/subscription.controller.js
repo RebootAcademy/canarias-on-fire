@@ -49,8 +49,8 @@ const createSubscription = async (req, res) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.BASE_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.BASE_URL}/subscription/canceled`,
+      // success_url: `${process.env.BASE_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+      // cancel_url: `${process.env.BASE_URL}/subscription/canceled`,
     })
 
     // Guardar el subscriptionId en la base de datos

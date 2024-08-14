@@ -4,14 +4,27 @@
       <div
         class="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold text-white"
       >
-        {{ (editedUser.role === 'company' ? editedUser.companyName : editedUser.username).charAt(0).toUpperCase() }}
+        {{
+          (editedUser.role === 'company'
+            ? editedUser.companyName
+            : editedUser.username
+          )
+            .charAt(0)
+            .toUpperCase()
+        }}
       </div>
       <div>
         <h3 class="text-xl font-semibold">
-          {{ editedUser.role === 'company' ? editedUser.companyName : editedUser.username }}
+          {{
+            editedUser.role === 'company'
+              ? editedUser.companyName
+              : editedUser.username
+          }}
         </h3>
         <p class="text-gray-600">{{ editedUser.email }}</p>
-        <p v-if="!editedUser.isActive" class="text-red-500 font-semibold">Deactivated</p>
+        <p v-if="!editedUser.isActive" class="text-red-500 font-semibold">
+          Deactivated
+        </p>
       </div>
     </div>
 
@@ -36,10 +49,7 @@
       </div>
       <div class="mb-4">
         <Label class="mb-2 text-gray-300">Role</Label>
-        <Select 
-          v-model="selectedRole"
-          :disabled="!editedUser.isActive"
-        >
+        <Select v-model="editedUser.role" :disabled="!editedUser.isActive">
           <SelectTrigger>
             <SelectValue placeholder="Select role" class="text-gray-500" />
           </SelectTrigger>
@@ -50,10 +60,10 @@
           </SelectContent>
         </Select>
       </div>
-  
-      <hr class="mb-6">
+
+      <hr class="mb-6" />
       <!-- Company-specific fields -->
-      <div v-if="selectedRole === 'company'">
+      <div v-if="editedUser.role === 'company'">
         <div class="mb-4">
           <Label for="companyName" class="text-gray-300">Company Name</Label>
           <Input
@@ -83,10 +93,7 @@
         </div>
         <div class="mb-4">
           <Label for="sector" class="text-gray-300">Sector</Label>
-          <Select 
-            v-model="editedUser.sector"
-            :disabled="!editedUser.isActive"
-          >
+          <Select v-model="editedUser.sector" :disabled="!editedUser.isActive">
             <SelectTrigger>
               <SelectValue placeholder="Select sector" class="text-gray-500" />
             </SelectTrigger>
@@ -100,20 +107,25 @@
         </div>
       </div>
       <div class="flex gap-4 mt-12">
-        <Button @click="deleteUser" class="px-6" variant="destructive"> Delete </Button>
-        <Button @click="toggleUserActivation" variant="outline" class="text-gray-500">
+        <Button @click="deleteUser" class="px-6" variant="destructive">
+          Delete
+        </Button>
+        <Button
+          @click="toggleUserActivation"
+          variant="outline"
+          class="text-gray-500"
+        >
           {{ editedUser.isActive ? 'Deactivate' : 'Activate' }}
         </Button>
-        <Button 
-          @click="updateUser" 
+        <Button
+          @click="updateUser"
           :disabled="!editedUser.isActive"
           class="px-6"
         >
-          Update 
+          Update
         </Button>
       </div>
     </form>
-    
   </div>
 </template>
 
@@ -125,20 +137,44 @@ const props = defineProps({
   },
 })
 
+const router = useRouter()
 const userStore = useUserStore()
-const selectedRole = ref(props.user.role)
 const editedUser = reactive({ ...props.user })
 
-watch(() => props.user, (newUser) => {
+/* watch(() => props.user, (newUser) => {
   Object.assign(editedUser, newUser)
-  selectedRole.value = newUser.role
-}, { deep: true })
+}, { deep: true }) */
+
+watch(
+  () => editedUser.role,
+  (newRole, oldRole) => {
+    if (newRole === 'company' && oldRole !== 'company') {
+      // Inicializar campos de compañía si cambia a rol de compañía
+      editedUser.companyName = editedUser.companyName || ''
+      editedUser.companyEmail = editedUser.companyEmail || editedUser.email
+      editedUser.phone = editedUser.phone || ''
+      editedUser.sector = editedUser.sector || ''
+    }
+  }
+)
 
 const updateUser = async () => {
   if (editedUser && editedUser._id) {
-    const result = await userStore.updateUserProfile(toRaw(editedUser))
+    const dataToUpdate = {
+      ...editedUser,
+      role: editedUser.role,
+      // Incluir campos de compañía solo si el rol es 'company'
+      ...(editedUser.role === 'company' && {
+        companyName: editedUser.companyName,
+        companyEmail: editedUser.companyEmail,
+        phone: editedUser.phone,
+        sector: editedUser.sector,
+      }),
+    }
+    const result = await userStore.updateUserProfile(toRaw(dataToUpdate))
     if (result.success) {
       Object.assign(editedUser, result.user)
+      router.push('/dashboard')
     }
   } else {
     console.error('Invalid user data for update')
