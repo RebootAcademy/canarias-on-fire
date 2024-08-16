@@ -9,9 +9,9 @@ const SubscriptionSchema = new mongoose.Schema({
   pricing: {
     type: Number,
   },
-  paymentLink: {
+/*   paymentLink: {
     type: String,
-  },
+  }, */
   features: {
     eventPublication: { 
       type: Boolean, 

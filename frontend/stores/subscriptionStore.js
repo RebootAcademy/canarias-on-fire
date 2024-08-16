@@ -78,6 +78,28 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
         console.error('Error reactivating subscription:', error)
         return { success: false, message: error.message }
       }
-    }
+    },
+
+    async createSubscription(companyId, planId) {
+      try {
+        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/create/${companyId}`, {
+          method: 'POST',
+          body: JSON.stringify({ planId }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log('Received response:', response); // Para depuración
+        if (response.success && response.sessionUrl) {
+          return { success: true, sessionUrl: response.sessionUrl };
+        } else if (response.success && response.subscription) {
+          return { success: true, subscription: response.subscription };
+        }
+        return { success: false, message: response.error || 'Failed to create subscription' };
+      } catch (error) {
+        console.error('Error creating subscription:', error);
+        return { success: false, message: error.message };
+      }
+    },
   },
 })

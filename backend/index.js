@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
 const dbConnect = require('./api/config/db')
 const stripeWebhookRouter = require('./api/routes/stripeWebhook.router.js')
 
@@ -11,6 +12,8 @@ const cron = require('node-cron')
 const {
   updateExpiredSubscriptions,
 } = require('./api/services/subscriptionService')
+
+mongoose.set('strictPopulate', false)
 
 const app = express()
 
