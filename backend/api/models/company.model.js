@@ -43,7 +43,7 @@ const CompanySchema = new mongoose.Schema({
   activeSubscription: {
     status: {
       type: String,
-      enum: ['inactive', 'active', 'canceling', 'canceled'],
+      enum: ['inactive', 'active', 'canceling', 'canceled', 'downgrading'],
       default: 'inactive'
     },
     currentPeriodStart: Date,

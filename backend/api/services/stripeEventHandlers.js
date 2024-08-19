@@ -9,7 +9,7 @@ const Subscription = require('../models/subscription.model')
 
 const handleCheckoutSessionCompleted = async (session) => {
   console.log('Checkout session completed:', session.id)
-  
+
   try {
     const company = await Company.findOne({
       'stripe.customerId': session.customer,
@@ -19,13 +19,15 @@ const handleCheckoutSessionCompleted = async (session) => {
       return
     }
 
-    const subscription = await stripe.subscriptions.retrieve(session.subscription)
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription
+    )
     const subscriptionItemId = subscription.items.data[0].id
 
     // Verificar si es un upgrade
     if (session.metadata && session.metadata.isUpgrade === 'true') {
       const oldSubscriptionId = session.metadata.oldSubscriptionId
-      
+
       // Cancelar la suscripción anterior
       if (oldSubscriptionId) {
         await stripe.subscriptions.del(oldSubscriptionId)
@@ -40,7 +42,10 @@ const handleCheckoutSessionCompleted = async (session) => {
     })
 
     if (!subscriptionPlan) {
-      console.error('Subscription plan not found for Stripe price ID:', stripePriceId)
+      console.error(
+        'Subscription plan not found for Stripe price ID:',
+        stripePriceId
+      )
       return
     }
 
@@ -122,7 +127,6 @@ const handleCheckoutSessionCompleted = async (session) => {
   // Implementa la lógica para manejar el pago de la factura
 } */
 
-
 const handleInvoicePaymentSucceeded = async (invoice) => {
   console.log('Invoice payment succeeded:', invoice.id)
   const { invoice_pdf, amount_paid, status } = invoice
@@ -134,7 +138,7 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
   }
 
   const lineItem = invoice.lines.data[0]
-  
+
   // Verificar si el período existe en el lineItem
   if (!lineItem.period) {
     console.error('Period information is missing in the invoice line item')
@@ -154,10 +158,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
 
       if (!company) {
         console.error('Company not found for customer email:', customer.email)
-        if (invoice.subscription) {
-          await stripe.subscriptions.del(invoice.subscription)
-          console.log('Subscription cancelled due to unmatched user')
-        }
         return
       }
 
@@ -171,10 +171,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     const company = await Company.findById(userId)
     if (!company) {
       console.error('Company not found for user ID:', userId)
-      if (invoice.subscription) {
-        await stripe.subscriptions.del(invoice.subscription)
-        console.log('Subscription cancelled due to non-existent company')
-      }
       return
     }
 
@@ -186,7 +182,10 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     })
 
     if (!subscription) {
-      console.error('Subscription not found for Stripe price ID:', stripePriceId)
+      console.error(
+        'Subscription not found for Stripe price ID:',
+        stripePriceId
+      )
       return
     }
 
@@ -197,8 +196,13 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       date: new Date(),
     }
 
+    if (company.activeSubscription.status === 'downgrading') {
+      company.activeSubscription.status = 'active'
+      console.log('Subscription downgrade completed for company:', company._id)
+    }
+
     company.activeSubscription = {
-      status: 'active',
+      status: company.activeSubscription.status,
       currentPeriodStart: new Date(period_start * 1000),
       currentPeriodEnd: new Date(period_end * 1000),
       lastInvoice: newInvoice,
@@ -211,13 +215,15 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     company.stripe.subscriptionItemId = lineItem.id
 
     await company.save()
-    console.log('Company active subscription and invoices updated:', company._id)
+    console.log(
+      'Company active subscription and invoices updated:',
+      company._id
+    )
   } catch (error) {
-    console.error('Error updating company active subscription and invoices:', error)
-    if (invoice.subscription) {
-      await stripe.subscriptions.del(invoice.subscription)
-      console.log('Subscription cancelled due to error')
-    }
+    console.error(
+      'Error updating company active subscription and invoices:',
+      error
+    )
   }
 }
 

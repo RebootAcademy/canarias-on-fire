@@ -14,6 +14,7 @@
     </div>
     <SubscriptionPlans 
       :plans="subscriptionStore.subscriptions"
+      :currentPlan="getCurrentPlanName"
       :selectedPlan="userStore.selectedUser ? userStore.selectedUser.subscription : null"
       @planSelected="handlePlanSelection"
     />

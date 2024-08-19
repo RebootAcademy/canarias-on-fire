@@ -216,6 +216,79 @@ const upgradeSubscription = async (req, res) => {
   }
 }
 
+const downgradeSubscription = async (req, res) => {
+  const { companyId } = req.params
+  const { newPlanId } = req.body
+
+  try {
+    const company = await Company.findById(companyId)
+    if (!company) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Company not found' 
+      })
+    }
+
+    if (!company.stripe || !company.stripe.subscriptionId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Company does not have an active subscription' 
+      })
+    }
+
+    const newPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
+    if (!newPlan) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'New subscription plan not found' 
+      })
+    }
+
+    // Recuperar la suscripción actual
+    const currentSubscription = await stripe.subscriptions.retrieve(company.stripe.subscriptionId)
+
+    // Programar el cambio de plan al final del ciclo de facturación actual
+    const updatedSubscription = await stripe.subscriptions.update(company.stripe.subscriptionId, {
+      proration_behavior: 'none',
+      items: [
+        {
+          id: currentSubscription.items.data[0].id,
+          price: newPlanId,
+        },
+      ],
+      // Asegurarse de que no se genere una factura inmediatamente
+      billing_cycle_anchor: 'unchanged',
+    })
+
+    // Actualizar la información de la suscripción en la base de datos
+    company.activeSubscription = company.activeSubscription || {};
+    company.activeSubscription.status = 'downgrading';
+    company.activeSubscription.plan = newPlan._id;
+    company.activeSubscription.currentPeriodEnd = new Date(updatedSubscription.current_period_end * 1000);
+
+    // Solo actualizar lastInvoice si existe
+    if (company.activeSubscription.lastInvoice) {
+      company.activeSubscription.lastInvoice = company.activeSubscription.lastInvoice;
+    }
+
+    await company.save()
+
+    res.json({
+      success: true,
+      message: 'Subscription downgrade scheduled for the next billing cycle',
+      nextBillingDate: new Date(updatedSubscription.current_period_end * 1000),
+      newPlan: newPlan.name,
+    })
+  } catch (error) {
+    console.error('Error downgrading subscription:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Error downgrading subscription',
+      message: error.message,
+    })
+  }
+}
+
 const updateExpiredSubscriptions = async () => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -245,5 +318,6 @@ module.exports = {
   cancelSubscription,
   reactivateSubscription,
   upgradeSubscription,
+  downgradeSubscription,
   updateExpiredSubscriptions,
 }

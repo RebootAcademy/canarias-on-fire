@@ -120,11 +120,11 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    async updateUserSubscription(userId, planId) {
+    async updateUserSubscription(userId, planId, status = 'active') {
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
           method: 'PATCH',
-          body: JSON.stringify({ subscriptionId: planId }),
+          body: JSON.stringify({ subscriptionId: planId, status: status }),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -151,11 +151,11 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    async updateSelectedUserSubscription(userId, planId) {
+    async updateSelectedUserSubscription(userId, planId, status = 'active') {
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
           method: 'PATCH',
-          body: JSON.stringify({ subscriptionId: planId }),
+          body: JSON.stringify({ subscriptionId: planId, status: status }),
           headers: {
             'Content-Type': 'application/json',
           },
