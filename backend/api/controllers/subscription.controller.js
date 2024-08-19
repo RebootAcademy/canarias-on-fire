@@ -22,19 +22,11 @@ const getSubscriptions = async (req, res) => {
 }
 
 const createSubscription = async (req, res) => {
-  console.log('Received request body:', req.body)
-  console.log('Received request params:', req.params)
-
   try {
     const { companyId } = req.params
     const { planId } = req.body
-    console.log('Extracted companyId:', companyId)
-    console.log('Extracted planId:', planId)
 
-    // Buscar la compañía
-    console.log('Searching for company with ID:', companyId)
     const company = await Company.findById(companyId)
-    console.log('Found company:', company)
 
     if (!company) {
       return res.status(404).json({ success: false, error: 'Company not found' })
@@ -65,9 +57,11 @@ const createSubscription = async (req, res) => {
         },
       ],
       mode: 'subscription',
-      success_url: encodeURI(`${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`),
-      cancel_url: encodeURI(`${process.env.FRONTEND_URL}/subscription/canceled`),
+      success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
     })
+
+    console.log('Stripe Checkout Session:', JSON.stringify(session, null, 2))
 
     // Guardar el customerId en la base de datos si es nuevo
     if (!company.stripe) {
@@ -78,10 +72,18 @@ const createSubscription = async (req, res) => {
     }
     await company.save()
 
-    res.status(200).json({ success: true, sessionId: session.id, sessionUrl: session.url })
+    res.status(200).json({ 
+      success: true, 
+      sessionId: session.id, 
+      sessionUrl: session.url 
+    })
   } catch (error) {
     console.error('Error creating subscription:', error)
-    res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })
+    res.status(500).json({ 
+      success: false, 
+      error: 'Error creating subscription', 
+      message: error.message 
+    })
   }
 }
 
@@ -166,16 +168,25 @@ const upgradeSubscription = async (req, res) => {
   try {
     const company = await Company.findById(companyId)
     if (!company) {
-      return res.status(404).json({ success: false, error: 'Company not found' })
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Company not found' 
+      })
     }
 
     if (!company.stripe || !company.stripe.customerId || !company.stripe.subscriptionId) {
-      return res.status(400).json({ success: false, error: 'Company does not have an active subscription' })
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Company does not have an active subscription' 
+      })
     }
 
     const newPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
     if (!newPlan) {
-      return res.status(404).json({ success: false, error: 'New subscription plan not found' })
+      return res.status(404).json({ 
+        success: false, 
+        error: 'New subscription plan not found' 
+      })
     }
 
     // Crear una sesión de Checkout para el upgrade

@@ -46,7 +46,6 @@ if (isAuthenticated.value && user.value) {
     if (!response.ok) {
       console.log('Failed to register user:', response.statusText)
     } else {
-      console.log('User registered successfully')
       await userStore.fetchAndSetUser(user.value.email)
     }
   } catch (error) {

@@ -17,9 +17,13 @@
         </div>
         <div class="flex gap-4 mt-4">
           <Button @click="managePlans">Manage Plans</Button>
-          <Button @click="toggleSubscription" variant="destructive">{{
-            subscriptionButtonText
-          }}</Button>
+          <Button 
+            @click="toggleSubscription" 
+            :disabled="isSubscriptionButtonDisabled"
+            :variant="subscriptionButtonVariant"
+          >
+            {{ subscriptionButtonText }}
+          </Button>
         </div>
       </div>
     </div>
@@ -129,49 +133,76 @@ const managePlans = () => {
   }
 }
 
+const subscriptionButtonText = computed(() => {
+  if (!userSubscription.value) return 'Subscribe'
+  switch (userSubscription.value.status) {
+    case 'active':
+    case 'downgrading':
+      return 'Cancel Plan'
+    case 'canceling':
+      return 'Reactivate Plan'
+    case 'canceled':
+    case 'inactive':
+      return 'Subscribe'
+    default:
+      return 'Manage Subscription'
+  }
+})
+
+const isSubscriptionButtonDisabled = computed(() => {
+  if (!userSubscription.value) return false
+  return ['canceled', 'inactive'].includes(userSubscription.value.status)
+})
+
+const subscriptionButtonVariant = computed(() => {
+  if (!userSubscription.value) return 'primary'
+  switch (userSubscription.value.status) {
+    case 'active':
+    case 'downgrading':
+      return 'destructive'
+    case 'canceling':
+      return 'warning'
+    case 'canceled':
+    case 'inactive':
+      return 'primary'
+    default:
+      return 'secondary'
+  }
+})
+
 const toggleSubscription = async () => {
   if (props.user && props.user._id) {
     let result
-    if (userSubscription.value && userSubscription.value.status === 'active') {
-      result = await subscriptionStore.cancelSubscription(props.user._id)
-      if (result.success) {
-        // Actualizar el estado del usuario en el store
-        await userStore.updateUserSubscriptionStatus(
-          props.user._id,
-          'canceling'
-        )
-        console.log('Subscription canceled successfully')
-      } else {
-        console.log(result.message || 'Failed to cancel subscription')
-      }
-    } else {
-      result = await subscriptionStore.reactivateSubscription(props.user._id)
-      if (result.success) {
-        // Actualizar el estado del usuario en el store
-        await userStore.updateUserSubscriptionStatus(props.user._id, 'active')
-        console.log('Subscription reactivated successfully')
-      } else {
-        console.log(result.message || 'Failed to reactivate subscription')
-      }
+    switch (userSubscription.value?.status) {
+      case 'active':
+      case 'downgrading':
+        result = await subscriptionStore.cancelSubscription(props.user._id)
+        if (result.success) {
+          await userStore.updateUserSubscriptionStatus(props.user._id, 'canceling')
+          console.log('Subscription cancellation initiated')
+        }
+        break
+      case 'canceling':
+        result = await subscriptionStore.reactivateSubscription(props.user._id)
+        if (result.success) {
+          await userStore.updateUserSubscriptionStatus(props.user._id, 'active')
+          console.log('Subscription reactivated successfully')
+        }
+        break
+      case 'canceled':
+      case 'inactive':
+      default:
+        // Redirigir al usuario a la página de planes para suscribirse
+        router.push('/pricing')
+        break
+    }
+    if (result && !result.success) {
+      console.error(result.message || 'Failed to update subscription')
     }
   } else {
     console.error('No user data available for toggling subscription')
   }
 }
-
-const subscriptionButtonText = computed(() => {
-  return userSubscription.value && userSubscription.value.status === 'active'
-    ? 'Cancel Plan'
-    : 'Reactivate Plan'
-})
-
-// NOT WORKING
-/* watch(() => userSubscription.value?.status, (newStatus) => {
-  console.log('Subscription status changed:', newStatus)
-  // This will trigger when the subscription status changes
-  subscriptionButtonText.value = newStatus === 'active' ? 'Cancel Plan' : 'Reactivate Plan'
-  // Optionally, you can also refresh the payment history here if needed
-}, { immediate: true }) */
 
 onMounted(() => {
   if (props.user?._id) {

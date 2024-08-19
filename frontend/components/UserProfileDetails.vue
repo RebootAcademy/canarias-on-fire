@@ -194,6 +194,7 @@ const deleteUser = async () => {
   if (result.success) {
     console.log('User deleted successfully')
     // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
+    router.push('/dashboard')
   }
 }
 </script>
