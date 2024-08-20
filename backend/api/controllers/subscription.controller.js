@@ -78,12 +78,7 @@ const createSubscription = async (req, res) => {
       sessionUrl: session.url 
     })
   } catch (error) {
-    console.error('Error creating subscription:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: 'Error creating subscription', 
-      message: error.message 
-    })
+    res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })
   }
 }
 
@@ -170,26 +165,51 @@ const upgradeSubscription = async (req, res) => {
   try {
     const company = await Company.findById(companyId)
     if (!company) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Company not found' 
-      })
+      console.error('Company not found with ID:', companyId)
+      return res.status(404).json({ success: false, error: 'Company not found' })
     }
 
     console.log('Company found:', company._id)
 
     if (!company.stripe || !company.stripe.customerId || !company.stripe.subscriptionId) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Company does not have an active subscription' 
-      })
+      console.error('Company does not have required Stripe information:', company._id)
+      return res.status(400).json({ success: false, error: 'Company does not have an active subscription' })
     }
 
-    const newPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
-    if (!newPlan) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'New subscription plan not found' 
+    // Obtener la suscripción actual
+    const currentSubscription = await stripe.subscriptions.retrieve(company.stripe.subscriptionId)
+    const currentPlanId = currentSubscription.items.data[0].price.id
+
+    // Obtener los detalles de los planes
+    const [currentPlan, newPlan] = await Promise.all([
+      stripe.prices.retrieve(currentPlanId),
+      stripe.prices.retrieve(newPlanId)
+    ])
+
+    // Calcular la diferencia de precio
+    const priceDifference = newPlan.unit_amount - currentPlan.unit_amount
+
+    // Calcular el tiempo restante en el ciclo de facturación actual
+    const now = Math.floor(Date.now() / 1000)
+    const remainingTime = currentSubscription.current_period_end - now
+    const billingCycleDuration = currentSubscription.current_period_end - currentSubscription.current_period_start
+
+    // Calcular el monto prorrateado
+    const proratedAmount = Math.round((priceDifference * remainingTime) / billingCycleDuration)
+
+    console.log('Prorated amount:', proratedAmount)
+
+    if (proratedAmount <= 0) {
+      console.log('No additional charge needed for upgrade')
+      // Actualizar la suscripción directamente sin crear una sesión de pago
+      await stripe.subscriptions.update(company.stripe.subscriptionId, {
+        items: [{ id: currentSubscription.items.data[0].id, price: newPlanId }],
+        proration_behavior: 'always_invoice',
+      })
+
+      return res.json({
+        success: true,
+        message: 'Subscription upgraded without additional charge',
       })
     }
 
