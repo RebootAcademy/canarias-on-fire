@@ -122,6 +122,8 @@ const route = useRoute()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 
+const isAdmin = computed(() => userStore.userData.role === 'admin')
+
 const featureDescriptions = {
   eventPublication: 'Publicación de eventos',
   eventPhotos: 'Fotos del evento o cartelería del mismo',
@@ -192,13 +194,12 @@ const handleSubscription = async (plan) => {
 
 const upgradeToPlan = async (plan) => {
   try {
-    console.log('Upgrading to plan:', plan)
-    
     // Usar el userId de la URL si está disponible, de lo contrario usar el ID del usuario actual
     const userId = route.query.userId || userStore.userData._id
     console.log('User ID for upgrade:', userId)
     
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
+
     console.log('Upgrade result:', result)
     if (result.success && result.sessionUrl) {
       window.location.href = result.sessionUrl
