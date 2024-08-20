@@ -32,37 +32,52 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
           headers: {
             'Content-Type': 'application/json'
           }
-        });
-        console.log('Received response:', response); // Para depuración
+        })
+
         if (response.success && response.sessionUrl) {
-          return { success: true, sessionUrl: response.sessionUrl };
+          return { 
+            success: true, 
+            sessionUrl: response.sessionUrl 
+          }
         } else if (response.success && response.subscription) {
-          return { success: true, subscription: response.subscription };
+          return { 
+            success: true, 
+            subscription: response.subscription 
+          }
         }
-        return { success: false, message: response.error || 'Failed to create subscription' };
+        return { 
+          success: false, 
+          message: response.error || 'Failed to create subscription' 
+        }
       } catch (error) {
-        console.error('Error creating subscription:', error);
-        return { success: false, message: error.message };
+        return { 
+          success: false, 
+          message: error.message 
+        }
       }
     },
 
-    async upgradeSubscription(userId, newPlanId) {
+    async upgradeSubscription(companyId, newPlanId) {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${userId}`, {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${companyId}`, {
           method: 'PATCH',
           body: JSON.stringify({ newPlanId }),
           headers: {
             'Content-Type': 'application/json',
           },
         })
-        if (data.value) {
-          return { success: true, ...data.value }
+
+        if (data.value && data.value.success) {
+          return { 
+            success: true, 
+            sessionUrl: data.value.sessionUrl 
+          }
         } else {
-          return { success: false, error: 'No data received from server' }
+          throw new Error(data.value?.error || 'Failed to upgrade subscription')
         }
       } catch (error) {
         console.error('Error upgrading subscription:', error)
-        return { success: false, error: 'Failed to upgrade subscription' }
+        return { success: false, error: error.message }
       }
     },
 

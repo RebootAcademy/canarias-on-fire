@@ -118,6 +118,7 @@ const props = defineProps({
   },
 })
 
+const route = useRoute()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 
@@ -145,14 +146,6 @@ const getReadingPriorityText = (value) => {
   }
 }
 
-const getCurrentPlan = () => {
-  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
-    return userStore.selectedUser.activeSubscription?.plan;
-  } else {
-    return userStore.userData.activeSubscription?.plan;
-  }
-}
-
 const isCurrentPlan = (plan) => {
   return plan.name.toUpperCase() === props.currentPlan.toUpperCase()
 }
@@ -169,46 +162,52 @@ const isPlanDowngrade = (plan) => {
   return newPlanIndex < currentPlanIndex
 }
 
-const upgradeToPlan = async (plan) => {
-  let userId, isAdmin
-
-  if (userStore.userData && userStore.userData.role === 'admin') {
-    isAdmin = true
-    if (userStore.selectedUser && userStore.selectedUser._id) {
-      userId = userStore.selectedUser._id
-    } else {
-      console.error('No selected user data available for upgrading subscription')
-      return
-    }
-  } else if (userStore.userData && userStore.userData._id) {
-    isAdmin = false
-    userId = userStore.userData._id
-  } else {
-    console.error('No user data available for upgrading subscription')
-    return
-  }
-
+const handleSubscription = async (plan) => {
   try {
-    const result = await subscriptionStore.createSubscription(
-      userId,
-      plan.stripe.planId
-    )
+    console.log('Handling subscription for plan:', plan)
+    
+    const userId = route.query.userId || userStore.userData._id
+    console.log('User ID for subscription:', userId)
+    
+    let result
+    if (userStore.userData.activeSubscription) {
+      // Si ya tiene una suscripción activa, realizamos un upgrade
+      result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
+    } else {
+      // Si no tiene una suscripción activa, creamos una nueva
+      result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
+    }
+    
     console.log('Subscription result:', result)
     if (result.success && result.sessionUrl) {
       window.location.href = result.sessionUrl
-    } else if (result.subscription) {
-      // La suscripción se actualizó directamente
-      if (isAdmin) {
-        userStore.updateSelectedUserSubscription(userId, plan._id)
-      } else {
-        userStore.updateUserSubscription(userId, plan._id)
-      }
-      console.log('Subscription created or upgraded successfully')
     } else {
-      console.log(result?.error || 'Failed to create or upgrade subscription')
+      alert(result?.error || 'Failed to process subscription')
     }
   } catch (error) {
-    console.error('Error creating or upgrading subscription:', error)
+    console.error('Error processing subscription:', error)
+    alert('An error occurred while processing the subscription')
+  }
+}
+
+const upgradeToPlan = async (plan) => {
+  try {
+    console.log('Upgrading to plan:', plan)
+    
+    // Usar el userId de la URL si está disponible, de lo contrario usar el ID del usuario actual
+    const userId = route.query.userId || userStore.userData._id
+    console.log('User ID for upgrade:', userId)
+    
+    const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
+    console.log('Upgrade result:', result)
+    if (result.success && result.sessionUrl) {
+      window.location.href = result.sessionUrl
+    } else {
+      alert(result?.error || 'Failed to upgrade subscription')
+    }
+  } catch (error) {
+    console.error('Error upgrading subscription:', error)
+    alert('An error occurred while upgrading the subscription')
   }
 }
 
@@ -270,9 +269,4 @@ const downgradeToPlan = async (plan) => {
   }
 }
 
-// Logs para depuración
-console.log('Plans:', props.plans)
-console.log('User Data:', userStore.userData)
-console.log('Selected User (if admin):', userStore.selectedUser)
-console.log('Current Plan:', getCurrentPlan())
 </script>

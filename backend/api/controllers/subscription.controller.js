@@ -165,6 +165,8 @@ const upgradeSubscription = async (req, res) => {
   const { companyId } = req.params
   const { newPlanId } = req.body
 
+  console.log('Upgrade request received for company:', companyId, 'to plan:', newPlanId)
+
   try {
     const company = await Company.findById(companyId)
     if (!company) {
@@ -173,6 +175,8 @@ const upgradeSubscription = async (req, res) => {
         error: 'Company not found' 
       })
     }
+
+    console.log('Company found:', company._id)
 
     if (!company.stripe || !company.stripe.customerId || !company.stripe.subscriptionId) {
       return res.status(400).json({ 
@@ -189,33 +193,39 @@ const upgradeSubscription = async (req, res) => {
       })
     }
 
-    // Crear una sesión de Checkout para el upgrade
+    console.log('Creating Stripe checkout session for company:', company._id)
+
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'subscription',
       customer: company.stripe.customerId,
+      payment_method_types: ['card'],
+      mode: 'payment',
       line_items: [
         {
-          price: newPlanId,
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: 'Subscription Upgrade',
+              description: 'Prorated amount for upgrading your subscription',
+            },
+            unit_amount: proratedAmount,
+          },
           quantity: 1,
         },
       ],
-      subscription_data: {
-        metadata: {
-          isUpgrade: 'true',
-          oldSubscriptionId: company.stripe.subscriptionId,
-        },
-      },
-      allow_promotion_codes: true,
       success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
+      metadata: {
+        isUpgrade: 'true',
+        oldSubscriptionId: company.stripe.subscriptionId,
+        newPlanId: newPlanId,
+      },
     })
+
+    console.log('Stripe checkout session created:', session.id)
 
     res.json({
       success: true,
-      message: 'Upgrade session created successfully',
-      sessionId: session.id,
-      sessionUrl: session.url
+      sessionUrl: session.url,
     })
   } catch (error) {
     console.error('Error creating upgrade session:', error)

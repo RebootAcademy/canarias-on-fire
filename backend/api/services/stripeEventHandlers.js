@@ -8,67 +8,57 @@ const Subscription = require('../models/subscription.model')
 } */
 
 const handleCheckoutSessionCompleted = async (session) => {
-  console.log('Checkout session completed:', session.id)
-
-  try {
-    const company = await Company.findOne({
-      'stripe.customerId': session.customer,
-    })
-    if (!company) {
-      console.error('Company not found for customer:', session.customer)
-      return
-    }
-
-    const subscription = await stripe.subscriptions.retrieve(
-      session.subscription
-    )
-    const subscriptionItemId = subscription.items.data[0].id
-
-    // Verificar si es un upgrade
-    if (session.metadata && session.metadata.isUpgrade === 'true') {
-      const oldSubscriptionId = session.metadata.oldSubscriptionId
-
-      // Cancelar la suscripción anterior
-      if (oldSubscriptionId) {
-        await stripe.subscriptions.del(oldSubscriptionId)
-        console.log('Old subscription cancelled:', oldSubscriptionId)
+  if (session.metadata && session.metadata.isUpgrade === 'true') {
+    try {
+      const company = await Company.findOne({ 'stripe.customerId': session.customer })
+      if (!company) {
+        console.error('Company not found for customer:', session.customer)
+        return
       }
+
+      const oldSubscriptionId = session.metadata.oldSubscriptionId
+      const newPlanId = session.metadata.newPlanId
+
+      // Obtener la suscripción actual de Stripe
+      const currentSubscription = await stripe.subscriptions.retrieve(oldSubscriptionId)
+
+      // Obtener el ID del elemento de suscripción actual
+      const currentSubscriptionItemId = currentSubscription.items.data[0].id
+
+      // Actualizar la suscripción existente con el nuevo plan
+      const updatedSubscription = await stripe.subscriptions.update(oldSubscriptionId, {
+        items: [{ id: currentSubscriptionItemId, price: newPlanId }],
+        proration_behavior: 'always_invoice',
+      })
+
+      const newSubscriptionPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
+      if (!newSubscriptionPlan) {
+        throw new Error('New subscription plan not found in database')
+      }
+
+      company.activeSubscription = {
+        status: 'active',
+        plan: newSubscriptionPlan._id,
+        currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
+        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+        cancelAtPeriodEnd: false,
+        canceledAt: null,
+      }
+
+      // Actualizar la información de Stripe en la compañía
+      company.stripe.subscriptionId = updatedSubscription.id
+      company.stripe.subscriptionItemId = updatedSubscription.items.data[0].id
+
+      // Actualizar el rol de la compañía si es necesario
+      if (newSubscriptionPlan.name.toLowerCase() === 'premium') {
+        company.role = 'premium'
+      }
+
+      await company.save()
+      console.log('Company subscription upgraded:', company._id, 'New plan:', newSubscriptionPlan.name)
+    } catch (error) {
+      console.error('Error processing upgrade:', error)
     }
-
-    // Obtener el plan de suscripción
-    const stripePriceId = subscription.items.data[0].price.id
-    const subscriptionPlan = await Subscription.findOne({
-      'stripe.planId': stripePriceId,
-    })
-
-    if (!subscriptionPlan) {
-      console.error(
-        'Subscription plan not found for Stripe price ID:',
-        stripePriceId
-      )
-      return
-    }
-
-    company.activeSubscription = {
-      status: 'active',
-      plan: subscriptionPlan._id,
-      currentPeriodStart: new Date(subscription.current_period_start * 1000),
-      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-      cancelAtPeriodEnd: false,
-      canceledAt: null,
-    }
-
-    // Only update customerId if it doesn't exist
-    if (!company.stripe.customerId) {
-      company.stripe.customerId = session.customer
-    }
-    company.stripe.subscriptionId = session.subscription
-    company.stripe.subscriptionItemId = subscriptionItemId
-
-    await company.save()
-    console.log('Company subscription updated:', company._id)
-  } catch (error) {
-    console.error('Error processing checkout session:', error)
   }
 }
 
