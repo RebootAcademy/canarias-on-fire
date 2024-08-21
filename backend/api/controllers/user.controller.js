@@ -5,7 +5,7 @@ const Subscription = require('../models/subscription.model')
 const createUser = async (req, res) => {
   try {
     let newUser
-    const { role, ...userData } = req.body
+    const { role, auth0Id, ...userData } = req.body
 
     if (role === 'company') {
       if (!userData.companyName || !userData.phone || !userData.sector) {
@@ -29,9 +29,17 @@ const createUser = async (req, res) => {
         })
       }
 
-      newUser = await Company.create({ ...userData, role })
+      const companyData = { ...userData, role }
+      if (auth0Id) {
+        companyData.auth0Id = auth0Id
+      }
+      newUser = await Company.create(companyData)
     } else {
-      newUser = await User.create({ ...userData, role })
+      const userData = { ...req.body }
+      if (auth0Id) {
+        userData.auth0Id = auth0Id
+      }
+      newUser = await User.create(userData)
     }
 
     res.status(201).json({
