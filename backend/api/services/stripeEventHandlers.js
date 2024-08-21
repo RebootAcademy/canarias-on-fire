@@ -49,9 +49,8 @@ const handleCheckoutSessionCompleted = async (session) => {
       company.stripe.subscriptionId = updatedSubscription.id
       company.stripe.subscriptionItemId = updatedSubscription.items.data[0].id
 
-      // Actualizar el rol de la compañía si es necesario
       if (newSubscriptionPlan.name.toLowerCase() === 'premium') {
-        company.role = 'premium'
+        company.activeSubscription.plan = newSubscriptionPlan._id
       }
 
       await company.save()

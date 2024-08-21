@@ -5,7 +5,7 @@
         v-for="plan in plans"
         :key="plan._id"
         class="text-center bg-white border rounded-lg shadow-sm p-6 pt-12 relative"
-        :class="{ 'border-black': isCurrentPlan(plan) }"
+        :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
       >
         <div
           v-if="plan.name === 'premium'"
@@ -76,26 +76,33 @@
 
         <div class="mt-8">
           <NuxtLink
-            v-if="!isCurrentPlan(plan) && isPlanUpgrade(plan)"
+            v-if="getSubscriptionAction(plan) === 'subscribe'"
+            @click="subscribeToPlan(plan)"
+            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+          >
+            Subscribe
+          </NuxtLink>
+          <NuxtLink
+            v-else-if="getSubscriptionAction(plan) === 'upgrade'"
             @click="upgradeToPlan(plan)"
             class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
           >
             Upgrade
           </NuxtLink>
           <NuxtLink
-            v-else-if="!isCurrentPlan(plan) && isPlanDowngrade(plan)"
+            v-else-if="getSubscriptionAction(plan) === 'downgrade'"
             @click="downgradeToPlan(plan)"
             class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
           >
             Downgrade
           </NuxtLink>
-          <button
+          <Button
             v-else
             disabled
             class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
           >
             Current Plan
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -122,7 +129,7 @@ const route = useRoute()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 
-const isAdmin = computed(() => userStore.userData.role === 'admin')
+/* const isAdmin = computed(() => userStore.userData.role === 'admin') */
 
 const featureDescriptions = {
   eventPublication: 'Publicación de eventos',
@@ -148,11 +155,7 @@ const getReadingPriorityText = (value) => {
   }
 }
 
-const isCurrentPlan = (plan) => {
-  return plan.name.toUpperCase() === props.currentPlan.toUpperCase()
-}
-
-const isPlanUpgrade = (plan) => {
+/* const isPlanUpgrade = (plan) => {
   const currentPlanIndex = props.plans.findIndex(p => p.name.toUpperCase() === props.currentPlan.toUpperCase())
   const newPlanIndex = props.plans.findIndex(p => p.name === plan.name)
   return newPlanIndex > currentPlanIndex
@@ -162,9 +165,9 @@ const isPlanDowngrade = (plan) => {
   const currentPlanIndex = props.plans.findIndex(p => p.name.toUpperCase() === props.currentPlan.toUpperCase())
   const newPlanIndex = props.plans.findIndex(p => p.name === plan.name)
   return newPlanIndex < currentPlanIndex
-}
+} */
 
-const handleSubscription = async (plan) => {
+/* const handleSubscription = async (plan) => {
   try {
     console.log('Handling subscription for plan:', plan)
     
@@ -190,83 +193,70 @@ const handleSubscription = async (plan) => {
     console.error('Error processing subscription:', error)
     alert('An error occurred while processing the subscription')
   }
+} */
+
+const getSubscriptionAction = (plan) => {
+  const currentPlan = userStore.userData.activeSubscription
+  
+  if (!currentPlan) {
+    return 'subscribe'
+  }
+
+  const planOrder = ['basic', 'premium', 'gold']
+  const currentPlanIndex = planOrder.indexOf(currentPlan.name)
+  const newPlanIndex = planOrder.indexOf(plan.name)
+
+  if (currentPlanIndex === newPlanIndex) {
+    return 'current'
+  } else if (newPlanIndex > currentPlanIndex) {
+    return 'upgrade'
+  } else {
+    return 'downgrade'
+  }
+}
+
+const subscribeToPlan = async (plan) => {
+  try {
+    const userId = route.query.userId || userStore.userData._id
+    const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
+
+    if (result.success && result.sessionUrl) {
+      await userStore.updateUserSubscription(userId, plan._id, 'active')
+      window.location.href = result.sessionUrl
+    } else {
+      console.error(result?.error || 'Failed to create subscription')
+    }
+  } catch (error) {
+    console.error('Error creating subscription:', error)
+  }
 }
 
 const upgradeToPlan = async (plan) => {
   try {
-    // Usar el userId de la URL si está disponible, de lo contrario usar el ID del usuario actual
     const userId = route.query.userId || userStore.userData._id
-    console.log('User ID for upgrade:', userId)
-    
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
-
-    console.log('Upgrade result:', result)
     if (result.success && result.sessionUrl) {
       window.location.href = result.sessionUrl
     } else {
-      alert(result?.error || 'Failed to upgrade subscription')
+      console.error(result?.error || 'Failed to upgrade subscription')
     }
   } catch (error) {
     console.error('Error upgrading subscription:', error)
-    alert('An error occurred while upgrading the subscription')
   }
 }
 
 const downgradeToPlan = async (plan) => {
-  let userId, isAdmin
-
-  if (userStore.userData && userStore.userData.role === 'admin') {
-    isAdmin = true
-    if (userStore.selectedUser && userStore.selectedUser._id) {
-      userId = userStore.selectedUser._id
-    } else {
-      console.error('No selected user data available for downgrading subscription')
-      return
-    }
-  } else if (userStore.userData && userStore.userData._id) {
-    isAdmin = false
-    userId = userStore.userData._id
-  } else {
-    console.error('No user data available for downgrading subscription')
-    return
-  }
-
   try {
-    const result = await subscriptionStore.downgradeSubscription(
-      userId,
-      plan.stripe.planId
-    )
-    console.log('Downgrade result:', result)
+    const userId = route.query.userId || userStore.userData._id
+    const result = await subscriptionStore.downgradeSubscription(userId, plan.stripe.planId)
     if (result.success) {
-      // Mostrar un mensaje al usuario sobre el downgrade programado
-      alert(
-        `Your plan will be downgraded to ${
-          plan.name
-        } at the end of your current billing cycle on ${new Date(
-          result.nextBillingDate
-        ).toLocaleDateString()}. You will not be charged until then.`
-      )
-
-      // Actualizar el estado de la suscripción en el store
-      if (isAdmin) {
-        userStore.updateSelectedUserSubscription(
-          userId,
-          props.selectedPlan._id,
-          'downgrading'
-        )
-      } else {
-        userStore.updateUserSubscription(
-          userId,
-          props.selectedPlan._id,
-          'downgrading'
-        )
-      }
+      console.log(`Your plan will be downgraded to ${plan.name} at the end of your current billing cycle on ${new Date(result.nextBillingDate).toLocaleDateString()}. You will not be charged until then.`)
+      userStore.updateUserSubscription(userId, plan._id, 'downgrading')
     } else {
-      alert(result?.error || 'Failed to downgrade subscription')
+      console.error(result?.error || 'Failed to downgrade subscription')
     }
   } catch (error) {
     console.error('Error downgrading subscription:', error)
-    alert('An error occurred while downgrading the subscription')
   }
 }
 

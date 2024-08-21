@@ -32,6 +32,12 @@ const createSubscription = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Company not found' })
     }
 
+    // Buscar el plan de suscripción en la base de datos
+    const subscriptionPlan = await Subscription.findOne({ 'stripe.planId': planId })
+    if (!subscriptionPlan) {
+      return res.status(404).json({ success: false, error: 'Subscription plan not found' })
+    }
+
     // Verificar si la compañía ya tiene una suscripción activa
     if (company.activeSubscription && company.activeSubscription.status === 'active') {
       // Si tiene una suscripción activa, redirigir a upgradeSubscription
@@ -70,12 +76,22 @@ const createSubscription = async (req, res) => {
     if (!company.stripe.customerId) {
       company.stripe.customerId = customer.id
     }
+
+    // Actualizar el estado de la suscripción a 'active'
+    company.activeSubscription = {
+      status: 'active',
+      plan: subscriptionPlan._id,
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 días desde ahora
+    }
+
     await company.save()
 
     res.status(200).json({ 
       success: true, 
       sessionId: session.id, 
-      sessionUrl: session.url 
+      sessionUrl: session.url,
+      subscription: company.activeSubscription
     })
   } catch (error) {
     res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })
