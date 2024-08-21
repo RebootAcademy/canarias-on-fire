@@ -12,7 +12,7 @@ const handleCheckoutSessionCompleted = async (session) => {
     try {
       const company = await Company.findOne({ 'stripe.customerId': session.customer })
       if (!company) {
-        console.error('Company not found for customer:', session.customer)
+        // console.error('Company not found for customer:', session.customer)
         return
       }
 
@@ -49,12 +49,10 @@ const handleCheckoutSessionCompleted = async (session) => {
       company.stripe.subscriptionId = updatedSubscription.id
       company.stripe.subscriptionItemId = updatedSubscription.items.data[0].id
 
-      if (newSubscriptionPlan.name.toLowerCase() === 'premium') {
-        company.activeSubscription.plan = newSubscriptionPlan._id
-      }
-
       await company.save()
-      console.log('Company subscription upgraded:', company._id, 'New plan:', newSubscriptionPlan.name)
+      console.log('Company saved after upgrade. New plan:', company.activeSubscription.plan)
+
+      // console.log('Company subscription upgraded:', company._id, 'New plan:', newSubscriptionPlan.name, newSubscriptionPlan)
     } catch (error) {
       console.error('Error processing upgrade:', error)
     }
@@ -118,7 +116,7 @@ const handleCheckoutSessionCompleted = async (session) => {
 
 const handleInvoicePaymentSucceeded = async (invoice) => {
   console.log('Invoice payment succeeded:', invoice.id)
-  const { invoice_pdf, amount_paid, status } = invoice
+  const { invoice_pdf, amount_paid } = invoice
 
   // Verificar si invoice.lines.data existe y tiene al menos un elemento
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
@@ -163,21 +161,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       return
     }
 
-    const stripePriceId = lineItem.price.id
-    console.log('Stripe Price ID:', stripePriceId)
-
-    const subscription = await Subscription.findOne({
-      'stripe.planId': stripePriceId,
-    })
-
-    if (!subscription) {
-      console.error(
-        'Subscription not found for Stripe price ID:',
-        stripePriceId
-      )
-      return
-    }
-
     const newInvoice = {
       id: invoice.id,
       amount: amount_paid,
@@ -185,29 +168,28 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       date: new Date(),
     }
 
-    if (company.activeSubscription.status === 'downgrading') {
-      company.activeSubscription.status = 'active'
-      console.log('Subscription downgrade completed for company:', company._id)
-    }
+    // Actualizar solo los campos necesarios sin tocar el plan
+    const updateFields = {
+      'activeSubscription.status': company.activeSubscription.status === 'downgrading' ? 'active' : company.activeSubscription.status,
+      'activeSubscription.currentPeriodStart': new Date(period_start * 1000),
+      'activeSubscription.currentPeriodEnd': new Date(period_end * 1000),
+      'activeSubscription.lastInvoice': newInvoice,
+      $push: { invoices: newInvoice },
+      'stripe.subscriptionId': invoice.subscription,
+      'stripe.subscriptionItemId': lineItem.id
+    };
 
-    company.activeSubscription = {
-      status: company.activeSubscription.status,
-      currentPeriodStart: new Date(period_start * 1000),
-      currentPeriodEnd: new Date(period_end * 1000),
-      lastInvoice: newInvoice,
-      plan: subscription._id,
-    }
+    const updatedCompany = await Company.findByIdAndUpdate(
+      company._id,
+      updateFields,
+      { new: true, runValidators: true }
+    );
 
-    company.invoices.push(newInvoice)
-
-    company.stripe.subscriptionId = invoice.subscription
-    company.stripe.subscriptionItemId = lineItem.id
-
-    await company.save()
     console.log(
       'Company active subscription and invoices updated:',
-      company._id
-    )
+      updatedCompany._id
+    );
+    console.log('Current subscription plan (unchanged):', updatedCompany.activeSubscription.plan);
   } catch (error) {
     console.error(
       'Error updating company active subscription and invoices:',
