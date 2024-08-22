@@ -61,6 +61,10 @@ const CompanySchema = new mongoose.Schema({
     plan: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'subscription'
+    },
+    nextPlan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'subscription'
     }
   },
   stripe: {

@@ -97,11 +97,18 @@
             Downgrade
           </NuxtLink>
           <Button
-            v-else
+            v-else-if="getSubscriptionAction(plan) === 'current'"
             disabled
             class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
           >
             Current Plan
+          </Button>
+          <Button
+            v-else-if="getSubscriptionAction(plan) === 'disabled'"
+            disabled
+            class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
+          >
+            Downgrade Scheduled
           </Button>
         </div>
       </div>
@@ -125,11 +132,9 @@ const props = defineProps({
   },
 })
 
-const route = useRoute()
+const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
-
-/* const isAdmin = computed(() => userStore.userData.role === 'admin') */
 
 const featureDescriptions = {
   eventPublication: 'Publicación de eventos',
@@ -155,56 +160,46 @@ const getReadingPriorityText = (value) => {
   }
 }
 
-/* const isPlanUpgrade = (plan) => {
-  const currentPlanIndex = props.plans.findIndex(p => p.name.toUpperCase() === props.currentPlan.toUpperCase())
-  const newPlanIndex = props.plans.findIndex(p => p.name === plan.name)
-  return newPlanIndex > currentPlanIndex
+const getFullPlanInfo = (planId) => {
+  return subscriptionStore.subscriptions.find(plan => plan._id === planId)
 }
 
-const isPlanDowngrade = (plan) => {
-  const currentPlanIndex = props.plans.findIndex(p => p.name.toUpperCase() === props.currentPlan.toUpperCase())
-  const newPlanIndex = props.plans.findIndex(p => p.name === plan.name)
-  return newPlanIndex < currentPlanIndex
-} */
-
-/* const handleSubscription = async (plan) => {
-  try {
-    console.log('Handling subscription for plan:', plan)
-    
-    const userId = route.query.userId || userStore.userData._id
-    console.log('User ID for subscription:', userId)
-    
-    let result
-    if (userStore.userData.activeSubscription) {
-      // Si ya tiene una suscripción activa, realizamos un upgrade
-      result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
-    } else {
-      // Si no tiene una suscripción activa, creamos una nueva
-      result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
-    }
-    
-    console.log('Subscription result:', result)
-    if (result.success && result.sessionUrl) {
-      window.location.href = result.sessionUrl
-    } else {
-      alert(result?.error || 'Failed to process subscription')
-    }
-  } catch (error) {
-    console.error('Error processing subscription:', error)
-    alert('An error occurred while processing the subscription')
+const getActiveSubscription = () => {
+  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
+    return userStore.selectedUser.activeSubscription || {}
+  } else {
+    return userStore.userData.activeSubscription || {}
   }
-} */
+}
 
 const getSubscriptionAction = (plan) => {
-  const currentPlan = userStore.userData.activeSubscription
+  const currentSubscription = getActiveSubscription()
   
-  if (!currentPlan) {
+  if (!currentSubscription || !currentSubscription.plan) {
     return 'subscribe'
   }
 
-  const planOrder = ['basic', 'premium', 'gold']
+  const currentPlan = getFullPlanInfo(currentSubscription.plan)
+  
+  if (!currentPlan) {
+    return 'unknown'
+  }
+
+  const planOrder = ['basic', 'gold', 'premium'] // Corregido el orden de los planes
   const currentPlanIndex = planOrder.indexOf(currentPlan.name)
   const newPlanIndex = planOrder.indexOf(plan.name)
+
+  if (currentPlanIndex === -1 || newPlanIndex === -1) {
+    return 'unknown'
+  }
+
+  if (currentSubscription.status === 'downgrading') {
+    return currentSubscription.nextPlan && currentSubscription.nextPlan === plan._id ? 'current' : 'disabled'
+  }
+
+  if (currentSubscription.status === 'canceled' || currentSubscription.status === 'inactive') {
+    return 'subscribe'
+  }
 
   if (currentPlanIndex === newPlanIndex) {
     return 'current'
@@ -215,9 +210,17 @@ const getSubscriptionAction = (plan) => {
   }
 }
 
+const getUserId = () => {
+  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
+    return userStore.selectedUser._id
+  } else {
+    return userStore.userData._id
+  }
+}
+
 const subscribeToPlan = async (plan) => {
   try {
-    const userId = route.query.userId || userStore.userData._id
+    const userId = getUserId()
     const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
 
     if (result.success && result.sessionUrl) {
@@ -233,8 +236,9 @@ const subscribeToPlan = async (plan) => {
 
 const upgradeToPlan = async (plan) => {
   try {
-    const userId = route.query.userId || userStore.userData._id
+    const userId = getUserId()
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
+
     if (result.success && result.sessionUrl) {
       window.location.href = result.sessionUrl
     } else {
@@ -247,16 +251,18 @@ const upgradeToPlan = async (plan) => {
 
 const downgradeToPlan = async (plan) => {
   try {
-    const userId = route.query.userId || userStore.userData._id
+    const userId = getUserId()
     const result = await subscriptionStore.downgradeSubscription(userId, plan.stripe.planId)
+
     if (result.success) {
-      console.log(`Your plan will be downgraded to ${plan.name} at the end of your current billing cycle on ${new Date(result.nextBillingDate).toLocaleDateString()}. You will not be charged until then.`)
-      userStore.updateUserSubscription(userId, plan._id, 'downgrading')
+      await userStore.updateUserSubscription(userId, plan._id, 'downgrading')
+      alert(`The plan will be downgraded to ${plan.name} at the end of the current billing cycle on ${new Date(result.nextBillingDate).toLocaleDateString()}. No charges will be made until then.`)
+      router.push('/subscription/success')
     } else {
-      console.error(result?.error || 'Failed to downgrade subscription')
+      alert(result.error || 'Failed to downgrade subscription. Please try again later.')
     }
   } catch (error) {
-    console.error('Error downgrading subscription:', error)
+    console.error('An error occurred while downgrading the subscription. Please try again later.')
   }
 }
 

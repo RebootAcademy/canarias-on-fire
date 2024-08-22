@@ -313,20 +313,14 @@ const downgradeSubscription = async (req, res) => {
           price: newPlanId,
         },
       ],
-      // Asegurarse de que no se genere una factura inmediatamente
       billing_cycle_anchor: 'unchanged',
     })
 
     // Actualizar la información de la suscripción en la base de datos
     company.activeSubscription = company.activeSubscription || {};
     company.activeSubscription.status = 'downgrading';
-    company.activeSubscription.plan = newPlan._id;
+    company.activeSubscription.nextPlan = newPlan._id; // Guardamos el próximo plan
     company.activeSubscription.currentPeriodEnd = new Date(updatedSubscription.current_period_end * 1000);
-
-    // Solo actualizar lastInvoice si existe
-    if (company.activeSubscription.lastInvoice) {
-      company.activeSubscription.lastInvoice = company.activeSubscription.lastInvoice;
-    }
 
     await company.save()
 
@@ -353,16 +347,21 @@ const updateExpiredSubscriptions = async () => {
   try {
     const expiredCompanies = await Company.find({
       'activeSubscription.currentPeriodEnd': { $lte: today },
-      'activeSubscription.status': { $in: ['active', 'canceling'] },
+      'activeSubscription.status': { $in: ['active', 'canceling', 'downgrading'] },
     })
 
     for (const company of expiredCompanies) {
-      company.activeSubscription.status = 'canceled'
-      company.role = 'basic'
+      if (company.activeSubscription.status === 'downgrading') {
+        // Cambiar al nuevo plan
+        company.activeSubscription.status = 'active';
+        company.activeSubscription.plan = company.activeSubscription.nextPlan;
+        company.activeSubscription.nextPlan = undefined;
+      } else if (company.activeSubscription.status === 'canceling') {
+        company.activeSubscription.status = 'canceled';
+        company.role = 'basic';
+      }
       await company.save()
-      console.log(
-        `Company ${company._id} subscription expired and role set to basic`
-      )
+      console.log(`Company ${company._id} subscription updated`)
     }
   } catch (error) {
     console.error('Error updating expired subscriptions:', error)

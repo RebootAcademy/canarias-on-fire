@@ -96,6 +96,9 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
         }
 
         if (data.value && data.value.success) {
+          // Update the subscription status in the store
+          this.status = 'downgrading'
+          
           return {
             success: true,
             nextBillingDate: data.value.nextBillingDate,
