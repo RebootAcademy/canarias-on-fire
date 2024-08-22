@@ -7,6 +7,9 @@ const createUser = async (req, res) => {
     let newUser
     const { role, auth0Id, ...userData } = req.body
 
+    // Only include auth0Id in the user data if it's not null
+    const userDataWithAuth0Id = auth0Id ? { ...userData, auth0Id } : userData
+
     if (role === 'company') {
       if (!userData.companyName || !userData.phone || !userData.sector) {
         return res.status(400).json({
@@ -29,16 +32,10 @@ const createUser = async (req, res) => {
         })
       }
 
-      const companyData = { ...userData, role }
-      if (auth0Id) {
-        companyData.auth0Id = auth0Id
-      }
+      const companyData = { ...userDataWithAuth0Id, role }
       newUser = await Company.create(companyData)
     } else {
-      const userData = { ...req.body }
-      if (auth0Id) {
-        userData.auth0Id = auth0Id
-      }
+      const userData = { ...userDataWithAuth0Id }
       newUser = await User.create(userData)
     }
 
