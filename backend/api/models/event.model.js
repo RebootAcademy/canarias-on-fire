@@ -61,7 +61,25 @@ const EventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'user',
   },
-  // visibility_level: { type: String }, // Echarle un repaso
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+  },
+  activePayment: {
+    status: {
+      type: String,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending'
+    },
+    amount: Number,
+    currency: {
+      type: String,
+      default: 'EUR'
+    },
+    paymentLinkId: String,
+    paymentLinkUrl: String,
+    paidAt: Date
+  }
 })
 
 const EventModel = mongoose.model('event', EventSchema)
