@@ -38,6 +38,25 @@ const createSubscription = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Subscription plan not found' })
     }
 
+    // Si el plan es 'basic', actualizamos directamente sin involucrar a Stripe
+    if (subscriptionPlan.name === 'basic') {
+      company.role = 'basic'
+      company.activeSubscription = {
+        status: 'active',
+        plan: subscriptionPlan._id,
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
+      }
+
+      await company.save()
+
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Basic subscription activated successfully',
+        subscription: company.activeSubscription
+      })
+    }
+
     // Verificar si la compañía ya tiene una suscripción activa
     if (company.activeSubscription && company.activeSubscription.status === 'active') {
       // Si tiene una suscripción activa, redirigir a upgradeSubscription

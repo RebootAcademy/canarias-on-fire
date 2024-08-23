@@ -221,13 +221,22 @@ const getUserId = () => {
 const subscribeToPlan = async (plan) => {
   try {
     const userId = getUserId()
-    const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
-
-    if (result.success && result.sessionUrl) {
-      await userStore.updateUserSubscription(userId, plan._id, 'active')
-      window.location.href = result.sessionUrl
+    if (plan.name === 'basic') {
+      const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
+      if (result.success) {
+        await userStore.updateUserSubscription(userId, plan._id, 'active')
+        router.push('/subscription/success')
+      } else {
+        console.error(result?.error || 'Failed to create basic subscription')
+      }
     } else {
-      console.error(result?.error || 'Failed to create subscription')
+      const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
+      if (result.success && result.sessionUrl) {
+        await userStore.updateUserSubscription(userId, plan._id, 'active')
+        window.location.href = result.sessionUrl
+      } else {
+        console.error(result?.error || 'Failed to create subscription')
+      }
     }
   } catch (error) {
     console.error('Error creating subscription:', error)
