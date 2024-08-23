@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
       <div
-        v-for="plan in plans"
+        v-for="plan in filteredPlans"
         :key="plan._id"
         class="text-center bg-white border rounded-lg shadow-sm p-6 pt-12 relative"
         :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
@@ -160,6 +160,10 @@ const getReadingPriorityText = (value) => {
   }
 }
 
+const filteredPlans = computed(() => {
+  return props.plans.filter(plan => plan.name !== 'premium')
+})
+
 const getFullPlanInfo = (planId) => {
   return subscriptionStore.subscriptions.find(plan => plan._id === planId)
 }
@@ -244,17 +248,21 @@ const subscribeToPlan = async (plan) => {
 }
 
 const upgradeToPlan = async (plan) => {
+  console.log('upgradeToPlan called with plan:', plan)
   try {
     const userId = getUserId()
+    console.log('Calling subscriptionStore.upgradeSubscription with userId:', userId, 'and planId:', plan.stripe.planId)
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
+    console.log('Result from upgradeSubscription:', result)
 
     if (result.success && result.sessionUrl) {
+      console.log('Redirecting to Stripe session URL:', result.sessionUrl)
       window.location.href = result.sessionUrl
     } else {
-      console.error(result?.error || 'Failed to upgrade subscription')
+      console.error('Failed to upgrade subscription:', result.error)
     }
   } catch (error) {
-    console.error('Error upgrading subscription:', error)
+    console.error('Error in upgradeToPlan:', error)
   }
 }
 

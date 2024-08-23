@@ -74,10 +74,47 @@ const handleCheckoutSessionCompleted = async (session) => {
   // Implementa la lógica para manejar la actualización del cliente
 } */
 
-/* const handleCustomerSubscriptionCreated = async (subscription) => {
+const handleCustomerSubscriptionCreated = async (subscription) => {
   console.log('Subscription created:', subscription.id)
-  // Implementa la lógica para manejar la creación de la suscripción
-} */
+  
+  try {
+    const customer = await stripe.customers.retrieve(subscription.customer)
+    const userId = customer.metadata.userId
+
+    if (!userId) {
+      console.error('User ID not found in customer metadata:', subscription.customer)
+      return
+    }
+
+    const company = await Company.findById(userId)
+    if (!company) {
+      console.error('Company not found for user ID:', userId)
+      return
+    }
+
+    const subscriptionPlan = await Subscription.findOne({ 'stripe.planId': subscription.plan.id })
+    if (!subscriptionPlan) {
+      console.error('Subscription plan not found:', subscription.plan.id)
+      return
+    }
+
+    company.activeSubscription = {
+      status: subscription.status === 'active' ? 'active' : 'inactive',
+      plan: subscriptionPlan._id,
+      currentPeriodStart: new Date(subscription.current_period_start * 1000),
+      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+    }
+    company.stripe.subscriptionId = subscription.id
+    company.stripe.subscriptionItemId = subscription.items.data[0].id
+    company.role = 'company'
+
+    await company.save()
+
+    console.log('Company subscription created:', company._id)
+  } catch (error) {
+    console.error('Error processing subscription creation:', error)
+  }
+}
 
 /* const handleCustomerSubscriptionUpdated = async (subscription) => {
   console.log('Subscription updated:', subscription.id)
@@ -118,7 +155,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
   console.log('Invoice payment succeeded:', invoice.id)
   const { invoice_pdf, amount_paid } = invoice
 
-  // Verificar si invoice.lines.data existe y tiene al menos un elemento
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
     console.error('Invoice lines data is empty or undefined')
     return
@@ -126,7 +162,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
 
   const lineItem = invoice.lines.data[0]
 
-  // Verificar si el período existe en el lineItem
   if (!lineItem.period) {
     console.error('Period information is missing in the invoice line item')
     return
@@ -168,37 +203,44 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       date: new Date(),
     }
 
-    // Actualizar solo los campos necesarios sin tocar el plan
-    const updateFields = {
-      'activeSubscription.status': company.activeSubscription.status === 'downgrading' ? 'active' : company.activeSubscription.status,
-      'activeSubscription.currentPeriodStart': new Date(period_start * 1000),
-      'activeSubscription.currentPeriodEnd': new Date(period_end * 1000),
-      'activeSubscription.lastInvoice': newInvoice,
-      $push: { invoices: newInvoice },
-      'stripe.subscriptionId': invoice.subscription,
-      'stripe.subscriptionItemId': lineItem.id
-    };
+    // Check if the subscription is downgrading to basic
+    if (company.activeSubscription.status === 'downgrading' && company.activeSubscription.nextPlan) {
+      const nextPlan = await Subscription.findById(company.activeSubscription.nextPlan)
+      if (nextPlan && nextPlan.name === 'basic') {
+        // Transition to basic plan
+        company.activeSubscription.status = 'active'
+        company.activeSubscription.plan = company.activeSubscription.nextPlan
+        company.activeSubscription.nextPlan = undefined
 
-    const updatedCompany = await Company.findByIdAndUpdate(
-      company._id,
-      updateFields,
-      { new: true, runValidators: true }
-    );
+        // Cancel the Stripe subscription
+        await stripe.subscriptions.del(company.stripe.subscriptionId)
+        company.stripe.subscriptionId = undefined
+        company.stripe.subscriptionItemId = undefined
+      } else {
+        // Normal downgrade to a paid plan
+        company.activeSubscription.status = 'active'
+        company.activeSubscription.plan = company.activeSubscription.nextPlan
+        company.activeSubscription.nextPlan = undefined
+      }
+    }
 
-    console.log(
-      'Company active subscription and invoices updated:',
-      updatedCompany._id
-    );
-    console.log('Current subscription plan (unchanged):', updatedCompany.activeSubscription.plan);
+    // Update other subscription details
+    company.activeSubscription.currentPeriodStart = new Date(period_start * 1000)
+    company.activeSubscription.currentPeriodEnd = new Date(period_end * 1000)
+    company.activeSubscription.lastInvoice = newInvoice
+    company.invoices.push(newInvoice)
+
+    await company.save()
+
+    console.log('Company subscription updated:', company._id)
+    console.log('Current subscription plan:', company.activeSubscription.plan)
   } catch (error) {
-    console.error(
-      'Error updating company active subscription and invoices:',
-      error
-    )
+    console.error('Error updating company subscription:', error)
   }
 }
 
 module.exports = {
   'checkout.session.completed': handleCheckoutSessionCompleted,
   'invoice.payment_succeeded': handleInvoicePaymentSucceeded,
+  'customer.subscription.created': handleCustomerSubscriptionCreated,
 }

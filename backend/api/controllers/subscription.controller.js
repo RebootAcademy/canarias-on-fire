@@ -40,7 +40,6 @@ const createSubscription = async (req, res) => {
 
     // Si el plan es 'basic', actualizamos directamente sin involucrar a Stripe
     if (subscriptionPlan.name === 'basic') {
-      company.role = 'basic'
       company.activeSubscription = {
         status: 'active',
         plan: subscriptionPlan._id,
@@ -192,103 +191,84 @@ const reactivateSubscription = async (req, res) => {
 }
 
 const upgradeSubscription = async (req, res) => {
+  console.log('upgradeSubscription called with params:', req.params, 'and body:', req.body)
   const { companyId } = req.params
   const { newPlanId } = req.body
-
-  console.log('Upgrade request received for company:', companyId, 'to plan:', newPlanId)
 
   try {
     const company = await Company.findById(companyId)
     if (!company) {
-      console.error('Company not found with ID:', companyId)
+      console.log('Company not found for ID:', companyId)
       return res.status(404).json({ success: false, error: 'Company not found' })
     }
+    console.log('Company found:', company)
 
-    console.log('Company found:', company._id)
+    const newPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
+    if (!newPlan) {
+      console.log('New subscription plan not found for planId:', newPlanId)
+      return res.status(404).json({ success: false, error: 'New subscription plan not found' })
+    }
+    console.log('New plan found:', newPlan)
 
-    if (!company.stripe || !company.stripe.customerId || !company.stripe.subscriptionId) {
-      console.error('Company does not have required Stripe information:', company._id)
-      return res.status(400).json({ success: false, error: 'Company does not have an active subscription' })
+    const currentPlan = await Subscription.findById(company.activeSubscription.plan)
+    const isUpgradingFromBasic = currentPlan.name === 'basic'
+    console.log('Is upgrading from basic:', isUpgradingFromBasic)
+
+    // Crear un cliente de Stripe si no existe
+    if (!company.stripe || !company.stripe.customerId) {
+      const customer = await stripe.customers.create({
+        email: company.companyEmail || company.email,
+        metadata: { userId: company._id.toString() }
+      })
+      company.stripe = { customerId: customer.id }
+      await company.save()
     }
 
-    // Obtener la suscripción actual
-    const currentSubscription = await stripe.subscriptions.retrieve(company.stripe.subscriptionId)
-    const currentPlanId = currentSubscription.items.data[0].price.id
-
-    // Obtener los detalles de los planes
-    const [currentPlan, newPlan] = await Promise.all([
-      stripe.prices.retrieve(currentPlanId),
-      stripe.prices.retrieve(newPlanId)
-    ])
-
-    // Calcular la diferencia de precio
-    const priceDifference = newPlan.unit_amount - currentPlan.unit_amount
-
-    // Calcular el tiempo restante en el ciclo de facturación actual
-    const now = Math.floor(Date.now() / 1000)
-    const remainingTime = currentSubscription.current_period_end - now
-    const billingCycleDuration = currentSubscription.current_period_end - currentSubscription.current_period_start
-
-    // Calcular el monto prorrateado
-    const proratedAmount = Math.round((priceDifference * remainingTime) / billingCycleDuration)
-
-    console.log('Prorated amount:', proratedAmount)
-
-    if (proratedAmount <= 0) {
-      console.log('No additional charge needed for upgrade')
-      // Actualizar la suscripción directamente sin crear una sesión de pago
-      await stripe.subscriptions.update(company.stripe.subscriptionId, {
-        items: [{ id: currentSubscription.items.data[0].id, price: newPlanId }],
-        proration_behavior: 'always_invoice',
-      })
-
-      return res.json({
-        success: true,
-        message: 'Subscription upgraded without additional charge',
-      })
-    }
-
-    console.log('Creating Stripe checkout session for company:', company._id)
-
-    const session = await stripe.checkout.sessions.create({
-      customer: company.stripe.customerId,
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: 'Subscription Upgrade',
-              description: 'Prorated amount for upgrading your subscription',
-            },
-            unit_amount: proratedAmount,
+    let session
+    if (isUpgradingFromBasic) {
+      // Crear una nueva suscripción
+      session = await stripe.checkout.sessions.create({
+        customer: company.stripe.customerId,
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: newPlanId,
+            quantity: 1,
           },
-          quantity: 1,
-        },
-      ],
-      success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
-      metadata: {
-        isUpgrade: 'true',
-        oldSubscriptionId: company.stripe.subscriptionId,
-        newPlanId: newPlanId,
-      },
-    })
+        ],
+        mode: 'subscription',
+        success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
+      })
+    } else {
+      // Actualizar la suscripción existente
+      const subscription = await stripe.subscriptions.retrieve(company.stripe.subscriptionId)
+      session = await stripe.checkout.sessions.create({
+        customer: company.stripe.customerId,
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: newPlanId,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
+        subscription: subscription.id,
+      })
+    }
 
-    console.log('Stripe checkout session created:', session.id)
+    console.log('Created Stripe session:', session)
 
-    res.json({
+    return res.json({
       success: true,
-      sessionUrl: session.url,
+      sessionId: session.id,
+      sessionUrl: session.url
     })
   } catch (error) {
-    console.error('Error creating upgrade session:', error)
-    res.status(500).json({
-      success: false,
-      error: 'Error creating upgrade session',
-      message: error.message,
-    })
+    console.error('Error in upgradeSubscription:', error)
+    res.status(500).json({ success: false, error: 'Error upgrading subscription', message: error.message })
   }
 }
 
@@ -323,30 +303,37 @@ const downgradeSubscription = async (req, res) => {
     // Recuperar la suscripción actual
     const currentSubscription = await stripe.subscriptions.retrieve(company.stripe.subscriptionId)
 
-    // Programar el cambio de plan al final del ciclo de facturación actual
-    const updatedSubscription = await stripe.subscriptions.update(company.stripe.subscriptionId, {
-      proration_behavior: 'none',
-      items: [
-        {
-          id: currentSubscription.items.data[0].id,
-          price: newPlanId,
-        },
-      ],
-      billing_cycle_anchor: 'unchanged',
-    })
+    if (newPlan.name === 'basic') {
+      // Si el nuevo plan es básico, cancelamos la suscripción al final del período actual
+      await stripe.subscriptions.update(company.stripe.subscriptionId, {
+        cancel_at_period_end: true
+      })
 
-    // Actualizar la información de la suscripción en la base de datos
-    company.activeSubscription = company.activeSubscription || {};
-    company.activeSubscription.status = 'downgrading';
-    company.activeSubscription.nextPlan = newPlan._id; // Guardamos el próximo plan
-    company.activeSubscription.currentPeriodEnd = new Date(updatedSubscription.current_period_end * 1000);
+      company.activeSubscription.status = 'downgrading'
+      company.activeSubscription.nextPlan = newPlan._id
+    } else {
+      // Si no es básico, procedemos con el cambio de plan normal
+      const updatedSubscription = await stripe.subscriptions.update(company.stripe.subscriptionId, {
+        proration_behavior: 'none',
+        items: [
+          {
+            id: currentSubscription.items.data[0].id,
+            price: newPlanId,
+          },
+        ],
+        billing_cycle_anchor: 'unchanged',
+      })
+
+      company.activeSubscription.status = 'downgrading'
+      company.activeSubscription.nextPlan = newPlan._id
+    }
 
     await company.save()
 
     res.json({
       success: true,
       message: 'Subscription downgrade scheduled for the next billing cycle',
-      nextBillingDate: new Date(updatedSubscription.current_period_end * 1000),
+      nextBillingDate: new Date(currentSubscription.current_period_end * 1000),
       newPlan: newPlan.name,
     })
   } catch (error) {
@@ -372,12 +359,11 @@ const updateExpiredSubscriptions = async () => {
     for (const company of expiredCompanies) {
       if (company.activeSubscription.status === 'downgrading') {
         // Cambiar al nuevo plan
-        company.activeSubscription.status = 'active';
-        company.activeSubscription.plan = company.activeSubscription.nextPlan;
-        company.activeSubscription.nextPlan = undefined;
+        company.activeSubscription.status = 'active'
+        company.activeSubscription.plan = company.activeSubscription.nextPlan
+        company.activeSubscription.nextPlan = undefined
       } else if (company.activeSubscription.status === 'canceling') {
-        company.activeSubscription.status = 'canceled';
-        company.role = 'basic';
+        company.activeSubscription.status = 'canceled'
       }
       await company.save()
       console.log(`Company ${company._id} subscription updated`)

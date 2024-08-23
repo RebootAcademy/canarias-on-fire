@@ -58,6 +58,7 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
     },
 
     async upgradeSubscription(companyId, newPlanId) {
+      console.log('upgradeSubscription called with companyId:', companyId, 'and newPlanId:', newPlanId)
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${companyId}`, {
           method: 'PATCH',
@@ -66,50 +67,48 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
             'Content-Type': 'application/json',
           },
         })
+        console.log('Response from backend:', data.value)
 
         if (data.value && data.value.success) {
+          console.log('Upgrade successful, returning sessionUrl:', data.value.sessionUrl)
           return { 
             success: true, 
             sessionUrl: data.value.sessionUrl 
           }
         } else {
+          console.error('Upgrade failed:', data.value?.error)
           throw new Error(data.value?.error || 'Failed to upgrade subscription')
         }
       } catch (error) {
-        console.error('Error upgrading subscription:', error)
+        console.error('Error in upgradeSubscription:', error)
         return { success: false, error: error.message }
       }
     },
 
     async downgradeSubscription(companyId, newPlanId) {
-      try {
-        const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/downgrade/${companyId}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ newPlanId }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+      const { data, error } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/downgrade/${companyId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ newPlanId }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-        if (error.value) {
-          throw new Error(error.value.message || 'Failed to downgrade subscription')
-        }
+      if (error.value) {
+        throw new Error(error.value.message || 'Failed to downgrade subscription')
+      }
 
-        if (data.value && data.value.success) {
-          // Update the subscription status in the store
-          this.status = 'downgrading'
-          
-          return {
-            success: true,
-            nextBillingDate: data.value.nextBillingDate,
-            newPlan: data.value.newPlan,
-          }
-        } else {
-          throw new Error(data.value?.error || 'Failed to downgrade subscription')
+      if (data.value && data.value.success) {
+        // Update the subscription status in the store
+        this.status = 'downgrading'
+        
+        return {
+          success: true,
+          nextBillingDate: data.value.nextBillingDate,
+          newPlan: data.value.newPlan,
         }
-      } catch (error) {
-        console.error('Error downgrading subscription:', error)
-        return { success: false, error: error.message }
+      } else {
+        throw new Error(data.value?.error || 'Failed to downgrade subscription')
       }
     },
 
