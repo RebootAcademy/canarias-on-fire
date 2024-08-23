@@ -38,16 +38,18 @@
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Payment date</TableHead>
-            <TableHead>Invoice pdf</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead class="text-right">Amount</TableHead>
+            <TableHead>Amount</TableHead>
+            <TableHead class="text-right">PDF</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow v-for="invoice in paymentHistory" :key="invoice.id">
             <TableCell>{{ invoice.id }}</TableCell>
             <TableCell>{{ invoice.paymentDate }}</TableCell>
-            <TableCell>
+            <TableCell>{{ invoice.status }}</TableCell>
+            <TableCell>{{ invoice.amount }}</TableCell>
+            <TableCell class="text-right">
               <NuxtLink
                 :to="invoice.pdf"
                 target="_blank"
@@ -57,8 +59,6 @@
                 See PDF
               </NuxtLink>
             </TableCell>
-            <TableCell>{{ invoice.status }}</TableCell>
-            <TableCell class="text-right">{{ invoice.amount }}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

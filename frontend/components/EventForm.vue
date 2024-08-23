@@ -22,7 +22,7 @@ const { t } = useI18n()
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
-  validateFields(t)
+  // validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
