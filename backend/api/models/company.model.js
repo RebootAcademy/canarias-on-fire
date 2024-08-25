@@ -76,7 +76,8 @@ const CompanySchema = new mongoose.Schema({
     id: String,
     amount: Number,
     pdf: String,
-    date: Date
+    date: Date,
+    status: String
   }],
   companyLogoUrl: {
     type: String

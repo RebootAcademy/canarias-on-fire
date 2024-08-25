@@ -92,7 +92,7 @@ const createSubscription = async (req, res) => {
       cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
     })
 
-    console.log('Stripe Checkout Session:', JSON.stringify(session, null, 2))
+    // console.log('Stripe Checkout Session:', JSON.stringify(session, null, 2))
 
     // Guardar el customerId en la base de datos si es nuevo
     if (!company.stripe) {
@@ -120,7 +120,6 @@ const createSubscription = async (req, res) => {
       sessionId: session.id, 
       sessionUrl: session.url,
       subscription: company.activeSubscription
-
     })
   } catch (error) {
     res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })

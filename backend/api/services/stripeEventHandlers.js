@@ -74,7 +74,7 @@ const handleCheckoutSessionCompleted = async (session) => {
   // Implementa la lógica para manejar la actualización del cliente
 } */
 
-const handleCustomerSubscriptionCreated = async (subscription) => {
+/* const handleCustomerSubscriptionCreated = async (subscription) => {
   console.log('Subscription created:', subscription.id)
   
   try {
@@ -114,7 +114,7 @@ const handleCustomerSubscriptionCreated = async (subscription) => {
   } catch (error) {
     console.error('Error processing subscription creation:', error)
   }
-}
+} */
 
 /* const handleCustomerSubscriptionUpdated = async (subscription) => {
   console.log('Subscription updated:', subscription.id)
@@ -152,8 +152,10 @@ const handleCustomerSubscriptionCreated = async (subscription) => {
 } */
 
 const handleInvoicePaymentSucceeded = async (invoice) => {
-  console.log('Invoice payment succeeded:', invoice.id)
-  const { invoice_pdf, amount_paid } = invoice
+  console.log('Entering handleInvoicePaymentSucceeded')
+  console.log('Invoice received:', JSON.stringify(invoice, null, 2))
+  
+  const { invoice_pdf, amount_paid, status } = invoice
 
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
     console.error('Invoice lines data is empty or undefined')
@@ -196,51 +198,50 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       return
     }
 
+    console.log('Company found:', company._id)
+    console.log('Current invoices:', company.invoices)
+
     const newInvoice = {
       id: invoice.id,
       amount: amount_paid,
       pdf: invoice_pdf,
       date: new Date(),
+      status: status
     }
 
-    // Check if the subscription is downgrading to basic
-    if (company.activeSubscription.status === 'downgrading' && company.activeSubscription.nextPlan) {
-      const nextPlan = await Subscription.findById(company.activeSubscription.nextPlan)
-      if (nextPlan && nextPlan.name === 'basic') {
-        // Transition to basic plan
-        company.activeSubscription.status = 'active'
-        company.activeSubscription.plan = company.activeSubscription.nextPlan
-        company.activeSubscription.nextPlan = undefined
+    console.log('New invoice created:', newInvoice)
 
-        // Cancel the Stripe subscription
-        await stripe.subscriptions.del(company.stripe.subscriptionId)
-        company.stripe.subscriptionId = undefined
-        company.stripe.subscriptionItemId = undefined
-      } else {
-        // Normal downgrade to a paid plan
-        company.activeSubscription.status = 'active'
-        company.activeSubscription.plan = company.activeSubscription.nextPlan
-        company.activeSubscription.nextPlan = undefined
-      }
+    // Asegúrate de que la propiedad invoices existe
+    if (!company.invoices) {
+      company.invoices = []
+      console.log('Initialized invoices array')
     }
 
+    // Añade la nueva factura al array de facturas
+    
     // Update other subscription details
     company.activeSubscription.currentPeriodStart = new Date(period_start * 1000)
     company.activeSubscription.currentPeriodEnd = new Date(period_end * 1000)
     company.activeSubscription.lastInvoice = newInvoice
     company.invoices.push(newInvoice)
+    console.log('Invoice added to company')
+
+    console.log('Company before save:', company)
 
     await company.save()
+    console.log('Company saved successfully')
+    console.log('Updated invoices:', company.invoices)
 
-    console.log('Company subscription updated:', company._id)
-    console.log('Current subscription plan:', company.activeSubscription.plan)
   } catch (error) {
-    console.error('Error updating company subscription:', error)
+    console.error('Error in handleInvoicePaymentSucceeded:', error)
   }
 }
+
+console.log('stripeEventHandlers.js loaded')
+console.log('Event handlers:', Object.keys(module.exports))
 
 module.exports = {
   'checkout.session.completed': handleCheckoutSessionCompleted,
   'invoice.payment_succeeded': handleInvoicePaymentSucceeded,
-  'customer.subscription.created': handleCustomerSubscriptionCreated,
+  // 'customer.subscription.created': handleCustomerSubscriptionCreated,
 }

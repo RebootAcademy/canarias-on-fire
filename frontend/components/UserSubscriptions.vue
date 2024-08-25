@@ -111,14 +111,18 @@ const userSubscription = computed(() => {
 })
 
 const paymentHistory = computed(() => {
+  console.log('Current user invoices:', currentUser.value?.invoices)
   return currentUser.value?.invoices
-    ? currentUser.value.invoices.map((invoice) => ({
-        id: invoice.id,
-        pdf: invoice.pdf,
-        paymentDate: formatDate(invoice.date),
-        amount: `$${(invoice.amount / 100).toFixed(2)}`,
-        status: userSubscription.value ? userSubscription.value.status : 'N/A',
-      }))
+    ? currentUser.value.invoices.map((invoice) => {
+        console.log('Processing invoice:', invoice)
+        return {
+          id: invoice.id,
+          pdf: invoice.pdf,
+          paymentDate: formatDate(invoice.date),
+          amount: `$${(invoice.amount / 100).toFixed(2)}`,
+          status: invoice.status || 'N/A', // Changed to use invoice status
+        }
+      })
     : []
 })
 
