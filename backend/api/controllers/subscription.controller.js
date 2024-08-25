@@ -70,6 +70,13 @@ const createSubscription = async (req, res) => {
       customer = await createStripeCustomer(company._id, company.companyEmail || company.email)
     }
 
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      items: [{ price: planId }],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
+    })
+
     // Crear una sesión de Checkout
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
@@ -103,6 +110,9 @@ const createSubscription = async (req, res) => {
       currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 días desde ahora
     }
 
+    company.stripe.subscriptionId = subscription.id
+    company.stripe.subscriptionItemId = subscription.items.data[0].id
+
     await company.save()
 
     res.status(200).json({ 
@@ -110,6 +120,7 @@ const createSubscription = async (req, res) => {
       sessionId: session.id, 
       sessionUrl: session.url,
       subscription: company.activeSubscription
+
     })
   } catch (error) {
     res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })
