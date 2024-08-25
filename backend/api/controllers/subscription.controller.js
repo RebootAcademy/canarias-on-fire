@@ -225,7 +225,7 @@ const upgradeSubscription = async (req, res) => {
     }
 
     let session
-    if (isUpgradingFromBasic) {
+    if (isUpgradingFromBasic || !company.stripe.subscriptionId) {
       // Crear una nueva suscripción
       session = await stripe.checkout.sessions.create({
         customer: company.stripe.customerId,
@@ -258,6 +258,14 @@ const upgradeSubscription = async (req, res) => {
         subscription: subscription.id,
       })
     }
+
+    // Actualizar la información de la suscripción en la base de datos
+    company.activeSubscription = {
+      plan: newPlan._id,
+      stripeSessionId: session.id,
+      status: 'active'
+    }
+    await company.save()
 
     console.log('Created Stripe session:', session)
 

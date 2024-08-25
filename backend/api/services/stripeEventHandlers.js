@@ -99,7 +99,7 @@ const handleCustomerSubscriptionCreated = async (subscription) => {
     }
 
     company.activeSubscription = {
-      status: subscription.status === 'active' ? 'active' : 'inactive',
+      status: 'active',
       plan: subscriptionPlan._id,
       currentPeriodStart: new Date(subscription.current_period_start * 1000),
       currentPeriodEnd: new Date(subscription.current_period_end * 1000),
