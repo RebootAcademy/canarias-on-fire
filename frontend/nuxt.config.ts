@@ -9,20 +9,20 @@ export default defineNuxtConfig({
     'nuxt-csurf',
     '@nuxt/image',
     '@nuxt/devtools',
-    "@nuxtjs/i18n"
+    '@nuxtjs/i18n',
   ],
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'es',
-    vueI18n: './i18n.config.ts'
+    vueI18n: './i18n.config.ts',
   },
   vite: {
     define: {
-      __VUE_PROD_DEVTOOLS__: true
-    }
+      __VUE_PROD_DEVTOOLS__: true,
+    },
   },
-  devtools: { 
-    enabled: true, 
+  devtools: {
+    enabled: true,
   },
   css: ['~/assets/css/main.css'],
   postcss: {
@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   },
   shadcn: {
     prefix: '',
-    componentDir: './components/ui'
+    componentDir: './components/ui',
   },
   runtimeConfig: {
     public: {
@@ -41,11 +41,11 @@ export default defineNuxtConfig({
       auth0ClientId: process.env.AUTH0_CLIENT_ID,
       apiBaseUrl: process.env.API_BASE_URL,
       auth0Audience: process.env.AUTH0_AUDIENCE,
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
-    }
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    },
   },
   build: {
-    transpile: ["@fawmi/vue-google-maps"]
+    transpile: ['@fawmi/vue-google-maps'],
   },
   routeRules: {
     // Homepage pre-rendered at build time
@@ -60,9 +60,7 @@ export default defineNuxtConfig({
     '/api/**': { cors: true },
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' },
-    '/event/:id': { ssr: true }
+    '/event/:id': { ssr: true },
   },
-  plugins: [
-    '~/plugins/auth0.js'
-  ]
+  plugins: ['~/plugins/auth0.js'],
 })
