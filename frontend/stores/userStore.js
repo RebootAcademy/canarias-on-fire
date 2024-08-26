@@ -202,4 +202,7 @@ export const useUserStore = defineStore('userStore', {
       )
     },
   },
+  persist: {
+    paths: ['userData', 'isAuthenticated']
+  }
 })
