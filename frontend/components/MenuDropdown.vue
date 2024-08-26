@@ -44,6 +44,7 @@ const handleLogout = () => {
     auth0.value.logout({ logoutParams: {
       returnTo: window.location.origin
     }})
+    userStore.clearUserId()
   }
 }
 

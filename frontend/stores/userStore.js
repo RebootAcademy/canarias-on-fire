@@ -64,36 +64,37 @@ export const useUserStore = defineStore('userStore', {
 
     async updateUserProfile(profileData) {
       try {
-        const updateData = {
-          username: profileData.username,
-          email: profileData.email,
-          role: profileData.role,
-          // Include company fields only if the role is 'company'
-          ...(profileData.role === 'company' && {
-            companyName: profileData.companyName,
-            companyEmail: profileData.companyEmail,
-            phone: profileData.phone,
-            sector: profileData.sector,
-          }),
-        };
-
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
           method: 'PATCH',
-          body: updateData
+          body: profileData
+        })
+        
+        if (response.data.success) {
+          this.userData = { ...this.userData, ...response.data.user }
+          return { success: true }
+        } else {
+          return { success: false, message: response.data.message }
+        }
+      } catch (error) {
+        return { 
+          success: false, 
+          message: error.message || 'Failed to update profile' 
+        }
+      }
+    },
+
+    async updateUserProfileToCompany(profileData) {
+      try {
+        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}/profile`, {
+          method: 'PATCH',
+          body: profileData
         })
 
-        const updatedUser = response
-        const index = this.users.findIndex(u => u._id === updatedUser._id)
-        if (index !== -1) {
-          this.users[index] = updatedUser
-        }
-        if (this.userData && this.userData._id === updatedUser._id) {
-          this.userData = updatedUser
-        }
-        return { 
-          success: true, 
-          message: 'Profile updated successfully', 
-          user: updatedUser 
+        if (response && response.success) {
+          this.userData = { ...this.userData, ...response.result }
+          return { success: true, user: response.result }
+        } else {
+          return { success: false, message: response.message || 'Unknown error occurred' }
         }
       } catch (error) {
         return { 

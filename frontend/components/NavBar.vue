@@ -37,7 +37,7 @@ onMounted(() => {
 
 const login = () => {
   if (auth0.value) {
-    auth0.value.loginWithRedirect({ appState: { target: '/dashboard' }})
+    auth0.value.loginWithRedirect()
   }
 }
 

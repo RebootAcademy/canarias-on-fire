@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/devtools',
     '@nuxtjs/i18n',
+    '@element-plus/nuxt'
   ],
   i18n: {
     locales: ['en', 'es'],

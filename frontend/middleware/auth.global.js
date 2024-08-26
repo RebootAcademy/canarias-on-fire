@@ -7,8 +7,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const userStore = useUserStore()
     const config = useRuntimeConfig()
 
-    console.log('Auth middleware executing for route:', to.path)
-
     if (isAuthenticated.value && user.value && !userStore.isAuthenticated) {
       console.log('User authenticated, registering and fetching user data')
       try {
@@ -49,7 +47,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       if (role === 'basic' && to.path !== '/dashboard/onboarding') {
         return navigateTo('/dashboard/onboarding')
       } else if (['company', 'musician'].includes(role) && to.path !== '/dashboard') {
-        return navigateTo('/dashboard')
+        return navigateTo('/')
       }
     }
   }
