@@ -155,7 +155,7 @@ const updateUser = async (req, res) => {
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector'];
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
@@ -168,6 +168,68 @@ const updateUser = async (req, res) => {
       ;['companyName', 'companyEmail', 'phone', 'sector'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
+    }
+
+    if (newRole === 'company' && oldRole !== 'company') {
+      // Cambio a company
+      await User.findByIdAndDelete(req.params.id)
+      user = await Company.create({ ...user.toObject(), ...updateData })
+    } else if (newRole !== 'company' && oldRole === 'company') {
+      // Cambio de company a otro rol
+      await Company.findByIdAndDelete(req.params.id)
+      user = await User.create({ ...user.toObject(), ...updateData })
+    } else {
+      // Actualización de usuario regular o company
+      Object.assign(user, updateData)
+      await user.save()
+    }
+
+    // Si es una compañía y tiene un plan de suscripción activo, lo poblamos
+    if (user.role === 'company' && user.activeSubscription && user.activeSubscription.plan) {
+      await user.populate('activeSubscription.plan');
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User successfully updated.',
+      result: user,
+    })
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating user.',
+      description: error.message,
+    })
+  }
+}
+
+const updateUserProfile = async (req, res) => {
+  try {
+    let user = await User.findById(req.params.id)
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    const oldRole = user.role
+    const newRole = req.body.role
+
+    // Filtrar campos válidos para actualización
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'address'];
+    const updateData = Object.keys(req.body)
+      .filter(key => validFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = req.body[key]
+        return obj
+      }, {})
+
+    // Asegurarse de que el email esté presente para usuarios de tipo company
+    if (newRole === 'company' && !updateData.email) {
+      updateData.email = user.email // Mantener el email existente si no se proporciona uno nuevo
     }
 
     if (newRole === 'company' && oldRole !== 'company') {
@@ -285,6 +347,7 @@ module.exports = {
   getUserById,
   getCurrentUser,
   updateUser,
+  updateUserProfile,
   updateUserSubscription,
   deleteUser,
 }
