@@ -3,6 +3,7 @@ const router = require('express').Router()
 const { isAuth, checkRole } = require('../middlewares')
 const { 
   createEvent,
+  createPromotion,
   getAllEvents,
   getEventById,
   getEventsByUserId,
@@ -13,6 +14,7 @@ const {
 router
   //.post('/', isAuth, checkRole('admin', 'company'), createEvent)
   .post('/', createEvent)
+  .post('/promotion', createPromotion)
   .get('/', getAllEvents)
   .get('/:id', /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById)
   .get('/user/:userId', getEventsByUserId)

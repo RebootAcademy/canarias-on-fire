@@ -16,6 +16,7 @@ const props = defineProps({
   }
 })
 
+const userStore = useUserStore()
 const eventStore = useEventStore()
 const router = useRouter()
 const { t } = useI18n()
@@ -29,9 +30,16 @@ const onSubmit = async () => {
       router.push(`/events/${eventStore.event._id}`)
     } else {
       eventStore.status = 'draft'
+      eventStore.setUserId(userStore.userData._id)
+      
+      // Solo establecemos el payment si es un evento, no una promoción
+      if (eventStore.eventType === 'event') {
+        // router.push(`/payment?id=${eventId}&type=${eventType}`)
+      }
+
       const result = await eventStore.createEvent()
       if (result) {
-        router.push(`/events/preview/${eventStore.event._id}`)
+        router.push(`/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`)
       } else {
         console.error('Failed to create event')
       }

@@ -67,11 +67,11 @@ const EventSchema = new mongoose.Schema({
   },
   companyId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
+    ref: 'company',
   },
   payment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Payment'
+    ref: 'payment'
   }
 })
 

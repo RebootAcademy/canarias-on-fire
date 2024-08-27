@@ -1,6 +1,4 @@
 const Event = require('../models/event.model')
-const Category = require('../models/category.model')
-const Location = require('../models/location.model')
 
 const createEvent = async (req, res) => {
   try {
@@ -15,6 +13,28 @@ const createEvent = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error creating event.',
+      description: error.message,
+    })
+  }
+}
+
+const createPromotion = async (req, res) => {
+  try {
+    const promotionData = {
+      ...req.body,
+      eventType: 'promotion'
+    }
+    const newPromotion = await Event.create(promotionData)
+    res.status(201).json({
+      success: true,
+      message: 'Promotion successfully created.',
+      result: newPromotion,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error creating promotion.',
       description: error.message,
     })
   }
@@ -147,6 +167,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
   createEvent,
+  createPromotion,
   getAllEvents,
   getEventById,
   getEventsByUserId,

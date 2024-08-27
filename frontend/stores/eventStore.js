@@ -38,7 +38,9 @@ export const useEventStore = defineStore('eventStore', {
       endTime: null,
       categories: []
     },
-    userEvents: []
+    userEvents: [],
+    userId: null,
+    payment: null,
   }),
   
   actions: {
@@ -112,6 +114,14 @@ export const useEventStore = defineStore('eventStore', {
           year: newFilters.date.getFullYear()
         } : null
       }
+    },
+
+    setUserId(userId) {
+      this.userId = userId
+    },
+
+    setPayment(payment) {
+      this.payment = payment
     },
 
     resetFilters() {
@@ -199,6 +209,34 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    async createEvent () {
+      try {
+        const eventData = this.getEventData()
+
+        if (this.eventType === 'promotion') {
+          delete eventData.payment
+        }
+
+        const { data } = await useFetch(`${this.apiBase}/events`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`
+          },
+          body: JSON.stringify(eventData)
+        })
+
+        if (data.value?.success) {
+          this.event = data.value.result
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error('Error creating event:', error)
+        return false
+      }
+    },
+
     async saveEvent(isNew = true) {
       const eventData = this.getEventData()
       const url = isNew ? '/events' : `/events/${this.event._id}`
@@ -279,7 +317,9 @@ export const useEventStore = defineStore('eventStore', {
         externalUrl: this.externalUrl,
         eventImg: this.eventImg,
         categories: this.selectedCategories.map(cat => typeof cat === 'object' ? cat.id : cat),
-        status: this.status // Add this line to include the status
+        status: this.status,
+        userId: this.userId,
+        payment: this.payment
       }
     },
 
