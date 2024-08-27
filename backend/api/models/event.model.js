@@ -57,6 +57,10 @@ const EventSchema = new mongoose.Schema({
     enum: ['draft', 'published', 'closed'],
     default: ['draft']
   },
+/*   date: {
+    type: Date,
+    required: true
+  }, */
   userId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'user',
@@ -65,20 +69,9 @@ const EventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
   },
-  activePayment: {
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'failed'],
-      default: 'pending'
-    },
-    amount: Number,
-    currency: {
-      type: String,
-      default: 'EUR'
-    },
-    paymentLinkId: String,
-    paymentLinkUrl: String,
-    paidAt: Date
+  payment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Payment'
   }
 })
 

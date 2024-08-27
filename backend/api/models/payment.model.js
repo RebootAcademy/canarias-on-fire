@@ -11,24 +11,6 @@ const PaymentSchema = new mongoose.Schema({
   stripe: {
     paymentId: String
   },
-  eventDate: {
-    type: Date,
-    required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  event: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event',
-    required: true
-  },
-  company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
-    required: true
-  },
   features: {
     eventPublication: { 
       type: Boolean, 
@@ -60,17 +42,6 @@ const PaymentSchema = new mongoose.Schema({
     },
   },
 })
-
-PaymentSchema.methods.calculateTotalPrice = function() {
-  if (this.name === 'basic') return 0;
-
-  const monthsDiff = (this.eventDate.getMonth() - this.createdAt.getMonth()) + 
-    (12 * (this.eventDate.getFullYear() - this.createdAt.getFullYear()));
-  
-  const daysInLastMonth = (this.eventDate - new Date(this.eventDate.getFullYear(), this.eventDate.getMonth(), 1)) / (1000 * 60 * 60 * 24);
-  
-  return this.basePrice * (monthsDiff + (daysInLastMonth / 30));
-}
 
 const PaymentModel = mongoose.model('payment', PaymentSchema)
 
