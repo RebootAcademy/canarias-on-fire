@@ -105,6 +105,27 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    async updateUserProfileToBand(profileData) {
+      try {
+        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}/profile`, {
+          method: 'PATCH',
+          body: profileData
+        })
+    
+        if (response && response.success) {
+          this.userData = { ...this.userData, ...response.result }
+          return { success: true, user: response.result }
+        } else {
+          return { success: false, message: response.message || 'Unknown error occurred' }
+        }
+      } catch (error) {
+        return { 
+          success: false, 
+          message: error.message || 'Failed to update profile' 
+        }
+      }
+    },
+
     async deleteUser(userId) {
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}`, {
