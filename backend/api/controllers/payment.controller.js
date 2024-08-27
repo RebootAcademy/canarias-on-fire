@@ -116,7 +116,7 @@ const createPayment = async (req, res) => {
 const getPayments = async (req, res) => {
   try {
     const { companyId } = req.params
-    const payments = await Payment.find({ company: companyId }).populate('event')
+    const payments = await Payment.find()
     res.status(200).json({
       success: true,
       payments: payments

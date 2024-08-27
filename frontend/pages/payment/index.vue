@@ -7,15 +7,13 @@
       </p>
     </div>
     <div v-else class="text-center mb-4">
-      <h2 class="text-2xl font-bold text-gray-900">Choose your plan</h2>
+      <h2 class="text-2xl font-bold text-primary">Choose your payment</h2>
       <p class="mt-2 text-md text-gray-500">
-        Find the perfect plan that suits your event needs.
+        Find the perfect payment that suits your event needs.
       </p>
     </div>
-    <SubscriptionPlans 
-      :plans="subscriptionStore.subscriptions"
-      :currentPlan="getCurrentPlanName"
-      :selectedPlan="userStore.selectedUser ? userStore.selectedUser.subscription : null"
+    <PaymentOptions 
+      :payments="paymentStore.payments"
       @planSelected="handlePlanSelection"
     />
   </div>
@@ -24,6 +22,7 @@
 <script setup>
 const route = useRoute()
 const userStore = useUserStore()
+const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
 
 onMounted(async () => {
