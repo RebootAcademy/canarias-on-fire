@@ -237,9 +237,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
   }
 }
 
-console.log('stripeEventHandlers.js loaded')
-console.log('Event handlers:', Object.keys(module.exports))
-
 module.exports = {
   'checkout.session.completed': handleCheckoutSessionCompleted,
   'invoice.payment_succeeded': handleInvoicePaymentSucceeded,

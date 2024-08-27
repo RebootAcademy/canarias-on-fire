@@ -17,9 +17,10 @@ export const useUserStore = defineStore('userStore', {
     setSelectedUser(user) {
       this.selectedUser = user
     },
-    clearUserId() {
+    clearUserData() {
       this.userData = null
       this.isAuthenticated = false
+      localStorage.removeItem('userStore')
     },
     setSearchQuery(query) {
       this.searchQuery = query
