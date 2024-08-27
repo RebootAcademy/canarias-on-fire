@@ -1,5 +1,6 @@
 const User = require('../models/user.model')
 const Company = require('../models/company.model')
+const Musician = require('../models/musician.model')
 const Subscription = require('../models/subscription.model')
 
 const createUser = async (req, res) => {
@@ -34,6 +35,16 @@ const createUser = async (req, res) => {
 
       const companyData = { ...userDataWithAuth0Id, role }
       newUser = await Company.create(companyData)
+
+    } else if (role === 'musician') {
+      if (!userData.bandName || !userData.genre || !userData.members) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields for musician user.',
+        })
+      }
+      const musicianData = { ...userDataWithAuth0Id, role }
+      newUser = await Musician.create(musicianData) 
     } else {
       const userData = { ...userDataWithAuth0Id }
       newUser = await User.create(userData)

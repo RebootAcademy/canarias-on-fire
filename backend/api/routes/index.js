@@ -7,6 +7,7 @@ const CategoryRouter = require('./category.router')
 const LocationRouter = require('./location.router')
 const ArticleRouter = require('./article.router')
 const SubscriptionRouter = require('./subscription.router')
+const PaymentRouter = require('./payment.router')
 
 router
   .use('/auth', AuthRouter)
@@ -16,5 +17,6 @@ router
   .use('/locations', LocationRouter)
   .use('/articles', ArticleRouter)
   .use('/subscriptions', SubscriptionRouter)
+  .use('/payments', PaymentRouter)
 
 module.exports = router
