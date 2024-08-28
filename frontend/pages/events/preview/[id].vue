@@ -56,17 +56,18 @@ onMounted(async () => {
 })
 
 const publishEvent = async () => {
-  if (eventStore.eventType === 'event') {
+  if (eventStore.event.eventType === 'event') {
     // Para eventos, redirigir a la página de pago
     router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
-  } else {
+    console.log('status: ', eventStore.event.status)
+/*   } else {
     // Para promociones, publicar directamente
     const result = await eventStore.updateEventStatus(eventId, 'published')
     if (result) {
       router.push(`/events/${eventId}`)
     } else {
       console.error('Failed to publish promotion')
-    }
+    } */
   }
 }
 

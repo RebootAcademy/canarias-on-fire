@@ -131,42 +131,41 @@ const getUserId = () => {
   }
 }
 
-const choosePayment = async (payment) => {
+const choosePayment = async (plan) => {
   try {
     const userId = getUserId()
     const eventId = eventStore.event._id
+    
+    console.log('Selected plan:', plan);
 
-    if (payment.name === 'basic') {
-      // For basic plan, publish the event directly
-     
-      const result = await eventStore.updateEventStatus(eventId, 'published')
-      if (result) {
-        // Create a record of the free payment
-        await paymentStore.createPayment(userId, {
-          paymentId: payment._id,
-          eventId: eventId,
-          eventDate: eventStore.event.eventDate
-        })
-        // Redirect to home page
-        router.push('/')
+    const result = await paymentStore.assignPaymentToEvent(userId, {
+      paymentPlanId: plan._id, 
+      eventId: eventId,
+      eventDate: eventStore.event.eventDate
+    });
+
+    if (result.success) {
+      if (plan.name === 'basic') {
+        // For basic plan, update event status and redirect
+        const publishResult = await eventStore.updateEventStatus(eventId, 'published');
+        if (publishResult) {
+          router.push(`/events/${eventId}`);
+        } else {
+          console.error('Failed to publish event');
+        }
       } else {
-        console.error('Failed to publish event')
+        // For paid plans, redirect to Stripe checkout
+        if (result.sessionUrl) {
+          window.location.href = result.sessionUrl;
+        } else {
+          console.error('No session URL provided for paid plan');
+        }
       }
     } else {
-      // For paid plans, create a payment and redirect to Stripe
-      const result = await paymentStore.createPayment(userId, {
-        paymentId: payment._id,
-        eventId: eventId,
-        eventDate: eventStore.event.eventDate
-      })
-      if (result.success && result.sessionUrl) {
-        window.location.href = result.sessionUrl
-      } else {
-        console.error(result?.error || 'Failed to create payment')
-      }
+      console.error(result?.error || 'Failed to assign payment to event');
     }
   } catch (error) {
-    console.error('Error processing payment:', error)
+    console.error('Error processing payment:', error);
   }
 }
 

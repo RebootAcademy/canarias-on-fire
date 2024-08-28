@@ -19,9 +19,9 @@ export const usePaymentStore = defineStore('paymentStore', {
       }
     },
 
-    async createPayment(companyId, paymentData) {
+    async assignPaymentToEvent(companyId, paymentData) {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/payments/create/${companyId}`, {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/payments/assign/${companyId}`, {
           method: 'POST',
           body: JSON.stringify(paymentData),
           headers: {
@@ -29,26 +29,22 @@ export const usePaymentStore = defineStore('paymentStore', {
           }
         })
 
-        if (data.value.success && data.value.sessionUrl) {
-          return { 
-            success: true, 
-            sessionUrl: data.value.sessionUrl 
+        if (data.value && data.value.success) {
+          return {
+            success: true,
+            sessionUrl: data.value.sessionUrl,
+            event: data.value.event
           }
-        } else if (data.value.success && data.value.payment) {
-          return { 
-            success: true, 
-            payment: data.value.payment 
+        } else {
+          return {
+            success: false,
+            error: data.value?.error || 'Failed to assign payment to event'
           }
         }
-        return { 
-          success: false, 
-          message: data.value.error || 'Failed to create payment' 
-        }
+
       } catch (error) {
-        return { 
-          success: false, 
-          message: error.message 
-        }
+        console.error('Error in assignPaymentToEvent:', error)
+        return { success: false, error: error.message }
       }
     },
   },
