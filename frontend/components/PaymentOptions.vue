@@ -91,7 +91,7 @@ const props = defineProps({
   payments: {
     type: Array,
     required: true,
-  }
+  },
 })
 
 const router = useRouter()
@@ -131,42 +131,64 @@ const getUserId = () => {
   }
 }
 
+const formatDate = (dateObj) => {
+  if (!dateObj || typeof dateObj !== 'object') return null
+  const { year, month, day } = dateObj
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+const calculateFinalPrice = (basePrice, eventDate) => {
+  const today = new Date()
+  const event = eventDate ? new Date(eventDate) : new Date()
+  const daysUntilEvent = Math.max(1, Math.ceil((event - today) / (1000 * 60 * 60 * 24)))
+  return Math.max(basePrice, basePrice * daysUntilEvent)
+}
+
 const choosePayment = async (plan) => {
   try {
     const userId = getUserId()
     const eventId = eventStore.event._id
-    
-    console.log('Selected plan:', plan);
+    const eventDate = formatDate(eventStore.event.eventDate)
 
-    const result = await paymentStore.assignPaymentToEvent(userId, {
-      paymentPlanId: plan._id, 
-      eventId: eventId,
-      eventDate: eventStore.event.eventDate
-    });
+    console.log('Selected plan:', plan)
+    console.log('Event date:', eventDate)
 
-    if (result.success) {
-      if (plan.name === 'basic') {
-        // For basic plan, update event status and redirect
-        const publishResult = await eventStore.updateEventStatus(eventId, 'published');
+    if (plan.name === 'basic') {
+      const result = await paymentStore.assignPaymentToEvent(userId, {
+        paymentPlanId: plan._id,
+        eventId: eventId,
+        eventDate: eventDate,
+      })
+
+      if (result.success) {
+        const publishResult = await eventStore.updateEventStatus(eventId, 'published')
         if (publishResult) {
-          router.push(`/events/${eventId}`);
+          router.push(`/events/${eventId}`)
         } else {
-          console.error('Failed to publish event');
+          console.error('Failed to publish event')
         }
       } else {
-        // For paid plans, redirect to Stripe checkout
-        if (result.sessionUrl) {
-          window.location.href = result.sessionUrl;
-        } else {
-          console.error('No session URL provided for paid plan');
-        }
+        console.error(result?.error || 'Failed to create basic payment')
       }
     } else {
-      console.error(result?.error || 'Failed to assign payment to event');
+      const finalPrice = calculateFinalPrice(plan.basePrice, eventDate)
+      console.log('Calculated final price:', finalPrice)
+
+      const result = await paymentStore.createPaymentSession(userId, {
+        paymentPlanId: plan._id,
+        eventId: eventId,
+        eventDate: eventDate,
+        finalPrice: finalPrice,
+      })
+
+      if (result.success && result.sessionUrl) {
+        window.location.href = result.sessionUrl
+      } else {
+        console.error(result?.error || 'Failed to create payment session')
+      }
     }
   } catch (error) {
-    console.error('Error processing payment:', error);
+    console.error('Error processing payment:', error)
   }
 }
-
 </script>

@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const Company = require('../models/company.model')
+const Event = require('../models/event.model')
 const Subscription = require('../models/subscription.model')
 
 /* const handleChargeSucceeded = async (charge) => {
@@ -55,6 +56,28 @@ const handleCheckoutSessionCompleted = async (session) => {
       // console.log('Company subscription upgraded:', company._id, 'New plan:', newSubscriptionPlan.name, newSubscriptionPlan)
     } catch (error) {
       console.error('Error processing upgrade:', error)
+    }
+  } else if (session.metadata && session.metadata.eventId) {
+    // Manejar el pago de un evento
+    try {
+      const eventId = session.metadata.eventId;
+      const event = await Event.findById(eventId);
+
+      if (!event) {
+        console.error('Event not found for successful payment:', eventId);
+        return;
+      }
+
+      // Actualizar el estado del evento a 'published'
+      event.status = 'published';
+      await event.save();
+
+      console.log('Event published after successful payment:', eventId);
+
+      // Aquí puedes agregar lógica adicional, como enviar notificaciones, etc.
+
+    } catch (error) {
+      console.error('Error processing event payment:', error);
     }
   }
 }

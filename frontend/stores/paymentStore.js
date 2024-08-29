@@ -47,5 +47,32 @@ export const usePaymentStore = defineStore('paymentStore', {
         return { success: false, error: error.message }
       }
     },
+
+    async createPaymentSession(companyId, paymentData) {
+      try {
+        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/payments/create-session/${companyId}`, {
+          method: 'POST',
+          body: JSON.stringify(paymentData),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        if (data.value && data.value.success) {
+          return {
+            success: true,
+            sessionUrl: data.value.sessionUrl
+          }
+        } else {
+          return {
+            success: false,
+            error: data.value?.error || 'Failed to create payment session'
+          }
+        }
+      } catch (error) {
+        console.error('Error in createPaymentSession:', error)
+        return { success: false, error: error.message }
+      }
+    },
   },
 })
