@@ -139,9 +139,14 @@ const formatDate = (dateObj) => {
 
 const calculateFinalPrice = (basePrice, eventDate) => {
   const today = new Date()
-  const event = eventDate ? new Date(eventDate) : new Date()
+  const event = new Date(eventDate)
   const daysUntilEvent = Math.max(1, Math.ceil((event - today) / (1000 * 60 * 60 * 24)))
-  return Math.max(basePrice, basePrice * daysUntilEvent)
+  
+  const pricePerDay = basePrice / 30
+  
+  const finalPrice = basePrice + (pricePerDay * daysUntilEvent)
+  
+  return Math.round(finalPrice * 100) / 100
 }
 
 const choosePayment = async (plan) => {

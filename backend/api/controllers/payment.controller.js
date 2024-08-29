@@ -147,8 +147,6 @@ const createPaymentSession = async (req, res) => {
 
     const amountInCents = Math.round(parseFloat(finalPrice) * 100)
 
-    console.log('Amount in cents:', amountInCents)
-
     if (isNaN(amountInCents) || amountInCents <= 0) {
       return res.status(400).json({ success: false, error: 'Invalid price' })
     }
@@ -183,8 +181,16 @@ const createPaymentSession = async (req, res) => {
     // Update event with session information
     event.payment = paymentPlanId
     event.stripe = { sessionId: session.id, paymentIntentId: session.payment_intent }
-    event.status = 'published'
+    event.status = 'draft'
     await event.save()
+
+    // Crear y añadir la factura al usuario
+    await addInvoiceToCompany(companyId, {
+      id: session.id,
+      amount: amountInCents, 
+      status: 'pending',
+      date: new Date(),
+    })
 
     res.status(200).json({
       success: true,
@@ -198,6 +204,36 @@ const createPaymentSession = async (req, res) => {
       error: 'Error creating payment session',
       message: error.message,
     })
+  }
+}
+
+const addInvoiceToCompany = async (companyId, invoiceData) => {
+  console.log(invoiceData)
+  try {
+    const company = await User.findById(companyId)
+    if (!company) {
+      throw new Error('Company not found')
+    }
+
+    const newInvoice = {
+      id: invoiceData.id,
+      amount: invoiceData.amount,
+      status: invoiceData.status,
+      pdf: invoiceData.pdf,
+      date: invoiceData.date,
+    };
+
+    if (!company.invoices) {
+      company.invoices = []
+    }
+
+    company.invoices.push(newInvoice)
+    await company.save()
+
+    console.log('Invoice added to company:', newInvoice)
+  } catch (error) {
+    console.error('Error adding invoice to company:', error)
+    throw error
   }
 }
 
@@ -249,6 +285,7 @@ const getPaymentById = async (req, res) => {
 module.exports = {
   assignPaymentToEvent,
   createPaymentSession,
+  addInvoiceToCompany,
   getPayments,
   getPaymentById,
 }

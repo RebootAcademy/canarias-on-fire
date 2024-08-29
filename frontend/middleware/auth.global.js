@@ -46,9 +46,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       const role = userStore.userData?.role
       if (role === 'basic' && to.path !== '/dashboard/onboarding') {
         return navigateTo('/dashboard/onboarding')
-      } else if (['company', 'musician'].includes(role) && to.path !== '/dashboard') {
+      } /* else if (['company', 'musician'].includes(role) && to.path !== '/dashboard') {
         return navigateTo('/dashboard')
-      }
+      } */
     }
   }
 })
