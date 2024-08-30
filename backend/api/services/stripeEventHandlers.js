@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const Company = require('../models/company.model')
+const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Subscription = require('../models/subscription.model')
 
@@ -60,24 +61,68 @@ const handleCheckoutSessionCompleted = async (session) => {
   } else if (session.metadata && session.metadata.eventId) {
     // Manejar el pago de un evento
     try {
-      const eventId = session.metadata.eventId;
-      const event = await Event.findById(eventId);
+      const eventId = session.metadata.eventId
+      const event = await Event.findById(eventId)
 
       if (!event) {
-        console.error('Event not found for successful payment:', eventId);
-        return;
+        console.error('Event not found for successful payment:', eventId)
+        return
       }
 
       // Actualizar el estado del evento a 'published'
-      event.status = 'published';
-      await event.save();
+      event.status = 'published'
+      event.paymentStatus = 'paid'
+      await event.save()
 
-      console.log('Event published after successful payment:', eventId);
+      console.log('Event published after successful payment:', eventId)
 
-      // Aquí puedes agregar lógica adicional, como enviar notificaciones, etc.
+      // Crear la factura
+      console.log('[handleCheckoutSessionCompleted] Creating invoice');
+      const invoice = await stripe.invoices.create({
+        customer: session.customer,
+        auto_advance: true,
+        collection_method: 'charge_automatically',
+        metadata: { eventId: eventId },
+      });
+      console.log('[handleCheckoutSessionCompleted] Invoice created:', invoice.id);
+
+      // Agregar el item a la factura
+      console.log('[handleCheckoutSessionCompleted] Adding item to invoice');
+      await stripe.invoiceItems.create({
+        customer: session.customer,
+        invoice: invoice.id,
+        amount: session.amount_total, // Usar el monto total directamente
+        currency: session.currency,
+        description: `Payment for event: ${event.name}`, // Puedes personalizar esta descripción
+      });
+      console.log('[handleCheckoutSessionCompleted] Item added to invoice');
+
+      // Finalizar la factura para generar el PDF
+      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
+
+      // Actualizar la compañía con la nueva factura
+      const company = await User.findOne({ 'stripe.customerId': session.customer })
+      if (company) {
+        const newInvoice = {
+          id: finalizedInvoice.id,
+          amount: finalizedInvoice.amount_paid,
+          pdf: finalizedInvoice.invoice_pdf,
+          date: new Date(),
+          status: 'paid'
+        }
+
+        if (!company.invoices) {
+          company.invoices = []
+        }
+        company.invoices.push(newInvoice)
+        await company.save()
+        
+      } else {
+        console.error('[handleCheckoutSessionCompleted] Company not found for customer:', session.customer);
+      }
 
     } catch (error) {
-      console.error('Error processing event payment:', error);
+      console.error('Error processing event payment:', error)
     }
   }
 }
@@ -174,11 +219,8 @@ const handleCheckoutSessionCompleted = async (session) => {
   // Implementa la lógica para manejar el pago de la factura
 } */
 
-const handleInvoicePaymentSucceeded = async (invoice) => {
-  console.log('Entering handleInvoicePaymentSucceeded')
-  console.log('Invoice received:', JSON.stringify(invoice, null, 2))
-  
-  const { invoice_pdf, amount_paid, status } = invoice
+const handleInvoicePaymentSucceeded = async (invoice) => {  
+  const { invoice_pdf, amount_paid } = invoice
 
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
     console.error('Invoice lines data is empty or undefined')
@@ -228,8 +270,7 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       id: invoice.id,
       amount: amount_paid,
       pdf: invoice_pdf,
-      date: new Date(),
-      status: status
+      date: new Date()
     }
 
     console.log('New invoice created:', newInvoice)

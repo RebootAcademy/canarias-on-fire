@@ -161,7 +161,7 @@ const getReadingPriorityText = (value) => {
 }
 
 const filteredPlans = computed(() => {
-  return props.plans.filter(plan => plan.name !== 'premium')
+  return props.plans.filter(plan => (plan.name !== 'premium' && plan.name !== 'basic'))
 })
 
 const getFullPlanInfo = (planId) => {
