@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         const userData = {
           email: user.value.email,
           username: user.value.nickname,
-          role: roles[0] // Asumimos que el primer rol es el principal
+          role: roles[0]
         }
 
         const response = await fetch(`${config.public.apiBaseUrl}/auth/register`, {
@@ -28,11 +28,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           body: JSON.stringify(userData)
         })
 
+        await userStore.fetchAndSetUser(user.value.email)
+        
         if (!response.ok) {
           console.log('Failed to register user:', response.statusText)
           // Considerar redirigir a una página de error o manejar este caso
         } else {
-          await userStore.fetchAndSetUser(user.value.email)
           console.log('User registered and data fetched successfully')
         }
       } catch (error) {
