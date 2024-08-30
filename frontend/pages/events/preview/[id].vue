@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+const userStore = useUserStore()
 const eventStore = useEventStore()
 const route = useRoute()
 const router = useRouter()
@@ -60,14 +61,17 @@ const publishEvent = async () => {
     // Para eventos, redirigir a la página de pago
     router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
     console.log('status: ', eventStore.event.status)
-/*   } else {
-    // Para promociones, publicar directamente
-    const result = await eventStore.updateEventStatus(eventId, 'published')
-    if (result) {
-      router.push(`/events/${eventId}`)
+  } else if (eventStore.event.eventType === 'promotion') {
+    if (userStore.userData.activeSubscription?.status === 'active') {
+      const result = await eventStore.updateEventStatus(eventId, 'published')
+      if (result) {
+        router.push(`/events/${eventId}`)
+      } else {
+        console.error('Failed to publish promotion')
+      }
     } else {
-      console.error('Failed to publish promotion')
-    } */
+      router.push(`/pricing?id=${eventId}&type=${eventStore.event.eventType}`)
+    }
   }
 }
 

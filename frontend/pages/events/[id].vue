@@ -40,7 +40,7 @@
     </div>
     <div class="mt-6">
       <h2 class="text-xl font-semibold">Organizador</h2>
-      <p class="text-white">{{ event.userId.companyName }}</p>
+      <p class="text-white">{{ event.userId?.companyName }}</p>
     </div>
     <div class="flex gap-2 mt-6 mb-6">
       <Button class="px-4">
