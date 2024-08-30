@@ -36,10 +36,6 @@ const CompanySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'location' 
   }],
-  events: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'event' 
-  }],
   activeSubscription: {
     status: {
       type: String,
