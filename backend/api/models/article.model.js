@@ -8,7 +8,10 @@ const ArticleSchema = new mongoose.Schema({
   content: { 
     type: String
   },
-  image: {
+  articleImages: {
+    type: Array
+  },
+  coverImage: {
     type: String
   },
   author: {

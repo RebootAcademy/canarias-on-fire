@@ -4,6 +4,10 @@ import { defineStore } from 'pinia'
 export const useArticleStore = defineStore('articleStore', {
   state: () => ({
     articles: [],
+    article: {
+      articleImages: [],
+      coverImage: null,
+    },
     filteredArticles: [],
     searchQuery: '',
     selectedCategory: null,
