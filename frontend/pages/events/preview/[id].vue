@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <NuxtImg :src="eventStore.eventImg || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
+    <NuxtImg :src="eventStore.event.coverImage || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
     <div class="flex p-8 gap-2">
 <!--       <span v-for="category in eventStore.selectedCategories" :key="category.id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
         {{ category.name }}
@@ -37,6 +37,10 @@
         <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
         <span>{{ eventStore.organizerName }}</span>
       </div> -->
+    </div>
+    <div>
+      <EventGallery />
+      <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
     </div>
     <Button @click="publishEvent" class="mt-8">Publish</Button>
   </div>

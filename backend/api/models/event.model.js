@@ -42,11 +42,15 @@ const EventSchema = new mongoose.Schema({
   externalUrl: { 
     type: String 
   },
-  eventImg: { 
-    type: String 
+  eventImages: {
+    type: Array
+  },
+  coverImage: {
+    type: String
   },
   selectedFile: {
-    type: Object
+    type: Object,
+    deprecated: true
   },
   location: { 
     type: mongoose.Schema.Types.ObjectId, 

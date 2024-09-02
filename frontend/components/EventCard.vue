@@ -16,7 +16,13 @@
 
         <!-- Event Image -->
         <NuxtImg
-          :src="event.eventImg || defaultImage"
+          v-if="!isBasicPayment"
+          :src="event.coverImage || defaultImage"
+          class="w-full h-44 object-cover rounded-t-lg z-0"
+        />
+        <NuxtImg
+          v-else
+          :src="defaultImage"
           class="w-full h-44 object-cover rounded-t-lg z-0"
         />
         <!-- Main content -->
@@ -74,6 +80,7 @@ import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
+const paymentStore = usePaymentStore()
 const router = useRouter()
 
 const props = defineProps({
@@ -81,6 +88,11 @@ const props = defineProps({
 })
 
 const defaultImage = './defaultEvent.jpg'
+
+const isBasicPayment = computed(() => {
+  const payment = paymentStore.getPaymentById(props.event.payment)
+  return payment?.name === 'basic'
+})
 
 const editEvent = () => {
   router.push(`/events/edit/${props.event._id}`)

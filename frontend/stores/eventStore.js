@@ -3,7 +3,10 @@ import { defineStore } from 'pinia'
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
     events: [],
-    event: null,
+    event: {
+      eventImages: [],
+      coverImage: null,
+    },
     categories: [],
     selectedCategories: [],
     searchQuery: '',
@@ -23,7 +26,8 @@ export const useEventStore = defineStore('eventStore', {
     startTime: '',
     endTime: '',
     externalUrl: '',
-    eventImg: '',
+    eventImages: [],
+    coverImage: null,
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
     hasTriedSubmit: false,
@@ -59,6 +63,16 @@ export const useEventStore = defineStore('eventStore', {
       } else {
         this.selectedCategories.splice(index, 1)
       }
+    },
+
+    addEventImage(image) {
+      this.eventImages.push(image)
+    },
+    removeEventImage(imageUrl) {
+      this.eventImages = this.eventImages.filter(image => image.url !== imageUrl)
+    },
+    setCoverImage(imageUrl) {
+      this.coverImage = imageUrl
     },
 
     setPlaceDetails(place) {
@@ -315,7 +329,8 @@ export const useEventStore = defineStore('eventStore', {
         isFree: this.isFree,
         eventCapacity: this.eventCapacity,
         externalUrl: this.externalUrl,
-        eventImg: this.eventImg,
+        eventImages: this.eventImages,
+        coverImage: this.coverImage,
         categories: this.selectedCategories.map(cat => typeof cat === 'object' ? cat.id : cat),
         status: this.status,
         userId: this.userId,

@@ -21,8 +21,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
-
 const emit = defineEmits(['image-uploaded'])
 const cloudName = 'drs1a2bso'
 const selectedFile = ref(null)

@@ -15,7 +15,8 @@
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('selectImageDescription') }}
       </p>
-      <ImageUploader />
+      <ImageGallery />
+      <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
     </div>
 
     <!-- EVENT NAME, DATE & TIME -->
@@ -151,7 +152,8 @@ onMounted(() => {
     eventStore.isFree = eventStore.event.isFree
     eventStore.eventCapacity = eventStore.event.eventCapacity
     eventStore.externalUrl = eventStore.event.externalUrl
-    eventStore.eventImg = eventStore.event.eventImg
+    eventStore.eventImages = eventStore.event.eventImages
+    eventStore.coverImage = eventStore.event.coverImage
   }
 })
 

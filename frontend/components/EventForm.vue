@@ -31,11 +31,6 @@ const onSubmit = async () => {
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)
-      
-      // Solo establecemos el payment si es un evento, no una promoción
-      if (eventStore.eventType === 'event') {
-        // router.push(`/payment?id=${eventId}&type=${eventType}`)
-      }
 
       const result = await eventStore.createEvent()
       if (result) {
