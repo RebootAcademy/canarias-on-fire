@@ -64,6 +64,12 @@
           </SelectContent>
         </Select>
       </div>
+      <div class="mb-4">
+        <Label class="text-gray-300"
+          >Código de vendedor <span class="text-primary">*</span></Label
+        >
+        <Input id="phone" v-model="formData.refCode" class="text-gray-500" />
+      </div>
       <div class="flex items-center mb-4">
         <input
           id="terms"
@@ -100,7 +106,8 @@ const formData = ref({
   address: '',
   sector: '',
   termsAccepted: false,
-  imageUrl: ''
+  imageUrl: '',
+  refCode: '',
 })
 
 const router = useRouter()

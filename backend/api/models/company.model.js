@@ -77,6 +77,9 @@ const CompanySchema = new mongoose.Schema({
   }],
   companyLogoUrl: {
     type: String
+  },
+  refCode: {
+    type: String
   }
 })
 
