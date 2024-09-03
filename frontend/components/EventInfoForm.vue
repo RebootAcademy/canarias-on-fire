@@ -15,7 +15,7 @@
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('selectImageDescription') }}
       </p>
-      <ImageGallery />
+      <ImageGallery store-type="event" />
       <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
     </div>
 

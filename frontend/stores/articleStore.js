@@ -8,6 +8,10 @@ export const useArticleStore = defineStore('articleStore', {
       articleImages: [],
       coverImage: null,
     },
+    title: '',
+    content: '',
+    articleImages: [],
+    coverImage: null,
     filteredArticles: [],
     searchQuery: '',
     selectedCategory: null,
@@ -17,6 +21,17 @@ export const useArticleStore = defineStore('articleStore', {
   }),
 
   actions: {
+    addArticleImage(image) {
+      this.articleImages.push(image)
+    },
+
+    removeArticleImage(url) {
+      this.articleImages = this.articleImages.filter(image => image.url !== url)
+    },
+
+    setCoverImage(url) {
+      this.coverImage = url
+    },
     async fetchArticles() {
       this.isLoading = true
       this.error = null
@@ -125,8 +140,8 @@ export const useArticleStore = defineStore('articleStore', {
 
     updateFilteredArticles() {
       this.filteredArticles = this.articles.filter(article => {
-        const matchesSearch = article.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                              article.author.toLowerCase().includes(this.searchQuery.toLowerCase())
+        const matchesSearch = article.title?.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                              article.author?.toLowerCase().includes(this.searchQuery.toLowerCase())
         const matchesCategory = !this.selectedCategory || article.category === this.selectedCategory
         return matchesSearch && matchesCategory
       })

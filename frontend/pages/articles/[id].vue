@@ -10,12 +10,9 @@
             <p class="text-sm text-gray-600">{{ formattedDate(article.date) }}</p>
           </div>
         </div>
-        <NuxtImg :src="article.image" class="w-full h-64 object-cover mb-6 rounded-lg" alt="Article Image" />
+        <NuxtImg :src="article.coverImage" class="w-full h-64 object-cover mb-6 rounded-lg" alt="Article Image" />
         <div class="prose max-w-none" v-html="article.content"></div>
-        <div v-if="article.relatedEvents" class="mt-6">
-          <h3 class="text-xl font-semibold mb-2">Related Event:</h3>
-          <p>{{ article.relatedEvents.name }}</p>
-        </div>
+        <ArticleGallery />
       </div>
       <div v-else class="text-center py-8">
         Loading article...
@@ -53,18 +50,11 @@ const router = useRouter()
 const articleStore = useArticleStore()
 const userStore = useUserStore()
 
-const { articles } = storeToRefs(articleStore)
+const { article } = storeToRefs(articleStore)
 
 const articleId = route.params.id
-const article = ref(null)
 
-onMounted(async () => {
-  try {
-    article.value = await articleStore.fetchArticleById(articleId)
-  } catch (error) {
-    console.error('Error fetching article:', error)
-  }
-})
+onMounted(async () => article.value = await articleStore.fetchArticleById(articleId))
 
 const otherArticles = computed(() => {
   return articleStore.articles.filter(a => a._id !== articleId)
