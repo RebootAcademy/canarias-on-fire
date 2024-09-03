@@ -39,6 +39,9 @@
       </div> -->
     </div>
     <div>
+      <TicketButton />
+    </div>
+    <div>
       <EventGallery />
       <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
     </div>
@@ -66,7 +69,7 @@ const publishEvent = async () => {
     router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
     console.log('status: ', eventStore.event.status)
   } else if (eventStore.event.eventType === 'promotion') {
-    if (userStore.userData.activeSubscription?.status === 'active') {
+    if (userStore.userData.activeSubscription?.status === 'active' || userStore.userData.role === 'admin') {
       const result = await eventStore.updateEventStatus(eventId, 'published')
       if (result) {
         router.push(`/events/${eventId}`)

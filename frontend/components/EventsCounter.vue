@@ -9,8 +9,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
-
 const eventStore = useEventStore()
 
 const activeEventsCount = computed(() => {

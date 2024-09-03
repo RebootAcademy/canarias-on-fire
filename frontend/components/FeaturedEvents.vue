@@ -1,30 +1,37 @@
 <template>
+  <h1 class="text-2xl text-primary font-semibold">Featured events</h1>
+  <p class="text-sm font-light opacity-70">Don't miss the upcoming most anticipated events</p>
   <div class="relative w-full">
-    <Carousel class="w-full">
+    <Carousel class="border-none shadow-none ">
       <CarouselContent>
-        <CarouselItem v-for="event in events" :key="event.id">
-          <div class="p-1">
-            <Card>
-              <CardContent class="flex flex-col items-center justify-center p-6 h-60">
-                <span class="text-2xl font-semibold">{{ event.name }}</span>
-                <p class="text-sm">{{ event.description }}</p>
-              </CardContent>
-            </Card>
-          </div>
+        <CarouselItem v-for="event in premiumEvents" :key="event.id">
+          <Card class="border-0 flex items-center justify-center  bg-gray-900">
+            <CardContent class="bg-black">
+              <NuxtImg :src="event.coverImage" class="object-scale-down h-96 w-80" />
+            </CardContent>
+          </Card>
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious class="absolute left-0 top-1/2 transform -translate-y-1/2" />
+      <CarouselPrevious class="absolute left-0 top-1/2 transform -translate-y-1/2 " />
       <CarouselNext class="absolute right-0 top-1/2 transform -translate-y-1/2" />
     </Carousel>
   </div>
 </template>
 
-<script setup lang="ts">
-const events = ref([
-  { id: 1, name: 'Event 1', description: 'Description for Event 1' },
-  { id: 2, name: 'Event 2', description: 'Description for Event 2' },
-  { id: 3, name: 'Event 3', description: 'Description for Event 3' },
-  { id: 4, name: 'Event 4', description: 'Description for Event 4' },
-  { id: 5, name: 'Event 5', description: 'Description for Event 5' },
-])
+<script setup>
+
+const eventStore = useEventStore()
+const paymentStore = usePaymentStore()
+const { payments } = storeToRefs(paymentStore)
+
+function filterPremiumEvents(events) {
+  return events.filter(event => {
+    return event.payment && paymentStore.payments.some(payment => {
+      return payment._id === event.payment && payment.name === 'premium'
+    })
+  })
+}
+
+const premiumEvents = computed(() => filterPremiumEvents(eventStore.events))
+
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-start mb-6 mt-6">
-      <div>
+      <div v-if="!userStore.userData.role === 'admin'">
         <h2 class="text-lg font-semibold">My subscription</h2>
         <p class="text-sm opacity-60">Change your plan based on your needs</p>
         <div v-if="userSubscription" class="bg-gray-500 p-4 rounded-lg mt-6">

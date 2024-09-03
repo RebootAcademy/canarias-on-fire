@@ -1,7 +1,21 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
-    <div class="relative w-[300px] h-[332px] rounded-lg overflow-hidden group">
-      <div class="absolute inset-0 rounded-lg border-2 border-orange-600 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 group-hover:top-[-2px] group-hover:left-[-2px] group-hover:right-[-2px] group-hover:bottom-[-2px] group-hover:border-4"></div>
+    <div 
+      class="relative w-[300px] h-[332px] rounded-lg overflow-hidden group"
+      :class="{
+        'bg-[#FBB03B] text-black': isGoldPayment,
+        'bg-primary text-black': isPremiumPayment
+      }"
+    >
+      <div 
+        class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 group-hover:top-[-2px] group-hover:left-[-2px] group-hover:right-[-2px] group-hover:bottom-[-2px] group-hover:border-4"
+        :class="{
+          'border-orange-600': !isGoldPayment && !isPremiumPayment,
+          'border-[#FBB03B]': isGoldPayment,
+          'border-primary': isPremiumPayment
+        }"  
+      ></div>
+
       <div class="relative z-10 w-full h-full rounded-lg">
         <!-- Event status -->
         <span
@@ -60,13 +74,24 @@
         </div>
         <div class="flex flex-col justify-between items-start px-3">
           <h3 class="text-xl font-semibold mb-2">{{ event.eventName }}</h3>
-          <p class="text-sm text-gray-600">
+          <p 
+            class="text-sm"
+            :class="{
+              'text-gray-300': isBasicPayment
+            }"
+          >
             {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
           </p>
-          <p class="text-sm text-gray-600 line-clamp-1">
+          <p class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
-          <p class="text-primary text-md font-semibold mt-2">
+          <p 
+            class="text-md font-semibold mt-2"
+            :class="{
+              'text-primary': isBasicPayment,
+              'text-gray-100': isGoldPayment || isPremiumPayment
+            }"
+          >
             {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
           </p>
         </div>
@@ -92,6 +117,16 @@ const defaultImage = './defaultEvent.jpg'
 const isBasicPayment = computed(() => {
   const payment = paymentStore.getPaymentById(props.event.payment)
   return payment?.name === 'basic'
+})
+
+const isGoldPayment = computed(() => {
+  const payment = paymentStore.getPaymentById(props.event.payment)
+  return payment?.name === 'gold'
+})
+
+const isPremiumPayment = computed(() => {
+  const payment = paymentStore.getPaymentById(props.event.payment)
+  return payment?.name === 'premium'
 })
 
 const editEvent = () => {

@@ -31,18 +31,19 @@
             </li>
             <li>
               <NavigationMenuLink as-child>
-                <NuxtLink
-                  to="/events/create"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                <button
+                  @click="checkLogin"
+                  variant="ghost"
+                  class="text-left block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 >
                   <div class="text-sm font-medium leading-none">Create events</div>
                   <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
                     Plan and organize your own events.
                   </p>
-                </NuxtLink>
+                </button>
               </NavigationMenuLink>
             </li>
-            <li>
+            <li v-show="isLogged">
               <NavigationMenuLink as-child>
                 <NuxtLink
                   to="/dashboard/events"
@@ -68,6 +69,19 @@
             <li>
               <NavigationMenuLink as-child>
                 <NuxtLink
+                  to="/articles"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none">Find articles</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    Search and discover articles near you or in your area of interest.
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+            </li>
+            <li v-show="isAdmin">
+              <NavigationMenuLink as-child>
+                <NuxtLink
                   to="/articles/create"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 >
@@ -78,7 +92,7 @@
                 </NuxtLink>
               </NavigationMenuLink>
             </li>
-            <li>
+            <li v-show="isAdmin">
               <NavigationMenuLink as-child>
                 <NuxtLink
                   to="/dashboard/articles"
@@ -97,3 +111,26 @@
     </NavigationMenuList>
   </NavigationMenu>
 </template>
+
+<script setup>
+import { useAuth0 } from '@auth0/auth0-vue'
+const userStore = useUserStore()
+
+const auth0 = ref(null)
+const route = useRouter()
+
+auth0.value = useAuth0()
+
+const checkLogin = async () => {
+  if (!userStore.isAuthenticated) {
+    if (auth0.value) {
+      await auth0.value.loginWithRedirect()
+    }
+  } else {
+    route.push('/events/create')
+  }
+}
+
+const isAdmin = userStore.userData?.role === 'admin'
+const isLogged = userStore.userData
+</script>
