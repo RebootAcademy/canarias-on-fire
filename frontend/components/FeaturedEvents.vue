@@ -4,8 +4,12 @@
   <div class="relative w-full">
     <Carousel class="border-none shadow-none ">
       <CarouselContent>
-        <CarouselItem v-for="event in premiumEvents" :key="event.id">
-          <Card class="border-0 flex items-center justify-center  bg-gray-900">
+        <CarouselItem 
+          v-show="event.payment.name === 'premium'" 
+          v-for="event in eventStore.events" 
+          :key="event.id"
+        >
+          <Card  class="border-0 flex items-center justify-center  bg-gray-900">
             <CardContent class="bg-black">
               <NuxtImg :src="event.coverImage" class="object-scale-down h-96 w-80" />
             </CardContent>
@@ -19,19 +23,6 @@
 </template>
 
 <script setup>
-
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-const { payments } = storeToRefs(paymentStore)
-
-function filterPremiumEvents(events) {
-  return events.filter(event => {
-    return event.payment && paymentStore.payments.some(payment => {
-      return payment._id === event.payment && payment.name === 'premium'
-    })
-  })
-}
-
-const premiumEvents = computed(() => filterPremiumEvents(eventStore.events))
-
 </script>

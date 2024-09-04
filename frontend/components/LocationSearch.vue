@@ -3,7 +3,7 @@
     <GMapAutocomplete
       v-model="eventStore.eventLocation"
       ref="autocompleteInput"
-      class="text-sm p-2 border rounded-md w-full"
+      class="bg-gray text-sm p-2 rounded-md w-full"
       :placeholder="$t('location')"
       @place_changed="setPlace"
     >
@@ -27,8 +27,6 @@
 </template>
 
 <script setup>
-import { useEventStore } from '../stores/eventStore'
-
 const eventStore = useEventStore()
 
 const setPlace = (place) => {

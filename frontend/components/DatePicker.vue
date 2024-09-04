@@ -4,8 +4,8 @@
     <Popover>
       <PopoverTrigger as-child>
         <Button
-          variant="outline"
-          :class="cn('w-full justify-start text-left', !formattedDate && 'text-muted-foreground')"
+          variant="ghost"
+          :class="cn('w-full bg-gray justify-start text-left', !formattedDate && 'text-muted-foreground')"
         >
           <CalendarIcon class="mr-2 h-4 w-4" />
           {{ formattedDate || $t('pickDate') }}

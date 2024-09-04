@@ -15,12 +15,12 @@
       <aside class="w-64 p-4">
         <nav class="space-y-4">
           <ul class="space-y-2">
-            <li><NuxtLink to="/dashboard/statistics" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Statistics</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/events" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Events</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/articles" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Articles</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/users" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Users list</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/profile" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Profile</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/password" active-class="bg-gray-400" class="block py-2 px-4 rounded hover:bg-gray-500">Password</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/statistics" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Statistics</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/events" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Events</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/articles" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Articles</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/users" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Users list</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/profile" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Profile</NuxtLink></li>
+            <li><NuxtLink to="/dashboard/password" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Password</NuxtLink></li>
           </ul>
         </nav>
       </aside>

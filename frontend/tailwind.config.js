@@ -51,6 +51,7 @@ module.exports = {
         },
         black: '#1C1F1F',
         white: '#FAFAFA',
+        gray: 'rgba(125, 125, 125, 0.20)'
       },
       borderRadius: {
       	xl: "calc(var(--radius) + 4px)",

@@ -6,7 +6,7 @@
         <h2 class="text-3xl font-semibold text-primary">Events</h2>
         <div class="flex gap-4">
           <SearchInput v-model="searchQuery" />
-          <Button @click="openFilterModal" class="text-sm px-3">
+          <Button @click="openFilterModal" variant="outline" class="text-sm px-3 border border-primary">
             {{ $t('filterBtn') }}
           </Button>
           <FilterModal />
