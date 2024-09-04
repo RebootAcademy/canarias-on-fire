@@ -44,7 +44,7 @@ export const useEventStore = defineStore('eventStore', {
     },
     userEvents: [],
     userId: null,
-    payment: null,
+    payment: {},
   }),
   
   actions: {    
@@ -408,5 +408,5 @@ export const useEventStore = defineStore('eventStore', {
 
     getCategoryById: (state) => (id) => {
       return state.categories.find(category => category.id === id || category._id === id)
-    },
+    }
 })

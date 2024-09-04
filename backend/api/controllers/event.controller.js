@@ -42,7 +42,7 @@ const createPromotion = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('categories location userId')
+    const events = await Event.find().populate('categories location userId payment')
     res.status(200).json({
       success: true,
       message: 'Events successfully fetched.',
@@ -60,7 +60,7 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id).populate('categories location userId')
+    const event = await Event.findById(req.params.id).populate('categories location userId payment')
 
     if (!event) {
       return res.status(404).json({

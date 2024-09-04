@@ -1,19 +1,19 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
-    <div 
+    <div
       class="relative w-[300px] h-[332px] rounded-lg overflow-hidden group"
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
-        'bg-primary text-black': isPremiumPayment
+        'bg-primary text-black': isPremiumPayment,
       }"
     >
-      <div 
+      <div
         class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 group-hover:top-[-2px] group-hover:left-[-2px] group-hover:right-[-2px] group-hover:bottom-[-2px] group-hover:border-4"
         :class="{
           'border-orange-600': !isGoldPayment && !isPremiumPayment,
           'border-[#FBB03B]': isGoldPayment,
-          'border-primary': isPremiumPayment
-        }"  
+          'border-primary': isPremiumPayment,
+        }"
       ></div>
 
       <div class="relative z-10 w-full h-full rounded-lg">
@@ -52,7 +52,9 @@
             </span>
           </div>
           <!-- Options menu -->
-          <div v-show="userStore.userData && userStore.userData.role === 'admin'">
+          <div
+            v-show="userStore.userData && userStore.userData.role === 'admin'"
+          >
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <MoreVertical
@@ -74,10 +76,10 @@
         </div>
         <div class="flex flex-col justify-between items-start px-3">
           <h3 class="text-xl font-semibold mb-2">{{ event.eventName }}</h3>
-          <p 
+          <p
             class="text-sm"
             :class="{
-              'text-gray-300': isBasicPayment
+              'text-gray-300': isBasicPayment,
             }"
           >
             {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
@@ -85,11 +87,11 @@
           <p class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
-          <p 
+          <p
             class="absolute text-md font-semibold mt-2 bottom-2"
             :class="{
               'text-primary': isBasicPayment,
-              'text-gray-100': isGoldPayment || isPremiumPayment
+              'text-gray-100': isGoldPayment || isPremiumPayment,
             }"
           >
             {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
@@ -105,7 +107,6 @@ import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
-const paymentStore = usePaymentStore()
 const router = useRouter()
 
 const props = defineProps({
@@ -114,20 +115,22 @@ const props = defineProps({
 
 const defaultImage = './defaultEvent.jpg'
 
-const isBasicPayment = computed(() => {
-  const payment = paymentStore.getPaymentById(props.event.payment)
-  return payment?.name === 'basic'
+const getPaymentType = computed(() => {
+  switch (props.event.payment?.name) {
+    case 'basic':
+      return 'basic'
+    case 'gold':
+      return 'gold'
+    case 'premium':
+      return 'premium'
+    default:
+      return 'unknown'
+  }
 })
 
-const isGoldPayment = computed(() => {
-  const payment = paymentStore.getPaymentById(props.event.payment)
-  return payment?.name === 'gold'
-})
-
-const isPremiumPayment = computed(() => {
-  const payment = paymentStore.getPaymentById(props.event.payment)
-  return payment?.name === 'premium'
-})
+const isBasicPayment = computed(() => getPaymentType.value === 'basic')
+const isGoldPayment = computed(() => getPaymentType.value === 'gold')
+const isPremiumPayment = computed(() => getPaymentType.value === 'premium')
 
 const editEvent = () => {
   router.push(`/events/edit/${props.event._id}`)
