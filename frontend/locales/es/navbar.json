@@ -1,6 +1,32 @@
 {
   "home": "Inicio",
-  "createEvent": "Crear Evento",
+  "createNewEvent": "Crear Evento",
   "login": "Iniciar Sesión",
-  "logout": "Cerrar Sesión"
+  "logout": "Cerrar Sesión",
+  "dashboard": "Dashboard",
+  "eventText": "Encuentre las mejores planes en las islas con nuestro sitio web.",
+  "findEvents": {
+    "label": "Encontrar eventos",
+    "subtext": "Busque y descubra eventos cerca de usted o en su área de interés."
+  },
+  "eventCreate": {
+    "label": "Crear eventos",
+    "subtext": "Planifica y organiza tus propios eventos."
+  },
+  "myEvents": {
+    "label": "Mis eventos",
+    "subtext": "Ver mis eventos creados."
+  },
+  "findArticles": {
+    "label": "Encontrar artículos",
+    "subtext": "Busque y descubra artículos cerca de usted o en su área de interés."
+  },
+  "createArticles": {
+    "label": "Crear artículos",
+    "subtext": "Crea y comparte tus propios artículos."
+  },
+  "manageArticles": {
+    "label": "Gestionar artículos",
+    "subtext": "Gestione los artículos de su sitio web."
+  }
 }

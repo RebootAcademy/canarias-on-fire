@@ -7,7 +7,7 @@
       </div>
       <Button variant="ghost" class="font-light">
         <NuxtLink to="/events">
-          Ver más
+          {{ $t('buttons.seeMore') }}
         </NuxtLink>
       </Button>
 

@@ -11,7 +11,7 @@
         />
       </div>
     </div>
-    <p v-if="filteredEvents.length === 0" class="text-gray-500 mt-4">No se encontraron eventos.</p>
+    <p v-if="filteredEvents.length === 0" class="text-gray-500 mt-4">{{ $t('notEventsFound')}}</p>
   </div>
 </template>
 
