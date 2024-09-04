@@ -86,7 +86,7 @@
             {{ event.eventLocation.address }}
           </p>
           <p 
-            class="text-md font-semibold mt-2"
+            class="absolute text-md font-semibold mt-2 bottom-2"
             :class="{
               'text-primary': isBasicPayment,
               'text-gray-100': isGoldPayment || isPremiumPayment
