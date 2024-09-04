@@ -132,5 +132,5 @@ const checkLogin = async () => {
 }
 
 const isAdmin = userStore.userData?.role === 'admin'
-const isLogged = userStore.userData
+const isLogged = userStore.isAuthenticated
 </script>
