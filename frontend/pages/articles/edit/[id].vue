@@ -20,8 +20,12 @@
         </client-only>
       </div>
       <div class="flex justify-end mt-20 gap-8">
-        <Button @click="cancelEdit" class="bg-gray-300 hover:bg-gray-400 text-gray-800">Cancel</Button>
-        <Button type="submit">Update Article</Button>
+        <div class="bg-primary-gradient p-0.5 rounded-md">
+          <Button @click="cancelEdit" class="bg-gray-300 hover:bg-gray-400 text-gray-800">Cancel</Button>
+        </div>
+        <div class="bg-primary-gradient p-0.5 rounded-md">
+          <Button type="submit">Update Article</Button>
+        </div>
       </div>
     </form>
     <div v-else class="text-center py-8">

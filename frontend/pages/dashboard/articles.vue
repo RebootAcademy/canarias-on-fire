@@ -4,9 +4,10 @@
       <h2 class="text-xl font-semibold">Articles</h2>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />
-        <Button @click="openFilterModal" class="text-sm px-3">
-          {{ $t('filterBtn') }}
-        </Button>
+        <CustomBtn
+            :title="$t('filterBtn')"
+            @click="openFilterModal"
+          />
         <FilterModal />
       </div>
     </div>
@@ -26,7 +27,6 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-
 const articleStore = useArticleStore()
 const { filteredArticles } = storeToRefs(articleStore)
 

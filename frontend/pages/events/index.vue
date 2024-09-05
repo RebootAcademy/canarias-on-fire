@@ -6,9 +6,15 @@
         <h2 class="text-3xl font-semibold text-primary">{{ $t('events') }}</h2>
         <div class="flex gap-4">
           <SearchInput v-model="searchQuery" />
-          <Button @click="openFilterModal" class="text-sm px-3">
-            {{ $t('filterBtn') }}
-          </Button>
+          <CustomBtn
+            :title="$t('filterBtn')"
+            @click="openFilterModal"
+          />
+            <!-- <Button @click="openFilterModal" variant="ghost" class="text-sm px-3 bg-black  ">
+              {{ $t('filterBtn') }}
+            </Button> -->
+
+      
           <FilterModal />
         </div>
       </div>

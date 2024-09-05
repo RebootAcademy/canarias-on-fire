@@ -4,7 +4,7 @@
     <hr />
     <div class="flex flex-col">
       <p class="font-semibold">{{ $t('eventType') }}</p>
-      <p class="text-xs text-gray-500 mb-3">{{ $t('selectDateTime') }}</p>
+      <p class="text-xs mb-3">{{ $t('selectDateTime') }}</p>
       <EventTypeRadioGroup />
     </div>
 
@@ -12,7 +12,7 @@
     <hr />
     <div class="flex flex-col gap-1">
       <p class="font-semibold">{{ $t('selectImage') }}</p>
-      <p class="text-xs text-gray-500 mb-2">
+      <p class="text-xs mb-2">
         {{ $t('selectImageDescription') }}
       </p>
       <ImageGallery store-type="event" />

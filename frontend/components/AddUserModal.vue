@@ -1,9 +1,9 @@
 <template>
   <div
     v-if="isOpen"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 z-2 flex items-center justify-center"
   >
-    <div class="bg-gray-600 rounded-lg p-6 w-11/12 max-w-md">
+    <div class="rounded-lg p-6 w-11/12 max-w-md bg-black border">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Add New User</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -68,11 +68,14 @@
             </div>
           </template>
         </div>
-        <div class="flex justify-end gap-4 mt-6">
-          <Button type="button" variant="outline" @click="closeModal"
+        <div class="flex justify-end gap-4 mt-6 z-10">
+         
+          <Button type="button" variant="ghost" @click="closeModal" class="bg-gray"
             >Cancel</Button
           >
-          <Button type="submit">Add User</Button>
+          <div class="bg-primary-gradient p-0.5 rounded-md">
+            <Button type="submit" variant="ghost" class="text-white bg-black hover:bg-primary-gradient hover:text-white">Accept</Button>
+          </div>
         </div>
       </form>
     </div>

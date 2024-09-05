@@ -9,9 +9,10 @@
       </Tabs>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" placeholder="Search users..." />
-        <Button @click="openAddUserModal" class="text-sm px-3">
-          Add user
-        </Button>
+        <CustomBtn
+          title="Add user"
+          @click="openAddUserModal"
+        />
       </div>
     </div>
     <UserTable 
