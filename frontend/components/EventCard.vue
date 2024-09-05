@@ -1,10 +1,10 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
     <div
-      class="relative w-[300px] h-[332px] rounded-lg overflow-hidden group"
+      class="relative h-[360px] rounded-lg overflow-hidden group "
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
-        'bg-primary text-black': isPremiumPayment,
+        'bg-primary-gradient text-black': isPremiumPayment,
       }"
     >
       <div

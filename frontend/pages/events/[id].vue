@@ -1,8 +1,16 @@
 <template>
   <div class="relative bg-black">
-    <NuxtImg :src="eventStore.event.coverImage || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
+    <NuxtImg
+      :src="eventStore.event.coverImage || defaultImage"
+      alt="Event Image"
+      class="w-full h-96 object-cover"
+    />
     <div class="flex p-8 gap-2">
-      <span v-for="category in event.categories" :key="category._id" class="bg-gray-500 text-white text-xs font-semibold px-4 py-1 rounded-xl">
+      <span
+        v-for="category in event.categories"
+        :key="category._id"
+        class="bg-gray-500 text-white text-xs font-semibold px-4 py-1 rounded-xl"
+      >
         {{ category.name }}
       </span>
     </div>
@@ -20,24 +28,22 @@
           <Calendar size="16" />
           <span>{{ formattedDate }}</span>
         </div>
-  
       </div>
       <div>
-        <TicketButton hasBorder="hasBorder"/>
+        <TicketButton hasBorder="hasBorder" />
       </div>
     </div>
-
     <div class="mt-6">
       <h2 class="text-xl font-semibold">Sobre el evento</h2>
       <p class="mt-2">{{ event.eventDescription }}</p>
     </div>
     <div class="mt-6">
       <h2 class="text-xl font-semibold">Ubicación</h2>
-      <img 
-        v-if="event.eventLocation && event.eventLocation.mapImageUrl" 
-        :src="event.eventLocation.mapImageUrl" 
-        alt="Event Location" 
-        class="w-full h-60 object-cover mt-2" 
+      <img
+        v-if="event.eventLocation && event.eventLocation.mapImageUrl"
+        :src="event.eventLocation.mapImageUrl"
+        alt="Event Location"
+        class="w-full h-60 object-cover mt-2"
       />
       <p v-else-if="pending">Cargando mapa...</p>
       <p v-else>No hay imagen del mapa disponible</p>
@@ -53,24 +59,32 @@
       <EventGallery />
     </div>
     <div class="flex gap-2 mt-6 mb-6">
-      <Button class="px-4">
-        <Share2 class="mr-2 h-4 w-4" />
-        Share
-      </Button>
-      <Button 
-        v-if="isAdmin"
-        @click="editEvent"
-      >
-        <Pencil class="mr-2 h-4 w-4" />
-        Edit
-      </Button>
-      <Button 
-        v-if="isAdmin" 
-        @click="deleteEvent"
-      >
-        <Trash class="mr-2 h-4 w-4" />
-        Delete
-      </Button>
+      <div class="bg-primary-gradient p-0.5 rounded-md">
+        <Button
+          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+        >
+          <Share2 class="mr-2 h-4 w-4" />
+          Share
+        </Button>
+      </div>
+      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
+        <Button
+          @click="editEvent"
+          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+        >
+          <Pencil class="mr-2 h-4 w-4" />
+          Edit
+        </Button>
+      </div>
+      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
+        <Button
+          @click="deleteEvent"
+          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+        >
+          <Trash class="mr-2 h-4 w-4" />
+          Delete
+        </Button>
+      </div>
     </div>
     <EventsRelated />
   </div>
@@ -100,8 +114,8 @@ const isBasicPayment = computed(() => {
 
 const { data, pending, error } = await eventStore.fetchEventById(eventId)
 
-if (error) { 
-  console.error('Error fetching event:', error) 
+if (error) {
+  console.error('Error fetching event:', error)
 }
 
 const editEvent = () => {
@@ -120,5 +134,4 @@ const formattedDate = computed(() => {
 const formatPrice = computed(() => {
   return event.value.eventPrice === 0 ? 'Free' : `${event.value.eventPrice} €`
 })
-
 </script>

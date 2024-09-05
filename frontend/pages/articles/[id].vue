@@ -4,39 +4,62 @@
       <div v-if="article" class="max-w-4xl">
         <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>
         <div class="flex items-center mb-4">
-          <Avatar :src="article.userId?.avatar" alt="Author Image" class="w-10 h-10 rounded-full mr-4" />
+          <Avatar
+            :src="article.userId?.avatar"
+            alt="Author Image"
+            class="w-10 h-10 rounded-full mr-4"
+          />
           <div>
             <p class="font-semibold">{{ article.userId?.name }}</p>
-            <p class="text-sm text-gray-600">{{ formattedDate(article.date) }}</p>
+            <p class="text-sm text-gray-600">
+              {{ formattedDate(article.date) }}
+            </p>
           </div>
         </div>
-        <NuxtImg :src="article.coverImage" class="w-full h-64 object-cover mb-6 rounded-lg" alt="Article Image" />
+        <NuxtImg
+          :src="article.coverImage"
+          class="w-full h-64 object-cover mb-6 rounded-lg"
+          alt="Article Image"
+        />
         <div class="prose max-w-none" v-html="article.content"></div>
         <ArticleGallery />
       </div>
-      <div v-else class="text-center py-8">
-        Loading article...
-      </div>
+      <div v-else class="text-center py-8">Loading article...</div>
       <div class="flex gap-2 mt-6 mb-6">
-      <Button class="px-4">
-        <Share2 class="mr-2 h-4 w-4" />
-        Share
-      </Button>
-      <Button 
-        v-if="userStore.userData.role === 'admin'"
-        @click="editArticle"
-      >
-        <Pencil class="mr-2 h-4 w-4" />
-        Edit
-      </Button>
-      <Button 
-        v-if="userStore.userData.role === 'admin'" 
-        @click="deleteArticle"
-      >
-        <Trash class="mr-2 h-4 w-4" />
-        Delete
-      </Button>
-    </div>
+        <div class="bg-primary-gradient p-0.5 rounded-md">
+          <Button
+            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+          >
+            <Share2 class="mr-2 h-4 w-4" />
+            Share
+          </Button>
+        </div>
+        <div
+          v-if="userStore.userData.role === 'admin'"
+          class="bg-primary-gradient p-0.5 rounded-md"
+        >
+          <Button
+            @click="editArticle"
+            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+          >
+            <Pencil class="mr-2 h-4 w-4" />
+            Edit
+          </Button>
+        </div>
+        <div
+          v-if="userStore.userData.role === 'admin'"
+          class="bg-primary-gradient p-0.5 rounded-md"
+        >
+          <Button
+            v-if="userStore.userData.role === 'admin'"
+            @click="deleteArticle"
+            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+          >
+            <Trash class="mr-2 h-4 w-4" />
+            Delete
+          </Button>
+        </div>
+      </div>
     </div>
     <ArticleSidebar :articles="otherArticles" />
   </div>
@@ -54,14 +77,20 @@ const { article } = storeToRefs(articleStore)
 
 const articleId = route.params.id
 
-onMounted(async () => article.value = await articleStore.fetchArticleById(articleId))
+onMounted(
+  async () => (article.value = await articleStore.fetchArticleById(articleId))
+)
 
 const otherArticles = computed(() => {
-  return articleStore.articles.filter(a => a._id !== articleId)
+  return articleStore.articles.filter((a) => a._id !== articleId)
 })
 
 const formattedDate = (date) => {
-  return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+  return new Date(date).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 }
 
 const editArticle = () => {
@@ -70,13 +99,12 @@ const editArticle = () => {
 
 const deleteArticle = async () => {
   const result = await articleStore.deleteArticle(articleId)
-    if (result.success) {
-      console.log(result.message)
-      await articleStore.fetchArticles() 
-      router.push('/')
-    } else {
-      console.error(result.message)
-    }
+  if (result.success) {
+    console.log(result.message)
+    await articleStore.fetchArticles()
+    router.push('/')
+  } else {
+    console.error(result.message)
+  }
 }
-
 </script>
