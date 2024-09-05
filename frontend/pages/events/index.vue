@@ -3,7 +3,7 @@
     <Hero />
     <div class="w-2/3">
       <div class="flex items-center justify-between w-full px-4 mb-4">
-        <h2 class="text-3xl font-semibold text-primary">Events</h2>
+        <h2 class="text-3xl font-semibold text-primary">{{ $t('events') }}</h2>
         <div class="flex gap-4">
           <SearchInput v-model="searchQuery" />
           <Button @click="openFilterModal" class="text-sm px-3">
@@ -20,7 +20,7 @@
         />
       </div>
       <p v-if="filteredEvents.length === 0" class="text-gray-500 mt-4">
-        No se encontraron eventos.
+       {{ $t('notEventsFound')}}
       </p>
     </div>
   </div>
