@@ -45,7 +45,7 @@
       <EventGallery />
       <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
     </div>
-    <Button @click="publishEvent" class="mt-8">Publish</Button>
+    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">Publish</Button>
   </div>
 </template>
 

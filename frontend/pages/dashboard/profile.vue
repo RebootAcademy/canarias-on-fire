@@ -16,7 +16,7 @@
         <div class="mb-4">
           <Label class="block text-sm font-medium text-gray-300">Profile Image</Label>
           <Input type="file" @change="handleFileChange" accept="image/*" />
-          <Button type="button" @click="uploadImage" class="mt-2">Upload Image</Button>
+            <Button type="button" @click="uploadImage" class="mt-2 bg-black border-2 border-primary hover:bg-primary-gradient hover:border-1">Upload Image</Button>
         </div>
         <div class="mb-4">
           <Label class="block text-sm font-medium text-gray-300">Username</Label>
@@ -26,7 +26,7 @@
           <Label class="block text-sm font-medium text-gray-300">Email</Label>
           <Input class="mt-1 block w-full text-gray-500" v-model="formData.email"  />
         </div>
-        <Button type="submit" :disabled="isUpdating">
+        <Button type="submit" :disabled="isUpdating" class="mt-2 bg-black border-2 border-primary hover:bg-primary-gradient hover:border-1">
         {{ isUpdating ? 'Updating...' : 'Update profile' }}
         </Button>
       </form>
