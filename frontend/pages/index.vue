@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full bg-black w-full flex flex-col items-center">
+  <div class="h-full bg-black w-full !flex !flex-col gap-2 items-center">
     <Hero />
-    <div class="w-2/3">
+    <div class="sm:w-3/4 md:w-3/4 lg:w-2/3">
       <EventsCounter />
       <CategoriesFilter />
       <EventsHeader />

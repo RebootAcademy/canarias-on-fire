@@ -4,9 +4,11 @@
       <h2 class="text-xl font-semibold">Articles</h2>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />
-        <Button @click="openFilterModal" class="text-sm px-3">
-          {{ $t('filterBtn') }}
-        </Button>
+        <div class="bg-primary-gradient p-0.5 rounded-md">
+          <Button @click="openFilterModal" class="text-sm px-3 bg-black hover:text-white hover:bg-primary-gradient">
+            {{ $t('filterBtn') }}
+          </Button>
+        </div>
         <FilterModal />
       </div>
     </div>

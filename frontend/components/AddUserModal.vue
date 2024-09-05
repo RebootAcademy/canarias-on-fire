@@ -69,10 +69,13 @@
           </template>
         </div>
         <div class="flex justify-end gap-4 mt-6 z-10">
+         
           <Button type="button" variant="ghost" @click="closeModal" class="bg-gray"
             >Cancel</Button
           >
-          <Button type="submit" variant="outline">Accept</Button>
+          <div class="bg-primary-gradient p-0.5 rounded-md">
+            <Button type="submit" variant="ghost" class="text-white bg-black hover:bg-primary-gradient hover:text-white">Accept</Button>
+          </div>
         </div>
       </form>
     </div>

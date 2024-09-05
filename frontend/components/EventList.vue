@@ -1,11 +1,10 @@
 <template>
-  <div class="px-6 w-full">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <EventCard 
+  <div class="lg:px-6 w-full ">
+<div class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">      <EventCard 
         v-for="event in limitedEvents" 
         :key="event._id" 
         :event="event" 
-        class="w-full"
+        class="xs:w-[60%] sm:w-full"
       />
     </div>
     <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">No se encontraron eventos.</p>
