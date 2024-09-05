@@ -8,6 +8,8 @@ import eventEn from './locales/en/events.json'
 import eventEs from './locales/es/events.json'
 import validationEn from './locales/en/validation.json'
 import validationEs from './locales/es/validation.json'
+import articlesES from './locales/es/articles.json'
+import articlesEN from './locales/en/articles.json'
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -18,14 +20,16 @@ export default defineI18nConfig(() => ({
       ...categorySelectorEn,
       ...indexEn,
       ...eventEn,
-      ...validationEn
+      ...validationEn,
+      ...articlesEN
     },
     es: {
       ...navbarEs,
       ...categorySelectorEs,
       ...indexEs,
       ...eventEs,
-      ...validationEs
+      ...validationEs,
+      ...articlesES
     }
   }
 }))

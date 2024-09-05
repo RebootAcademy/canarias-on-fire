@@ -1,4 +1,5 @@
 {
+  "eventAdvice": "No se pierda los próximos acontecimientos más esperados",
   "createEvent": "Crear un nuevo evento",
   "preview": "Vista previa",
   "eventType": "Tipo de evento",
@@ -25,5 +26,6 @@
   "capacity": "Aforo",
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
   "location": "Introduce una ubicación",
-  "externalUrl": "Sitio web"
+  "externalUrl": "Sitio web",
+  "notEventsFound": "No se encontraron eventos."
 }

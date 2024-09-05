@@ -1,4 +1,5 @@
 {
+  "eventAdvice": "Don't miss the upcoming most anticipated events",
   "createEvent": "Create a new event",
   "preview": "Preview",
   "eventType": "Event type",
@@ -23,5 +24,6 @@
   "capacity": "Capacity",
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",
   "location": "Enter a location",
-  "externalUrl": "External site"
+  "externalUrl": "External site",
+  "notEventsFound": "Not events found."
 }

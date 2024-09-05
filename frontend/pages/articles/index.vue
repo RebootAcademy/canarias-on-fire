@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex items-center justify-between w-full px-4 mb-4">
-      <h2 class="text-xl font-semibold">Articles</h2>
+      <h2 class="text-xl font-semibold">{{ $t('articles')}}</h2>
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />
         <div class="bg-primary-gradient p-0.5 rounded-md">
@@ -21,7 +21,7 @@
       />
     </div>
     <p v-if="filteredArticles.length === 0" class="text-gray-500 mt-4">
-      No se encontraron artículos.
+      {{ $t('notArticlesFound') }}
     </p>
   </div>
 </template>

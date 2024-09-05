@@ -10,7 +10,7 @@
         />
       </div>
     </div>
-    <p v-if="articles.length === 0" class="text-gray-500 h-60">No se encontraron artículos.</p>
+    <p v-if="articles.length === 0" class="text-gray-500 h-60">{{ $t('notArticlesFound')}}</p>
   </div>
 </template>
 

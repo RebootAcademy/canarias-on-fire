@@ -12,11 +12,11 @@
       </a>
     </div>
     <div class="flex space-x-4 text-base">
-      <a href="/contact" class="hover:underline">Contact us</a>
-      <a href="/about" class="hover:underline">About Us</a>
-      <a href="/privacy-policy" class="hover:underline">Policy of privacy</a>
+      <a href="/contact" class="hover:underline">{{ $t('footer.contactUs') }}</a>
+      <a href="/about" class="hover:underline">{{ $t('footer.aboutUs') }}</a>
+      <a href="/privacy-policy" class="hover:underline">{{ $t('footer.privacy') }}</a>
     </div>
-    <div>Copyright © 2024 Canarias On Fire - All rights reserved</div>
+    <div>{{ $t('footer.copyright') }}</div>
   </div>
 </template>
 

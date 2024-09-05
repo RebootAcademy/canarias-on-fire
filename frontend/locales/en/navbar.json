@@ -1,6 +1,33 @@
 {
   "home": "Home",
-  "createEvent": "Create Event",
+  "createNewEvent": "Create Event",
   "login": "Log in",
-  "logout": "Log out"
+  "logout": "Log out",
+  "dashboard": "Dashboard",
+  "eventText": "Find the best plans on the islands with our website.",
+  "findEvents": {
+    "label": "Find events",
+    "subtext": "Search and discover events near you or in your area of interest."
+  },
+  "eventCreate": {
+    "label": "Create events",
+    "subtext": "Plan and organize your own events."
+  },
+  "myEvents": {
+    "label": "My events",
+    "subtext": "View and manage all the events you have created."
+  },
+
+  "findArticles": {
+    "label": "Find articles",
+    "subtext": "Search and discover articles near you or in your area of interest."
+  },
+  "createArticles": {
+    "label": "Create articles",
+    "subtext": "Create and share your own articles."
+  },
+  "manageArticles": {
+    "label": "Manage articles",
+    "subtext": "Manage your website's articles."
+  }
 }

@@ -2,5 +2,20 @@
   "counter": "Active events in Canary islands: ",
   "events": "Events",
   "eventsDesc": "Below you will see some of the most notable events.",
-  "filterBtn": "Filter" 
+  "filterBtn": "Filter",
+  "articles": "Articles",
+  "articlesDesc": "Below are some of the highlights.",
+  "titles": {
+    "featuresEvents": "Features events"
+  },
+  "footer": {
+    "copyright": "Copyright © 2020. All rights reserved.",
+    "contactUs": "Contact us",
+    "aboutUs": "About us",
+    "privacy": "Policy of privacy"
+  },
+
+  "buttons": {
+    "seeMore": "SEE MORE"
+  }
 }

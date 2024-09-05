@@ -1,6 +1,6 @@
-<template v-show="somePremium">
-  <h1 class="text-2xl text-primary font-semibold mt-4">Featured events</h1>
-  <p class="text-sm font-light opacity-70">Don't miss the upcoming most anticipated events</p>
+<template>
+  <h1 class="text-2xl text-primary font-semibold">{{  $t('titles.featuresEvents') }}</h1>
+  <p class="text-sm font-light opacity-70">{{  $t('eventAdvice') }}</p>
   <div class="relative w-full">
     <Carousel class="border-none shadow-none ">
       <CarouselContent>

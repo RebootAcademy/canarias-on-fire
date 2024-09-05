@@ -7,6 +7,7 @@
         class="xs:w-[60%] sm:w-full"
       />
     </div>
+
     <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">No se encontraron eventos.</p>
     <div v-if="limitedEvents.length > 9" class="mt-6 text-center">
       <NuxtLink to="/events">

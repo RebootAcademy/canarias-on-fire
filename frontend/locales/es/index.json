@@ -1,8 +1,20 @@
 {
   "counter": "Eventos activos en Canarias:",
   "events": "Eventos",
-  "eventsDesc": "A continuación, verás algunos de los eventos más destacados." ,
+  "eventsDesc": "A continuación, verás algunos de los eventos más destacados.",
   "filterBtn": "Filtrar",
   "articles": "Artículos",
-  "articlesDesc": "A continuación, verás algunos de los artículos más destacados."
+  "articlesDesc": "A continuación, verás algunos de los artículos más destacados.",
+  "titles": {
+    "featuresEvents": "Eventos destacados"
+  }, 
+  "footer": {
+    "copyright": "Copyright © 2020. Todos los derechos reservados.",
+    "contactUs": "Contáctanos",
+    "aboutUs": "Sobre nosotros",
+    "privacy": "Política de Privacidad"
+  },
+  "buttons": {
+    "seeMore": "VER MÁS"
+  }
 }
