@@ -16,21 +16,22 @@
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
     >
       <EventCard
-        v-for="event in filteredEvents"
+        v-for="event in limitedEvents"
         :key="event._id"
         :event="event"
       />
     </div>
-    <p v-if="filteredEvents.length === 0" class="text-gray-500 mt-4">
-      No se encontraron eventos.
-    </p>
+     <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">
+       {{ $t('notEventsFound')}}
+      </p>
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
-
 const eventStore = useEventStore()
+const paymentStore = usePaymentStore()
+
 const { filteredEvents } = storeToRefs(eventStore)
 
 definePageMeta({
@@ -49,5 +50,34 @@ const searchQuery = computed({
 const openFilterModal = () => {
   eventStore.setFilterModalOpen(true)
 }
+
+const limitedEvents = computed(() => {
+  return filteredEvents.value
+    .filter(event => event.status === 'published')
+    .sort((a, b) => {
+      const priorityA = getEventPriority(a)
+      const priorityB = getEventPriority(b)
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
+      }
+      
+      return compareDates(a.eventDate, b.eventDate)
+    })
+ 
+})
+
+function getEventPriority(event) {
+  const paymentId = event.type === 'event' ? event.payment._id : event.payment
+  const payment = paymentStore.getPaymentById(paymentId?._id)
+  return payment?.features?.readPriority
+}
+
+function compareDates(dateA, dateB) {
+  if (dateA.year !== dateB.year) return dateA.year - dateB.year
+  if (dateA.month !== dateB.month) return dateA.month - dateB.month
+  return dateA.day - dateB.day
+}
+
 
 </script>

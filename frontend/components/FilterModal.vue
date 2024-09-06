@@ -1,8 +1,8 @@
 <template>
   <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg p-6 w-11/12 max-w-2xl">
+    <div class="bg-black border-2 rounded-lg p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">ADD FILTER</h2>
+        <h2 class="w-full text-xl font-semibold text-center ">FILTERS</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
           <span class="text-2xl">&times;</span>
         </button>
@@ -12,7 +12,7 @@
         <p class="text-sm text-gray-500 mb-2">Select the island or islands you want to filter events by from the list below.</p>
         <div class="grid grid-cols-3 gap-2 mb-4">
           <label v-for="island in islands" :key="island" class="flex items-center">
-            <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2">
+            <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2 accent-primary">
             {{ island }}
           </label>
         </div>
@@ -24,20 +24,24 @@
         </div>
         <h3 class="font-semibold">Categories</h3>
         <p class="text-sm text-gray-500 mb-2">Select up to 3 categories to find events that match your interests.</p>
-        <div class="grid grid-cols-3 gap-2 mb-4">
+        <div class="flex flex-wrap justify-center gap-2 mb-4">
           <Button
             v-for="category in eventStore.categories"
             :key="category.id"
             @click="toggleCategory(category)"
             :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
-            class="text-xs"
+            class="text-xs rounded-lg bg-gray border-0 hover:bg-orange-900 hover:text-white "
+            :class="selectedCategories.includes(category.id) ? 'bg-primary text-white' : ''"
           >
             {{ category.name }}
           </Button>
         </div>
         <div class="flex justify-end gap-4 mt-4">
-          <Button @click="resetFilters" variant="outline">Reset</Button>
-          <Button @click="applyFilters">Apply</Button>
+          <Button @click="resetFilters" variant="ghost" class="bg-gray">Reset</Button>
+          <CustomBtn 
+            title="Apply"
+            @click="applyFilters"
+          />
         </div>
       </div>
     </div>
@@ -46,6 +50,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import CustomBtn from './CustomBtn.vue'
 
 const eventStore = useEventStore()
 const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)

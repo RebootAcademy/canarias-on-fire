@@ -25,5 +25,11 @@
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",
   "location": "Enter a location",
   "externalUrl": "External site",
-  "notEventsFound": "Not events found."
+  "notEventsFound": "Not events found.",
+  "dateFilters": {
+     "all": "All",
+    "today": "Today",
+    "weekend": "This weekend",
+    "month": "This month"
+  }
 }

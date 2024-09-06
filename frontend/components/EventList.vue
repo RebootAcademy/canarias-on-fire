@@ -7,12 +7,11 @@
         class="xs:w-[60%] sm:w-full"
       />
     </div>
-
-    <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">No se encontraron eventos.</p>
-    <div v-if="limitedEvents.length > 9" class="mt-6 text-center">
+    <p v-if="limitedEvents?.length === 0" class="text-gray-500 mt-4">{{ $t('notEventsFound')}}</p>
+    <div v-if="limitedEvents?.length > 9" class="mt-6 text-center">
       <NuxtLink to="/events">
         <Button variant="outline">
-          Ver todos los eventos
+          {{ $t('seeMore')}}
         </Button>
       </NuxtLink>
     </div>  
@@ -21,14 +20,20 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-const { filteredEvents } = storeToRefs(eventStore)
+const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
+
+const eventsByDate = computed(() => {
+  return filteredEventsByDate?.value(filteredEvents?.value)
+}) 
 
 const limitedEvents = computed(() => {
-  return filteredEvents.value
-    .filter(event => event.status === 'published')
+  if (!eventsByDate.value) {
+    return [];
+  }
+  return eventsByDate.value
+    ?.filter(event => event.status === 'published')
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
@@ -36,11 +41,10 @@ const limitedEvents = computed(() => {
       if (priorityA !== priorityB) {
         return priorityA - priorityB
       }
-      
       return compareDates(a.eventDate, b.eventDate)
     })
     .slice(0, 9)
-})
+});
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment._id : event.payment
