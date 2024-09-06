@@ -5,9 +5,14 @@
   "filterBtn": "Filtrar",
   "articles": "Artículos",
   "articlesDesc": "A continuación, verás algunos de los artículos más destacados.",
+  "bands": "Bandas Musicales",
+  "restaurant": "Restaurantes",
+  "explore": "Explora",
+  "pricing": "Precios",
+  "help": "Ayuda",
   "titles": {
     "featuresEvents": "Eventos destacados"
-  }, 
+  },
   "footer": {
     "copyright": "Copyright © 2020. Todos los derechos reservados.",
     "contactUs": "Contáctanos",
