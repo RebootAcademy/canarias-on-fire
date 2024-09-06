@@ -9,6 +9,7 @@ export const useEventStore = defineStore('eventStore', {
     },
     categories: [],
     selectedCategories: [],
+    selectedFilterByDate: 'all',
     searchQuery: '',
     eventName: '',
     eventType: '',
@@ -17,7 +18,7 @@ export const useEventStore = defineStore('eventStore', {
       address: '',
       coordinates: { lat: null, lng: null },
       postalCode: '',
-      mapImageUrl: ''
+      mapImageUrl: '',
     },
     eventPrice: 0,
     isFree: false,
@@ -40,24 +41,26 @@ export const useEventStore = defineStore('eventStore', {
       date: null,
       startTime: null,
       endTime: null,
-      categories: []
+      categories: [],
     },
     userEvents: [],
     userId: null,
     payment: {},
   }),
-  
-  actions: {    
+
+  actions: {
     updateState(key, value) {
       this[key] = value
     },
 
     removeEvent(eventId) {
-      this.events = this.events.filter(event => event._id !== eventId)
-    }, 
+      this.events = this.events.filter((event) => event._id !== eventId)
+    },
 
     toggleCategory(category) {
-      const index = this.selectedCategories.findIndex(c => c.id === category.id)
+      const index = this.selectedCategories.findIndex(
+        (c) => c.id === category.id
+      )
       if (index === -1) {
         this.selectedCategories.push(category)
       } else {
@@ -69,7 +72,9 @@ export const useEventStore = defineStore('eventStore', {
       this.eventImages.push(image)
     },
     removeEventImage(imageUrl) {
-      this.eventImages = this.eventImages.filter(image => image.url !== imageUrl)
+      this.eventImages = this.eventImages.filter(
+        (image) => image.url !== imageUrl
+      )
     },
     setCoverImage(imageUrl) {
       this.coverImage = imageUrl
@@ -81,16 +86,19 @@ export const useEventStore = defineStore('eventStore', {
         address: formatted_address,
         coordinates: {
           lat: geometry.location.lat(),
-          lng: geometry.location.lng()
+          lng: geometry.location.lng(),
         },
         postalCode: this.extractPostalCode(address_components),
-        mapImageUrl: this.generateMapImageUrl(geometry.location.lat(), geometry.location.lng())
+        mapImageUrl: this.generateMapImageUrl(
+          geometry.location.lat(),
+          geometry.location.lng()
+        ),
       }
       this.externalUrl = website
     },
 
     extractPostalCode(addressComponents) {
-      const postalCodeComponent = addressComponents.find(component => 
+      const postalCodeComponent = addressComponents.find((component) =>
         component.types.includes('postal_code')
       )
       return postalCodeComponent ? postalCodeComponent.long_name : ''
@@ -119,14 +127,16 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     setFilters(newFilters) {
-      this.filters = { 
-        ...this.filters, 
+      this.filters = {
+        ...this.filters,
         ...newFilters,
-        date: newFilters.date ? {
-          day: newFilters.date.getDate(),
-          month: newFilters.date.getMonth() + 1,
-          year: newFilters.date.getFullYear()
-        } : null
+        date: newFilters.date
+          ? {
+              day: newFilters.date.getDate(),
+              month: newFilters.date.getMonth() + 1,
+              year: newFilters.date.getFullYear(),
+            }
+          : null,
       }
     },
 
@@ -138,6 +148,10 @@ export const useEventStore = defineStore('eventStore', {
       this.payment = payment
     },
 
+    setSelectedFilterByDate(date) {
+      this.selectedFilterByDate = date
+    },
+
     resetFilters() {
       this.selectedCategory = null
       this.searchQuery = ''
@@ -145,14 +159,14 @@ export const useEventStore = defineStore('eventStore', {
         islands: [],
         date: null,
         startTime: null,
-        categories: []
+        categories: [],
       }
       this.eventDate = null
     },
 
     async fetchEvents() {
       const { data, error } = await useFetch('/events', {
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
@@ -166,7 +180,7 @@ export const useEventStore = defineStore('eventStore', {
 
     async fetchEventById(id) {
       const { data, error } = await useFetch(`/events/${id}`, {
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
@@ -180,7 +194,7 @@ export const useEventStore = defineStore('eventStore', {
 
     async fetchUserEvents(userId) {
       const { data, error } = await useFetch(`/events/user/${userId}`, {
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
@@ -203,18 +217,21 @@ export const useEventStore = defineStore('eventStore', {
         const apiUrl = `${config.public.apiBaseUrl}/categories`
         const response = await fetch(apiUrl)
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`)
 
         const data = await response.json()
 
         if (data.success && Array.isArray(data.result)) {
-          this.categories = data.result.map(category => ({
+          this.categories = data.result.map((category) => ({
             id: category._id,
             name: category.name,
-            icon: category.icon
+            icon: category.icon,
           }))
         } else {
-          throw new Error('Unexpected data structure or request was not successful')
+          throw new Error(
+            'Unexpected data structure or request was not successful'
+          )
         }
       } catch (error) {
         this.categoriesError = error
@@ -223,7 +240,7 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async createEvent () {
+    async createEvent() {
       try {
         const eventData = this.getEventData()
 
@@ -235,9 +252,9 @@ export const useEventStore = defineStore('eventStore', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`
+            Authorization: `Bearer ${this.token}`,
           },
-          body: JSON.stringify(eventData)
+          body: JSON.stringify(eventData),
         })
 
         if (data.value?.success) {
@@ -259,11 +276,14 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(url, {
         method,
         body: eventData,
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
-        console.error(`Error ${isNew ? 'creating' : 'updating'} event:`, error.value)
+        console.error(
+          `Error ${isNew ? 'creating' : 'updating'} event:`,
+          error.value
+        )
         return { error: error.value }
       }
 
@@ -283,7 +303,7 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(`/events/${eventId}`, {
         method: 'PATCH',
         body: { status },
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
@@ -295,7 +315,9 @@ export const useEventStore = defineStore('eventStore', {
         this.event = data.value.result
         return { data: this.event }
       } else {
-        const customError = new Error(data.value?.error || 'Failed to update event status')
+        const customError = new Error(
+          data.value?.error || 'Failed to update event status'
+        )
         console.error('Error updating event status:', customError)
         return { error: customError }
       }
@@ -304,7 +326,7 @@ export const useEventStore = defineStore('eventStore', {
     async deleteEvent(id) {
       const { error } = await useFetch(`/events/${id}`, {
         method: 'DELETE',
-        baseURL: useRuntimeConfig().public.apiBaseUrl
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
       })
 
       if (error.value) {
@@ -312,10 +334,10 @@ export const useEventStore = defineStore('eventStore', {
         return { error: error.value }
       }
 
-      this.events = this.events.filter(event => event._id !== id)
+      this.events = this.events.filter((event) => event._id !== id)
       return { success: true }
     },
-    
+
     getEventData() {
       return {
         eventName: this.eventName,
@@ -331,47 +353,64 @@ export const useEventStore = defineStore('eventStore', {
         externalUrl: this.externalUrl,
         eventImages: this.eventImages,
         coverImage: this.coverImage,
-        categories: this.selectedCategories.map(cat => typeof cat === 'object' ? cat.id : cat),
+        categories: this.selectedCategories.map((cat) =>
+          typeof cat === 'object' ? cat.id : cat
+        ),
         status: this.status,
         userId: this.userId,
-        payment: this.payment
+        payment: this.payment,
       }
     },
 
     normalizeCategories() {
-      this.selectedCategories = this.selectedCategories.map(cat => 
-        typeof cat === 'object' ? cat : this.getCategoryById(cat)
-      ).filter(Boolean) // Remove any undefined categories
+      this.selectedCategories = this.selectedCategories
+        .map((cat) =>
+          typeof cat === 'object' ? cat : this.getCategoryById(cat)
+        )
+        .filter(Boolean) // Remove any undefined categories
     },
 
+    isSameDay(date1, date2) {
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+      )
+    },
   },
 
   getters: {
     filteredEvents() {
       if (!this.events) return []
 
-      return this.events.filter(event => {
+      return this.events.filter((event) => {
         // Search
         if (this.searchQuery) {
           const lowercaseQuery = this.searchQuery.toLowerCase()
-          if (!event.eventName.toLowerCase().includes(lowercaseQuery) &&
-              !event.eventDescription.toLowerCase().includes(lowercaseQuery)) {
+          if (
+            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          ) {
             return false
           }
         }
         // Filter by Categories
         if (this.filters.categories.length > 0) {
-          const eventCategoryIds = event.categories.map(cat => cat._id)
-          if (!this.filters.categories.some(id => eventCategoryIds.includes(id))) {
+          const eventCategoryIds = event.categories.map((cat) => cat._id)
+          if (
+            !this.filters.categories.some((id) => eventCategoryIds.includes(id))
+          ) {
             return false
           }
         }
 
         // Filtrar por categorías seleccionadas
         if (this.selectedCategories.length > 0) {
-          const eventCategoryIds = event.categories.map(c => c._id)          
-          const hasMatchingCategory = this.selectedCategories.some(sc => eventCategoryIds.includes(sc.id))
-          
+          const eventCategoryIds = event.categories.map((c) => c._id)
+          const hasMatchingCategory = this.selectedCategories.some((sc) =>
+            eventCategoryIds.includes(sc.id)
+          )
+
           if (!hasMatchingCategory) {
             return false
           }
@@ -379,7 +418,9 @@ export const useEventStore = defineStore('eventStore', {
 
         // Filter by islands
         if (this.filters.islands.length > 0) {
-          const eventIsland = getIslandFromPostalCode(event.eventLocation.postalCode)
+          const eventIsland = getIslandFromPostalCode(
+            event.eventLocation.postalCode
+          )
           if (!this.filters.islands.includes(eventIsland)) {
             return false
           }
@@ -389,24 +430,49 @@ export const useEventStore = defineStore('eventStore', {
         if (this.filters.date) {
           const filterDate = this.filters.date
           const eventDate = event.eventDate
-          if (!eventDate || 
-              eventDate.year !== filterDate.year || 
-              eventDate.month !== filterDate.month || 
-              eventDate.day !== filterDate.day) {
+          if (
+            !eventDate ||
+            eventDate.year !== filterDate.year ||
+            eventDate.month !== filterDate.month ||
+            eventDate.day !== filterDate.day
+          ) {
             return false
           }
         }
 
         return true
-        })
-      }
+      })
     },
-
     eventsCount() {
       return this.events.length
     },
-
+  
     getCategoryById: (state) => (id) => {
-      return state.categories.find(category => category.id === id || category._id === id)
-    }
+      return state.categories.find(
+        (category) => category.id === id || category._id === id
+      )
+    },
+  
+    filteredEventsByDate: (state) => (array) => {
+      return array.filter((event) => {
+        const eventDate = new Date(
+          event.eventDate.year,
+          event.eventDate.month - 1,
+          event.eventDate.day
+        )  
+        switch (state.selectedFilterByDate) {
+          case 'all':
+            return true // Devuelve todos los eventos
+          case 'today':
+            return state.isSameDay(eventDate, new Date()) // Comparar con la fecha de hoy
+          case 'weekend':
+            return eventDate.getDay() === 6 || eventDate.getDay() === 0 // Filtro por fin de semana
+          case 'month':
+            return eventDate.getMonth() === new Date().getMonth() // Filtro por mes actual
+          default:
+            return true
+        }
+      })
+    },
+  },
 })

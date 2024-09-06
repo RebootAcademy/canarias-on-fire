@@ -4,11 +4,16 @@
       v-for="category in categories"
       :key="category.id"
       class="flex flex-col items-center cursor-pointer p-2.5 rounded-lg transition-colors duration-300"
-      :class="{ 'bg-gray-200': isSelected(category) }"
+      :class="{ 'text-primary': isSelected(category) }"
       @click="toggleCategory(category)"
     >
-      <component :is="getIcon(category.icon)" class="w-6 h-6" />
-      <span class="mt-1.5 text-xs">{{ $t(`values.${category.name}`) }}</span>
+      <div 
+        class="ring-1 p-6 rounded-full ring-gray mb-2"
+        :class="{ 'ring-[rgb(247,145,29)]': isSelected(category) }"
+      >
+        <component :is="getIcon(category.icon)" class="w-6 h-6 " />
+      </div>
+      <span class="mt-1.5 text-xs text-white font-bold">{{ $t(`values.${category.name}`) }}</span>
     </div>
   </div>
 </template>

@@ -27,5 +27,11 @@
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
   "location": "Introduce una ubicación",
   "externalUrl": "Sitio web",
-  "notEventsFound": "No se encontraron eventos."
+  "notEventsFound": "No se encontraron eventos.",
+  "dateFilters": {
+    "all": "Todos",
+    "today": "Hoy",
+    "weekend": "Esta semana",
+    "month": "Este mes"
+  }
 }
