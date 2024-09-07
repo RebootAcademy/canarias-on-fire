@@ -7,14 +7,55 @@
   "articlesDesc": "A continuación, verás algunos de los artículos más destacados.",
   "titles": {
     "featuresEvents": "Eventos destacados"
-  }, 
+  },
   "footer": {
     "copyright": "Copyright © 2020. Todos los derechos reservados.",
     "contactUs": "Contáctanos",
     "aboutUs": "Sobre nosotros",
     "privacy": "Política de Privacidad"
   },
+  "onBoarding": {
+    "step1": "PASO 1 de 2: Selecciona tu rol",
+    "step1Description": " Para empezar, seleccione la función que mejor le describa. Esta elección nos permitirá personalizar su experiencia y solicitar la información específica que necesitamos para crear su cuenta.",
+    "step1Company": "Soy una compañía",
+    "step1CompanyDescription": "Promocione su marca, comparta sus productos y muestre sus novedades.",
+    "step1MusicBand": "Soy una grupo de música",
+    "step1MusicBandDescription": "Promocione su música, llegue a un público más amplio y gestione la logística de sus eventos.",
+    "step2Band": "PASO 2 de 2: Introduzca los datos de su grupo",
+    "step2Company": "PASO 2 de 2: Introduzca los datos de su empresa",
+    "step2BandDescription": "Rellene el siguiente formulario con los datos de su grupo para terminar de configurar su cuenta.",
+    "step2CompanyDescription": "Rellene el siguiente formulario con los datos de su empresa para terminar de configurar su cuenta.",
+    "step2BandName": "Nombre del grupo",
+    "step2Genres": {
+      "label": "Géneros",
+      "rock": "Rock",
+      "pop": "Pop",
+      "jazz": "Jazz",
+      "electronic": "Electrónica",
+      "hiphop": "Hip Hop",
+      "other": "Other"
+    },
+    "step2BandMembers": "Integrantes del grupo",
+    "step2Bio": "Bio",
+    "step2CompanyName": "Nombre de la Compañía",
+    "step2Email": "Correo de contacto",
+    "step2Phone": "Teléfono",
+    "step2Address": "Dirección",
+    "step2Sector": {
+      "label": "Sector",
+      "placeholder": "Selecciona el sector",
+      "services": "Servicios",
+      "restoration": "Restauración",
+      "nigthlife": "Ocio nocturno",
+      "activities": "Actividades"
+    },
+    "step2CodRef": "Código de vendedor",
+    "step2TermsPart1": "Acepto los  ",
+    "step2TermsPart2": "términos y condiciones"
+  },
   "buttons": {
-    "seeMore": "VER MÁS"
+    "seeMore": "VER MÁS",
+    "continue": "CONTINUAR",
+    "completeReg": "COMPLETAR REGISTRO"
   }
 }

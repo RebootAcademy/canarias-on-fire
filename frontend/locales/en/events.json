@@ -27,7 +27,7 @@
   "externalUrl": "External site",
   "notEventsFound": "Not events found.",
   "dateFilters": {
-     "all": "All",
+    "all": "All",
     "today": "Today",
     "weekend": "This weekend",
     "month": "This month"

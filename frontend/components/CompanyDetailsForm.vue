@@ -2,11 +2,11 @@
   <div class="flex flex-col w-full items-center p-6">
     <div class="flex flex-col w-full items-start">
       <div class="flex items-center justify-start ">
-          <ArrowLeft size="24" @click="$emit('back')" class="text-yellow-500 cursor-pointer mr-2"/>
-        <h1 class="text-2xl font-bold text-primary">STEP 2 of 2: Enter Your Company Details</h1>
+        <ArrowLeft size="24" @click="$emit('back')" class="text-yellow-500 cursor-pointer mr-2"/>
+        <h1 class="text-2xl font-bold text-primary">{{ $t('onBoarding.step2Company')}}</h1>
       </div>
       <p class="text-gray-400 mb-8">
-        Please complete the form below with your company's details to finish setting up your account.
+        {{ $t('onBoarding.step2CompanyDescription') }}
       </p>
 
     </div>
@@ -16,8 +16,10 @@
     <ImageUploader />
     <form @submit.prevent="submitForm">
       <div class="mb-4">
-        <Label class="text-gray-300"
-          >Company Name <span class="text-primary">*</span></Label
+        <Label class="text-gray-300">
+          {{ $t('onBoarding.step2CompanyName')}}
+          <span class="text-primary">*</span>
+        </Label
         >
         <Input
           id="companyName"
@@ -27,7 +29,7 @@
       </div>
       <div class="mb-4">
         <Label class="text-gray-300"
-          >Company Email <span class="text-primary">*</span></Label
+          >{{ $t('onBoarding.step2Email')}} <span class="text-primary">*</span></Label
         >
         <Input
           id="companyEmail"
@@ -36,37 +38,41 @@
         />
       </div>
       <div class="mb-4">
-        <Label class="text-gray-300"
-          >Phone <span class="text-primary">*</span></Label
-        >
+        <Label class="text-gray-300">
+          {{ $t('onBoarding.step2Phone')}} 
+          <span class="text-primary">*</span>
+          </Label>
         <Input id="phone" v-model="formData.phone" class="text-gray-500" />
       </div>
       <div class="mb-4">
-        <Label class="text-gray-300"
-          >Address <span class="text-primary">*</span></Label
-        >
+        <Label class="text-gray-300">
+          {{ $t('onBoarding.step2Address')}} 
+          <span class="text-primary">*</span>
+        </Label>
         <Input id="address" v-model="formData.address" class="text-gray-500" />
       </div>
       <div class="mb-4">
-        <Label class="text-gray-300"
-          >Sector <span class="text-primary">*</span></Label
-        >
+        <Label class="text-gray-300">
+          {{ $t('onBoarding.step2Sector.label')}}
+          <span class="text-primary">*</span>
+        </Label>
         <Select v-model="formData.sector">
           <SelectTrigger>
-            <SelectValue placeholder="Select sector" class="text-gray-500" />
+            <SelectValue :placeholder="$t('onBoarding.step2Sector.placeholder')" class="text-gray-500" />
           </SelectTrigger>
           <SelectContent class="text-gray-500">
-            <SelectItem value="restoration">Restoration</SelectItem>
-            <SelectItem value="services">Services</SelectItem>
-            <SelectItem value="nightlife">Nightlife</SelectItem>
-            <SelectItem value="activities">Activities</SelectItem>
+            <SelectItem value="restoration">{{ $t('onBoarding.step2Sector.restoration')}}</SelectItem>
+            <SelectItem value="services">{{ $t('onBoarding.step2Sector.services')}}</SelectItem>
+            <SelectItem value="nightlife">{{ $t('onBoarding.step2Sector.nigthlife')}}</SelectItem>
+            <SelectItem value="activities">{{ $t('onBoarding.step2Sector.activities')}}</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div class="mb-4">
-        <Label class="text-gray-300"
-          >Código de vendedor <span class="text-primary">*</span></Label
-        >
+        <Label class="text-gray-300">
+          {{ $t('onBoarding.step2CodRef')}}
+          <span class="text-primary">*</span>
+        </Label>
         <Input id="phone" v-model="formData.refCode" class="text-gray-500" />
       </div>
       <div class="flex items-center mb-4 ">
@@ -78,7 +84,7 @@
           class="h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-600 rounded"
         />
         <label for="terms" class="ml-2 block text-sm text-gray-400">
-          I accept the <a href="#" class="text-yellow-500">terms and conditions</a>
+          {{ $t('onBoarding.step2TermsPart1') }} <a href="#" class="text-yellow-500">{{ $t('onBoarding.step2TermsPart2') }}</a>
         </label>
       </div>
       
@@ -94,7 +100,7 @@
           @click="submitForm"
           class="w-full bg-black text-white px-4 py-2 rounded-full font-semibold  transition duration-300 hover:bg-primary-gradient hover:text-white"
         >
-          COMPLETE REGISTRATION
+          {{ $t('buttons.completeReg')}}
         </button>
       </div>
 

@@ -14,8 +14,9 @@
     <div class="flex gap-4 lg:w-2/3">
       <Input 
         type="file"
-        class="text-white  "
+        class="text-white cursor-pointer "
         @change="handleFileChange"
+        placeholder="Select an image"
       />
       <Button @click.prevent="uploadImage" class="text-xs px-4 bg-primary-gradient">
         {{ $t('uploadImage') }}
