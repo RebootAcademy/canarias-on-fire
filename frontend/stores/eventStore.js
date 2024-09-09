@@ -45,7 +45,7 @@ export const useEventStore = defineStore('eventStore', {
     },
     userEvents: [],
     userId: null,
-    payment: {},
+    payment: null,
   }),
 
   actions: {
