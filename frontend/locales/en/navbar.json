@@ -29,5 +29,21 @@
   "manageArticles": {
     "label": "Manage articles",
     "subtext": "Manage your website's articles."
+  },
+  "findMusic": {
+    "label": "Find music bands",
+    "subtext": "Search and discover band music near you or in your area of interest."
+  },
+  "findRestaurants": {
+    "label": "Find restaurants",
+    "subtext": "Search and discover restaurants near you or in your area of interest."
+  },
+  "helping": {
+    "label": "Find help",
+    "subtext": "Frequently Asked Questions"
+  },
+  "princingNav": {
+    "label": "Princing",
+    "subtext": "Plan Pricing"
   }
 }

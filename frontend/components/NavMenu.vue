@@ -2,56 +2,118 @@
   <NavigationMenu>
     <NavigationMenuList>
       <NavigationMenuItem>
-        <NavigationMenuTrigger class="bg-transparent text-white">
-          {{ $t('events') }}
+        <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white  active:text-primary after:bg-transparent before:bg-orange-600">
+          {{ $t('explore') }}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul class="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
-            <li class="row-span-3 flex flex-col justify-end px-2 py-3">
-              <img src="https://www.radix-vue.com/logo.svg" class="h-6 w-6">
-              <div class="mb-2 mt-4 text-lg font-medium">
-                {{ $t('events') }}
-              </div>
-              <p class="text-sm leading-tight text-muted-foreground">
-                {{ $t('eventText') }}
-              </p>
-            </li>
+          <ul class="grid gap-3 p-6 bg-[#1C1F1F] border-1 border-white text-primary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
             <li>
+              <div class="mb-2 text-lg font-medium text-white">
+                 {{ $t('events') }}
+               </div>
               <NavigationMenuLink as-child>
                 <NuxtLink
                   to="/events"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
-                  <div class="text-sm font-medium leading-none">{{ $t('findEvents.label')}} </div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                  <div class="text-sm font-medium leading-none ">
+                    {{ $t('findEvents.label')}} 
+                  </div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
                     {{ $t('findEvents.subtext')}}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+              <NavigationMenuLink as-child >
+                <button
+                  @click="checkLogin"
+                  variant="ghost"
+                  class="text-left block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none ">{{  $t('eventCreate.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground  text-white">
+                    {{  $t('eventCreate.subtext') }}
+                  </p>
+                </button>
+              </NavigationMenuLink>
+              <NavigationMenuLink as-child v-show="isLogged">
+                <NuxtLink
+                  to="/dashboard/events"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary  focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none">{{ $t('myEvents.label')}}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{ $t('myEvents.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
             </li>
             <li>
-              <NavigationMenuLink as-child>
-                <button
-                  @click="checkLogin"
-                  variant="ghost"
-                  class="text-left block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                >
-                  <div class="text-sm font-medium leading-none">{{  $t('eventCreate.label') }}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {{  $t('eventCreate.subtext') }}
-                  </p>
-                </button>
-              </NavigationMenuLink>
-            </li>
-            <li v-show="isLogged">
+              <div class="mb-2 text-lg font-medium text-white">
+                 {{ $t('articles') }}
+               </div>
               <NavigationMenuLink as-child>
                 <NuxtLink
-                  to="/dashboard/events"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  to="/articles"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
-                  <div class="text-sm font-medium leading-none">{{ $t('myEvents.label')}}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {{ $t('myEvents.subtext') }}
+                  <div class="text-sm font-medium leading-none">{{  $t('findArticles.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{  $t('findArticles.subtext') }}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+              <NavigationMenuLink as-child v-show="isAdmin">
+                <NuxtLink
+                  to="/articles/create"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none">{{ $t('createArticles.label')}}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                   {{ $t('createArticles.subtext') }}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+              <NavigationMenuLink as-child v-show="isAdmin">
+                <NuxtLink
+                  to="/dashboard/articles"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none"> {{  $t('manageArticles.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{ $t('manageArticles.subtext') }}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+            </li>
+            <li>
+               <div class="mb-2 text-lg font-medium text-white">
+                 {{ $t('bands') }}
+               </div>
+               <NavigationMenuLink as-child >
+                <NuxtLink
+                  to="/dashboard/articles"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none"> {{  $t('findMusic.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{ $t('findMusic.subtext') }}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+            </li>
+            <li>
+               <div class="mb-2 text-lg font-medium text-white">
+                 {{ $t('restaurant') }}
+               </div>
+               <NavigationMenuLink as-child >
+                <NuxtLink
+                  to="/dashboard/articles"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none"> {{  $t('findRestaurants.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{ $t('findRestaurants.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
@@ -60,47 +122,44 @@
         </NavigationMenuContent>
       </NavigationMenuItem>
       
-      <NavigationMenuItem>
-        <NavigationMenuTrigger class="bg-transparent text-white">
-          {{ $t('articles') }}
+      <NavigationMenuItem >
+        <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white before:bg-orange-600">
+          {{ $t('help') }}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul class="flex gap-3 p-4 w-96">
+          <ul class="grid gap-3 p-6 bg-[#1C1F1F] border-1 border-white text-primary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
             <li>
               <NavigationMenuLink as-child>
                 <NuxtLink
-                  to="/articles"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  to="/help"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
-                  <div class="text-sm font-medium leading-none">{{  $t('findArticles.label') }}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {{  $t('findArticles.subtext') }}
+                  <div class="text-sm font-medium leading-none">{{  $t('helping.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{  $t('helping.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
             </li>
-            <li v-show="isAdmin">
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+
+      <NavigationMenuItem >
+        <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white before:bg-orange-600">
+          {{ $t('pricing') }}
+        </NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <ul class="grid gap-3 p-6 bg-[#1C1F1F] border-1 border-white text-primary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
+            <li>
               <NavigationMenuLink as-child>
                 <NuxtLink
-                  to="/articles/create"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  to="/pricing"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
-                  <div class="text-sm font-medium leading-none">{{ $t('createArticles.label')}}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                   {{ $t('createArticles.subtext') }}
-                  </p>
-                </NuxtLink>
-              </NavigationMenuLink>
-            </li>
-            <li v-show="isAdmin">
-              <NavigationMenuLink as-child>
-                <NuxtLink
-                  to="/dashboard/articles"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                >
-                  <div class="text-sm font-medium leading-none"> {{  $t('manageArticles.label') }}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {{ $t('manageArticles.subtext') }}
+                  <div class="text-sm font-medium leading-none">{{  $t('princingNav.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
+                    {{  $t('princingNav.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
@@ -109,15 +168,17 @@
         </NavigationMenuContent>
       </NavigationMenuItem>
     </NavigationMenuList>
-  </NavigationMenu>
+  </NavigationMenu> 
+
 </template>
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 const userStore = useUserStore()
-
 const auth0 = ref(null)
 const route = useRouter()
+const isAdmin = userStore.userData?.role === 'admin'
+const isLogged = userStore.isAuthenticated
 
 auth0.value = useAuth0()
 
@@ -130,7 +191,10 @@ const checkLogin = async () => {
     route.push('/events/create')
   }
 }
-
-const isAdmin = userStore.userData?.role === 'admin'
-const isLogged = userStore.isAuthenticated
 </script>
+
+<style scoped>
+button[data-state="open"] {
+  background-color: rgba(125, 125, 125, 0.20); 
+}
+</style>

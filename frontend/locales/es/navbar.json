@@ -28,5 +28,13 @@
   "manageArticles": {
     "label": "Gestionar artículos",
     "subtext": "Gestione los artículos de su sitio web."
+  },
+  "findMusic":{
+    "label": "Encontrar bandas musicalees",
+    "subtext": "Busque y descubra bandas de su interés."
+  },
+  "findRestaurantes":{
+    "label": "Encontrar restaurantes",
+    "subtext": "Busque y descubra restaurantes de su interés."
   }
 }

@@ -5,6 +5,11 @@
   "filterBtn": "Filter",
   "articles": "Articles",
   "articlesDesc": "Below are some of the highlights.",
+  "bands": "Bands",
+  "restaurant": "Restaurants",
+  "explore": "Explore",
+  "pricing": "Princing",
+  "help": "Help",
   "titles": {
     "featuresEvents": "Features events"
   },

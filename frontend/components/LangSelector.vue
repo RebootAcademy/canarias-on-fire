@@ -2,7 +2,7 @@
   <NavigationMenu>
     <NavigationMenuList>
       <NavigationMenuItem>
-        <NavigationMenuTrigger class="bg-transparent text-white hover:bg-black">
+        <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray active:bg-transparent focus:bg-transparent">
           <NuxtLink 
             :to="switchLocalePath(currentLocale)"
             class="flex items-center bg-transparent text-white px-3 py-2 rounded-md"
@@ -11,7 +11,7 @@
             {{ currentLocale.toUpperCase() }}
           </NuxtLink>
         </NavigationMenuTrigger>
-        <NavigationMenuContent class="bg-white text-black">
+        <NavigationMenuContent class="bg-[#1C1F1F]  text-white">
           <ul class="p-2">
             <li v-for="lang in languages" :key="lang.code">
               <NavigationMenuLink as-child>
@@ -59,3 +59,9 @@ watchEffect(() => {
   currentLocale.value = locale.value
 })
 </script>
+
+<style scoped>
+button[data-state="open"] {
+  background-color: rgba(125, 125, 125, 0.20); 
+}
+</style>
