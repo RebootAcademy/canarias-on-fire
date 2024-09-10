@@ -79,6 +79,9 @@ export const useEventStore = defineStore('eventStore', {
     setCoverImage(imageUrl) {
       this.coverImage = imageUrl
     },
+    setEventDate(dateRange) {
+      this.eventDate = dateRange
+    },
 
     setPlaceDetails(place) {
       const { formatted_address, geometry, address_components, website } = place

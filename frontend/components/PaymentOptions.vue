@@ -1,25 +1,27 @@
 <template>
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
         v-for="payment in payments"
         :key="payment._id"
-        class="text-center bg-white border rounded-lg shadow-sm p-6 pt-12 relative"
+        class="text-center bg-gray border border-primary rounded-lg shadow-sm p-6 pt-12 relative"
       >
         <div
           v-if="payment.name === 'premium'"
-          class="absolute top-0 left-0 right-0 bg-black text-center py-1 rounded-t-lg"
-        >
-          Recommended option
+          class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
+         
+          >
+          {{ $t('payments.recommendedOption')}}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ payment.name }}
         </h3>
         <div class="mt-4">
-          <span class="text-4xl font-extrabold text-gray-900"
-            >{{ payment.basePrice }}€</span
+          <span class="text-4xl font-extrabold bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] inline-block text-transparent bg-clip-text
+"
+            >{{ payment.basePrice }}€  <span class="text-base font-medium text-gray-500"> / MO</span></span
           >
-          <span class="text-base font-medium text-gray-500"> / MO</span>
+         
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
@@ -63,23 +65,29 @@
               </svg>
             </div>
           </li>
-          <li v-for="key in payment.features" v-show="typeof key === 'number'">
+          <li v-for="(feature, index) in payment.features" 
+            :key="index" 
+            v-show="typeof feature === 'number'"
+          >
             <p class="ml-3 text-base text-gray-700">
-              Prioridad de lectura:
+              {{ $t('payments.readPriority')}}
               <span class="font-semibold">{{
-                getReadingPriorityText(key)
+                getReadingPriorityText(feature)
               }}</span>
             </p>
           </li>
         </ul>
 
         <div class="mt-8">
-          <NuxtLink
-            @click="choosePayment(payment)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
-          >
-            Subscribe
-          </NuxtLink>
+          <div class="bg-primary-gradient p-0.5 rounded-md cursor-pointer">
+            <NuxtLink
+              @click="choosePayment(payment)"
+              class="inline-block w-full bg-black text-white font-semibold py-4 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
+              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'premium' }"
+              >
+              {{ $t('buttons.subscribe')}}
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>
@@ -98,28 +106,29 @@ const router = useRouter()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
+const { t } = useI18n()
 
-const featureDescriptions = {
-  eventPublication: 'Publicación de eventos',
-  eventPhotos: 'Fotos del evento o cartelería del mismo',
-  readingPriority: 'Prioridad de lectura',
-  increasedCharacterLimit:
-    'Aumento del número de caracteres para la información',
-  websiteLink: 'Enlace a la página web',
-  offerPublication: 'Publicación de ofertas',
-  rssPublication: 'Publicación en RRSS',
-}
+
+const featureDescriptions = computed(() => ({
+  eventPublication: t('featuresDescriptions.eventPublication'),
+  eventPhotos: t('featuresDescriptions.eventPhotos'),
+  readingPriority: t('featuresDescriptions.readingPriority'),
+  increasedCharacterLimit: t('featuresDescriptions.increasedCharacterLimit'),
+  websiteLink: t('featuresDescriptions.websiteLink'),
+  offerPublication: t('featuresDescriptions.offerPublication'),
+  rssPublication: t('featuresDescriptions.rssPublication')
+}))
 
 const getReadingPriorityText = (value) => {
   switch (value) {
     case 1:
-      return 'Alta'
+      return t('priorities.high')
     case 2:
-      return 'Media'
+      return t('priorities.medium')
     case 3:
-      return 'Baja'
+      return t('priorities.low')
     default:
-      return 'No especificada'
+      return t('priorities.notSpecific')
   }
 }
 
@@ -143,7 +152,6 @@ const calculateFinalPrice = (basePrice, eventDate) => {
   const daysUntilEvent = Math.max(1, Math.ceil((event - today) / (1000 * 60 * 60 * 24)))
   
   const pricePerDay = basePrice / 30
-  
   const finalPrice = basePrice + (pricePerDay * daysUntilEvent)
   
   return Math.round(finalPrice * 100) / 100
@@ -197,3 +205,11 @@ const choosePayment = async (plan) => {
   }
 }
 </script>
+
+<style scoped>
+.raise,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--primary);
+  transform: translateY(-0.25em);
+}
+</style>

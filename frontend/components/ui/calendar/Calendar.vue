@@ -8,6 +8,15 @@ const props = defineProps<CalendarRootProps & { class?: HTMLAttributes['class'] 
 
 const emits = defineEmits<CalendarRootEmits>()
 
+const today = new Date()
+today.setHours(0, 0, 0, 0) // Normalizamos la fecha para que no tenga horas
+
+const isDateDisabled = (date: Date) => {
+  const selectedDate = new Date(date)
+  selectedDate.setHours(0, 0, 0, 0) // Aseguramos que solo se comparan las fechas, sin horas
+  return selectedDate < today
+} 
+
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
 
@@ -46,10 +55,14 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
               v-for="weekDate in weekDates"
               :key="weekDate.toString()"
               :date="weekDate"
+              :class="isDateDisabled(weekDate) ? 'opacity-50 cursor-not-allowed hover:bg-transparent' : ''"
+
             >
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
+                :class="isDateDisabled(weekDate) && 'cursor-not-allowed hover:bg-transparent'"
+                
               />
             </CalendarCell>
           </CalendarGridRow>

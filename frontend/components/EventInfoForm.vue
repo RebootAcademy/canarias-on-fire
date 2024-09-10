@@ -16,7 +16,7 @@
         {{ $t('selectImageDescription') }}
       </p>
       <ImageGallery store-type="event" />
-      <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
+      <p class="text-xs text-primary">{{ $t('availablePremium')}}</p>
     </div>
 
     <!-- EVENT NAME, DATE & TIME -->
@@ -37,27 +37,29 @@
     </div>
     <div
       v-if="eventStore.eventType === 'event'"
-      class="flex w-full justify-between items-center"
+      class="flex w-full justify-between items-center p-3"
     >
-      <div class="w-full flex">
-        <div class="w-full flex flex-col">
+      <div class="w-full flex xs:flex-col md:flex-row  gap-4 ">
+        <div class="w-full md:w-[25%] flex flex-col ">
           <DatePicker />
           <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.eventDate }}</span>
         </div>
-        <div class="w-full flex flex-col pl-8">
-          <TimePicker
-            id="startTime"
-            label="Start time"
-            modelValue="startTime"
-          />
-          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.startTime }}</span>
-        </div>
-        <div class="w-full flex flex-col pl-8">
-          <TimePicker
-            id="endTime"
-            label="Ending Time"
-            modelValue="endTime"
-          />
+        <div class="w-full flex">
+          <div class="xs:w-1/2 md:w-[40%] lg:w-[20%] flex flex-col ">
+            <TimePicker
+              id="startTime"
+              label="Start time"
+              modelValue="startTime"
+            />
+            <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.startTime }}</span>
+          </div>
+          <div class="xs:w-1/2 md:w-[40%] lg:w-[20%] flex flex-col ">
+            <TimePicker
+              id="endTime"
+              label="Ending Time"
+              modelValue="endTime"
+            />
+          </div>
         </div>
       </div>
     </div>

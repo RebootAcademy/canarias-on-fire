@@ -1,15 +1,15 @@
 <template>
   <div class="p-12 text-sm">
     <div v-if="userStore.selectedUser" class="text-center mb-4">
-      <h2 class="text-3xl font-bold text-primary">Manage Subscription for {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
+      <h2 class="text-3xl font-bold text-primary">{{ $t('payments.manageSub')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
       <p class="mt-2 text-lg font-medium text-gray-300">
-        Current plan: {{ getCurrentPlanName.toUpperCase() }}
+        {{ $t('payments.currentPlan')}} {{ getCurrentPlanName.toUpperCase() }}
       </p>
     </div>
     <div v-else class="text-center mb-4">
-      <h2 class="text-2xl font-bold text-primary">Choose your payment</h2>
+      <h2 class="text-2xl font-bold text-primary">{{ $t('payments.choose')}}</h2>
       <p class="mt-2 text-md text-gray-500">
-        Find the perfect payment that suits your event needs.
+        {{ $t('payments.findPerfect')}}
       </p>
     </div>
     <PaymentOptions 

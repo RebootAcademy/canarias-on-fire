@@ -28,6 +28,31 @@
   "location": "Introduce una ubicación",
   "externalUrl": "Sitio web",
   "notEventsFound": "No se encontraron eventos.",
+  "availablePremium": "* Seleccione su imagen de portada  (Función sólo disponible para eventos Gold y Premium).",
+  "payments": {
+    "manageSub": "Gestionar Suscripción para ",
+    "currentPlan": "Plan actual: ",
+    "choose": "Elige tu pago",
+    "findPerfect": "Encuentra el pago perfecto que se ajuste a las necesidades de tu evento.",
+    "recommendedOption": "Opción recomendada",
+    "readPriority": "Prioridad de lectura: "
+  },
+  "featuresDescriptions": {
+    "eventPublication": "Publicación de eventos",
+    "eventPhotos": "Fotos del evento o cartelería del mismo",
+    "readingPriority":"Prioridad de lectura",
+    "increasedCharacterLimit":
+    "Aumento del número de caracteres para la información",
+    "websiteLink": "Enlace a la página web",
+    "offerPublication": "Publicación de ofertas",
+    "rssPublication": "Publicación en RRSS"
+  },
+  "priorities": {
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baja",
+    "notSpecific": "No especificada"
+  },
   "dateFilters": {
     "all": "Todos",
     "today": "Hoy",
