@@ -13,6 +13,8 @@
   "eventInfo": "Name, date and time",
   "eventDate": "Date",
   "pickDate": "Pick a date",
+  "eventPeriod": "Dates Range",
+  "pickPeriod": "Pick the dates",
   "eventInfoDescription": "Select the name, date and time when the event will take place.",
   "eventNameLabel": "Event Name",
   "eventDescription": "Descripción",
@@ -26,6 +28,30 @@
   "location": "Enter a location",
   "externalUrl": "External site",
   "notEventsFound": "Not events found.",
+  "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
+  "payments": {
+    "manageSub": "Manage Subscription for ",
+    "currentPlan": "Current plan: ",
+    "choose": "Choose your payment",
+    "findPerfect": "Find the perfect payment that suits your event needs.",
+    "recommendedOption": "Recommended option",
+    "readPriority": "Reading priority: "
+  },
+  "featuresDescriptions": {
+    "eventPublication": "Events publication",
+    "eventPhotos": "Photos of the event or event posters",
+    "readingPriority": "Reading priority",
+    "increasedCharacterLimit": "Increase in the number of characters for information",
+    "websiteLink": "Link to the website",
+    "offerPublication": "Publication of offers",
+    "rssPublication": "Publication in RRSS"
+  },
+  "priorities": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "notSpecific": "Don't specific"
+  },
   "dateFilters": {
     "all": "All",
     "today": "Today",

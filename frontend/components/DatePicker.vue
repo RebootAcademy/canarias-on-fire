@@ -15,7 +15,8 @@
         <Calendar 
           v-model="eventStore.eventDate" 
           initial-focus 
-          @update:model-value="updateDate" />
+          @update:model-value="updateDate" 
+        />
       </PopoverContent>
     </Popover>
     <span v-if="dateError" class="text-red-500 text-xs mt-1">{{ dateError }}</span>
@@ -25,7 +26,7 @@
 <script setup>
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-vue-next'
-
+const today = new Date()
 const eventStore = useEventStore()
 const dateError = ref('')
 
@@ -36,5 +37,8 @@ const formattedDate = computed(() => {
 
 const updateDate = (newDate) => {
   eventStore.eventDate = newDate
+}
+const isDisabledDate = (date) => {
+  if (today > date) return true
 }
 </script>

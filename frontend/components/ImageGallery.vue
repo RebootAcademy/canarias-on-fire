@@ -1,7 +1,7 @@
 <template>
   <div class="image-gallery p-4 text-white rounded-lg">
     <div class="cover-image mb-4 relative">
-      <img v-if="coverImage" :src="coverImage" alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
+      <img v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
       <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
     </div>
     <div class="image-upload mb-4">
@@ -72,9 +72,9 @@ const removeImage = (url) => {
   }
 }
 
-/* const removeCoverImage = () => {
+ const removeCoverImage = () => {
   eventStore.setCoverImage(null)
-} */
+} 
 </script>
 
 <style scoped>
@@ -112,5 +112,14 @@ const removeImage = (url) => {
   color: white;
   border: none;
   cursor: pointer;
+}
+
+@media screen and (min-width: 1080px) {
+  .cover-image img {
+    width: 100%;
+    height: 400px;
+    background-clip: border-box;
+    background-size: cover;
+  }
 }
 </style>

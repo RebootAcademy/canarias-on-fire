@@ -3,6 +3,9 @@ import { type HTMLAttributes, computed } from 'vue'
 import { RangeCalendarRoot, type RangeCalendarRootEmits, type RangeCalendarRootProps, useForwardPropsEmits } from 'radix-vue'
 import { RangeCalendarCell, RangeCalendarCellTrigger, RangeCalendarGrid, RangeCalendarGridBody, RangeCalendarGridHead, RangeCalendarGridRow, RangeCalendarHeadCell, RangeCalendarHeader, RangeCalendarHeading, RangeCalendarNextButton, RangeCalendarPrevButton } from '.'
 import { cn } from '@/lib/utils'
+import { useEventStore } from '../stores/eventStore'
+
+const eventStore = useEventStore()
 
 const props = defineProps<RangeCalendarRootProps & { class?: HTMLAttributes['class'] }>()
 
@@ -13,6 +16,24 @@ const delegatedProps = computed(() => {
 
   return delegated
 })
+
+const handleDateClick = (date: Date) => {
+  if (!eventStore.eventDate) {
+    // Si no hay un rango iniciado, guardamos la fecha de inicio
+    eventStore.eventDate = { start: date, end: null } 
+  } else if (!eventStore.eventDate.end) {
+    // Si hay un inicio pero no un final, guardamos la fecha de fin
+    if (date < eventStore.eventDate.start) {
+      // Si la fecha seleccionada es anterior a la fecha de inicio, intercambiamos las fechas
+      eventStore.eventDate = { start: date, end: eventStore.eventDate.start }
+    } else {
+      eventStore.eventDate.end = date // De lo contrario, guardamos la fecha de fin normalmente
+    }
+  } else {
+    // Si el rango está completo, reiniciamos el rango con la nueva fecha
+    eventStore.eventDate = { start: date, end: null }
+  }
+}
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
@@ -50,6 +71,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
               <RangeCalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
+                 @click="handleDateClick(weekDate)"
               />
             </RangeCalendarCell>
           </RangeCalendarGridRow>

@@ -45,7 +45,7 @@ export const useEventStore = defineStore('eventStore', {
     },
     userEvents: [],
     userId: null,
-    payment: {},
+    payment: null,
   }),
 
   actions: {
@@ -78,6 +78,9 @@ export const useEventStore = defineStore('eventStore', {
     },
     setCoverImage(imageUrl) {
       this.coverImage = imageUrl
+    },
+    setEventDate(dateRange) {
+      this.eventDate = dateRange
     },
 
     setPlaceDetails(place) {
