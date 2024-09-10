@@ -29,12 +29,20 @@
     "label": "Gestionar artículos",
     "subtext": "Gestione los artículos de su sitio web."
   },
-  "findMusic":{
-    "label": "Encontrar bandas musicalees",
+  "findMusic": {
+    "label": "Encontrar bandas musicales",
     "subtext": "Busque y descubra bandas de su interés."
   },
-  "findRestaurantes":{
+  "findRestaurants": {
     "label": "Encontrar restaurantes",
     "subtext": "Busque y descubra restaurantes de su interés."
+  },
+  "helping": {
+    "label": "Preguntas y respuestas",
+    "subtext": "Preguntas frecuentes"
+  },
+  "princingNav": {
+    "label": "Precios",
+    "subtext": "Precios de los planes"
   }
 }

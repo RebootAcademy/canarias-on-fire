@@ -4,7 +4,7 @@
     <div class="w-2/3">
       <div class="flex items-center justify-between w-full px-4 mb-4">
         <h2 class="text-3xl font-semibold text-primary">{{ $t('events') }}</h2>
-        <div class="flex gap-4">
+        <div class="flex gap-4 items-center">
           <SearchInput v-model="searchQuery" />
           <CustomBtn
             :title="$t('filterBtn')"

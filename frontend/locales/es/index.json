@@ -31,6 +31,7 @@
     "step2BandDescription": "Rellene el siguiente formulario con los datos de su grupo para terminar de configurar su cuenta.",
     "step2CompanyDescription": "Rellene el siguiente formulario con los datos de su empresa para terminar de configurar su cuenta.",
     "step2BandName": "Nombre del grupo",
+    "step2SelectGenres": "Seleccione género",
     "step2Genres": {
       "label": "Géneros",
       "rock": "Rock",
@@ -41,7 +42,14 @@
       "other": "Other"
     },
     "step2BandMembers": "Integrantes del grupo",
+    "step2BandMembersPlaceholder": "ej. John (Bajo), Sarah (Vocalista)",
     "step2Bio": "Bio",
+    "socialMedia": {
+      "label": "Redes Sociales",
+      "instagramPlaceholder": "Ex: https://www.instagram.com/band",
+      "facebookPlaceholder": "Ex: https://www.facebook.com/band",
+      "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
+    },
     "step2CompanyName": "Nombre de la Compañía",
     "step2Email": "Correo de contacto",
     "step2Phone": "Teléfono",

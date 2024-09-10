@@ -52,6 +52,7 @@ module.exports = {
         black: '#1C1F1F',
         white: '#FAFAFA',
         gray: 'rgba(125, 125, 125, 0.20)',
+        whiteGray: '#8989A1',
       },
       backgroundImage: {
         'primary-gradient':

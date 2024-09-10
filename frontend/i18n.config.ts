@@ -10,6 +10,9 @@ import validationEn from './locales/en/validation.json'
 import validationEs from './locales/es/validation.json'
 import articlesES from './locales/es/articles.json'
 import articlesEN from './locales/en/articles.json'
+import bandsEN from './locales/en/bands.json'
+import bandsES from './locales/es/bands.json'
+
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -21,7 +24,8 @@ export default defineI18nConfig(() => ({
       ...indexEn,
       ...eventEn,
       ...validationEn,
-      ...articlesEN
+      ...articlesEN,
+      ...bandsEN,
     },
     es: {
       ...navbarEs,
@@ -29,7 +33,8 @@ export default defineI18nConfig(() => ({
       ...indexEs,
       ...eventEs,
       ...validationEs,
-      ...articlesES
-    }
-  }
+      ...articlesES,
+      ...bandsES,
+    },
+  },
 }))

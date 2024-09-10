@@ -31,6 +31,7 @@
     "step2BandDescription": "Please complete the form below with your band's details to finish setting up your account.",
     "step2CompanyDescription": "Please complete the form below with your company's details to finish setting up your account.",
     "step2BandName": "Band Name",
+    "step2SelectGenres": "Select genre",
     "step2Genres": {
       "label": "Genres",
       "rock": "Rock",
@@ -41,7 +42,15 @@
       "other": "Other"
     },
     "step2BandMembers": "Band Members",
+    "step2BandMembersPlaceholder": "e.g. John (Guitar), Sarah (Vocals)",
     "step2Bio": "Bio",
+    "socialMedia":{
+      "label": "Social Media",
+      "instagramPlaceholder": "Ex: https://www.instagram.com/band",
+      "facebookPlaceholder": "Ex: https://www.facebook.com/band",
+      "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
+
+    },
     "step2CompanyName": "Company Name",
     "step2Email": "Contact Email",
     "step2Phone": "Phone",

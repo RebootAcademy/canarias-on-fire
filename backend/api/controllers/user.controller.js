@@ -125,6 +125,25 @@ const getUserById = async (req, res) => {
   }
 }
 
+const getAllBands = async (req, res) => {
+  try {
+    const bands = await Musician.find({ role: 'musician' }).lean()
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Bands successfully fetched.', 
+      result: bands 
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting bands.',
+      description: error.message,
+    })
+  }
+}
+
 const getCurrentUser = async (req, res) => {
   try {
     const { email } = req.params
@@ -229,16 +248,26 @@ const updateUserProfile = async (req, res) => {
     const oldRole = user.role
     const newRole = req.body.role
 
-    console.log(req.body)
-
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'address', 'refCode']
+    let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
+    if (newRole === 'company') {
+      validFields.push( 'companyName', 'companyEmail', 'sector', 'address', 'refCode')
+    }  
+    
+    if (newRole === 'musician') {
+      validFields.push('isActive', 'bandName', 'genre', 'bio', 'socialMedia', 'events', 'socialMedia', 'events')
+    }
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
         obj[key] = req.body[key]
         return obj
       }, {})
+
+    if (newRole === 'musician') {
+      await User.findByIdAndDelete(req.params.id)
+      user = await Musician.create({ ...user.toObject(), ...updateData })
+    }
 
     // Asegurarse de que el email esté presente para usuarios de tipo company
     if (newRole === 'company' && !updateData.email) {
@@ -249,7 +278,8 @@ const updateUserProfile = async (req, res) => {
       // Cambio a company
       await User.findByIdAndDelete(req.params.id)
       user = await Company.create({ ...user.toObject(), ...updateData })
-    } else if (newRole !== 'company' && oldRole === 'company') {
+    } 
+    else if (newRole !== 'company' && oldRole === 'company') {
       // Cambio de company a otro rol
       await Company.findByIdAndDelete(req.params.id)
       user = await User.create({ ...user.toObject(), ...updateData })
@@ -271,6 +301,40 @@ const updateUserProfile = async (req, res) => {
     })
   } catch (error) {
     console.error('Error updating user:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating user.',
+      description: error.message,
+    })
+  }
+}
+
+const updateBand = async (req, res, updateData) => {
+  try {
+    const userId = req.params.id
+    console.log(userId)
+    console.log('updateData')
+    console.log(updateData)
+    let user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    })
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User successfully updated.',
+      result: user,
+    })
+  } catch (error) {
+    console.error(error)
     return res.status(500).json({
       success: false,
       message: 'Error updating user.',
@@ -358,6 +422,7 @@ module.exports = {
   createUser,
   getAllUsers,
   getUserById,
+  getAllBands,
   getCurrentUser,
   updateUser,
   updateUserProfile,

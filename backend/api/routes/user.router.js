@@ -5,6 +5,7 @@ const {
   createUser,
   getAllUsers,
   getUserById,
+  getAllBands,
   getCurrentUser,
   updateUser,
   updateUserProfile,
@@ -15,6 +16,7 @@ const {
 router
   .post('/', createUser)
   .get('/', getAllUsers)
+  .get('/bands', getAllBands)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/:id',/*  isAuth, checkRole('admin'), */ updateUser)
   .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)

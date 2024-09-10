@@ -2,6 +2,7 @@
   <NavigationMenu>
     <NavigationMenuList>
       <NavigationMenuItem>
+        <!-- EXPLORE SECTION -->
         <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white  active:text-primary after:bg-transparent before:bg-orange-600">
           {{ $t('explore') }}
         </NavigationMenuTrigger>
@@ -92,7 +93,7 @@
                </div>
                <NavigationMenuLink as-child >
                 <NuxtLink
-                  to="/dashboard/articles"
+                  to="/bands"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
                   <div class="text-sm font-medium leading-none"> {{  $t('findMusic.label') }}</div>
@@ -122,6 +123,7 @@
         </NavigationMenuContent>
       </NavigationMenuItem>
       
+      <!-- HELP SECTION -->
       <NavigationMenuItem >
         <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white before:bg-orange-600">
           {{ $t('help') }}
@@ -145,6 +147,7 @@
         </NavigationMenuContent>
       </NavigationMenuItem>
 
+      <!-- PRICING SECTION -->
       <NavigationMenuItem >
         <NavigationMenuTrigger class="bg-transparent text-white hover:bg-gray hover:text-white before:bg-orange-600">
           {{ $t('pricing') }}
