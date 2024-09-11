@@ -6,7 +6,7 @@
         {{ $t('onBoarding.step1Description')}}
       </p>
       
-      <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="grid md:grid-cols-2 gap-6 mb-8 md:px-12  lg:px-56 xl:px-72">
         <button 
           @click="selectRole('company')" 
           class="bg-gray   p-6 rounded-lg hover:bg-gray transition duration-300 flex flex-col items-center"

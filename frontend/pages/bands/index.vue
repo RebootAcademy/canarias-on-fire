@@ -5,7 +5,7 @@
             <SearchInput v-model="searchQuery"/>
         </div>
         <div v-if="filteredBands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-6">
-            <BandCard v-for="band in filteredBands" :key="band._id" :band="band"/>>
+            <BandCard v-for="band in filteredBands" :key="band._id" :band="band"/>
         </div>
        <!--  <div  v-if="bands && bands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-4">
             <BandCard v-for="band in bands" :key="band._id" :band="band"/>

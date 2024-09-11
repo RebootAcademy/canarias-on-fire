@@ -82,6 +82,12 @@
               <SelectItem value="hiphop">{{
                 $t('onBoarding.step2Genres.hiphop')
               }}</SelectItem>
+              <SelectItem value="metal">{{
+                $t('onBoarding.step2Genres.metal')
+              }}</SelectItem>
+              <SelectItem value="indie">{{
+                $t('onBoarding.step2Genres.indie')
+              }}</SelectItem>
               <SelectItem value="other">{{
                 $t('onBoarding.step2Genres.other')
               }}</SelectItem>
@@ -128,8 +134,7 @@
               :placeholder="$t('onBoarding.socialMedia.instagramPlaceholder')"
             />
           </div>
-
-          <!-- Facebook Input Section -->
+<!-- 
           <div class="flex flex-row items-center gap-4">
             <Facebook
               class="w-6 h-6"
@@ -143,7 +148,6 @@
             />
           </div>
 
-          <!-- YouTube Input Section -->
           <div class="flex flex-row items-center gap-4">
             <Youtube
               class="w-6 h-6"
@@ -155,7 +159,7 @@
               class="text-gray-500"
               :placeholder="$t('onBoarding.socialMedia.youtubePlaceholder')"
             />
-          </div>
+          </div> -->
         </div>
 
         <div class="flex items-center mb-4">

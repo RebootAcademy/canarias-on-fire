@@ -39,6 +39,8 @@
       "jazz": "Jazz",
       "electronic": "Electrónica",
       "hiphop": "Hip Hop",
+      "metal": "Metal",
+      "indie": "Indie",
       "other": "Other"
     },
     "step2BandMembers": "Integrantes del grupo",
@@ -46,7 +48,7 @@
     "step2Bio": "Bio",
     "socialMedia": {
       "label": "Redes Sociales",
-      "instagramPlaceholder": "Ex: https://www.instagram.com/band",
+      "instagramPlaceholder": "Nombre de usuario. Ej: bandOficial",
       "facebookPlaceholder": "Ex: https://www.facebook.com/band",
       "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
     },
