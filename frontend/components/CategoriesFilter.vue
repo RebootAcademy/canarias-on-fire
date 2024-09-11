@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-evenly flex-wrap gap-2.5">
+  <div class="flex justify-evenly flex-wrap items-center gap-2.5">
     <div
       v-for="category in categories"
       :key="category.id"
@@ -11,7 +11,7 @@
         class="ring-1 p-6 rounded-full ring-gray mb-2"
         :class="{ 'ring-[rgb(247,145,29)]': isSelected(category) }"
       >
-        <component :is="getIcon(category.icon)" class="w-6 h-6 " />
+        <component :is="getIcon(category.icon)" class="w-6 h-6 lg:w-10 lg:h-10 " />
       </div>
       <span class="mt-1.5 text-xs text-white font-bold">{{ $t(`values.${category.name}`) }}</span>
     </div>

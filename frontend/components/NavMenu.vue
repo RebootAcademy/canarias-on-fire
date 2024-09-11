@@ -7,7 +7,7 @@
           {{ $t('explore') }}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul class="grid gap-3 p-6 bg-[#1C1F1F] border-1 border-white text-primary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
+          <ul class="grid gap-3 p-6 bg-[#1C1F1F] border-whiteGray text-primary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
             <li>
               <div class="mb-2 text-lg font-medium text-white">
                  {{ $t('events') }}
@@ -37,7 +37,7 @@
                   </p>
                 </button>
               </NavigationMenuLink>
-              <NavigationMenuLink as-child v-show="isLogged">
+              <NavigationMenuLink as-child v-if="validateRole(['admin', 'company'], userRole)">
                 <NuxtLink
                   to="/dashboard/events"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary  focus:text-accent-foreground"
@@ -64,7 +64,7 @@
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
-              <NavigationMenuLink as-child >
+              <NavigationMenuLink as-child v-if="isAdmin">
                 <NuxtLink
                   to="/articles/create"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
@@ -178,6 +178,7 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 const userStore = useUserStore()
+const userRole = computed(() => userStore.userData?.role)
 const auth0 = ref(null)
 const route = useRouter()
 const isAdmin = userStore.userData?.role === 'admin'
