@@ -6,6 +6,15 @@ const CompanySchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  cif: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (value){
+        return /^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$/.test(value)
+      }
+    }
+  },
   companyEmail: { 
     type: String, 
     unique: [true, 'Email already exists.'],
@@ -80,6 +89,10 @@ const CompanySchema = new mongoose.Schema({
   },
   refCode: {
     type: String
+  },
+  isValidated: {
+    type: Boolean,
+    default: false
   }
 })
 

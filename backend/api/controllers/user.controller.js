@@ -253,7 +253,7 @@ const updateUserProfile = async (req, res) => {
     // Filtrar campos válidos para actualización
     let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
     if (newRole === 'company') {
-      validFields.push( 'companyName', 'companyEmail', 'sector', 'address', 'refCode')
+      validFields.push( 'companyName', 'postalCode', 'cif', 'companyEmail', 'sector', 'address', 'refCode')
     }  
     
     if (newRole === 'musician') {

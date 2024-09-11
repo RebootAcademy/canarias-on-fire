@@ -56,7 +56,11 @@
     "step2CompanyName": "Company Name",
     "step2Email": "Contact Email",
     "step2Phone": "Phone",
-    "step2Address": "Address",
+    "step2Address": "Commercial address",
+    "step2CIF": "CIF",
+    "step2InvalidCIF": "Invalid CIF", 
+    "step2ZIP": "Postal code",
+    "requiredField": "This field is required",
     "step2Sector": {
       "label": "Sector",
       "placeholder": "Select sector",
@@ -67,7 +71,8 @@
     },
     "step2CodRef": "Vendor Code",
     "step2TermsPart1": "I accept the ",
-    "step2TermsPart2": "terms and conditions"
+    "step2TermsPart2": "terms and conditions",
+    "step2TermsRequired": "* You must accept the terms and conditions"
   },
 
   "buttons": {
