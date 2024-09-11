@@ -12,7 +12,7 @@
                 @{{ band?.socialMedia.instagram }}
             </a>    
         </div>
-        <div v-if="props.band.socialMedia.facebook" class="flex flex-row gap-2 items-center text-white">
+       <!--  <div v-if="props.band.socialMedia.facebook" class="flex flex-row gap-2 items-center text-white">
             <Facebook size="20"/>
             <a :href="`https://www.facebook.com/${band.socialMedia.facebook}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
                 {{ band?.socialMedia.facebook }}
@@ -23,19 +23,19 @@
             <a :href="`https://www.youtube.com/user/${band.socialMedia.youtube}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
                 @{{ band?.socialMedia.youtube }}
             </a>    
-        </div>
+        </div> -->
     </div>
 
-    <div >
+    <div v-if="band.nextPerformance && isValidNextPerformance(band.nextPerformance)">
         <p class="text-whiteGray mt-4">{{ $t('bandNextPerformance')}}</p>
         <div class="flex flex-col gap-3 mt-2">
             <div class="flex flex-row gap-2 items-center">
                 <Calendar size="20"/>
-                <p>Fecha</p>
+                <p>{{ formattedDate(band.nextPerformance.date) }} - {{ band.nextPerformance.startTime }}</p>
             </div>
             <div class="flex flex-row gap-2 items-center">
                 <MapPin  size="20" />
-                <p>Localización</p>
+                <p>{{ band.nextPerformance.location.address}} </p>
             </div>
         </div>
     </div>
@@ -52,4 +52,10 @@ const props = defineProps({
   required: true
 })
 
+const isValidNextPerformance = (nextPerformance) => {
+  return (
+    typeof nextPerformance.date === 'object' && nextPerformance.date !== null ||
+    typeof nextPerformance.location === 'object' && nextPerformance.location !== null
+  )
+}
 </script>

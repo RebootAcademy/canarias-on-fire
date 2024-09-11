@@ -64,7 +64,7 @@
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
-              <NavigationMenuLink as-child v-show="isAdmin">
+              <NavigationMenuLink as-child >
                 <NuxtLink
                   to="/articles/create"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"

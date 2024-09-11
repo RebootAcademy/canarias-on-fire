@@ -15,6 +15,8 @@
   "pickDate": "Pick a date",
   "eventPeriod": "Dates Range",
   "pickPeriod": "Pick the dates",
+  "startTime": "Start time",
+  "endTime": "End time",
   "eventInfoDescription": "Select the name, date and time when the event will take place.",
   "eventNameLabel": "Event Name",
   "eventDescription": "Descripción",

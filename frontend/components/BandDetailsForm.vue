@@ -161,6 +161,29 @@
             />
           </div> -->
         </div>
+        <hr />
+        <div class="mb-4 mt-2">
+          <Label class="text-gray-300 font-bold text-lg">{{ $t('bandNextPerformance')}}</Label>
+          <div class="flex flex-col gap-1 mt-2">
+            <p >{{ $t('eventLocation') }}</p>
+            <p class="text-xs text-gray-500 mb-2">
+              {{ $t('eventLocationDescription') }}
+            </p>
+            <LocationSearch @locationChanged="handleLocationChange" />
+          </div>
+          <div class="w-full flex flex-row gap-2">
+            <div class="w-1/2 md:w-2/3">
+              <DatePicker :band="true" @dateChanged="handleDateChange" />
+            </div>
+            <div class="w-1/2 md:w-1/3">
+              <TimePicker
+                 id="startTime"
+                 label="Start time"
+                 v-model="formData.nextPerformance.startTime"
+              />
+            </div>
+          </div>
+        </div>
 
         <div class="flex items-center mb-4">
           <input
@@ -194,6 +217,7 @@
 
 <script setup>
 import { ArrowLeft, Instagram, Facebook, Youtube } from 'lucide-vue-next'
+import { errors, validateFields } from '../utils/validation'
 
 const formData = ref({
   bandName: '',
@@ -207,8 +231,17 @@ const formData = ref({
     facebook: '',
     youtube: '',
   },
+  nextPerformance: {
+    date: '', // Asigna una cadena vacía
+    location: '',
+    startTime: '',
+  },
   termsAccepted: false,
   imageUrl: '',
+})
+
+watch(() => formData.value.nextPerformance.startTime, (newValue) => {
+  console.log('Nuevo valor de startTime en el padre:', newValue)
 })
 
 const router = useRouter()
@@ -226,6 +259,14 @@ onMounted(() => {
   }
 })
 
+const handleLocationChange = (locationData) => {
+  formData.value.nextPerformance.location = locationData
+}
+
+const handleDateChange = (date) => {
+  formData.value.nextPerformance.date = date
+}
+
 const submitForm = async () => {
   if (formData.value.termsAccepted) {
     try {
@@ -233,9 +274,10 @@ const submitForm = async () => {
       console.log('User ID being sent:', userId)
       if (!userId) {
         console.error('User ID is undefined or null')
-        // Manejar el caso de ID faltante (tal vez redirigir al login)
         return
       }
+
+      console.log(formData.value)
       const result = await userStore.updateUserProfileToBand({
         ...formData.value,
         _id: userId,

@@ -28,6 +28,7 @@
 
 <script setup>
 const eventStore = useEventStore()
+const emit = defineEmits(['locationChanged'])
 
 const setPlace = (place) => {
   if (place && place.geometry) {
@@ -39,6 +40,14 @@ const setPlace = (place) => {
       place.geometry.location.lat(),
       place.geometry.location.lng()
     )
+
+    emit('locationChanged', {
+      address: eventStore.eventLocation.address,
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng(),
+      mapImageUrl: eventStore.eventLocation.mapImageUrl
+    })
+
   } else {
     eventStore.eventLocation.address = ''
     console.error('No place details available')

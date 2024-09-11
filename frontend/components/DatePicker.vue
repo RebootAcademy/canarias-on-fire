@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Label for="eventDate" class="text-xs text-gray-500">{{ $t('eventDate') }}</Label>
+    <Label 
+      for="eventDate" 
+      :class="props.band ? 'text-md' : 'text-sm'"
+    >
+    {{ $t('eventDate') }}
+  </Label>
     <Popover>
       <PopoverTrigger as-child>
         <Button
@@ -29,7 +34,13 @@ import { CalendarIcon } from 'lucide-vue-next'
 const today = new Date()
 const eventStore = useEventStore()
 const dateError = ref('')
+const emit = defineEmits(['dateChanged'])
 
+const props = defineProps({
+  band: Boolean
+})
+
+console.log(props.band)
 const formattedDate = computed(() => {
   if (!eventStore.eventDate) return ''
   return new Date(eventStore.eventDate).toLocaleDateString()
@@ -37,6 +48,7 @@ const formattedDate = computed(() => {
 
 const updateDate = (newDate) => {
   eventStore.eventDate = newDate
+  emit('dateChanged', eventStore.eventDate)
 }
 const isDisabledDate = (date) => {
   if (today > date) return true

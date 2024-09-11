@@ -248,6 +248,8 @@ const updateUserProfile = async (req, res) => {
     const oldRole = user.role
     const newRole = req.body.role
 
+    console.log(req.body)
+
     // Filtrar campos válidos para actualización
     let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
     if (newRole === 'company') {
@@ -255,7 +257,17 @@ const updateUserProfile = async (req, res) => {
     }  
     
     if (newRole === 'musician') {
-      validFields.push('isActive', 'bandName', 'genre', 'bio', 'socialMedia', 'events', 'socialMedia', 'events')
+      validFields.push(
+        'isActive',
+        'bandName',
+        'genre',
+        'bio',
+        'socialMedia',
+        'events',
+        'socialMedia',
+        'events',
+        'nextPerformance'
+      )
     }
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))

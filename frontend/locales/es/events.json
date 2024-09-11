@@ -17,6 +17,8 @@
   "pickDate": "Elige una fecha",
   "eventPeriod": "Fechas",
   "pickPeriod": "Elige fechas",
+  "startTime": "Hora de inicio",
+  "endTime": "Hora de finalización",
   "eventDescription": "Descripción",
   "eventDescriptionDescription": "Usa este espacio para contarle al público los detalles de tu evento. Asegúrate de incluir cualquier información relevante que les ayude a entender la esencia del evento y los motive a participar.",
   "eventLocation": "Ubicación",

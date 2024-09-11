@@ -58,6 +58,8 @@ const formData = reactive({
   profileImg: userStore.userData?.profileImg || ''
 })
 
+console.log(userStore)
+
 const isUpdating = ref(false)
 const selectedFile = ref(null)
 
