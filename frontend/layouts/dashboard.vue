@@ -15,12 +15,69 @@
       <aside class="w-64 p-4">
         <nav class="space-y-4">
           <ul class="space-y-2">
-            <li><NuxtLink to="/dashboard/statistics" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Statistics</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/events" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Events</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/articles" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Articles</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/users" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Users list</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/profile" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Profile</NuxtLink></li>
-            <li><NuxtLink to="/dashboard/password" active-class="border border-primary" class="block py-2 px-4 rounded-md bg-gray">Password</NuxtLink></li>
+            <li v-if="validateRole(['admin', 'company'], userRole)">
+              <NuxtLink 
+                to="/dashboard/events" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+                >
+                {{ userRole === 'admin' ? $t('dashboardNav.eventsAdmin') : $t('dashboardNav.myEvents') }}
+              </NuxtLink>
+            </li>
+            <li v-if="validateRole(['admin'], userRole)">
+              <NuxtLink 
+                to="/dashboard/articles" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+              {{$t('dashboardNav.articlesAdmin')}}
+              </NuxtLink>
+            </li>
+            <li v-if="userRole === 'admin'">
+              <NuxtLink 
+                to="/dashboard/users" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+                {{ $t('dashboardNav.usersList') }}
+              </NuxtLink>
+            </li>
+            <li v-if="userRole === 'admin'">
+              <NuxtLink 
+                to="/dashboard/statistics" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+              {{ $t('dashboardNav.statistics') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink 
+                to="/dashboard/profile" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+                {{ $t('dashboardNav.profile') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink 
+                to="/dashboard/password" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+                {{ $t('dashboardNav.password') }}
+              </NuxtLink>
+            </li>
+            <li v-if="userRole === 'company'">
+              <NuxtLink 
+                to="/dashboard/payments" 
+                active-class="border border-primary" 
+                class="block py-2 px-4 rounded-md bg-gray"
+              >
+                {{ $t('dashboardNav.payments') }}
+              </NuxtLink>
+          </li>
           </ul>
         </nav>
       </aside>
@@ -37,6 +94,12 @@
 </template>
 
 <script setup>
+const userStore = useUserStore()
+
+const userRole = computed(() => userStore.userData?.role)
+
+
+
 useHead({
   title: 'Admin Dashboard'
 })

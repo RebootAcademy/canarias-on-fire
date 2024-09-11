@@ -45,5 +45,15 @@
   "princingNav": {
     "label": "Princing",
     "subtext": "Plan Pricing"
+  },
+  "dashboardNav": {
+    "eventsAdmin": "Events",
+    "myEvents": "My events",
+    "articlesAdmin": "Articles",
+    "statistics": "Statistics",
+    "profile": "Profile",
+    "payments": "Payments",
+    "password": "Password",
+    "usersList": "Users List"
   }
 }

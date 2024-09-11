@@ -44,5 +44,15 @@
   "princingNav": {
     "label": "Precios",
     "subtext": "Precios de los planes"
+  },
+  "dashboardNav": {
+    "eventsAdmin": "Eventos",
+    "myEvents": "Mis eventos",
+    "articlesAdmin": "Artículos",
+    "statistics": "Estadísticas",
+    "profile": "Perfil",
+    "payments": "Pagos",
+    "password": "Contraseña",
+    "usersList": "Listado de usuarios"
   }
 }
