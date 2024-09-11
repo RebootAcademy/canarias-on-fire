@@ -1,10 +1,10 @@
 <template>
     <div class=" px-8 py-4 sm:px-8 md:px-16 lg:px-40 mt-8 ">
         <div class="flex flex-row justify-between items-center">
-            <h2 class="xs:text-xl sm:text-2xl md:text-4xl font-semibold text-primary mb-8">Music Bands</h2>
+            <h2 class="xs:text-xl sm:text-2xl md:text-4xl font-semibold text-primary mb-8">{{ $t('musicBands') }}</h2>
             <SearchInput v-model="searchQuery"/>
         </div>
-        <div v-if="filteredBands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-4">
+        <div v-if="filteredBands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-6">
             <BandCard v-for="band in filteredBands" :key="band._id" :band="band"/>>
         </div>
        <!--  <div  v-if="bands && bands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-4">
