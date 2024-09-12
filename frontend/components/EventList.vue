@@ -32,11 +32,10 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return [];
   }
-  const today = new Date()
   
   return eventsByDate.value
     ?.filter(event => 
-      event.status === 'published' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today
+      event.status === 'published'
     )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
@@ -48,7 +47,7 @@ const limitedEvents = computed(() => {
       return compareDates(a.eventDate, b.eventDate)
     })
     .slice(0, 9)
-});
+})
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment._id : event.payment

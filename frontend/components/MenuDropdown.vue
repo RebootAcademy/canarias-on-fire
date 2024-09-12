@@ -7,7 +7,7 @@
       </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuItem @click="navigateTo('/dashboard')">
+      <DropdownMenuItem @click="navigateTo()">
         {{ $t('dashboard') }}
       </DropdownMenuItem>
       <DropdownMenuItem v-if="auth0?.isAuthenticated" @click="handleLogout">
@@ -23,7 +23,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 const userStore = useUserStore()
 const router = useRouter()
 const { user } = useAuth0()
-
+const userRole = computed(() => userStore.userData?.role)
 const auth0 = ref(null)
 
 onMounted(() => {
@@ -48,7 +48,16 @@ const handleLogout = () => {
   }
 }
 
-const navigateTo = (path) => {
-  router.push(path)
+const navigateTo = () => {
+  switch (userRole.value) {
+    case 'admin':
+    case 'company':
+      return router.push('/dashboard/events')
+    case 'musician':
+      return router.push('/dashboard/profile')
+    default:
+      return router.push('/')
+
+  }
 }
 </script>

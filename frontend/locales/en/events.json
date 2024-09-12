@@ -59,5 +59,15 @@
     "today": "Today",
     "weekend": "This weekend",
     "month": "This month"
+  },
+  "modalFilter": {
+    "label": "FILTERS",
+    "ubication": "Ubication",
+    "selectIsland": "Select the island or islands you want to filter events by from the list below.",
+    "date": "Date",
+    "dateDescription": "Select the date to refine your event search.",
+    "categories": "Categories",
+    "categoriesDescription": "Select up to 3 categories to find events that match your interests."
   }
+
 }

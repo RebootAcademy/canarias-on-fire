@@ -221,7 +221,7 @@ const submitForm = async () => {
         role: 'company',
       })
       if (result.success) {
-        router.push('/dashboard')
+        router.push('/dashboard/events')
       } else {
         console.error('Error updating user:', result.message)
       }

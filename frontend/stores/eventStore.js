@@ -385,18 +385,27 @@ export const useEventStore = defineStore('eventStore', {
   getters: {
     filteredEvents() {
       if (!this.events) return []
+      const today = new Date()
 
       return this.events.filter((event) => {
-        // Search
-        if (this.searchQuery) {
-          const lowercaseQuery = this.searchQuery.toLowerCase()
-          if (
-            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-          ) {
-            return false
+        // Filter by date
+        if (
+          new Date(
+            event.eventDate.year,
+            event.eventDate.month - 1,
+            event.eventDate.day
+          ) < today
+        ) this.updateEventStatus(event._id, 'closed')
+          if (this.searchQuery) {
+            // Search
+            const lowercaseQuery = this.searchQuery.toLowerCase()
+            if (
+              !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+              !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+            ) {
+              return false
+            }
           }
-        }
         // Filter by Categories
         if (this.filters.categories.length > 0) {
           const eventCategoryIds = event.categories.map((cat) => cat._id)

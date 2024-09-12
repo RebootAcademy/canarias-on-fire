@@ -42,9 +42,8 @@
   "featuresDescriptions": {
     "eventPublication": "Publicación de eventos",
     "eventPhotos": "Fotos del evento o cartelería del mismo",
-    "readingPriority":"Prioridad de lectura",
-    "increasedCharacterLimit":
-    "Aumento del número de caracteres para la información",
+    "readingPriority": "Prioridad de lectura",
+    "increasedCharacterLimit": "Aumento del número de caracteres para la información",
     "websiteLink": "Enlace a la página web",
     "offerPublication": "Publicación de ofertas",
     "rssPublication": "Publicación en RRSS"
@@ -60,5 +59,14 @@
     "today": "Hoy",
     "weekend": "Esta semana",
     "month": "Este mes"
+  },
+  "modalFilter": {
+    "label": "FILTROS",
+    "ubication": "Ubicación",
+    "selectIsland": "Selecciona la isla o las islas que quieres filtrar eventos por de la lista de abajo.",
+    "date": "Fecha",
+    "dateDescription": "Selecciona la fecha que deseas buscar",
+    "categories": "Categorías",
+    "categoriesDescription": "Selecciona hasta 3 categorías para encontrar eventos que coincidan con tus intereses."
   }
 }
