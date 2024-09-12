@@ -55,7 +55,11 @@
     "step2CompanyName": "Nombre de la Compañía",
     "step2Email": "Correo de contacto",
     "step2Phone": "Teléfono",
-    "step2Address": "Dirección",
+    "step2CIF": "CIF",
+    "step2InvalidCIF": "CIF no válido",
+    "step2ZIP": "Código postal",
+    "requiredField": "Este campo es requerido",
+    "step2Address": "Domicilio comercial",
     "step2Sector": {
       "label": "Sector",
       "placeholder": "Selecciona el sector",
@@ -66,7 +70,8 @@
     },
     "step2CodRef": "Código de vendedor",
     "step2TermsPart1": "Acepto los  ",
-    "step2TermsPart2": "términos y condiciones"
+    "step2TermsPart2": "términos y condiciones",
+    "step2TermsRequired": "* Debes aceptar términos y condiciones"
   },
   "buttons": {
     "seeMore": "VER MÁS",
