@@ -79,6 +79,8 @@
     "seeMore": "SEE MORE",
     "continue": "CONTINUE",
     "completeReg": "COMPLETE REGISTRATION",
-    "subscribe": "SUBSCRIBE"
+    "subscribe": "SUBSCRIBE",
+    "reset": "Reset",
+    "apply": "Apply"
   }
 }

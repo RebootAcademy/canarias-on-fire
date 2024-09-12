@@ -31,6 +31,9 @@
             class="text-gray-500"
             required
           />
+          <p v-if="errors.bandName" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.bandName }}
+          </p>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300"
@@ -44,6 +47,9 @@
             class="text-gray-500"
             required
           />
+          <p v-if="errors.email" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.email }}
+          </p>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300"
@@ -64,7 +70,10 @@
           >
           <Select v-model="formData.genre" required>
             <SelectTrigger>
-              <SelectValue :placeholder="$t('onBoarding.step2SelectGenres')" class="text-gray-500" />
+              <SelectValue
+                :placeholder="$t('onBoarding.step2SelectGenres')"
+                class="text-gray-500"
+              />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
               <SelectItem value="rock">{{
@@ -93,6 +102,9 @@
               }}</SelectItem>
             </SelectContent>
           </Select>
+          <p v-if="errors.genre" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.genre }}
+          </p>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300"
@@ -134,7 +146,7 @@
               :placeholder="$t('onBoarding.socialMedia.instagramPlaceholder')"
             />
           </div>
-<!-- 
+          <!-- 
           <div class="flex flex-row items-center gap-4">
             <Facebook
               class="w-6 h-6"
@@ -163,9 +175,11 @@
         </div>
         <hr />
         <div class="mb-4 mt-2">
-          <Label class="text-gray-300 font-bold text-lg">{{ $t('bandNextPerformance')}}</Label>
+          <Label class="text-gray-300 font-bold text-lg">{{
+            $t('bandNextPerformance')
+          }}</Label>
           <div class="flex flex-col gap-1 mt-2">
-            <p >{{ $t('eventLocation') }}</p>
+            <p>{{ $t('eventLocation') }}</p>
             <p class="text-xs text-gray-500 mb-2">
               {{ $t('eventLocationDescription') }}
             </p>
@@ -177,9 +191,9 @@
             </div>
             <div class="w-1/2 md:w-1/3">
               <TimePicker
-                 id="startTime"
-                 label="Start time"
-                 v-model="formData.nextPerformance.startTime"
+                id="startTime"
+                label="Start time"
+                v-model="formData.nextPerformance.startTime"
               />
             </div>
           </div>
@@ -200,6 +214,9 @@
             }}</a>
           </label>
         </div>
+        <div v-if="errors.termsAccepted">
+          <span class="text-red-500 text-sm">{{ errors.termsAccepted }}</span>
+        </div>
       </form>
       <div></div>
     </div>
@@ -217,7 +234,7 @@
 
 <script setup>
 import { ArrowLeft, Instagram, Facebook, Youtube } from 'lucide-vue-next'
-import { errors, validateFields } from '../utils/validation'
+const { t } = useI18n()
 
 const formData = ref({
   bandName: '',
@@ -240,8 +257,11 @@ const formData = ref({
   imageUrl: '',
 })
 
-watch(() => formData.value.nextPerformance.startTime, (newValue) => {
-  console.log('Nuevo valor de startTime en el padre:', newValue)
+const errors = ref({
+  bandName: '',
+  email: '',
+  genre: '',
+  termsAccepted: '',
 })
 
 const router = useRouter()
@@ -267,8 +287,18 @@ const handleDateChange = (date) => {
   formData.value.nextPerformance.date = date
 }
 
+
 const submitForm = async () => {
+  console.log(formData.value.termsAccepted)
   if (formData.value.termsAccepted) {
+    errors.value = {
+      bandName: '',
+      email: '',
+      genre: '',
+      termsAccepted: '',
+    }
+    
+    if (!validateForm()) return false
     try {
       const userId = userStore.userData._id
       console.log('User ID being sent:', userId)
@@ -284,7 +314,7 @@ const submitForm = async () => {
         role: 'musician',
       })
       if (result.success) {
-        router.push('/dashboard')
+        router.push('/dashboard/profile')
       } else {
         console.error('Error updating user:', result.message)
       }
@@ -292,7 +322,18 @@ const submitForm = async () => {
       console.error('Error updating user:', error)
     }
   } else {
-    alert('Please accept the terms and conditions')
+    errors.value.termsAccepted = t('onBoarding.step2TermsRequired')
   }
+}
+
+function validateForm() {
+  Object.keys(errors.value).forEach((key) => {
+    if (!formData.value[key] || formData.value[key] === '') {
+      errors.value[key] = t('onBoarding.requiredField')
+    } else {
+      errors.value[key] = ''
+    }
+  });
+  return Object.values(errors.value).every(error => error === '')
 }
 </script>

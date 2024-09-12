@@ -24,7 +24,6 @@
 
 <script setup>
 const eventStore = useEventStore()
-const paymentStore = usePaymentStore()
 const today = new Date()
 
 let somePremium

@@ -2,28 +2,28 @@
   <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-black border-2 rounded-lg p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="w-full text-xl font-semibold text-center ">FILTERS</h2>
+        <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
           <span class="text-2xl">&times;</span>
         </button>
       </div>
       <div>
-        <h3 class="font-semibold">Ubication</h3>
-        <p class="text-sm text-gray-500 mb-2">Select the island or islands you want to filter events by from the list below.</p>
+        <h3 class="font-semibold">{{ $t('modalFilter.ubication')}}</h3>
+        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.selectIsland')}}</p>
         <div class="grid grid-cols-3 gap-2 mb-4">
           <label v-for="island in islands" :key="island" class="flex items-center">
             <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2 accent-primary">
             {{ island }}
           </label>
         </div>
-        <h3 class="font-semibold">Date</h3>
-        <p class="text-sm text-gray-500 mb-2">Select the date to refine your event search.</p>
+        <h3 class="font-semibold">{{ $t('modalFilter.date')}}</h3>
+        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p>
         <div class="grid grid-cols-3 gap-2 mb-4 place-items-end">
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
         </div>
-        <h3 class="font-semibold">Categories</h3>
-        <p class="text-sm text-gray-500 mb-2">Select up to 3 categories to find events that match your interests.</p>
+        <h3 class="font-semibold">{{ $t('modalFilter.categories')}}</h3>
+        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.categoriesDescription')}}</p>
         <div class="flex flex-wrap justify-center gap-2 mb-4">
           <Button
             v-for="category in eventStore.categories"
@@ -37,9 +37,9 @@
           </Button>
         </div>
         <div class="flex justify-end gap-4 mt-4">
-          <Button @click="resetFilters" variant="ghost" class="bg-gray">Reset</Button>
+          <Button @click="resetFilters" variant="ghost" class="bg-gray">{{ $t('buttons.reset')}}</Button>
           <CustomBtn 
-            title="Apply"
+            :title="$t('buttons.apply')"
             @click="applyFilters"
           />
         </div>
