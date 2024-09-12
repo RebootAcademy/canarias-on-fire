@@ -3,15 +3,15 @@
   <p class="text-sm font-light opacity-70">{{  $t('eventAdvice') }}</p>
   <div class="relative w-full">
     <Carousel class="border-none shadow-none ">
-      <CarouselContent>
+      <CarouselContent v-if="somePremium.length">
         <CarouselItem 
-          v-show="event.payment.name === 'premium'" 
-          v-for="event in eventStore.events" 
+          v-for="event in somePremium" 
           :key="event.id"
         >
           <Card  class="border-0 flex items-center justify-center  bg-gray-900">
             <CardContent class="bg-black">
-              <NuxtImg :src="event.coverImage" class="object-scale-down h-96 w-80" />
+              <NuxtImg v-if="event.coverImage" :src="event.coverImage" class="object-scale-down h-96 w-80" />
+              <NuxtImg v-else :src="event.eventImages[0].url" class="object-scale-down h-96 w-80" />
             </CardContent>
           </Card>
         </CarouselItem>
@@ -25,5 +25,19 @@
 <script setup>
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-const somePremium = eventStore?.events.some((event) => event.payment.name === 'premium')
+const today = new Date()
+
+let somePremium
+/* const somePremium = eventStore?.events.filter((event) => event?.payment?.name === 'premium' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today )
+console.log(somePremium) */
+
+watchEffect(() => {
+  if (eventStore.events) {
+    somePremium = eventStore?.events.filter((event) => 
+      event?.payment?.name === 'premium' && 
+      new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today 
+    );
+  }
+  return somePremium
+});
 </script>

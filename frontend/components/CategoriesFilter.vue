@@ -8,7 +8,7 @@
       @click="toggleCategory(category)"
     >
       <div 
-        class="ring-1 p-6 rounded-full ring-gray mb-2"
+        class="ring-1 p-6 rounded-full ring-gray mb-2 hover:bg-gray"
         :class="{ 'ring-[rgb(247,145,29)]': isSelected(category) }"
       >
         <component :is="getIcon(category.icon)" class="w-6 h-6 lg:w-10 lg:h-10 " />

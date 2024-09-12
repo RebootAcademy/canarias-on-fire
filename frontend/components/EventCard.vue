@@ -1,22 +1,22 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
     <div
-      class="relative h-[360px] rounded-lg overflow-hidden group "
+      class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
         'bg-primary-gradient text-black': isPremiumPayment,
       }"
     >
       <div
-        class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 group-hover:top-[-2px] group-hover:left-[-2px] group-hover:right-[-2px] group-hover:bottom-[-2px] group-hover:border-4"
+        class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
         :class="{
-          'border-orange-600': !isGoldPayment && !isPremiumPayment,
-          'border-[#FBB03B]': isGoldPayment,
-          'border-primary': isPremiumPayment,
+          'border-[rgba(234,88,12,0.5)] ': !isGoldPayment && !isPremiumPayment,
+          'border-[#FBB03B]  ': isGoldPayment,
+          'border-primary ': isPremiumPayment,
         }"
       ></div>
 
-      <div class="relative z-10 w-full h-full rounded-lg">
+      <div class="relative  w-full h-full rounded-lg">
         <!-- Event status -->
         <span
           v-show="userStore.userData && userStore.userData.role === 'admin'"
@@ -32,7 +32,7 @@
         <NuxtImg
           v-if="!isBasicPayment"
           :src="event.coverImage || defaultImage"
-          class="w-full h-44 object-cover rounded-t-lg z-0"
+          class="w-full h-44 object-cover rounded-t-lg "
         />
         <NuxtImg
           v-else
