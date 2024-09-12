@@ -1,5 +1,5 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray rounded p-6" >
+<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[250px] sm:h-[270px] xl:h-[250px]" >
     <p class="text-whiteGray text-2xl font-bold"> {{band.bandName }}</p>
     <div class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center text-white italic">
@@ -38,6 +38,9 @@
                 <p>{{ band.nextPerformance.location.address}} </p>
             </div>
         </div>
+    </div>
+    <div v-else>
+        <p class="text-whiteGray mt-4">No hay proxima actuación publicada</p>
     </div>
 </div>
 
