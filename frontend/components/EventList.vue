@@ -32,8 +32,12 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return [];
   }
+  const today = new Date()
+  
   return eventsByDate.value
-    ?.filter(event => event.status === 'published')
+    ?.filter(event => 
+      event.status === 'published' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today
+    )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
