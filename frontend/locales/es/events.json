@@ -68,5 +68,13 @@
     "dateDescription": "Selecciona la fecha que deseas buscar",
     "categories": "Categorías",
     "categoriesDescription": "Selecciona hasta 3 categorías para encontrar eventos que coincidan con tus intereses."
+  },
+  "eventsDashboard": {
+    "optionsFilter": {
+      "all": "Todos",
+      "draft": "Borradores",
+      "published": "Publicados",
+      "closed": "Cerrados"
+    }
   }
 }

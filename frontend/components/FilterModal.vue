@@ -51,7 +51,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import CustomBtn from './CustomBtn.vue'
-
 const eventStore = useEventStore()
 const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
 

@@ -25,7 +25,6 @@
             </a>    
         </div> -->
     </div>
-
     <div v-if="band.nextPerformance && isValidNextPerformance(band.nextPerformance)">
         <p class="text-whiteGray mt-4">{{ $t('bandNextPerformance')}}</p>
         <div class="flex flex-col gap-3 mt-2">
@@ -43,7 +42,6 @@
         <p class="text-whiteGray mt-4">No hay proxima actuación publicada</p>
     </div>
 </div>
-
 </template>
     
 <script setup>
