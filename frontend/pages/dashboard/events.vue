@@ -1,13 +1,27 @@
 <template>
-  <div>
-    <div class="flex items-center justify-between w-full px-4 mb-4">
-      <h2 class="text-xl font-semibold">Events</h2>
-      <div class="flex gap-4">
+  <div v-if="userStore.isAuthenticated && userRole === 'admin'">
+    <div class="w-full flex flex-row  items-center justify-between xs:gap-2 lg:px-4 mb-4">
+      <div class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2 ">
+        <div 
+            v-for="option in optionsFilters" 
+            :key="option.label" 
+            class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
+            :class="selectOption === option.value ? 'bg-black  hover:bg-none' : 'hover:bg-zinc-800'"
+            @click="selectOption = option.value"
+          >
+            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
+          </div>
+      </div>
+      <div class="lg:hidden w-1/3 mr-2">
+        <CustomSelect :selectOption="selectOption" :optionsFilters="optionsFilters" @update:selected="handleSelection"/>
+      </div>
+      <div class="flex items-center justify-end gap-4 xs:w-2/3 sm:w-1/2  lg:w-auto">
+        
         <SearchInput v-model="searchQuery" />
         <CustomBtn
-            :title="$t('filterBtn')"
-            @click="openFilterModal"
-          />
+          :title="$t('filterBtn')"
+          @click="openFilterModal"
+        />
         <FilterModal />
       </div>
     </div>
@@ -16,23 +30,46 @@
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
     >
       <EventCard
-        v-for="event in limitedEvents"
+        v-for="event in adminEvents"
         :key="event._id"
         :event="event"
       />
     </div>
-     <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">
+     <p v-if="adminEvents.length === 0" class="text-gray-500 mt-4">
+       {{ $t('notEventsFound')}}
+      </p>
+  </div>
+
+  <div v-if="userStore.isAuthenticated && userRole === 'company'">
+    <div class="flex items-center justify-between w-full px-4 mb-4">
+      <h2 class="text-xl font-semibold">{{$t('events')}}</h2>
+      <div class="flex gap-4">
+      </div>
+    </div>
+    <hr class="mb-4" />
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+    >
+      <EventCard
+        v-for="event in myEvents"
+        :key="event._id"
+        :event="event"
+      />
+    </div>
+     <p v-if="myEvents.length === 0" class="text-gray-500 mt-4">
        {{ $t('notEventsFound')}}
       </p>
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
+import CustomSelect from './CustomSelect.vue'
+const { t } = useI18n()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-
-const { filteredEvents } = storeToRefs(eventStore)
+const userStore = useUserStore()
+const userRole = computed(() => userStore.userData?.role)
+const selectOption = ref('all')
 
 definePageMeta({
   layout: 'dashboard',
@@ -51,9 +88,18 @@ const openFilterModal = () => {
   eventStore.setFilterModalOpen(true)
 }
 
-const limitedEvents = computed(() => {
-  return filteredEvents.value
-    .filter(event => event.status === 'published')
+const optionsFilters = computed(() => {
+  return [
+    {label: t('eventsDashboard.optionsFilter.all'), value: "all"},
+    {label: t('eventsDashboard.optionsFilter.draft'), value: "draft"},
+    {label: t('eventsDashboard.optionsFilter.published'), value: "published"},
+    {label: t('eventsDashboard.optionsFilter.closed'), value: "closed"}
+  ]
+})
+
+const myEvents = computed(() => {
+  return eventStore.events
+    .filter(event => event.userId && event.userId?._id === userStore.userData._id)
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
@@ -64,9 +110,22 @@ const limitedEvents = computed(() => {
       
       return compareDates(a.eventDate, b.eventDate)
     })
- 
-})
+}) 
 
+const adminEvents = computed(() => {
+  return eventStore.events
+    .filter((event) => event.status === selectOption.value || selectOption.value === 'all')
+    .sort((a, b) => {
+      const priorityA = getEventPriority(a)
+      const priorityB = getEventPriority(b)
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
+      }
+      
+      return compareDates(a.eventDate, b.eventDate)
+    })
+})
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment._id : event.payment
   const payment = paymentStore.getPaymentById(paymentId?._id)
@@ -79,5 +138,10 @@ function compareDates(dateA, dateB) {
   return dateA.day - dateB.day
 }
 
-
+const handleSelection = (selectedValue) => {
+  console.log('Selected value from child:', selectedValue);
+ if (selectOption.value !== selectedValue) {
+    selectOption.value = selectedValue;
+  }
+};
 </script>

@@ -6,15 +6,14 @@
     <!-- Header -->
     
     <div class="">
-      <h1 class="text-2xl text-primary font-bold">Dashboard</h1>
-      <p class="text-sm text-gray-500 mb-4">Manage On Fire settings and users accounts</p>
-      <hr class="mb-8">
+      <h1 class="text-2xl text-primary font-bold">{{ $t('dashboard')}}</h1>
+      <p class="text-sm text-gray-500 mb-4">Place of BreadCrumbs</p>
     </div>
-    <div class="flex">
+    <div class="flex items-center flex-col lg:flex-row lg:items-start ">
       <!-- Sidebar -->
-      <aside class="w-64 p-4">
-        <nav class="space-y-4">
-          <ul class="space-y-2">
+      <aside class="flex flex-wrap items-center lg:flex-col lg:w-64 p-4 lg:mt-8">
+        <nav class="flex w-full ">
+          <ul class=" flex flex-wrap items-center justify-center gap-2 lg:flex-col lg:items-stretch lg:w-full">
             <li v-if="validateRole(['admin', 'company'], userRole)">
               <NuxtLink 
                 to="/dashboard/events" 
@@ -83,7 +82,7 @@
       </aside>
   
       <!-- Main content -->
-      <main class="flex-1 p-8">
+      <main class="w-full md:flex-1 p-8">
         <NuxtPage />
       </main>
     </div>
@@ -98,9 +97,7 @@ const userStore = useUserStore()
 
 const userRole = computed(() => userStore.userData?.role)
 
-
-
 useHead({
-  title: 'Admin Dashboard'
+  title: 'Dashboard'
 })
 </script>
