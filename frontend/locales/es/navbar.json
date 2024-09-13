@@ -46,13 +46,15 @@
     "subtext": "Precios de los planes"
   },
   "dashboardNav": {
-    "eventsAdmin": "Eventos",
+    "events": "Eventos",
     "myEvents": "Mis eventos",
-    "articlesAdmin": "Artículos",
+    "articles": "Artículos",
     "statistics": "Estadísticas",
     "profile": "Perfil",
     "payments": "Pagos",
     "password": "Contraseña",
-    "usersList": "Listado de usuarios"
+    "users": "Listado de usuarios",
+    "dashboard": "Dashboard",
+    "home": "Home"
   }
 }
