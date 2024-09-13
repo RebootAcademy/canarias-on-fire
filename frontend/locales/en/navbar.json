@@ -47,13 +47,15 @@
     "subtext": "Plan Pricing"
   },
   "dashboardNav": {
-    "eventsAdmin": "Events",
+    "events": "Events",
     "myEvents": "My events",
-    "articlesAdmin": "Articles",
+    "articles": "Articles",
     "statistics": "Statistics",
     "profile": "Profile",
     "payments": "Payments",
     "password": "Password",
-    "usersList": "Users List"
+    "users": "Users List",
+    "dashboard": "Dashboard",
+    "home": "Home"
   }
 }

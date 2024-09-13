@@ -6,8 +6,7 @@
     <!-- Header -->
     
     <div class="">
-      <h1 class="text-2xl text-primary font-bold">{{ $t('dashboard')}}</h1>
-      <p class="text-sm text-gray-500 mb-4">Place of BreadCrumbs</p>
+      <breadcrumbs />
     </div>
     <div class="flex items-center flex-col lg:flex-row lg:items-start ">
       <!-- Sidebar -->
@@ -20,7 +19,7 @@
                 active-class="border border-primary" 
                 class="block py-2 px-4 rounded-md bg-gray"
                 >
-                {{ userRole === 'admin' ? $t('dashboardNav.eventsAdmin') : $t('dashboardNav.myEvents') }}
+                {{ userRole === 'admin' ? $t('dashboardNav.events') : $t('dashboardNav.myEvents') }}
               </NuxtLink>
             </li>
             <li v-if="validateRole(['admin'], userRole)">
@@ -29,7 +28,7 @@
                 active-class="border border-primary" 
                 class="block py-2 px-4 rounded-md bg-gray"
               >
-              {{$t('dashboardNav.articlesAdmin')}}
+              {{$t('dashboardNav.articles')}}
               </NuxtLink>
             </li>
             <li v-if="userRole === 'admin'">
@@ -38,7 +37,7 @@
                 active-class="border border-primary" 
                 class="block py-2 px-4 rounded-md bg-gray"
               >
-                {{ $t('dashboardNav.usersList') }}
+                {{ $t('dashboardNav.users') }}
               </NuxtLink>
             </li>
             <li v-if="userRole === 'admin'">
