@@ -3,12 +3,12 @@
     <GMapAutocomplete
       v-model="eventStore.eventLocation"
       ref="autocompleteInput"
-      class="bg-gray text-sm p-2 rounded-md w-full"
+      class="bg-gray text-sm p-2 rounded-md w-full lg:w-1/2"
       :placeholder="$t('location')"
       @place_changed="setPlace"
     >
     </GMapAutocomplete>
-    <div class="w-full h-60 py-6">
+    <div class="w-full h-80 lg:h-[500px] py-6">
       <GMapMap 
         :center="eventStore.mapCenter"
         :zoom="18"

@@ -33,18 +33,20 @@
         <TicketButton hasBorder="hasBorder" />
       </div>
     </div>
-    <div class="mt-6">
-      <h2 class="text-xl font-semibold">Sobre el evento</h2>
-      <p class="mt-2">{{ event.eventDescription }}</p>
+   <div class="mt-8">
+      <h2 class="text-2xl font-semibold">{{$t('previewText.aboutEvent')}}</h2>
+      <div class="prose max-w-none" v-html="eventStore.eventDescription"></div>
     </div>
-    <div class="mt-6">
-      <h2 class="text-xl font-semibold">Ubicación</h2>
-      <img
-        v-if="event.eventLocation && event.eventLocation.mapImageUrl"
-        :src="event.eventLocation.mapImageUrl"
-        alt="Event Location"
-        class="w-full h-60 object-cover mt-2"
-      />
+    <div class="flex flex-col gap-2 my-8">
+      <h2 class="text-2xl font-semibold">{{$t('eventLocation')}}</h2>
+      <div class="flex gap-2">
+        <MapPin size="20" />
+        <p>{{ eventStore.eventLocation.address }}</p>
+      </div>
+      <details v-if="event.eventLocation && event.eventLocation.mapImageUrl" class="w-full lg:w-2/3">
+        <summary class="text-primary">{{$t('previewText.showMap')}}</summary>
+        <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
+      </details>
       <p v-else-if="pending">Cargando mapa...</p>
       <p v-else>No hay imagen del mapa disponible</p>
     </div>
@@ -91,7 +93,7 @@
 </template>
 
 <script setup>
-import { Share2, Pencil, Trash, Clock, Calendar } from 'lucide-vue-next'
+import { Share2, Pencil, Trash, Clock, Calendar, MapPin } from 'lucide-vue-next'
 
 import { formatEventDate } from '@/utils/dateUtils'
 import { storeToRefs } from 'pinia'
@@ -103,7 +105,7 @@ const route = useRoute()
 const router = useRouter()
 
 const { event } = storeToRefs(eventStore)
-const defaultImage = '/defaultEvent.jpg'
+const defaultImage = '/defaultImg.png'
 const eventId = route.params.id
 const isAdmin = userStore.userData?.role === 'admin'
 

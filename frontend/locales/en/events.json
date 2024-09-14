@@ -76,6 +76,11 @@
       "published": "Published",
       "closed": "Closed"
     }
+  },
+  "previewText": {
+    "aboutEvent": "About the event",
+    "showMap":"Show map",
+    "organizer": "Organizer",
+    "featurePayedEvents": "* Feature only available for Gold and Premium events."
   }
-
 }

@@ -113,7 +113,7 @@ const props = defineProps({
   event: Object,
 })
 
-const defaultImage = './defaultEvent.jpg'
+const defaultImage = './defaultImg.png'
 
 const getPaymentType = computed(() => {
   switch (props.event.payment?.name) {

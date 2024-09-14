@@ -76,5 +76,11 @@
       "published": "Publicados",
       "closed": "Cerrados"
     }
+  },
+  "previewText": {
+    "aboutEvent": "Sobre el evento",
+    "showMap": "Mostrar mapa",
+    "organizer": "Organizador",
+    "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
   }
 }

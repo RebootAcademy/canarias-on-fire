@@ -79,6 +79,10 @@
     "completeReg": "COMPLETAR REGISTRO",
     "subscribe": "SUBCRIBIRSE",
     "reset": "Reiniciar",
-    "apply": "Aplicar"
+    "apply": "Aplicar",
+    "pay": "Pago",
+    "free": "Gratis",
+    "publish": "Publicar",
+    "cancel": "Cancelar"
   }
 }
