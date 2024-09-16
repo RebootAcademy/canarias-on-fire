@@ -2,98 +2,108 @@ const mongoose = require('mongoose')
 const User = require('./user.model')
 
 const CompanySchema = new mongoose.Schema({
-  companyName: { 
-    type: String, 
-    required: true 
+  companyName: {
+    type: String,
+    required: true,
   },
   cif: {
     type: String,
     required: true,
     validate: {
-      validator: function (value){
+      validator: function (value) {
         return /^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$/.test(value)
-      }
-    }
+      },
+    },
   },
-  companyEmail: { 
-    type: String, 
+  companyEmail: {
+    type: String,
     unique: [true, 'Email already exists.'],
     sparse: true,
     validate: {
-      validator: function(value) {
+      validator: function (value) {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-      }
+      },
     },
-    message: 'Invalid email format' 
+    message: 'Invalid email format',
   },
-  phone: { 
-    type: String, 
+  phone: {
+    type: String,
     required: true,
     validate: {
-      validator: function(value) {
+      validator: function (value) {
         return /^\+?[1-9]\d{1,14}$/.test(value) // Ejemplo de validación para números de teléfono en formato E.164
       },
-      message: 'Invalid phone number format'
-    }
+      message: 'Invalid phone number format',
+    },
   },
-  sector: { 
+  sector: {
     type: String,
     enum: ['restoration', 'services', 'nightlife', 'activities'],
-    required: true 
+    required: true,
   },
-  preferredLocations: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'location' 
-  }],
+  preferredLocations: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'location',
+    },
+  ],
   activeSubscription: {
     status: {
       type: String,
       enum: ['inactive', 'active', 'canceling', 'canceled', 'downgrading'],
-      default: 'inactive'
+      default: 'inactive',
     },
     currentPeriodStart: Date,
     currentPeriodEnd: Date,
     cancelAtPeriodEnd: {
       type: Boolean,
-      default: false
+      default: false,
     },
     canceledAt: Date,
     lastInvoice: {
       id: String,
       amount: Number,
-      pdf: String
+      pdf: String,
     },
     plan: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'subscription'
+      ref: 'subscription',
     },
     nextPlan: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'subscription'
-    }
+      ref: 'subscription',
+    },
   },
   stripe: {
     customerId: String,
     subscriptionId: String,
-    subscriptionItemId: String
+    subscriptionItemId: String,
   },
-  invoices: [{
-    id: String,
-    amount: Number,
-    pdf: String,
-    date: Date,
-    status: String
-  }],
+  invoices: [
+    {
+      id: String,
+      amount: Number,
+      pdf: String,
+      date: Date,
+      status: String,
+    },
+  ],
   companyLogoUrl: {
-    type: String
+    type: String,
   },
   refCode: {
-    type: String
+    type: String,
   },
   isValidated: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
+  socialMedia: {
+    facebook: String,
+    instagram: String,
+    twitter: String,
+    youtube: String,
+  },
 })
 
 CompanySchema.pre('validate', function(next) {

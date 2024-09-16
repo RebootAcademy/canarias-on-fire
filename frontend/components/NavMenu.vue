@@ -109,7 +109,7 @@
                </div>
                <NavigationMenuLink as-child >
                 <NuxtLink
-                  to="/dashboard/articles"
+                  to="/restaurants"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
                 >
                   <div class="text-sm font-medium leading-none"> {{  $t('findRestaurants.label') }}</div>
