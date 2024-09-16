@@ -10,7 +10,7 @@
        <!--  <div  v-if="bands && bands.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-4 lg:gap-4">
             <RestaurantCard v-for="band in bands" :key="band._id" :band="band"/>
         </div> -->
-        <div v-else-if="restaurants && restaurants.length === 0">
+        <div v-else-if="restaurants && restaurants.length === 0 || !filteredRestaurants.length">
           <p>{{ $t('notFound')}}</p>
         </div>
         <div v-else>

@@ -104,6 +104,9 @@ const CompanySchema = new mongoose.Schema({
     twitter: String,
     youtube: String,
   },
+  foodType: {
+    type: String,
+  }
 })
 
 CompanySchema.pre('validate', function(next) {
