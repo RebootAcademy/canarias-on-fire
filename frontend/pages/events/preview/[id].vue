@@ -1,10 +1,19 @@
 <template>
   <div class="relative">
     <NuxtImg :src="eventStore.event.coverImage || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
-    <div class="flex p-8 gap-2">
-<!--       <span v-for="category in eventStore.selectedCategories" :key="category.id" class="bg-black text-white text-xs font-semibold px-4 py-1 rounded-xl">
-        {{ category.name }}
-      </span> -->
+     <div class="flex  gap-2 justify-between">
+      <div class="flex p-8 gap-2">
+        <span
+          v-for="category in event.categories"
+          :key="category._id"
+          class="bg-gray text-white text-xs font-semibold px-4 py-1 rounded-xl"
+        >
+          {{ category.name }}
+        </span>
+      </div>
+      <div class="flex items-center gap-2 my-6 mr-6">
+        <Share2 class="mr-2 w-8 cursor-pointer hover:text-primary" />
+      </div>
     </div>
   </div>
   <div class="px-8">

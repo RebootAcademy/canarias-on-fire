@@ -81,6 +81,7 @@
     "aboutEvent": "About the event",
     "showMap":"Show map",
     "organizer": "Organizer",
+    "dateAndTime": "Date and time",
     "featurePayedEvents": "* Feature only available for Gold and Premium events."
   }
 }

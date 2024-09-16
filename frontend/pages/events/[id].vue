@@ -5,21 +5,28 @@
       alt="Event Image"
       class="w-full h-96 object-cover"
     />
-    <div class="flex p-8 gap-2">
-      <span
-        v-for="category in event.categories"
-        :key="category._id"
-        class="bg-gray-500 text-white text-xs font-semibold px-4 py-1 rounded-xl"
-      >
-        {{ category.name }}
-      </span>
+    <div class="flex  gap-2 justify-between">
+      <div class="flex p-8 gap-2">
+        <span
+          v-for="category in event.categories"
+          :key="category._id"
+          class="bg-gray text-white text-xs font-semibold px-4 py-1 rounded-xl"
+        >
+          {{ category.name }}
+        </span>
+      </div>
+      <div class="flex items-center gap-2 my-6 mr-6">
+        <Share2 class="mr-2 w-8 cursor-pointer hover:text-primary" />
+        <Pencil v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary" @click="editEvent"/>
+        <Trash v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary"   @click="deleteEvent"/>
+      </div>
     </div>
   </div>
   <div class="px-8 bg-black text-white">
     <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
     <div class="flex justify-between">
       <div class="flex flex-col gap-1 mt-2">
-        <h2 class="text-2xl font-semibold">Date and time</h2>
+        <h2 class="text-2xl font-semibold mt-4">{{ $t('previewText.dateAndTime')}}</h2>
         <div class="flex items-center gap-1">
           <Clock size="16" />
           <span>{{ event.startTime }} - {{ event.endTime }}</span>
@@ -50,11 +57,11 @@
       <p v-else-if="pending">Cargando mapa...</p>
       <p v-else>No hay imagen del mapa disponible</p>
     </div>
-    <div class="mt-6">
+<!--     <div class="mt-6">
       <h2 class="text-xl font-semibold">Organizador</h2>
       <p>{{ event.userId?.companyName }}</p>
-    </div>
-    <div class="mt-6">
+    </div> -->
+    <div class="my-6">
       <TicketButton />
     </div>
     <div v-show="!isBasicPayment">
@@ -87,7 +94,7 @@
           Delete
         </Button>
       </div>
-    </div>
+    </div> 
     <EventsRelated />
   </div>
 </template>
