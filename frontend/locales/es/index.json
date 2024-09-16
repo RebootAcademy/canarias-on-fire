@@ -83,6 +83,10 @@
     "pay": "Pago",
     "free": "Gratis",
     "publish": "Publicar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "share": "Compartir"
   }
 }
