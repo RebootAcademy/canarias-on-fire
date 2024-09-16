@@ -12,10 +12,10 @@
       />
       <span class="absolute right-2 top-2 text-gray-500">€</span>
     </div>
-    <div class="flex items-center gap-2 mt-2 text-gray-500">
+    <!-- <div class="flex items-center gap-2 mt-2 text-gray-500">
       <Switch v-model:checked="eventStore.isFree" id="isFree" />
       <Label for="isFree" class="text-xs">{{ $t('free') }}</Label>
-    </div>
+    </div> -->
   </div>
 </template>
 

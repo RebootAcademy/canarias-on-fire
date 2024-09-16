@@ -1,20 +1,33 @@
 <template>
-  <div class="image-gallery p-4 text-white rounded-lg">
+  <div class="flex flex-col image-gallery p-4 text-white rounded-lg">
     <div class="cover-image mb-4 relative">
       <img v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
       <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
     </div>
-    <div class="image-upload mb-4">
-      <label class="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-500 rounded-lg cursor-pointer hover:bg-gray-800">
-        <span class="text-gray-400">+</span>
-        <input type="file" @change="onFileChange" multiple class="hidden" />
-      </label>
-    </div>
-    <div class="image-previews flex gap-4 overflow-x-auto">
-      <div v-for="(image, index) in images" :key="index" class="image-preview relative">
-        <img :src="image.url" @click="setCoverImage(image.url)" :class="{ 'border-4 border-orange-500': image.url === coverImage }" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
-        <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
+    <div class="flex gap-4 items-center">
+      <div class="image-upload mb-4 min-w-40">
+        <label class="flex items-center justify-center h-32 border-2  border-primary rounded-lg cursor-pointer hover:bg-gray-800">
+          <span class="text-primary text-4xl">+</span>
+          <input type="file" @change="onFileChange" multiple class="hidden" />
+        </label>
       </div>
+      <div class="hidden md:flex image-previews gap-4 overflow-x-auto xs:pb-4 md:pb-0">
+        <div v-for="(image, index) in images" :key="index" class="image-preview relative">
+          <img :src="image.url" @click="setCoverImage(image.url)" :class="{ 'border-4 border-orange-500': image.url === coverImage }" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
+          <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
+        </div>
+      </div>
+     <!--  <div class="w-full md:hidden">
+        <Carousel v-if="images.length" class="w-full">
+          <CarouselContent class="w-full">
+           <CarouselItem v-for="(image, index) in images" :key="index" class="image-preview2">
+              <img :src="image.url" class="w-full h-32 object-cover rounded-lg" />
+              <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
+
+            </CarouselItem>
+          </CarouselContent>
+        </Carousel>
+      </div> -->
     </div>
   </div>
 </template>
@@ -100,6 +113,7 @@ const removeImage = (url) => {
   height: 128px; /* Fixed height */
   object-fit: cover;
   cursor: pointer;
+  
 }
 .image-preview img.cover {
   border: 2px solid red;
@@ -112,6 +126,26 @@ const removeImage = (url) => {
   color: white;
   border: none;
   cursor: pointer;
+}
+
+.image-previews::-webkit-scrollbar {
+  height: 12px;
+}
+
+.image-previews::-webkit-scrollbar-track {
+  background: #333; /* Color del fondo del track */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+.image-previews::-webkit-scrollbar-thumb {
+  background-color: #ff6600; /* Color de la barra */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 3px solid #333; /* Espacio entre el scroll y el track */
+}
+
+/* Opcional: Si deseas modificar el hover de la barra */
+.image-previews::-webkit-scrollbar-thumb:hover {
+  background-color: #ff9900; /* Color de hover */
 }
 
 @media screen and (min-width: 1080px) {

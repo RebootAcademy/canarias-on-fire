@@ -390,10 +390,11 @@ export const useEventStore = defineStore('eventStore', {
       return this.events.filter((event) => {
         // Filter by date
         if (
+          event.eventDate &&
           new Date(
-            event.eventDate.year,
-            event.eventDate.month - 1,
-            event.eventDate.day
+            event.eventDate?.year,
+            event.eventDate?.month - 1,
+            event.eventDate?.day
           ) < today
         ) this.updateEventStatus(event._id, 'closed')
           if (this.searchQuery) {
@@ -467,20 +468,23 @@ export const useEventStore = defineStore('eventStore', {
   
     filteredEventsByDate: (state) => (array) => {
       return array.filter((event) => {
-        const eventDate = new Date(
-          event.eventDate.year,
-          event.eventDate.month - 1,
-          event.eventDate.day
-        )  
+        let eventDate = null
+        if (event.eventDate) {
+          const eventDate = new Date(
+            event.eventDate.year,
+            event.eventDate.month - 1,
+            event.eventDate.day
+          )  
+        }
         switch (state.selectedFilterByDate) {
           case 'all':
             return true // Devuelve todos los eventos
           case 'today':
-            return state.isSameDay(eventDate, new Date()) // Comparar con la fecha de hoy
+            return eventDate && state.isSameDay(eventDate, new Date()) // Comparar con la fecha de hoy
           case 'weekend':
-            return eventDate.getDay() === 6 || eventDate.getDay() === 0 // Filtro por fin de semana
+            return eventDate && eventDate.getDay() === 6 || eventDate.getDay() === 0 // Filtro por fin de semana
           case 'month':
-            return eventDate.getMonth() === new Date().getMonth() // Filtro por mes actual
+            return eventDate && eventDate.getMonth() === new Date().getMonth() // Filtro por mes actual
           default:
             return true
         }

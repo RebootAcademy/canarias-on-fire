@@ -24,39 +24,48 @@
       </div>
     </div>
     <div class="mt-8">
-      <h2 class="text-2xl font-semibold">Sobre el evento</h2>
-      <p class="mt-4">{{ eventStore.eventDescription }}</p>
+      <h2 class="text-2xl font-semibold">{{$t('previewText.aboutEvent')}}</h2>
+      <div class="prose max-w-none" v-html="eventStore.eventDescription"></div>
     </div>
-    <div class="mt-8">
-      <h2 class="text-2xl font-semibold">Ubicación</h2>
-      <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 object-cover mt-4" />
+    <div class="flex flex-col gap-2 my-8">
+      <h2 class="text-2xl font-semibold">{{$t('eventLocation')}}</h2>
+      <div class="flex gap-2">
+        <MapPin size="20" />
+        <p>{{ eventStore.eventLocation.address }}</p>
+      </div>
+      <details class="w-full lg:w-2/3">
+        <summary class="text-primary">{{$t('previewText.showMap')}}</summary>
+        <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
+      </details>
     </div>
-    <div class="mt-8">
+<!--     <div class="mt-8">
       <h2 class="text-2xl font-semibold">Organizador</h2>
-<!--       <div class="flex items-center gap-2 mt-4">
+      <div class="flex items-center gap-2 mt-4">
         <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
         <span>{{ eventStore.organizerName }}</span>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
     <div>
       <TicketButton />
     </div>
     <div>
       <EventGallery />
-      <p class="text-xs text-primary">* Feature only available for Gold and Premium events.</p>
+      <p class="text-xs text-primary">{{ $t('previewText.featurePayedEvents')}}</p>
     </div>
-    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">Publish</Button>
+    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">{{ $t('buttons.publish') }}</Button>
   </div>
 </template>
 
 <script setup>
+import { MapPin} from 'lucide-vue-next'
+
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const route = useRoute()
 const router = useRouter()
 
 const eventId = route.params.id
-const defaultImage = './defaultEvent.jpg'
+const defaultImage = './defaultImg.png'
 
 onMounted(async () => {
   await eventStore.fetchEventById(eventId)

@@ -21,7 +21,7 @@
 
     <!-- EVENT NAME, DATE & TIME -->
     <hr />
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-1 w-full md:w-1/2">
       <p class="font-semibold">{{ $t('eventInfo') }}</p>
       <p class="text-xs text-gray-500 mb-2">{{ $t('eventInfoDescription') }}</p>
       <Label for="eventName" class="text-xs text-gray-500">
@@ -39,8 +39,8 @@
       v-if="eventStore.eventType === 'event'"
       class="flex w-full justify-between items-center p-3"
     >
-      <div class="w-full flex xs:flex-col md:flex-row  gap-4 ">
-        <div class="w-full md:w-[25%] flex flex-col ">
+      <div class="w-full flex xs:flex-col lg:flex-row  gap-4 ">
+        <div class="w-full lg:w-[25%] flex flex-col ">
           <DatePicker />
           <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.eventDate }}</span>
         </div>
@@ -70,37 +70,80 @@
 
     <!-- EVENT DESCRIPTION -->
     <hr />
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-1 ">
       <p class="font-semibold">{{ $t('eventDescription') }}</p>
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('eventDescriptionDescription') }}
       </p>
-      <Textarea
+     <!--  <Textarea
         v-model="eventStore.eventDescription"
         id="eventDescription"
         class="p-2 border rounded-md h-40"
-      ></Textarea>
-      <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.description }}</span>
+      ></Textarea> -->
+      <div class="w-full lg:w-2/3">
+        <client-only>
+          <QuillEditor 
+            v-model:content="eventStore.eventDescription" 
+            contentType="html" 
+            theme="snow" 
+            class="min-h-[200px]  border rounded-sm"
+          />
+        </client-only>
+        <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.description }}</span>
+      </div>
     </div>
 
     <!-- EVENT LOCATION -->
     <hr />
-    <div class="flex flex-col gap-1">
-      <p class="font-semibold">{{ $t('eventLocation') }}</p>
+    <div class="flex flex-col w-full gap-1">
+      <p class="font-semibold ">{{ $t('eventLocation') }}</p>
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('eventLocationDescription') }}
       </p>
-      <LocationSearch v-model="eventStore.eventLocation" />
+      <div class="w-full lg:w-2/3 ">
+        <LocationSearch v-model="eventStore.eventLocation" />
+      </div>
       <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.location }}</span>
     </div>
 
+    
+    <!-- EXTERNAL URL -->
+    <hr />
+    <div class="flex flex-col mb-6">
+      <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
+      <Input
+      v-model="eventStore.externalUrl"
+      id="externalUrl"
+      type="text"
+      class="p-2 border rounded-md"
+      />
+    </div>
+
+
     <!-- EVENT PRICE & CAPACITY -->
     <hr />
-    <div v-show="eventStore.eventType === 'event'" class="flex flex-col gap-1">
-      <p class="font-semibold">{{ $t('eventPrice') }}</p>
-      <p class="text-xs text-gray-500 mb-2">
-        {{ $t('eventPriceDescription') }}
-      </p>
+    <p class="font-semibold">{{ $t('eventPrice') }}</p>
+    <p class="text-xs text-gray-500 mb-2">
+      {{ $t('eventPriceDescription') }}
+    </p>
+
+    <div class="flex gap-4">
+      <div 
+        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        :class="isClickTypeOfPay && eventStore.isFree === true ? 'border-primary' : 'border-whiteGray'"
+         @click="modifyTypeOfEvent(true)"
+        >
+        <p>{{ $t('buttons.free') }}</p>
+      </div>
+      <div 
+        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        :class="isClickTypeOfPay && eventStore.isFree === false ? 'border-primary' : 'border-whiteGray'"
+        @click="modifyTypeOfEvent(false)"
+      >
+        <p>{{ $t('buttons.pay') }}</p>
+      </div>
+    </div>
+    <div v-show="eventStore.eventType === 'event' && isClickTypeOfPay " class="flex flex-col gap-1">
       <div class="flex items-start gap-4">
         <div class="w-1/6">
           <PriceInput v-model="eventStore.eventPrice"  />
@@ -110,18 +153,6 @@
           <CapacityInput />
         </div>
       </div>
-    </div>
-
-    <!-- EXTERNAL URL -->
-    <hr />
-    <div class="flex flex-col mb-6">
-      <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
-      <Input
-        v-model="eventStore.externalUrl"
-        id="externalUrl"
-        type="text"
-        class="p-2 border rounded-md"
-      />
     </div>
   </div>
   <hr class="mb-4" />
@@ -139,6 +170,14 @@ const props = defineProps({
 
 const eventStore = useEventStore()
 const { t, locale } = useI18n()
+
+const isClickTypeOfPay = ref(false)
+
+const modifyTypeOfEvent = (type) => {
+  eventStore.isFree = type
+  isClickTypeOfPay.value = true
+}
+
 
 onMounted(() => {
   if (props.isEditing && eventStore.event) {

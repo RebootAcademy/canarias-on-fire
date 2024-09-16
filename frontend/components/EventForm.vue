@@ -2,7 +2,11 @@
   <div class="flex flex-col mt-4 gap-4">
     <EventInfoForm :isEditing="isEditing" />
     <CategorySelector :isEditing="isEditing" />
-    <Button type="submit" @click="onSubmit">{{ isEditing ? $t('update') : $t('preview') }}</Button>
+    <div class="flex w-full justify-end items-center gap-4">
+
+      <CustomBtn :title="$t('buttons.cancel')" :withoutGradient="true" @click="router.push('/events')" />
+      <CustomBtn :title="isEditing ? $t('update') : $t('preview')" :action="onSubmit" />
+    </div>
   </div>
 </template>
 

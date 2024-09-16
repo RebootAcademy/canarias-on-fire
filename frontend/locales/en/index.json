@@ -80,6 +80,10 @@
     "completeReg": "COMPLETE REGISTRATION",
     "subscribe": "SUBSCRIBE",
     "reset": "Reset",
-    "apply": "Apply"
+    "apply": "Apply",
+    "pay": "Pay",
+    "free": "Free",
+    "publish": "Publish",
+    "cancel": "Cancel"
   }
 }

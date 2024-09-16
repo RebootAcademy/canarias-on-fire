@@ -71,9 +71,13 @@ function getEventPriority(event) {
 }
 
 function compareDates(dateA, dateB) {
+  if (!dateA || !dateB) {
+    if (!dateA && !dateB) return 0
+    return dateA ? -1 : 1
+  }
   if (dateA.year !== dateB.year) return dateA.year - dateB.year
   if (dateA.month !== dateB.month) return dateA.month - dateB.month
-  return dateA.day - dateB.day
+  return dateA.day - dateB.day;
 }
 
 </script>

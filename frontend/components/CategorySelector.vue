@@ -6,10 +6,10 @@
       <Badge 
         v-for="category in eventStore.categories"
         :key="category.id"
-        :class="{'bg-black text-white' : isSelected(category), 'bg-white' : !isSelected(category)}"
+        :class="{'bg-transparent border-primary ' : isSelected(category), 'bg-gray' : !isSelected(category)}"
         @click="toggleCategory(category)"
         variant="secondary"
-        class="p-2 px-4 cursor-pointer"
+        class="p-2 px-4 cursor-pointer text-white hover:bg-black"
       >{{ $t(`values.${category.name}`) }}</Badge>
     </div>
     <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.categories }}</span>
@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+const {t} = useI18n()
 import { errors, validateFields } from '../utils/validation'
 
 const props = defineProps({
