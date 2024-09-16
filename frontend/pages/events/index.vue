@@ -50,7 +50,7 @@ const openFilterModal = () => {
 
 const limitedEvents = computed(() => {
   return filteredEvents.value
-    .filter(event => event.status === 'published')
+    .filter(event => event.status === 'published' && event.userId?.isActive && event.userId?.isValidated)
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
