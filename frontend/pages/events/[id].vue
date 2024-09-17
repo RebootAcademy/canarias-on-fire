@@ -107,6 +107,7 @@
     </div> 
     <EventsRelated />
   </div>
+  </div>
 </template>
 
 <script setup>
