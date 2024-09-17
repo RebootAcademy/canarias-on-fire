@@ -19,7 +19,7 @@
     <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
     <div class="flex justify-between">
       <div class="flex flex-col gap-1 mt-2">
-        <h2 class="text-2xl font-semibold"></h2>
+        <h2 class="text-2xl font-semibold">Date and time</h2>
         <div class="flex items-center gap-1">
           <Clock size="16" />
           <span>{{ event.startTime }} - {{ event.endTime }}</span>
