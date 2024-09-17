@@ -2,7 +2,7 @@ const User = require('../models/user.model')
 const Company = require('../models/company.model')
 const Musician = require('../models/musician.model')
 const Subscription = require('../models/subscription.model')
-
+const sendEmail = require('../services/nodemailer/nodemailer.service')
 const createUser = async (req, res) => {
   try {
     let newUser
@@ -204,6 +204,7 @@ const updateUser = async (req, res) => {
       // Cambio a company
       await User.findByIdAndDelete(req.params.id)
       user = await Company.create({ ...user.toObject(), ...updateData })
+
     } else if (newRole !== 'company' && oldRole === 'company') {
       // Cambio de company a otro rol
       await Company.findByIdAndDelete(req.params.id)
@@ -290,6 +291,8 @@ const updateUserProfile = async (req, res) => {
       // Cambio a company
       await User.findByIdAndDelete(req.params.id)
       user = await Company.create({ ...user.toObject(), ...updateData })
+      await sendEmail('registeredCompany', user)
+
     } 
     else if (newRole !== 'company' && oldRole === 'company') {
       // Cambio de company a otro rol
