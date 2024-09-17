@@ -20,7 +20,6 @@
         <Pencil v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary" @click="editEvent"/>
         <Trash v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary"   @click="deleteEvent"/>
       </div>
-    </div>
   </div>
   <div class="px-8 bg-black text-white">
     <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
@@ -42,17 +41,17 @@
     </div>
    <div class="mt-8">
       <h2 class="text-2xl font-semibold">{{$t('previewText.aboutEvent')}}</h2>
-      <div class="prose max-w-none" v-html="eventStore.eventDescription"></div>
+      <div class="prose max-w-none" v-html="event.eventDescription"></div>
     </div>
-    <div class="flex flex-col gap-2 my-8">
+    <div class="flex flex-col gap-2 my-8" v-if=" event.eventLocation &&  event.eventLocation.address">
       <h2 class="text-2xl font-semibold">{{$t('eventLocation')}}</h2>
-      <div class="flex gap-2">
+      <div class="flex gap-2" >
         <MapPin size="20" />
-        <p>{{ eventStore.eventLocation.address }}</p>
+        <p>{{ event.eventLocation.address }}</p>
       </div>
-      <details v-if="event.eventLocation && event.eventLocation.mapImageUrl" class="w-full lg:w-2/3">
+      <details v-if="event.eventLocation.mapImageUrl" class="w-full lg:w-2/3">
         <summary class="text-primary">{{$t('previewText.showMap')}}</summary>
-        <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
+        <NuxtImg :src="event.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
       </details>
       <p v-else-if="pending">Cargando mapa...</p>
       <p v-else>No hay imagen del mapa disponible</p>
@@ -68,12 +67,23 @@
       <EventGallery />
     </div>
     <div class="flex gap-2 mt-6 mb-6">
-      <div class="bg-primary-gradient p-0.5 rounded-md">
-        <Button
+      <div 
+        v-if="event.status === 'draft' && isValidated" 
+        class="bg-primary-gradient p-0.5 rounded-md" 
+        @click="publishEvent"
+      >
+        <Button 
           class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
         >
-          <Share2 class="mr-2 h-4 w-4" />
-          Share
+          {{ $t('buttons.publish') }}
+        </Button>
+      </div>
+      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="event.status === 'published'">
+        <Button 
+          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+        >
+          <Share2  class="mr-2 h-4 w-4" />
+          {{ $t('buttons.share') }}
         </Button>
       </div>
       <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
@@ -82,7 +92,7 @@
           class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
         >
           <Pencil class="mr-2 h-4 w-4" />
-          Edit
+          {{ $t('buttons.edit') }}
         </Button>
       </div>
       <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
@@ -91,7 +101,7 @@
           class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
         >
           <Trash class="mr-2 h-4 w-4" />
-          Delete
+          {{ $t('buttons.delete') }}
         </Button>
       </div>
     </div> 
@@ -115,6 +125,7 @@ const { event } = storeToRefs(eventStore)
 const defaultImage = '/defaultImg.png'
 const eventId = route.params.id
 const isAdmin = userStore.userData?.role === 'admin'
+const isValidated = userStore.userData.isValidated
 
 const isBasicPayment = computed(() => {
   const payment = paymentStore.getPaymentById(eventStore.event.payment)
@@ -143,4 +154,25 @@ const formattedDate = computed(() => {
 const formatPrice = computed(() => {
   return event.value.eventPrice === 0 ? 'Free' : `${event.value.eventPrice} €`
 })
+
+const publishEvent = async () => {
+  if (eventStore.event.eventType === 'event') {
+    // Para eventos, redirigir a la página de pago
+    router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
+    console.log('status: ', eventStore.event.status)
+  } else if (eventStore.event.eventType === 'promotion') {
+    if (userStore.userData.activeSubscription?.status === 'active' || userStore.userData.role === 'admin') {
+      const result = await eventStore.updateEventStatus(eventId, 'published')
+      if (result) {
+        router.push(`/events/${eventId}`)
+      } else {
+        console.error('Failed to publish promotion')
+      }
+    } else {
+      router.push(`/pricing?id=${eventId}&type=${eventStore.event.eventType}`)
+    }
+  }
+}
+
+console.log(eventStore.eventLocation)
 </script>

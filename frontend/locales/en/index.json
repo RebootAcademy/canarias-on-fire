@@ -84,6 +84,10 @@
     "pay": "Pay",
     "free": "Free",
     "publish": "Publish",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "share": "Share"
   }
 }

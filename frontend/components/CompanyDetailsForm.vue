@@ -122,7 +122,6 @@
         <div class="mb-4">
           <Label class="text-gray-300">
             {{ $t('onBoarding.step2CodRef') }}
-            <span class="text-primary">*</span>
           </Label>
           <Input id="phone" v-model="formData.refCode" class="text-gray-500" />
         </div>
