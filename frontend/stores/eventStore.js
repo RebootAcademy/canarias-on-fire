@@ -396,17 +396,26 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate?.month - 1,
             event.eventDate?.day
           ) < today
-        ) this.updateEventStatus(event._id, 'closed')
-          if (this.searchQuery) {
-            // Search
-            const lowercaseQuery = this.searchQuery.toLowerCase()
-            if (
-              !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-              !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-            ) {
-              return false
-            }
+        ) {
+          this.updateEventStatus(event._id, 'closed')
+        }
+
+        // Filter events by active and validated users
+        if (!event.userId?.isActive || !event.userId?.isValidated) {
+          return false
+        }
+
+        if (this.searchQuery) {
+          // Search
+          const lowercaseQuery = this.searchQuery.toLowerCase()
+          if (
+            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          ) {
+            return false
           }
+        }
+
         // Filter by Categories
         if (this.filters.categories.length > 0) {
           const eventCategoryIds = event.categories.map((cat) => cat._id)
