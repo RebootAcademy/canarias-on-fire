@@ -33,7 +33,7 @@ const isValidated = userStore.userData.isValidated
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
-  // validateFields(t)
+  validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
@@ -41,7 +41,6 @@ const onSubmit = async () => {
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)
-
       const result = await eventStore.createEvent()
       if (result) {
         router.push(`/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`)
@@ -53,7 +52,7 @@ const onSubmit = async () => {
 }
 
 const onSaveAndRedirect = async () => {
-  eventStore.setHasTriedSubmit(true)
+  //eventStore.setHasTriedSubmit(true)
   if (Object.values(errors).every(error => error === '')) {
     eventStore.status = 'draft'
     eventStore.setUserId(userStore.userData._id)

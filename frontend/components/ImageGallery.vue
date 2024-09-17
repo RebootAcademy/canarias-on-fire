@@ -4,9 +4,9 @@
       <img v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
       <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
     </div>
-    <div class="flex gap-4 items-center">
-      <div class="image-upload mb-4 min-w-40">
-        <label class="flex items-center justify-center h-32 border-2  border-primary rounded-lg cursor-pointer hover:bg-gray-800">
+    <div class="flex flex-col lg:flex-row gap-4 items-center">
+      <div class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40">
+        <label class="flex items-center justify-center h-32 border-2 border-primary rounded-lg cursor-pointer hover:bg-gray-800">
           <span class="text-primary text-4xl">+</span>
           <input type="file" @change="onFileChange" multiple class="hidden" />
         </label>
@@ -17,17 +17,6 @@
           <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
         </div>
       </div>
-     <!--  <div class="w-full md:hidden">
-        <Carousel v-if="images.length" class="w-full">
-          <CarouselContent class="w-full">
-           <CarouselItem v-for="(image, index) in images" :key="index" class="image-preview2">
-              <img :src="image.url" class="w-full h-32 object-cover rounded-lg" />
-              <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
-
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-      </div> -->
     </div>
   </div>
 </template>
