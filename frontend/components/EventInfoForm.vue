@@ -147,16 +147,16 @@
       {{ $t('eventPriceDescription') }}
     </p>
 
-    <div class="flex gap-4">
+    <div class="flex justify-center sm:justify-start gap-4">
       <div 
-        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
         :class="isClickTypeOfPay && eventStore.isFree === true ? 'border-primary' : 'border-whiteGray'"
         @click="modifyTypeOfEvent(true)"
         >
         <p>{{ $t('buttons.free') }}</p>
       </div>
       <div 
-        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
         :class="isClickTypeOfPay && eventStore.isFree === false ? 'border-primary' : 'border-whiteGray'"
         @click="modifyTypeOfEvent(false)"
       >
