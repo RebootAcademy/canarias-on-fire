@@ -80,6 +80,7 @@
   "previewText": {
     "aboutEvent": "Sobre el evento",
     "showMap": "Mostrar mapa",
+    "dateAndTime": "Fecha y hora",
     "organizer": "Organizador",
     "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
   }
