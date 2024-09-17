@@ -144,6 +144,25 @@ const getAllBands = async (req, res) => {
   }
 }
 
+const getAllRestaurants = async (req, res) => {
+  try {
+    const bands = await Company.find({ sector: 'restoration' }).lean()
+
+    res.status(200).json({
+      success: true,
+      message: 'Restaurants successfully fetched.',
+      result: bands,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error getting restaurants.',
+      description: error.message,
+    })
+  }
+}
+
 const getCurrentUser = async (req, res) => {
   try {
     const { email } = req.params
@@ -435,6 +454,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   getAllBands,
+  getAllRestaurants,
   getCurrentUser,
   updateUser,
   updateUserProfile,

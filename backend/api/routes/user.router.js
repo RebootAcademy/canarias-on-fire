@@ -6,6 +6,7 @@ const {
   getAllUsers,
   getUserById,
   getAllBands,
+  getAllRestaurants,
   getCurrentUser,
   updateUser,
   updateUserProfile,
@@ -17,6 +18,7 @@ router
   .post('/', createUser)
   .get('/', getAllUsers)
   .get('/bands', getAllBands)
+  .get('/restaurants', getAllRestaurants)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/:id',/*  isAuth, checkRole('admin'), */ updateUser)
   .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)

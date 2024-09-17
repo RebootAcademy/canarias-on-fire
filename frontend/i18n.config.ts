@@ -12,6 +12,9 @@ import articlesES from './locales/es/articles.json'
 import articlesEN from './locales/en/articles.json'
 import bandsEN from './locales/en/bands.json'
 import bandsES from './locales/es/bands.json'
+import restaurantsES from './locales/es/restaurants.json'
+import restaurantsEN from './locales/en/restaurants.json'
+
 
 
 export default defineI18nConfig(() => ({
@@ -26,6 +29,7 @@ export default defineI18nConfig(() => ({
       ...validationEn,
       ...articlesEN,
       ...bandsEN,
+      ...restaurantsEN
     },
     es: {
       ...navbarEs,
@@ -35,6 +39,7 @@ export default defineI18nConfig(() => ({
       ...validationEs,
       ...articlesES,
       ...bandsES,
+      ...restaurantsES
     },
   },
 }))
