@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="flex items-center justify-between w-full mb-6">
+    <div class="flex flex-col-reverse gap-4 md:flex-row items-center justify-between w-full mb-6">
       <Tabs v-model="activeTab" class="w-auto">
         <TabsList>
-          <TabsTrigger value="companies">Companies</TabsTrigger>
-          <TabsTrigger value="basicUsers">Basic Users</TabsTrigger>
+          <TabsTrigger value="companies" class="relative">
+            <div v-if="isThereNotValidatedCompany.length" class="absolute top-0 right-0 rounded-full  bg-red-500 w-2 h-2 animate-pulse "/>
+            {{ $t('userCompanies') }}
+          </TabsTrigger>
+          <TabsTrigger value="basicUsers">{{ $t('basicUsers') }}</TabsTrigger>
         </TabsList>
       </Tabs>
-      <div class="flex gap-4">
-        <SearchInput v-model="searchQuery" placeholder="Search users..." />
+      <div class="flex flex-col-reverse md:flex-row gap-4 items-center">
+        <SearchInput v-model="searchQuery" :placeholder="$t('search')" />
         <CustomBtn
-          title="Add user"
+          :title="$t('addUser')"
           @click="openAddUserModal"
         />
       </div>
@@ -18,6 +21,7 @@
     <UserTable 
       :users="filteredUsers"
       :isCompanyTab="activeTab === 'companies'"
+      :companiesNotValidated="isThereNotValidatedCompany"
       @userSelected="$emit('userSelected', $event)"
     />
     <AddUserModal :isOpen="isAddUserModalOpen" @close="closeAddUserModal" @userAdded="handleUserAdded" />
@@ -46,6 +50,12 @@ const filteredUsers = computed(() => {
                           (user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase()))
     
     return matchesTab && matchesSearch
+  })
+})
+
+const isThereNotValidatedCompany = computed(() => {
+  return userStore.users.filter(user => {
+    return user.role === 'company' && !user.isValidated
   })
 })
 

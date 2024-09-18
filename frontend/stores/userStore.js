@@ -70,9 +70,11 @@ export const useUserStore = defineStore('userStore', {
           body: profileData
         })
         
-        if (response.data.success) {
-          this.userData = { ...this.userData, ...response.data.user }
-          return { success: true }
+        if (response) {
+          if (this.userData.id === profileData._id) {
+            this.userData = { ...this.userData, ...response.result }
+          }
+          return { success: true, user: response.result }
         } else {
           return { success: false, message: response.data.message }
         }
@@ -83,6 +85,7 @@ export const useUserStore = defineStore('userStore', {
         }
       }
     },
+
 
     async updateUserProfileToCompany(profileData) {
       try {

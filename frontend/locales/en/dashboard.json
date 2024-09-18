@@ -1,0 +1,38 @@
+{
+    "userManagement": "User Management",
+    "userCompanies": "Companies",
+    "basicUsers": "Basic Users",
+    "userName": "Username",
+    "addUser": "Add User",
+    "email": "Email",
+    "subscription": "Subcription",
+    "role": "Role",
+    "search": "Search",
+    "userProfile": {
+      "profile": "Profile",
+      "events": "Events",
+      "subscriptions": "Subscriptions",
+      "desactivated": "Desactivated",
+      "userName": "Username",
+      "email": "Email",
+      "role": "Role",
+      "selectedRole": {
+        "label": "Select role",
+        "basis": "Basis",
+        "company": "Company",
+        "admin": "Admin"
+      },
+      "companyName": "Company Name",
+      "phone": "Contact Phone",
+      "cif": "CIF",
+      "address": "Address",
+      "sector": {
+        "label": "Sector",
+        "select": "Select sector",
+        "restoration": "Restoration",
+        "services": "Services",
+        "nightlife": "Nightlife",
+        "activities": "Activities"
+      }
+    }
+}

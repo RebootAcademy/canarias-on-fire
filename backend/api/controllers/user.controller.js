@@ -214,7 +214,7 @@ const updateUser = async (req, res) => {
 
     if (newRole === 'company') {
       // Agregar campos de compañía si el nuevo rol es 'company'
-      ;['companyName', 'companyEmail', 'phone', 'sector', 'refCode'].forEach((field) => {
+      ;['companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'isValidated'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
     }

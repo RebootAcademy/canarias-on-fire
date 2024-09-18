@@ -1,0 +1,39 @@
+{
+  "userManagement": "Panel de control de Usuarios",
+  "userCompanies": "Empresas",
+  "basicUsers": "Usuarios básicos",
+  "userName": "Nombre de usuario",
+  "addUser": "Añadir usuario",
+  "email": "Correo electrónico",
+  "subscription": "Subcripción",
+  "role": "Rol",
+  "search": "Buscar",
+  "userProfile": {
+    "profile": "Perfil",
+    "events": "Eventos",
+    "subscriptions": "Subscripciones",
+    "desactivated": "Desactivado",
+    "userName": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "selectedRole": {
+      "label": "Seleccionar rol",
+      "basis": "Básico",
+      "company": "Empresa",
+      "admin": "Administrador"
+    },
+    "companyName": "Nombre de la Empresa",
+    "phone": "Teléfono de contacto",
+    "cif": "CIF",
+    "address": "Dirección",
+    "sector": {
+      "label": "Sector",
+      "select": "Selecciona sector",
+      "restoration": "Restauración",
+      "services": "Servicios",
+      "nightlife": "Ocio nocturno",
+      "activities": "Actividades"
+    }
+
+  }
+}
