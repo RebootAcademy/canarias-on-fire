@@ -53,11 +53,7 @@ const toggleCategory = (category) => {
     eventStore.setSelectedCategories([])
   }
 
-  console.log('Current selectedCategories:', eventStore.selectedCategories)
-
   const index = eventStore.selectedCategories.findIndex(c => c && c.id === category.id)
-
-  console.log('Found index:', index)
 
   let updatedCategories
   if (index === -1) {
@@ -66,10 +62,8 @@ const toggleCategory = (category) => {
     updatedCategories = eventStore.selectedCategories.filter(c => c && c.id !== category.id)
   }
 
-  console.log('Updated categories:', updatedCategories)
-
   eventStore.setSelectedCategories(updatedCategories)
-  validateFields()
+  //validateFields()
 }
 
 watch(() => eventStore.selectedCategories, (newValue) => {

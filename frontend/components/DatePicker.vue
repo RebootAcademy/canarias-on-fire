@@ -18,9 +18,15 @@
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0">
         <Calendar 
+          v-if="props.band"
           v-model="eventStore.eventDate" 
           initial-focus 
           @update:model-value="updateDate" 
+        />
+        <Calendar 
+          v-else
+          v-model="eventStore.eventDate" 
+          initial-focus 
         />
       </PopoverContent>
     </Popover>
@@ -37,7 +43,10 @@ const dateError = ref('')
 const emit = defineEmits(['dateChanged'])
 
 const props = defineProps({
-  band: Boolean
+  band: {
+    typeof: Boolean,
+    default: false
+  }
 })
 
 console.log(props.band)
@@ -48,7 +57,9 @@ const formattedDate = computed(() => {
 
 const updateDate = (newDate) => {
   eventStore.eventDate = newDate
-  emit('dateChanged', eventStore.eventDate)
+   if (props.band) {
+    emit('dateChanged', eventStore.eventDate)
+  }
 }
 const isDisabledDate = (date) => {
   if (today > date) return true

@@ -41,7 +41,12 @@
           type="text"
           class="p-2 border rounded-md mb-1"
         />
-        <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs font-normal">{{ errors.eventName }}</span>
+        <span 
+          v-if="eventStore.hasTriedSubmit" 
+          class="text-red-500 text-xs font-normal"
+        >
+          {{ errors.eventName }}
+        </span>
       </Label>
     </div>
     <div
@@ -50,22 +55,32 @@
     >
       <div class="w-full flex xs:flex-col lg:flex-row  gap-4 ">
         <div class="w-full lg:w-[25%] flex flex-col ">
-          <DatePicker />
-          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.eventDate }}</span>
+          <DatePicker v-model="endDate"/>
+          <span 
+            v-if="eventStore.hasTriedSubmit" 
+            class="text-red-500 text-xs mt-1"
+          >
+            {{ errors.eventDate }}
+          </span>
         </div>
         <div class="w-full flex">
           <div class="xs:w-1/2 md:w-[40%] lg:w-[20%] flex flex-col ">
             <TimePicker
               id="startTime"
-              label="Start time"
+              :label="$t('startTime')"
               modelValue="startTime"
             />
-            <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs mt-1">{{ errors.startTime }}</span>
+            <span 
+              v-if="eventStore.hasTriedSubmit" 
+              class="text-red-500 text-xs mt-1"
+            >
+              {{ errors.startTime }}
+            </span>
           </div>
           <div class="xs:w-1/2 md:w-[40%] lg:w-[20%] flex flex-col ">
             <TimePicker
               id="endTime"
-              label="Ending Time"
+              :label="$t('endTime')"
               modelValue="endTime"
             />
           </div>
@@ -84,11 +99,6 @@
       <p class="text-xs text-gray-500 mb-2">
         {{ $t('eventDescriptionDescription') }}
       </p>
-     <!--  <Textarea
-        v-model="eventStore.eventDescription"
-        id="eventDescription"
-        class="p-2 border rounded-md h-40"
-      ></Textarea> -->
       <div class="w-full lg:w-2/3">
         <client-only>
           <QuillEditor 
@@ -98,7 +108,12 @@
             class="min-h-[200px]  border rounded-sm"
           />
         </client-only>
-        <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.description }}</span>
+        <span 
+          v-if="eventStore.hasTriedSubmit" 
+          class="text-red-500 text-xs"
+        >
+          {{ errors.description }}
+        </span>
       </div>
     </div>
 
@@ -112,13 +127,18 @@
       <div class="w-full lg:w-2/3 ">
         <LocationSearch v-model="eventStore.eventLocation" />
       </div>
-      <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.location }}</span>
+      <span 
+        v-if="eventStore.hasTriedSubmit" 
+        class="text-red-500 text-xs"
+      >
+        {{ errors.location }}
+      </span>
     </div>
 
     
     <!-- EXTERNAL URL -->
     <hr />
-    <div class="flex flex-col mb-6">
+    <div class="flex flex-col mb-6 w-full lg:w-2/3">
       <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
       <Input
       v-model="eventStore.externalUrl"
@@ -136,16 +156,16 @@
       {{ $t('eventPriceDescription') }}
     </p>
 
-    <div class="flex gap-4">
+    <div class="flex justify-center sm:justify-start gap-4">
       <div 
-        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
         :class="isClickTypeOfPay && eventStore.isFree === true ? 'border-primary' : 'border-whiteGray'"
-         @click="modifyTypeOfEvent(true)"
+        @click="modifyTypeOfEvent(true)"
         >
         <p>{{ $t('buttons.free') }}</p>
       </div>
       <div 
-        class="border-2 px-16 py-4 rounded-sm cursor-pointer"
+        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
         :class="isClickTypeOfPay && eventStore.isFree === false ? 'border-primary' : 'border-whiteGray'"
         @click="modifyTypeOfEvent(false)"
       >
@@ -156,7 +176,12 @@
       <div class="flex items-start gap-4">
         <div class="w-1/6">
           <PriceInput v-model="eventStore.eventPrice"  />
-          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.price }}</span>
+          <span 
+            v-if="eventStore.hasTriedSubmit" 
+            class="text-red-500 text-xs"
+          >
+            {{ errors.price }}
+          </span>
         </div>
         <div class="w-1/6">
           <CapacityInput />
