@@ -7,7 +7,6 @@ const errors = reactive({
   startTime: '',
   description: '',
   location: '',
-  price: '',
   categories: ''
 })
 
@@ -15,9 +14,9 @@ const priceRules = () => {
   return eventStore.isFree ? '' : 'required'
 }
 
-/* const validateEventDate = (t) => {
+const validateEventDate = (t) => {
   if (eventStore.eventType === 'event') {
-    if (!eventStore.eventDate || typeof eventStore.eventDate !== 'object' || !eventStore.eventDate.toDateString) {
+    if (!eventStore.eventDate || typeof(eventStore.eventDate) !== 'object' ) {
       return t('eventDateRequired')
     }
   } else if (eventStore.eventType === 'promotion') {
@@ -26,7 +25,7 @@ const priceRules = () => {
     }
   }
   return ''
-} */
+} 
 
 const validateEventLocation = (t) => {
   if (!eventStore.eventLocation || !eventStore.eventLocation.address) {
@@ -47,7 +46,7 @@ const validateCategories = (t) => {
 
 const validateFields = (t) => {
   errors.eventName = eventStore.eventName ? '' : t('eventNameRequired')
-  /* errors.eventDate = validateEventDate(t) */
+  errors.eventDate = validateEventDate(t) 
   errors.startTime = eventStore.startTime ? '' : t('startTimeRequired')
   errors.description = eventStore.eventDescription ? '' : t('descriptionRequired')
   errors.location = validateEventLocation(t)

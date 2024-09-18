@@ -4,7 +4,7 @@
      <div class="flex  gap-2 justify-between">
       <div class="flex p-8 gap-2">
         <span
-          v-for="category in event.categories"
+          v-for="category in eventStore.selectedCategories"
           :key="category._id"
           class="bg-gray text-white text-xs font-semibold px-4 py-1 rounded-xl"
         >
