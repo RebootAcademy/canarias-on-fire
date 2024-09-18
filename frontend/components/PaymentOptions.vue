@@ -102,12 +102,12 @@
 const props = defineProps({
   payments: {
     type: Array,
-    required: true,
-    stripePayment: {
+    required: true, 
+  },
+  stripePayment: {
       type: Boolean,
       default: false
     }
-  },
 })
 
 console.log(props.payments)

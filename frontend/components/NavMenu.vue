@@ -25,7 +25,7 @@
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
-              <NavigationMenuLink as-child >
+              <NavigationMenuLink as-child v-if="validateRole(['admin', 'company'], userRole)">
                 <button
                   @click="checkLogin"
                   variant="ghost"

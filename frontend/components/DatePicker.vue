@@ -18,16 +18,15 @@
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0">
         <Calendar 
-          v-if="props.band"
           v-model="eventStore.eventDate" 
           initial-focus 
           @update:model-value="updateDate" 
         />
-        <Calendar 
+  <!--       <Calendar 
           v-else
           v-model="eventStore.eventDate" 
           initial-focus 
-        />
+        /> -->
       </PopoverContent>
     </Popover>
     <span v-if="dateError" class="text-red-500 text-xs mt-1">{{ dateError }}</span>
@@ -49,7 +48,7 @@ const props = defineProps({
   }
 })
 
-console.log(props.band)
+
 const formattedDate = computed(() => {
   if (!eventStore.eventDate) return ''
   return new Date(eventStore.eventDate).toLocaleDateString()
