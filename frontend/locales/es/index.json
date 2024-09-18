@@ -27,6 +27,10 @@
     "success": "Gracias! Recibirás un email de confirmación. Asegúrate te revisar la carpta de spam",
     "error": "Parece que algo no ha salido bien! Inténtalo de nuevo, y si el error persiste contáctanos."
   },
+  "exploreSection": {
+    "description": ["Explora ", "los momentos más ", "emocionantes y memorables ", "de nuestra lista de ", "eventos, o crea los tuyos ", "y compártelos con el resto."],
+    "button": "Empieza ahora"
+  },
   "onBoarding": {
     "step1": "PASO 1 de 2: Selecciona tu rol",
     "step1Description": " Para empezar, seleccione la función que mejor le describa. Esta elección nos permitirá personalizar su experiencia y solicitar la información específica que necesitamos para crear su cuenta.",

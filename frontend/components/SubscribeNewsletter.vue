@@ -15,11 +15,15 @@
           class="p-2 border rounded-md w-4/5"
           :placeholder="$t( 'newsletter.placeholder')"
         />
-      <CustomBtn :title="$t('newsletter.button').toUpperCase()" :action="subscribe" extraStyles="w-[110px]"/>
+      <CustomBtn 
+        :title="$t('newsletter.button').toUpperCase()" 
+        :action="subscribe" 
+        extraStyles="w-[110px]"
+      />
     </div>
     <p
       v-if="message"
-      class="text-xl mt-4"
+      class="text-xl mt-4 text"
     >
       {{ message }}
     </p>

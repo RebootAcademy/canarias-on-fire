@@ -7,6 +7,9 @@
         <CategoriesFilter />
         <EventsHeader />
         <EventList />
+      </div>
+      <Explore />
+      <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <FeaturedEvents />
         <ArticlesHeader />
         <ArticlesList :articles="articleStore.articles"/>
