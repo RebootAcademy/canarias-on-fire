@@ -17,13 +17,22 @@
         />
       <CustomBtn :title="$t('newsletter.button').toUpperCase()" :action="subscribe" extraStyles="w-[110px]"/>
     </div>
+    <p
+      v-if="message"
+      class="text-xl mt-4"
+    >
+      {{ message }}
+    </p>
   </div>
 </template>
 
 <script setup>
 const store = useUserStore()
+const { t } = useI18n()
   const email = ref('')
-  const subscribe = () => {
-    store.subscribeToNewsletter(email.value)
+  const message= ref('')
+  const subscribe = async () => {
+    const result = await store.subscribeToNewsletter(email.value)
+    message.value = result ? t('newsletter.success') : t('newsletter.error')
   }
 </script>

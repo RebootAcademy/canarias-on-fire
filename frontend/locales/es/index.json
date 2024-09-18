@@ -23,7 +23,9 @@
     "title": "No quieres perderte nada?",
     "description": "Obtén actualizaciones mensuales de los últimos eventos, artículos o promociones en tu email! Suscríbete a nuestra Newsletter.",
     "placeholder": "Inserta tu email",
-    "button": "Suscríbete"
+    "button": "Suscríbete",
+    "success": "Gracias! Recibirás un email de confirmación. Asegúrate te revisar la carpta de spam",
+    "error": "Parece que algo no ha salido bien! Inténtalo de nuevo, y si el error persiste contáctanos."
   },
   "onBoarding": {
     "step1": "PASO 1 de 2: Selecciona tu rol",

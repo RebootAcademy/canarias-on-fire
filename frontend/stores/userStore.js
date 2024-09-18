@@ -275,7 +275,7 @@ export const useUserStore = defineStore('userStore', {
             },
           }
         )
-        console.log(data.value.result.message)
+        return data.value ? true : false
       } catch (error) {
         console.error('Error fetching users:', error)
       }
