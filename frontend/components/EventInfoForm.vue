@@ -17,6 +17,15 @@
       </p>
       <ImageGallery store-type="event" />
       <p class="text-xs text-primary">{{ $t('availablePremium')}}</p>
+      <div class="flex items-center gap-2 mt-2">
+        <Info size="14" />
+        <span class="text-sm text-gray-500">{{ $t('showMoreInfo')}}</span>
+        <CustomDialog :title="$t('showPlans')" >
+          <PaymentOptions 
+            :payments="paymentStore.payments" 
+          />
+        </CustomDialog>
+      </div>
     </div>
 
     <!-- EVENT NAME, DATE & TIME -->
@@ -184,8 +193,10 @@
 </template>
 
 <script setup>
-import { errors } from '../utils/validation'
- 
+import { Info } from 'lucide-vue-next'
+
+import { errors, validateFields } from '../utils/validation'
+const paymentStore = usePaymentStore()
 const props = defineProps({
   isEditing: {
     type: Boolean,

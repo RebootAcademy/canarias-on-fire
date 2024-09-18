@@ -14,6 +14,7 @@
     </div>
     <PaymentOptions 
       :payments="paymentStore.payments"
+      :stripePayment="true"
       @planSelected="handlePlanSelection"
     />
   </div>

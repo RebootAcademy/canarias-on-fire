@@ -1,8 +1,11 @@
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <div 
+    class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"
+    :class="isStripePayment ? 'py-12' : 'py-6 mb-12'"
+    >
     <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
-        v-for="payment in payments"
+        v-for="payment in sortedPayments"
         :key="payment._id"
         class="text-center bg-gray border border-primary rounded-lg shadow-sm p-6 pt-12 relative"
       >
@@ -17,11 +20,12 @@
           {{ payment.name }}
         </h3>
         <div class="mt-4">
-          <span class="text-4xl font-extrabold bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] inline-block text-transparent bg-clip-text
-"
-            >{{ payment.basePrice }}€  <span class="text-base font-medium text-gray-500"> / MO</span></span
-          >
-         
+          <span 
+            class="text-4xl font-extrabold bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] inline-block text-transparent bg-clip-text
+            ">
+              {{ payment.basePrice }}€  
+              <span class="text-base font-medium text-gray-500"> / MO</span>
+            </span>
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
@@ -78,7 +82,7 @@
           </li>
         </ul>
 
-        <div class="mt-8">
+        <div v-if="stripePayment" class="mt-8">
           <div class="bg-primary-gradient p-0.5 rounded-md cursor-pointer">
             <NuxtLink
               @click="choosePayment(payment)"
@@ -99,14 +103,26 @@ const props = defineProps({
   payments: {
     type: Array,
     required: true,
+    stripePayment: {
+      type: Boolean,
+      default: false
+    }
   },
 })
+
+console.log(props.payments)
 
 const router = useRouter()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
 const { t } = useI18n()
+
+const sortedPayments = computed(() => {
+  return props.payments.sort((a, b) => a.basePrice - b.basePrice)
+})
+
+console.log(sortedPayments.value)
 
 
 const featureDescriptions = computed(() => ({

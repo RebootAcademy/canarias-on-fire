@@ -4,7 +4,7 @@
       <div
         v-for="plan in filteredPlans"
         :key="plan._id"
-        class="text-center bg-white border rounded-lg shadow-sm p-6 pt-12 relative"
+        class="text-center bg-gray border border-primary rounded-lg shadow-sm p-6 pt-12 relative"
         :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
       >
         <div
