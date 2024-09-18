@@ -292,6 +292,7 @@ const updateUserProfile = async (req, res) => {
       await User.findByIdAndDelete(req.params.id)
       user = await Company.create({ ...user.toObject(), ...updateData })
       await sendEmail('registeredCompany', user)
+      await sendEmail('messageToCompany', user)
 
     } 
     else if (newRole !== 'company' && oldRole === 'company') {

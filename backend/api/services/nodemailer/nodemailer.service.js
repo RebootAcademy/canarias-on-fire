@@ -16,9 +16,10 @@ const transporter = nodemailer.createTransport({
 // async..await is not allowed in global scope, must use a wrapper
 const sendEmail = async (type, company) => {
   try {
+    let result 
     switch (type) {
       case 'registeredCompany':
-        const result = transporter.sendMail({
+        result = transporter.sendMail({
           from: process.env.EMAIL,
           to: process.env.EMAIL,
           subject: `La empresa ${company.companyName} se ha registrado recientemente`,
@@ -53,7 +54,7 @@ const sendEmail = async (type, company) => {
 
                           <p style="font-size: 16px; line-height: 1.5;">Por favor, revisa los detalles de la empresa en el panel de administración para validarla.</p>
                           <p style="text-align: center;">
-                            <a href="https://reboot.academy.com"
+                            <a href="${process.env.FRONTEND_URL}/dashboard/"
                               style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #ff6600; text-decoration: none; border-radius: 5px; margin-top: 20px;">
                               Ver detalles de la empresa
                             </a>
@@ -63,16 +64,45 @@ const sendEmail = async (type, company) => {
                   </div>
               </body>
             </html>
-            
             `,
         })
-        console.log(
-          'Enviando correo a',
-          process.env.EMAIL,
-          'sobre la empresa',
-          company.companyName
-        )
+
         return result
+
+      case 'messageToCompany':
+        result = transporter.sendMail({
+          from: process.env.EMAIL,
+          to: company.email,
+          subject: `Bienvenido ${company.companyName} a Evente`,
+          html: `
+          <html lang="es">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Bienvenido a Evente</title>
+              </head>
+              <body style="font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px;">
+                  <div style="max-width: 600px; margin: 0 auto; background-color: #1e1e1e; border-radius: 10px; padding: 20px;">
+
+                      <div style="text-align: center; padding: 20px; background-color: #121212; border-radius: 10px 10px 0 0;">
+                          <img src="https://res.cloudinary.com/drs1a2bso/image/upload/fl_preserve_transparency/v1726053226/xrygeb0qzgrglcvpa0ij.jpg?_s=public-apps" alt="Logo" style="display: block; margin: 0 auto;">
+                          <h1 style="color: #ffffff; font-size: 24px; margin: 20px 0;">Bienvenido a Evente</h1>
+                      </div>
+
+                      <div style="padding: 20px; background-color: #2a2a2a; border-radius: 0 0 10px 10px;">
+                          <p style="font-size: 16px; line-height: 1.5;">Estamos encantandos de tenerte ${company.companyName} en nuestra plataforma.</p>
+                          <p style="font-size: 16px; line-height: 1.5;">Nuestros administradores validarán su cuenta para poder publicar sus eventos. </p>
+                          <p style="font-size: 16px; line-height: 1.5;">Saludos, el equipo directivo de Evente</p> 
+                      </div>
+                  </div>
+              </body>
+            </html>
+
+             `,
+        })
+
+        return result
+
       
   
     }
