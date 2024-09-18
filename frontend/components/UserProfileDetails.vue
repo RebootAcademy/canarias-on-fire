@@ -209,7 +209,8 @@ const updateUser = async () => {
 
 const validateUser = async () => {
    if (editedUser && editedUser._id) {
-     const updateValidation = {
+     alert('Validando usuario')
+     /* const updateValidation = {
        ...editedUser,
        isValidated: true
      }
@@ -221,7 +222,7 @@ const validateUser = async () => {
      if (result.success) {
        Object.assign(editedUser, result.user)
        router.replace('/dashboard/users')
-     }
+     } */
    } else  {
         console.error('Invalid user data for update')
    }
