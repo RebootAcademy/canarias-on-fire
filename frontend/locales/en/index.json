@@ -19,7 +19,13 @@
     "aboutUs": "About us",
     "privacy": "Policy of privacy"
   },
-  "onBoarding":{
+  "newsletter": {
+    "title": "Don't want to miss anything?",
+    "description": "Get weekly update on the newest events, articles or promotions on your enmail! susdcribe to our newletter now!",
+    "placeholder": "Enter your email address",
+    "button": "Subscribe"
+  },
+  "onBoarding": {
     "step1": "STEP 1 of 2: Select your role",
     "step1Description": "To get started, please select the role that best describes you. This choice will allow us to personalize your experience and request the specific information we need to create your account.",
     "step1Company": "I'm a company",
@@ -46,19 +52,18 @@
     "step2BandMembers": "Band Members",
     "step2BandMembersPlaceholder": "e.g. John (Guitar), Sarah (Vocals)",
     "step2Bio": "Bio",
-    "socialMedia":{
+    "socialMedia": {
       "label": "Social Media",
       "instagramPlaceholder": "User name. Ex: bandOfficial",
       "facebookPlaceholder": "Ex: https://www.facebook.com/band",
       "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
-
     },
     "step2CompanyName": "Company Name",
     "step2Email": "Contact Email",
     "step2Phone": "Phone",
     "step2Address": "Commercial address",
     "step2CIF": "CIF",
-    "step2InvalidCIF": "Invalid CIF", 
+    "step2InvalidCIF": "Invalid CIF",
     "step2ZIP": "Postal code",
     "requiredField": "This field is required",
     "step2Sector": {

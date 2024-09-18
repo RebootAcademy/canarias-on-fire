@@ -28,7 +28,9 @@ export const useUserStore = defineStore('userStore', {
 
     async fetchUsers() {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users`)
+        const { data } = await useFetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users`
+        )
         if (data.value) {
           this.users = data.value.result
         }
@@ -40,10 +42,13 @@ export const useUserStore = defineStore('userStore', {
     async addUser(userData) {
       try {
         console.log('Sending user data:', userData)
-        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users`, {
-          method: 'POST',
-          body: userData
-        })
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users`,
+          {
+            method: 'POST',
+            body: userData,
+          }
+        )
         this.users.push(response.user)
         return response.user
       } catch (error) {
@@ -54,7 +59,9 @@ export const useUserStore = defineStore('userStore', {
 
     async fetchAndSetUser(email) {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`)
+        const { data } = await useFetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`
+        )
         if (data.value) {
           this.setUser(data.value)
         }
@@ -65,11 +72,14 @@ export const useUserStore = defineStore('userStore', {
 
     async updateUserProfile(profileData) {
       try {
-        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`, {
-          method: 'PATCH',
-          body: profileData
-        })
-        
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`,
+          {
+            method: 'PATCH',
+            body: profileData,
+          }
+        )
+
         if (response.data.success) {
           this.userData = { ...this.userData, ...response.data.user }
           return { success: true }
@@ -77,62 +87,81 @@ export const useUserStore = defineStore('userStore', {
           return { success: false, message: response.data.message }
         }
       } catch (error) {
-        return { 
-          success: false, 
-          message: error.message || 'Failed to update profile' 
+        return {
+          success: false,
+          message: error.message || 'Failed to update profile',
         }
       }
     },
 
     async updateUserProfileToCompany(profileData) {
       try {
-        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}/profile`, {
-          method: 'PATCH',
-          body: profileData
-        })
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/${
+            profileData._id
+          }/profile`,
+          {
+            method: 'PATCH',
+            body: profileData,
+          }
+        )
 
         if (response && response.success) {
           this.userData = { ...this.userData, ...response.result }
           return { success: true, user: response.result }
         } else {
-          return { success: false, message: response.message || 'Unknown error occurred' }
+          return {
+            success: false,
+            message: response.message || 'Unknown error occurred',
+          }
         }
       } catch (error) {
-        return { 
-          success: false, 
-          message: error.message || 'Failed to update profile' 
+        return {
+          success: false,
+          message: error.message || 'Failed to update profile',
         }
       }
     },
 
     async updateUserProfileToBand(profileData) {
       try {
-        const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}/profile`, {
-          method: 'PATCH',
-          body: profileData
-        })
-    
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/${
+            profileData._id
+          }/profile`,
+          {
+            method: 'PATCH',
+            body: profileData,
+          }
+        )
+
         if (response && response.success) {
           this.userData = { ...this.userData, ...response.result }
           return { success: true, user: response.result }
         } else {
-          return { success: false, message: response.message || 'Unknown error occurred' }
+          return {
+            success: false,
+            message: response.message || 'Unknown error occurred',
+          }
         }
       } catch (error) {
-        return { 
-          success: false, 
-          message: error.message || 'Failed to update profile' 
+        return {
+          success: false,
+          message: error.message || 'Failed to update profile',
         }
       }
     },
 
     async deleteUser(userId) {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}`, {
-          method: 'DELETE'
-        })
+        const { data } = await useFetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/${userId}`,
+          {
+            method: 'DELETE',
+          }
+        )
         if (data.value && data.value.success) {
-          this.users = this.users.filter(user => user._id !== userId)
+          this.users = this.users.filter((user) => user._id !== userId)
           return { success: true, message: 'User deleted successfully' }
         } else {
           throw new Error(data.value?.message || 'Unknown error occurred')
@@ -145,17 +174,22 @@ export const useUserStore = defineStore('userStore', {
 
     async updateUserSubscription(userId, planId, status = 'active') {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
-          method: 'PATCH',
-          body: JSON.stringify({ subscriptionId: planId, status: status }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        const { data } = await useFetch(
+          `${
+            useRuntimeConfig().public.apiBaseUrl
+          }/users/${userId}/subscription`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify({ subscriptionId: planId, status: status }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
 
         if (data.value && data.value.success) {
           const updatedUser = data.value.result
-          const userIndex = this.users.findIndex(user => user._id === userId)
+          const userIndex = this.users.findIndex((user) => user._id === userId)
           if (userIndex !== -1) {
             this.users[userIndex] = updatedUser
           }
@@ -166,49 +200,84 @@ export const useUserStore = defineStore('userStore', {
 
           return { success: true, user: updatedUser }
         } else {
-          return { success: false, error: data.value?.error || 'Failed to update subscription' }
+          return {
+            success: false,
+            error: data.value?.error || 'Failed to update subscription',
+          }
         }
       } catch (error) {
         console.error('Error updating user subscription:', error)
-        return { success: false, error: 'An error occurred while updating the subscription' }
+        return {
+          success: false,
+          error: 'An error occurred while updating the subscription',
+        }
       }
     },
 
     async updateSelectedUserSubscription(userId, planId, status = 'active') {
       try {
-        const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/users/${userId}/subscription`, {
-          method: 'PATCH',
-          body: JSON.stringify({ subscriptionId: planId, status: status }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-    
+        const { data } = await useFetch(
+          `${
+            useRuntimeConfig().public.apiBaseUrl
+          }/users/${userId}/subscription`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify({ subscriptionId: planId, status: status }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+
         if (data.value && data.value.success) {
           const updatedUser = data.value.result
-          const userIndex = this.users.findIndex(user => user._id === userId)
+          const userIndex = this.users.findIndex((user) => user._id === userId)
           if (userIndex !== -1) {
             this.users[userIndex] = updatedUser
           }
-    
+
           if (this.selectedUser && this.selectedUser._id === userId) {
             this.selectedUser = updatedUser
           }
-    
+
           return { success: true, user: updatedUser }
         } else {
-          return { success: false, error: data.value?.error || 'Failed to update subscription' }
+          return {
+            success: false,
+            error: data.value?.error || 'Failed to update subscription',
+          }
         }
       } catch (error) {
         console.error('Error updating user subscription:', error)
-        return { success: false, error: 'An error occurred while updating the subscription' }
+        return {
+          success: false,
+          error: 'An error occurred while updating the subscription',
+        }
       }
     },
 
     async updateUserSubscriptionStatus(userId, newStatus) {
-      const userIndex = this.users.findIndex(user => user._id === userId)
+      const userIndex = this.users.findIndex((user) => user._id === userId)
       if (userIndex !== -1) {
         this.users[userIndex].activeSubscription.status = newStatus
+      }
+    },
+
+    async subscribeToNewsletter(email) {
+      try {
+        const { data } = await useFetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/newsletter/add`,
+          {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        console.log(data.value.result.message)
+      } catch (error) {
+        console.error('Error fetching users:', error)
       }
     },
   },
@@ -219,13 +288,14 @@ export const useUserStore = defineStore('userStore', {
         return this.users
       }
       const lowercaseQuery = this.searchQuery.toLowerCase()
-      return this.users.filter(user => 
-        user.username.toLowerCase().includes(lowercaseQuery) ||
-        user.email.toLowerCase().includes(lowercaseQuery)
+      return this.users.filter(
+        (user) =>
+          user.username.toLowerCase().includes(lowercaseQuery) ||
+          user.email.toLowerCase().includes(lowercaseQuery)
       )
     },
   },
   persist: {
-    paths: ['userData', 'isAuthenticated']
-  }
+    paths: ['userData', 'isAuthenticated'],
+  },
 })
