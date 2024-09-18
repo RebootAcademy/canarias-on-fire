@@ -1,5 +1,5 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[160px] sm:h-[160px] xl:h-[160px]" >
+<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[170px] sm:h-[170px] xl:h-[170px]" >
     <p class="text-whiteGray text-2xl font-bold"> {{restaurant.companyName }}</p>
     <div class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center text-white italic">
@@ -29,10 +29,10 @@
             </a>    
         </div> -->
     </div>
-    <div class="flex flex-row gap-2 items-center text-white italic">
+    <!-- <div class="flex flex-row gap-2 items-center text-white italic">
             <ChefHat size="20" />
             <p>{{ restaurant.foodType }}</p>
-        </div>
+        </div> -->
     <!-- <div v-if="band.nextPerformance && isValidNextPerformance(band.nextPerformance)">
         <p class="text-whiteGray mt-4">{{ $t('bandNextPerformance')}}</p>
         <div class="flex flex-col gap-3 mt-2">
