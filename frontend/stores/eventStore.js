@@ -474,12 +474,33 @@ export const useEventStore = defineStore('eventStore', {
         (category) => category.id === id || category._id === id
       )
     },
+
+    isCurrentWeek: () => (eventDate) => {
+      const today = new Date()
+
+      // Get the current day of the week (0 is Sunday, 1 is Monday, ..., 6 is Saturday)
+      const currentDay = today.getDay()
+
+      // Calculate the difference between today and the Monday of this week
+      const startOfWeek = new Date(today)
+      startOfWeek.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)) // Set to Monday
+
+      // Calculate the end of the week (Sunday)
+      const endOfWeek = new Date(startOfWeek)
+      endOfWeek.setDate(startOfWeek.getDate() + 6) // Set to Sunday
+
+      // Ensure eventDate is a valid Date object
+      eventDate = new Date(eventDate)
+
+      // Check if eventDate falls within the current week
+      return eventDate >= startOfWeek && eventDate <= endOfWeek
+    },
   
     filteredEventsByDate: (state) => (array) => {
       return array.filter((event) => {
         let eventDate = null
         if (event.eventDate) {
-          const eventDate = new Date(
+          eventDate = new Date(
             event.eventDate.year,
             event.eventDate.month - 1,
             event.eventDate.day
@@ -491,7 +512,7 @@ export const useEventStore = defineStore('eventStore', {
           case 'today':
             return eventDate && state.isSameDay(eventDate, new Date()) // Comparar con la fecha de hoy
           case 'weekend':
-            return eventDate && eventDate.getDay() === 6 || eventDate.getDay() === 0 // Filtro por fin de semana
+            return state.isCurrentWeek(eventDate) // Filtro por fin de semana
           case 'month':
             return eventDate && eventDate.getMonth() === new Date().getMonth() // Filtro por mes actual
           default:
