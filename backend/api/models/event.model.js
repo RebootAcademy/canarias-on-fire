@@ -28,7 +28,7 @@ const EventSchema = new mongoose.Schema({
     type: Boolean
   },
   eventCapacity: { 
-    type: Number 
+    type: String 
   },
   eventDescription: { 
     type: String
