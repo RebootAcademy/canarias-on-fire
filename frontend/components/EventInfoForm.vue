@@ -55,7 +55,7 @@
     >
       <div class="w-full flex xs:flex-col lg:flex-row  gap-4 ">
         <div class="w-full lg:w-[25%] flex flex-col ">
-          <DatePicker v-model="endDate"/>
+          <DatePicker v-model="endDate" :isEditing="isEditing"/>
           <span 
             v-if="eventStore.hasTriedSubmit" 
             class="text-red-500 text-xs mt-1"

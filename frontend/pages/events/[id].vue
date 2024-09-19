@@ -17,7 +17,7 @@
       </div>
       <div class="flex items-center gap-2 my-6 mr-6">
         <Share2 class="mr-2 w-8 cursor-pointer hover:text-primary" />
-        <Pencil v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary" @click="editEvent"/>
+        <Pencil v-if="isAdmin || isOwner" class="mr-2  w-8 cursor-pointer hover:text-primary" @click="editEvent"/>
         <Trash v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary"   @click="deleteEvent"/>
       </div>
   </div>
@@ -68,7 +68,7 @@
     </div>
     <div class="flex gap-2 mt-6 mb-6">
       <div 
-        v-if="event.status === 'draft' && isValidated" 
+        v-if="event.status === 'draft' && isValidated && isOwner" 
         class="bg-primary-gradient p-0.5 rounded-md" 
         @click="publishEvent"
       >
@@ -107,11 +107,16 @@ const isBasicPayment = computed(() => {
   return payment?.name === 'basic'
 })
 
+
 const { data, pending, error } = await eventStore.fetchEventById(eventId)
 
 if (error) {
   console.error('Error fetching event:', error)
 }
+
+const isOwner = computed(() => {
+  return eventStore.event?.userId._id === userStore.userData._id
+})
 
 const editEvent = () => {
   router.push(`/events/edit/${eventId}`)
@@ -131,7 +136,7 @@ const formatPrice = computed(() => {
 })
 
 const publishEvent = async () => {
-  if (eventStore.event.eventType === 'event') {
+  if (eventStore.event.eventType === 'event' ) {
     // Para eventos, redirigir a la página de pago
     router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
     console.log('status: ', eventStore.event.status)
@@ -148,6 +153,4 @@ const publishEvent = async () => {
     }
   }
 }
-
-console.log(eventStore.eventLocation)
 </script>
