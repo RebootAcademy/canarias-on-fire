@@ -119,30 +119,36 @@
         </div>
       </div>
       <div class="flex gap-4 mt-12">
-        <Button @click="deleteUser" class="px-6" variant="destructive">
+        <Button 
+          @click="deleteUser" 
+          variant="outline"
+          class="px-6 border-red-600 hover:bg-red-600 hover:text-white" 
+        >
           {{ $t('buttons.delete') }}
         </Button>
         <Button
           v-if="checkValidatedCompany"
           @click="toggleUserActivation"
           variant="outline"
-          class="text-gray-500"
+          class="border-primary text-white hover:bg-primary-gradient hover:text-white"
         >
           {{ editedUser.isActive ? $t('buttons.desactivate') : $t('buttons.activate') }}
         </Button>
         <Button
           v-if="checkValidatedCompany"
           @click="updateUser"
+          variant="outline"
           :disabled="!editedUser.isActive"
-          class="px-6 hover:bg-orange-700"
+          class="px-6 border-primary text-white hover:bg-primary-gradient hover:text-white"
         >
           {{ $t('buttons.update')}}
         </Button>
         <Button
           v-if="!checkValidatedCompany"
           @click="validateUser"
+          variant="outline"
           :disabled="!editedUser.isActive"
-          class="px-6 bg-green-700 hover:bg-green-800 text-white"
+          class="px-6 border-primary text-white hover:bg-primary-gradient hover:text-white"
         >
           {{ $t('buttons.validate')}}
         </Button>
@@ -158,14 +164,13 @@ const props = defineProps({
     required: true,
   },
 })
+import { useToast } from '@/components/ui/toast/use-toast'
 
 const router = useRouter()
 const userStore = useUserStore()
 const editedUser = reactive({ ...props.user })
-
-/* watch(() => props.user, (newUser) => {
-  Object.assign(editedUser, newUser)
-}, { deep: true }) */
+const { toast } = useToast()
+const {t} = useI18n()
 
 watch(
   () => editedUser.role,
@@ -208,24 +213,21 @@ const updateUser = async () => {
 }
 
 const validateUser = async () => {
-   if (editedUser && editedUser._id) {
-     alert('Validando usuario')
-     /* const updateValidation = {
-       ...editedUser,
-       isValidated: true
-     }
+  const result = await userStore.validateCompany(editedUser._id)
+     
+  if (result.success){
+    toast({
+       description: t('companyValidated'),
+       position: 'top-right',
+     });
+     router.push('/dashboard/users')
+  } else {
+     toast({
+       description: t('errorCompanyValidated'),
+       variant: 'destructive'
+     });
+  }
 
-     console.log('updateValidation:', toRaw(updateValidation))
-   
-     const result = await userStore.updateUserProfile(toRaw(updateValidation)) 
-     console.log(result)
-     if (result.success) {
-       Object.assign(editedUser, result.user)
-       router.replace('/dashboard/users')
-     } */
-   } else  {
-        console.error('Invalid user data for update')
-   }
 }
 
 const toggleUserActivation = async () => {

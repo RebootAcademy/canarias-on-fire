@@ -2,6 +2,7 @@
     "userManagement": "User Management",
     "userCompanies": "Companies",
     "basicUsers": "Basic Users",
+    "notValidatedCompanies": "Validate companies",
     "userName": "Username",
     "addUser": "Add User",
     "email": "Email",

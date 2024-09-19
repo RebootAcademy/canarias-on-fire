@@ -4,22 +4,21 @@
       <TableRow>
         <TableHead>{{ $t('userName') }}</TableHead>
         <TableHead>{{ $t('email') }}</TableHead>
-        <TableHead class="text-right">{{ isCompanyTab ? $t('subscription') : $t('role') }}</TableHead>
+        <TableHead class="text-right">{{ isCompanyTab || isValidateCompanyTab ? $t('subscription') : $t('role') }}</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <TableRow 
-        v-for="user in users" 
+        v-for="user in usersToShow" 
         :key="user._id"
         @click="$emit('userSelected', user)"
         class=" cursor-pointer"
       >
-        <TableCell class="relative">
+        <TableCell >
           {{ user.username }}
-          <div v-if="isNotValidatedThisUser(user._id)" class="absolute top-2 left-0 rounded-full  bg-red-500 w-2 h-2  "/>
         </TableCell>
         <TableCell>{{ user.email }}</TableCell>
-        <TableCell class="text-right">{{ isCompanyTab ? getSubscriptionName(user) : user.role }}</TableCell>
+        <TableCell class="text-right">{{ isCompanyTab || isValidateCompanyTab ? getSubscriptionName(user) : user.role }}</TableCell>
       </TableRow>
     </TableBody>
   </Table>
@@ -37,15 +36,27 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  isValidateCompanyTab: {
+    type: Boolean,
+    default: false
+  },
   companiesNotValidated: {
-    type: Array,
+    type: Boolean,
   }
 })
 const isNotValidatedThisUser = (user) => {
-  if (props.isCompanyTab && props.companiesNotValidated.length > 0 ){
-    return props.companiesNotValidated.find((company) => String(company._id) === user)
+  if (!props.isCompanyTab && props.companiesNotValidated.length > 0 ){
+    return props.companiesNotValidated.find((company) => company._id === user)
   }
 }
+
+const usersToShow = computed(() => {
+  if (props.isValidateCompanyTab) {
+    return props.users.filter((user) => !user.isValidated)
+  } else {
+    return props.users
+  }
+})
 
 const getSubscriptionName = (user) => {
   if (!user || !user.activeSubscription || !user.activeSubscription.plan) {
