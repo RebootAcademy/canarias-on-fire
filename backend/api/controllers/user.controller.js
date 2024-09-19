@@ -307,12 +307,10 @@ const updateUserProfile = async (req, res) => {
     }
 
     if (newRole === 'company' && oldRole !== 'company') {
-      // Cambio a company
       await User.findByIdAndDelete(req.params.id)
       user = await Company.create({ ...user.toObject(), ...updateData })
       await sendEmail('registeredCompany', user)
       await sendEmail('messageToCompany', user)
-
     } 
     else if (newRole !== 'company' && oldRole === 'company') {
       // Cambio de company a otro rol
@@ -344,18 +342,10 @@ const updateUserProfile = async (req, res) => {
   }
 }
 
-const updateBand = async (req, res, updateData) => {
+const validateCompany = async (req, res) => {
   try {
     const userId = req.params.id
-    console.log(userId)
-    console.log('updateData')
-    console.log(updateData)
-    let user = await User.findByIdAndUpdate(userId, updateData, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    })
-
+    const user = await User.findById(userId)
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -363,16 +353,28 @@ const updateBand = async (req, res, updateData) => {
       })
     }
 
+    if (user.role !== 'company') {
+      return res.status(400).json({
+        success: false,
+        message: 'Only company users can be validated',
+      })
+    }
+
+    user.isValidated = true
+    await user.save()
+
+    sendEmail('validatedCompany', user)
+
     res.status(200).json({
       success: true,
-      message: 'User successfully updated.',
+      message: 'User successfully validated.',
       result: user,
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({
       success: false,
-      message: 'Error updating user.',
+      message: 'Error validating user.',
       description: error.message,
     })
   }
@@ -460,6 +462,7 @@ module.exports = {
   getAllBands,
   getAllRestaurants,
   getCurrentUser,
+  validateCompany,
   updateUser,
   updateUserProfile,
   updateUserSubscription,

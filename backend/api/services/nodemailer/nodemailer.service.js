@@ -15,9 +15,8 @@ const transporter = nodemailer.createTransport({
 
 const loadTemplate = async (filePath, replacements) => {
   try {
-    const absolutePath = path.join(__dirname, filePath) // Convierte la ruta relativa en una absoluta
+    const absolutePath = path.join(__dirname, filePath)
 
-    // Verificar si el archivo existe
     await fsPromises.access(absolutePath)
 
     let template = await fsPromises.readFile(absolutePath, 'utf8')
@@ -43,6 +42,8 @@ const switchSubject = (type, company ) => {
       return `La empresa ${company.companyName} se ha registrado recientemente `
     case 'messageToCompany':
       return 'Bienvenido a Evente'
+    case 'validatedCompany':
+      return 'Cuenta validada'
   }
 }
 
@@ -71,7 +72,7 @@ const sendEmail = async (type, company) => {
         }
         break
 
-      case 'validatedCompay':
+      case 'validatedCompany':
         templatePath = './emailTemplates/validatedCompany.html'
         replacements = {
           companyName: company.companyName,
