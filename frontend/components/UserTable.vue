@@ -2,9 +2,9 @@
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Username</TableHead>
-        <TableHead>Email</TableHead>
-        <TableHead class="text-right">{{ isCompanyTab ? 'Subscription' : 'Role' }}</TableHead>
+        <TableHead>{{ $t('userName') }}</TableHead>
+        <TableHead>{{ $t('email') }}</TableHead>
+        <TableHead class="text-right">{{ isCompanyTab ? $t('subscription') : $t('role') }}</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -12,9 +12,12 @@
         v-for="user in users" 
         :key="user._id"
         @click="$emit('userSelected', user)"
-        class="cursor-pointer"
+        class=" cursor-pointer"
       >
-        <TableCell>{{ user.username }}</TableCell>
+        <TableCell class="relative">
+          {{ user.username }}
+          <div v-if="isNotValidatedThisUser(user._id)" class="absolute top-2 left-0 rounded-full  bg-red-500 w-2 h-2  "/>
+        </TableCell>
         <TableCell>{{ user.email }}</TableCell>
         <TableCell class="text-right">{{ isCompanyTab ? getSubscriptionName(user) : user.role }}</TableCell>
       </TableRow>
@@ -33,8 +36,16 @@ const props = defineProps({
   isCompanyTab: {
     type: Boolean,
     default: false
+  },
+  companiesNotValidated: {
+    type: Array,
   }
 })
+const isNotValidatedThisUser = (user) => {
+  if (props.isCompanyTab && props.companiesNotValidated.length > 0 ){
+    return props.companiesNotValidated.find((company) => String(company._id) === user)
+  }
+}
 
 const getSubscriptionName = (user) => {
   if (!user || !user.activeSubscription || !user.activeSubscription.plan) {

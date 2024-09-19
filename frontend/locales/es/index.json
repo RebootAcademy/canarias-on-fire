@@ -87,6 +87,10 @@
     "save": "Guardar",
     "edit": "Editar",
     "delete": "Eliminar",
-    "share": "Compartir"
+    "share": "Compartir",
+    "validate": "Validar",
+    "update": "Actualizar",
+    "desactivate": "Desactivar",
+    "activate": "Activar"
   }
 }

@@ -12,9 +12,9 @@
 
       <Tabs v-if="user.role === 'company'" v-model="activeTab" class="w-auto" @update:modelValue="onTabChange">
         <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="events">Events</TabsTrigger>
-          <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
+          <TabsTrigger value="profile">{{ $t('userProfile.profile') }}</TabsTrigger>
+          <TabsTrigger value="events">{{ $t('userProfile.events') }}</TabsTrigger>
+          <TabsTrigger value="subscriptions">{{ $t('userProfile.subscriptions') }}</TabsTrigger>
         </TabsList>
       </Tabs>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <h2 class="text-2xl font-semibold mb-6">Users Management</h2>
+    <h2 class="text-2xl font-semibold mb-6">{{ $t('userManagement')}}</h2>
     <UsersList 
       v-if="!selectedUser"
       @userSelected="selectUser"
