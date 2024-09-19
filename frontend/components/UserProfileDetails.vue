@@ -23,14 +23,14 @@
         </h3>
         <p class="text-gray-600">{{ editedUser.email }}</p>
         <p v-if="!editedUser.isActive" class="text-red-500 font-semibold">
-          Deactivated
+          {{ $t('userProfile.desactivated')}}
         </p>
       </div>
     </div>
 
     <form @submit.prevent="updateUser">
       <div class="mb-4">
-        <Label for="username" class="text-gray-300">Username</Label>
+        <Label for="username" class="text-gray-300">{{$t('userProfile.userName')}}</Label>
         <Input
           id="username"
           v-model="editedUser.username"
@@ -39,7 +39,7 @@
         />
       </div>
       <div class="mb-4">
-        <Label for="email" class="text-gray-300">Email</Label>
+        <Label for="email" class="text-gray-300">{{$t('userProfile.email')}}</Label>
         <Input
           id="email"
           v-model="editedUser.email"
@@ -47,16 +47,28 @@
           class="text-gray-500"
         />
       </div>
+      <div 
+        v-if="editedUser.role === 'company' && !checkValidatedCompany" 
+        class="mb-4"
+      >
+        <Label for="cif" class="text-gray-300">{{$t('userProfile.cif')}}</Label>
+        <Input
+          id="email"
+          v-model="editedUser.cif"
+          :disabled="true"
+          class="text-gray-500"
+        />
+      </div>
       <div class="mb-4">
-        <Label class="mb-2 text-gray-300">Role</Label>
+        <Label class="mb-2 text-gray-300">{{$t('userProfile.role')}}</Label>
         <Select v-model="editedUser.role" :disabled="!editedUser.isActive">
           <SelectTrigger>
-            <SelectValue placeholder="Select role" class="text-gray-500" />
+            <SelectValue :placeholder="$t('userProfile.selectedRole.label')" class="text-gray-500" />
           </SelectTrigger>
           <SelectContent class="text-gray-500">
-            <SelectItem value="basic">Basic</SelectItem>
-            <SelectItem value="company">Company</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
+            <SelectItem value="basic">{{$t('userProfile.selectedRole.basis')}}</SelectItem>
+            <SelectItem value="company">{{$t('userProfile.selectedRole.company')}}</SelectItem>
+            <SelectItem value="admin">{{$t('userProfile.selectedRole.admin')}}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -65,7 +77,7 @@
       <!-- Company-specific fields -->
       <div v-if="editedUser.role === 'company'">
         <div class="mb-4">
-          <Label for="companyName" class="text-gray-300">Company Name</Label>
+          <Label for="companyName" class="text-gray-300">{{ $t('userProfile.companyName') }}</Label>
           <Input
             id="companyName"
             v-model="editedUser.companyName"
@@ -74,7 +86,7 @@
           />
         </div>
         <div class="mb-4">
-          <Label for="companyEmail" class="text-gray-300">Company Email</Label>
+          <Label for="companyEmail" class="text-gray-300">{{ $t('userProfile.email') }}</Label>
           <Input
             id="companyEmail"
             v-model="editedUser.companyEmail"
@@ -83,7 +95,7 @@
           />
         </div>
         <div class="mb-4">
-          <Label for="phone" class="text-gray-300">Phone</Label>
+          <Label for="phone" class="text-gray-300">{{ $t('userProfile.phone') }}</Label>
           <Input
             id="phone"
             v-model="editedUser.phone"
@@ -92,37 +104,47 @@
           />
         </div>
         <div class="mb-4">
-          <Label for="sector" class="text-gray-300">Sector</Label>
+          <Label for="sector" class="text-gray-300">{{$t('userProfile.sector.label')}}</Label>
           <Select v-model="editedUser.sector" :disabled="!editedUser.isActive">
             <SelectTrigger>
-              <SelectValue placeholder="Select sector" class="text-gray-500" />
+              <SelectValue :placeholder="$t('userProfile.sector.select') " class="text-gray-500" />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
-              <SelectItem value="restoration">Restoration</SelectItem>
-              <SelectItem value="services">Services</SelectItem>
-              <SelectItem value="nightlife">Nightlife</SelectItem>
-              <SelectItem value="activities">Activities</SelectItem>
+              <SelectItem value="restoration">{{$t('userProfile.sector.restoration')}}</SelectItem>
+              <SelectItem value="services">{{$t('userProfile.sector.services')}}</SelectItem>
+              <SelectItem value="nightlife">{{$t('userProfile.sector.nightlife')}}</SelectItem>
+              <SelectItem value="activities">{{$t('userProfile.sector.activities')}}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
       <div class="flex gap-4 mt-12">
         <Button @click="deleteUser" class="px-6" variant="destructive">
-          Delete
+          {{ $t('buttons.delete') }}
         </Button>
         <Button
+          v-if="checkValidatedCompany"
           @click="toggleUserActivation"
           variant="outline"
           class="text-gray-500"
         >
-          {{ editedUser.isActive ? 'Deactivate' : 'Activate' }}
+          {{ editedUser.isActive ? $t('buttons.desactivate') : $t('buttons.activate') }}
         </Button>
         <Button
+          v-if="checkValidatedCompany"
           @click="updateUser"
           :disabled="!editedUser.isActive"
-          class="px-6"
+          class="px-6 hover:bg-orange-700"
         >
-          Update
+          {{ $t('buttons.update')}}
+        </Button>
+        <Button
+          v-if="!checkValidatedCompany"
+          @click="validateUser"
+          :disabled="!editedUser.isActive"
+          class="px-6 bg-green-700 hover:bg-green-800 text-white"
+        >
+          {{ $t('buttons.validate')}}
         </Button>
       </div>
     </form>
@@ -158,6 +180,10 @@ watch(
   }
 )
 
+const checkValidatedCompany = computed(() => {
+  return editedUser.role === 'company' && editedUser.isValidated 
+})
+
 const updateUser = async () => {
   if (editedUser && editedUser._id) {
     const dataToUpdate = {
@@ -174,11 +200,32 @@ const updateUser = async () => {
     const result = await userStore.updateUserProfile(toRaw(dataToUpdate))
     if (result.success) {
       Object.assign(editedUser, result.user)
-      router.push('/dashboard')
+      router.push('/dashboard/users')
     }
   } else {
     console.error('Invalid user data for update')
   }
+}
+
+const validateUser = async () => {
+   if (editedUser && editedUser._id) {
+     alert('Validando usuario')
+     /* const updateValidation = {
+       ...editedUser,
+       isValidated: true
+     }
+
+     console.log('updateValidation:', toRaw(updateValidation))
+   
+     const result = await userStore.updateUserProfile(toRaw(updateValidation)) 
+     console.log(result)
+     if (result.success) {
+       Object.assign(editedUser, result.user)
+       router.replace('/dashboard/users')
+     } */
+   } else  {
+        console.error('Invalid user data for update')
+   }
 }
 
 const toggleUserActivation = async () => {

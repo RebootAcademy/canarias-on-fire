@@ -99,6 +99,10 @@
     "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "share": "Share"
+    "share": "Share",
+    "validate": "Validate",
+    "update": "Update",
+    "desactivate": "Desactivate",
+    "activate": "Activate"
   }
 }

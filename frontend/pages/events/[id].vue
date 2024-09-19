@@ -78,32 +78,6 @@
           {{ $t('buttons.publish') }}
         </Button>
       </div>
-      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="event.status === 'published'">
-        <Button 
-          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-        >
-          <Share2  class="mr-2 h-4 w-4" />
-          {{ $t('buttons.share') }}
-        </Button>
-      </div>
-      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
-        <Button
-          @click="editEvent"
-          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-        >
-          <Pencil class="mr-2 h-4 w-4" />
-          {{ $t('buttons.edit') }}
-        </Button>
-      </div>
-      <div class="bg-primary-gradient p-0.5 rounded-md" v-if="isAdmin">
-        <Button
-          @click="deleteEvent"
-          class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-        >
-          <Trash class="mr-2 h-4 w-4" />
-          {{ $t('buttons.delete') }}
-        </Button>
-      </div>
     </div> 
     <EventsRelated />
   </div>
