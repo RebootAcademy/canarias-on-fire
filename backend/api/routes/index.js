@@ -8,6 +8,7 @@ const LocationRouter = require('./location.router')
 const ArticleRouter = require('./article.router')
 const SubscriptionRouter = require('./subscription.router')
 const PaymentRouter = require('./payment.router')
+const NewsletterRouter = require('./newsletter.router')
 
 router
   .use('/auth', AuthRouter)
@@ -18,5 +19,6 @@ router
   .use('/articles', ArticleRouter)
   .use('/subscriptions', SubscriptionRouter)
   .use('/payments', PaymentRouter)
+  .use('/newsletter', NewsletterRouter)
 
 module.exports = router

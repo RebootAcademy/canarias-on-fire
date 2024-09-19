@@ -1,14 +1,20 @@
 <template>
   <div class="h-full bg-black w-full !flex !flex-col gap-2 items-center">
     <Hero />
-    <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
-      <EventsCounter />
-      <CategoriesFilter />
-      <EventsHeader />
-      <EventList />
-      <FeaturedEvents />
-      <ArticlesHeader />
-      <ArticlesList :articles="articleStore.articles"/>
+    <div class="w-full flex flex-col items-center h-fit">
+      <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
+        <EventsCounter />
+        <CategoriesFilter />
+        <EventsHeader />
+        <EventList />
+      </div>
+      <Explore />
+      <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
+        <FeaturedEvents />
+        <ArticlesHeader />
+        <ArticlesList :articles="articleStore.articles"/>
+      </div>
+      <SubscribeNewsletter />
     </div>
   </div>
 </template>

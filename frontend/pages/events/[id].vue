@@ -100,7 +100,7 @@ const { event } = storeToRefs(eventStore)
 const defaultImage = '/defaultImg.png'
 const eventId = route.params.id
 const isAdmin = userStore.userData?.role === 'admin'
-const isValidated = userStore.userData.isValidated
+const isValidated = userStore?.userData?.isValidated
 
 const isBasicPayment = computed(() => {
   const payment = paymentStore.getPaymentById(eventStore.event.payment)
