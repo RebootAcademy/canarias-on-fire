@@ -3,15 +3,17 @@
   <p class="text-sm font-light opacity-70">{{  $t('eventAdvice') }}</p>
   <div class="relative w-full">
     <Carousel class="border-none shadow-none ">
-      <CarouselContent v-if="somePremium.length">
-        <CarouselItem 
+      <CarouselContent v-if="somePremium.length" >
+        <CarouselItem
           v-for="event in somePremium" 
           :key="event.id"
         >
           <Card  class="border-0 flex items-center justify-center  bg-gray-900">
             <CardContent class="bg-black">
-              <NuxtImg v-if="event.coverImage" :src="event.coverImage" class="object-scale-down h-96 w-80" />
-              <NuxtImg v-else :src="event.eventImages[0].url" class="object-scale-down h-96 w-80" />
+              <NuxtLink :to="`/events/${event._id}`" >
+                <NuxtImg v-if="event.coverImage" :src="event.coverImage" class="object-scale-down h-96 w-80" />
+                <NuxtImg v-else :src="event.eventImages[0].url" class="object-scale-down h-96 w-80" />
+              </NuxtLink>
             </CardContent>
           </Card>
         </CarouselItem>
