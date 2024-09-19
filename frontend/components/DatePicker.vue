@@ -22,11 +22,6 @@
           initial-focus 
           @update:model-value="updateDate" 
         />
-  <!--       <Calendar 
-          v-else
-          v-model="eventStore.eventDate" 
-          initial-focus 
-        /> -->
       </PopoverContent>
     </Popover>
     <span v-if="dateError" class="text-red-500 text-xs mt-1">{{ dateError }}</span>
