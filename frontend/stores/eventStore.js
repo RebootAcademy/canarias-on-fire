@@ -405,8 +405,6 @@ export const useEventStore = defineStore('eventStore', {
       )
         
       if (event.status !== 'closed' && eventDateTime < today) {
-        console.log('cerraro')
-        console.log(event)
         this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
       }
 
