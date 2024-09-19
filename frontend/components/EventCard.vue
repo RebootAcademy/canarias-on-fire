@@ -37,7 +37,7 @@
         <NuxtImg
           v-else
           :src="defaultImage"
-          class="w-full h-44 object-cover rounded-t-lg z-0"
+          class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
         />
         <!-- Main content -->
         <div class="px-3 py-2 flex justify-between">
