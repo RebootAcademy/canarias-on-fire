@@ -2,7 +2,6 @@ const sgClient = require('@sendgrid/client')
 
 sgClient.setApiKey(process.env.SENDGRID_API_KEY)
 
-
 const addEmailToList = async (req, res) => {
   try {
     const data = {
@@ -34,29 +33,6 @@ const addEmailToList = async (req, res) => {
     })
   }
 }
-
-// const getContacts = async () => {
-//   const request = {
-//     method: 'GET',
-//     url: '/v3/marketing/contacts',
-//   }
-
-//   const [response, body] = await sgClient.request(request)
-//   return body.result.map((contact) => contact.email)
-// }
-
-// const sendNewsletter = async (req, res) => {
-//   try {
-//     const contacts = await getContacts()
-//   } catch (error) {
-//     console.error(error)
-//     return res.status(500).json({
-//       success: false,
-//       message: 'Error sending newsletter.',
-//       description: error.message,
-//     })
-//   }
-// }
 
 module.exports = {
   addEmailToList,
