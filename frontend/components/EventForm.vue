@@ -52,7 +52,8 @@ const onSubmit = async () => {
 }
 
 const onSaveAndRedirect = async () => {
-  //eventStore.setHasTriedSubmit(true)
+  eventStore.setHasTriedSubmit(true)
+  validateFields(t)
   if (Object.values(errors).every(error => error === '')) {
     eventStore.status = 'draft'
     eventStore.setUserId(userStore.userData._id)
