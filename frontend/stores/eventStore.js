@@ -388,79 +388,89 @@ export const useEventStore = defineStore('eventStore', {
       const today = new Date()
 
       return this.events.filter((event) => {
-        // Filter by date
-        if (
-          event.eventDate &&
-          new Date(
-            event.eventDate?.year,
-            event.eventDate?.month - 1,
-            event.eventDate?.day
-          ) < today
-        ) {
-          this.updateEventStatus(event._id, 'closed')
-        }
+        const eventDate = new Date(
+        event.eventDate.year,
+        event.eventDate.month - 1,
+        event.eventDate.day
+      )
 
-        // Filter events by active and validated users
-        if (!event.userId?.isActive || !event.userId?.isValidated) {
+      const [hours, minutes] = event.startTime.split(':').map(Number)
+      
+      const eventDateTime = new Date(
+        eventDate.getFullYear(),
+        eventDate.getMonth(),
+        eventDate.getDate(),
+        hours,
+        minutes
+      )
+        
+      if (event.status !== 'closed' && eventDateTime < today) {
+        console.log('cerraro')
+        console.log(event)
+        this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
+      }
+
+      // Filter events by active and validated users
+      if (!event.userId?.isActive || !event.userId?.isValidated) {
+        return false
+      }
+
+      if (this.searchQuery) {
+        // Search
+        const lowercaseQuery = this.searchQuery.toLowerCase()
+        if (
+          !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+          !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+        ) {
           return false
         }
+      }
 
-        if (this.searchQuery) {
-          // Search
-          const lowercaseQuery = this.searchQuery.toLowerCase()
-          if (
-            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-          ) {
-            return false
-          }
+      // Filter by Categories
+      if (this.filters.categories.length > 0) {
+        const eventCategoryIds = event.categories.map((cat) => cat._id)
+        if (
+          !this.filters.categories.some((id) => eventCategoryIds.includes(id))
+        ) {
+          return false
         }
+      }
 
-        // Filter by Categories
-        if (this.filters.categories.length > 0) {
-          const eventCategoryIds = event.categories.map((cat) => cat._id)
-          if (
-            !this.filters.categories.some((id) => eventCategoryIds.includes(id))
-          ) {
-            return false
-          }
+      // Filtrar por categorías seleccionadas
+      if (this.selectedCategories.length > 0) {
+        const eventCategoryIds = event.categories.map((c) => c._id)
+        const hasMatchingCategory = this.selectedCategories.some((sc) =>
+          eventCategoryIds.includes(sc.id)
+        )
+
+        if (!hasMatchingCategory) {
+          return false
         }
+      }
 
-        // Filtrar por categorías seleccionadas
-        if (this.selectedCategories.length > 0) {
-          const eventCategoryIds = event.categories.map((c) => c._id)
-          const hasMatchingCategory = this.selectedCategories.some((sc) =>
-            eventCategoryIds.includes(sc.id)
-          )
-
-          if (!hasMatchingCategory) {
-            return false
-          }
+      // Filter by islands
+      if (this.filters.islands.length > 0) {
+        const eventIsland = getIslandFromPostalCode(
+          event.eventLocation.postalCode
+        )
+        if (!this.filters.islands.includes(eventIsland)) {
+          return false
         }
+      }
 
-        // Filter by islands
-        if (this.filters.islands.length > 0) {
-          const eventIsland = getIslandFromPostalCode(
-            event.eventLocation.postalCode
-          )
-          if (!this.filters.islands.includes(eventIsland)) {
-            return false
-          }
+      // Filter by date
+      if (this.filters.date) {
+        const filterDate = this.filters.date
+        const eventDate = event.eventDate
+        if (
+          !eventDate ||
+          eventDate.year !== filterDate.year ||
+          eventDate.month !== filterDate.month ||
+          eventDate.day !== filterDate.day
+        ) {
+          return false
         }
-
-        // Filter by date
-        if (this.filters.date) {
-          const filterDate = this.filters.date
-          const eventDate = event.eventDate
-          if (
-            !eventDate ||
-            eventDate.year !== filterDate.year ||
-            eventDate.month !== filterDate.month ||
-            eventDate.day !== filterDate.day
-          ) {
-            return false
-          }
-        }
+      }
 
         return true
       })
