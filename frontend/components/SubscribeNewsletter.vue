@@ -13,7 +13,7 @@
           type="text"
           v-model="email"
           class="p-2 border rounded-md w-4/5"
-          :placeholder="$t( 'newsletter.placeholder')"
+          :placeholder="$t('newsletter.placeholder')"
         />
       <CustomBtn 
         :title="$t('newsletter.button').toUpperCase()" 
