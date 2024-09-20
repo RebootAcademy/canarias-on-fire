@@ -17,8 +17,8 @@
         </Button>
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0">
-        <Calendar 
-          v-model="eventStore.eventDate" 
+        <Calendar
+          :v-model="modelToSelect()" 
           initial-focus 
           @update:model-value="updateDate" 
         />
@@ -35,17 +35,26 @@ const today = new Date()
 const eventStore = useEventStore()
 const dateError = ref('')
 const emit = defineEmits(['dateChanged'])
+const editingDate = ref('')
 
 const props = defineProps({
   band: {
     typeof: Boolean,
     default: false
+  },
+  isEditing: {
+    typeof: Boolean, 
+    default: false
   }
 })
 
+const modelToSelect = () => {
+  return props.isEditing ? editingDate.value : eventStore.eventDate
+}
 
 const formattedDate = computed(() => {
   if (!eventStore.eventDate) return ''
+  if (props.isEditing && !editingDate.value) return new Date (eventStore.eventDate.year, eventStore.eventDate.month - 1, eventStore.eventDate.day).toLocaleDateString()
   return new Date(eventStore.eventDate).toLocaleDateString()
 })
 

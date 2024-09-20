@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4">
     <!-- EVENT TYPE -->
-    <hr />
-    <div class="flex flex-col">
+    <hr v-if="!isEditing"/>
+    <div v-if="!isEditing" class="flex flex-col">
       <p class="font-semibold">{{ $t('eventType') }}</p>
       <p class="text-xs mb-3">{{ $t('selectDateTime') }}</p>
       <EventTypeRadioGroup />
@@ -55,7 +55,7 @@
     >
       <div class="w-full flex xs:flex-col lg:flex-row  gap-4 ">
         <div class="w-full lg:w-[25%] flex flex-col ">
-          <DatePicker v-model="endDate" :isEditing="isEditing"/>
+          <DatePicker v-model="endDate" :isEditing="isEditing" />
           <span 
             v-if="eventStore.hasTriedSubmit" 
             class="text-red-500 text-xs mt-1"
@@ -121,11 +121,16 @@
     <hr />
     <div class="flex flex-col w-full gap-1">
       <p class="font-semibold ">{{ $t('eventLocation') }}</p>
-      <p class="text-xs text-gray-500 mb-2">
+      <p v-if="!isEditing" class="text-xs text-gray-500 mb-2">
         {{ $t('eventLocationDescription') }}
       </p>
       <div class="w-full lg:w-2/3 ">
-        <LocationSearch v-model="eventStore.eventLocation" />
+        <LocationSearch v-if="!changeMap" v-model="eventStore.eventLocation" :isEditing="isEditing"/>
+        <div v-else>
+          <span>{{ eventStore.eventLocation.address }}.</span>
+          <span class="text-xs text-blue-400 cursor-pointer ml-2 hover:text-primary" @click="changeMap = false"> {{  $t('changeLocation') }} </span>
+          <NuxtImg :src="eventStore.eventLocation.mapImageUrl" :alt="eventStore.eventLocation.address" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
+        </div>
       </div>
       <span 
         v-if="eventStore.hasTriedSubmit" 
@@ -172,7 +177,7 @@
         <p>{{ $t('buttons.pay') }}</p>
       </div>
     </div>
-    <div v-show="eventStore.eventType === 'event' && isClickTypeOfPay " class="flex flex-col gap-1">
+    <div v-show="eventStore.eventType === 'event' && isClickTypeOfPay || eventStore.isFree" class="flex flex-col gap-1">
       <div class="flex items-start gap-4">
         <div class="w-1/6">
           <PriceInput v-model="eventStore.eventPrice"  />
@@ -203,6 +208,7 @@ const props = defineProps({
     default: false
   }
 })
+const changeMap = ref(props.isEditing)
 
 const eventStore = useEventStore()
 const { t, locale } = useI18n()
