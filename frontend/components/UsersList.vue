@@ -3,11 +3,15 @@
     <div class="flex flex-col-reverse gap-4 md:flex-row items-center justify-between w-full mb-6">
       <Tabs v-model="activeTab" class="w-auto">
         <TabsList>
-          <TabsTrigger value="companies" class="relative">
-            <div v-if="isThereNotValidatedCompany.length" class="absolute top-0 right-0 rounded-full  bg-red-500 w-2 h-2 animate-pulse "/>
+          <TabsTrigger value="companies">
             {{ $t('userCompanies') }}
           </TabsTrigger>
+          <TabsTrigger v-if="isThereNotValidatedCompany.length" value="validateCompanies"  class="relative">
+            <div  class="absolute top-0 right-0 rounded-full  bg-red-500 w-2 h-2 animate-pulse "/>
+            {{ $t('notValidatedCompanies') }}
+          </TabsTrigger>
           <TabsTrigger value="basicUsers">{{ $t('basicUsers') }}</TabsTrigger>
+          
         </TabsList>
       </Tabs>
       <div class="flex flex-col-reverse md:flex-row gap-4 items-center">
@@ -21,6 +25,7 @@
     <UserTable 
       :users="filteredUsers"
       :isCompanyTab="activeTab === 'companies'"
+      :isValidateCompanyTab="activeTab === 'validateCompanies'"
       :companiesNotValidated="isThereNotValidatedCompany"
       @userSelected="$emit('userSelected', $event)"
     />
@@ -42,7 +47,7 @@ const filteredUsers = computed(() => {
   return userStore.users.filter(user => {
     if (!user || typeof user !== 'object') return false
     
-    const matchesTab = activeTab.value === 'companies' 
+    const matchesTab = activeTab.value === 'companies' || activeTab.value === 'validateCompanies'
       ? user.role === 'company' 
       : user.role && user.role !== 'company'
     

@@ -1,6 +1,7 @@
 <template>
   <div>
     <NuxtLayout />
+    <Toaster />
   </div>
 </template>
 
@@ -9,6 +10,7 @@ const eventStore = useEventStore()
 const articleStore = useArticleStore()
 const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
+import Toaster from '@/components/ui/toast/Toaster.vue'
 
 onMounted(async () => {
   await eventStore.fetchCategories()

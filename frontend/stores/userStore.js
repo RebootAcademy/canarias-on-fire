@@ -155,6 +155,25 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    async validateCompany(companyId) {
+      try {
+        const { data } = await useFetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/users/validate/${companyId}`,
+          {
+            method: 'PATCH',
+          }
+        )
+        if (data.value && data.value.success) {
+          return { success: true, message: 'Company validated successfully' }
+        } else {
+          throw new Error(data.value?.message || 'Unknown error occurred')
+        }
+      } catch (error) {
+        console.error('Error validating company:', error)
+        return { success: false, message: error.message }
+      }
+    },
+
     async deleteUser(userId) {
       try {
         const { data } = await useFetch(
