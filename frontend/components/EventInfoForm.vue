@@ -88,7 +88,7 @@
       </div>
     </div>
 
-    <div v-else class="flex w-full justify-between items-center">
+    <div v-else class="flex w-1/2 justify-between items-center">
       <DateRangePicker />
     </div>
 

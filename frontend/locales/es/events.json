@@ -85,5 +85,6 @@
     "dateAndTime": "Fecha y hora",
     "organizer": "Organizador",
     "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
-  }
+  },
+  "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan"
 }

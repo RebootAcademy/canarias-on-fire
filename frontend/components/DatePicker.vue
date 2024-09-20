@@ -43,7 +43,6 @@ const props = defineProps({
   }
 })
 
-
 const formattedDate = computed(() => {
   if (!eventStore.eventDate) return ''
   return new Date(eventStore.eventDate).toLocaleDateString()

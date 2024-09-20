@@ -35,10 +35,10 @@
 
   const subscribe = async () => {
     const result = await store.subscribeToNewsletter(email.value)
-      toast({
-        description: result ? t('newsletter.success') : t('newsletter.error'),
-        variant: result ? '' : 'destructive',
-        position: 'top-right',
-      })
+    toast({
+      description: result ? t('newsletter.success') : t('newsletter.error'),
+      variant: result ? '' : 'destructive',
+      position: 'top-right',
+    })
   }
 </script>

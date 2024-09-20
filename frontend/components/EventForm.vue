@@ -7,9 +7,22 @@
     </div>
     <div class="flex w-full justify-end items-center gap-4">
 
-      <CustomBtn :title="$t('buttons.cancel')" :withoutGradient="true" @click="router.push('/events')" />
-      <CustomBtn v-if="isValidated"  :title="isEditing ? $t('update') : $t('preview')" :action="onSubmit" />
-      <CustomBtn v-else  :title="$t('buttons.save')" :action="onSaveAndRedirect" extraStyles="w-[110px]"/>
+      <CustomBtn 
+        :title="$t('buttons.cancel')" 
+        :withoutGradient="true" 
+        @click="router.push('/events')" 
+      />
+      <CustomBtn 
+        v-if="isValidated"  
+        :title="isEditing ? $t('update') : $t('preview')" 
+        :action="onSubmit" 
+      />
+      <CustomBtn 
+        v-else  
+        :title="$t('buttons.save')" 
+        :action="onSaveAndRedirect" 
+        extraStyles="w-[110px]"
+      />
     </div>
   </div>
 </template>
@@ -34,6 +47,7 @@ const isValidated = userStore.userData.isValidated
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
   validateFields(t)
+  console.log(errors)
   if (Object.values(errors).every(error => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
