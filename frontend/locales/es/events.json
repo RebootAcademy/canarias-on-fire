@@ -1,6 +1,7 @@
 {
   "eventAdvice": "No se pierda los próximos acontecimientos más esperados",
   "createEvent": "Crear un nuevo evento",
+  "editEvent": "Editar el evento",
   "preview": "Vista previa",
   "eventType": "Tipo de evento",
   "event": "Evento de fecha determinada",
@@ -21,6 +22,7 @@
   "pickPeriod": "Elige fechas",
   "startTime": "Hora de inicio",
   "endTime": "Hora de finalización",
+  "changeLocation": " Cambiar dirección",
   "eventDescription": "Descripción",
   "eventDescriptionDescription": "Usa este espacio para contarle al público los detalles de tu evento. Asegúrate de incluir cualquier información relevante que les ayude a entender la esencia del evento y los motive a participar.",
   "eventLocation": "Ubicación",
@@ -33,6 +35,7 @@
   "externalUrl": "Sitio web",
   "notEventsFound": "No se encontraron eventos.",
   "availablePremium": "* Seleccione su imagen de portada  (Función sólo disponible para eventos Gold y Premium).",
+  "validateByAdmin": "* Para publicar el evento el organizador debe ser validado por el administrador.",
   "payments": {
     "manageSub": "Gestionar Suscripción para ",
     "currentPlan": "Plan actual: ",

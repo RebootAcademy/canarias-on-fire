@@ -262,6 +262,8 @@ export const useEventStore = defineStore('eventStore', {
 
         if (data.value?.success) {
           this.event = data.value.result
+
+          this.fetchEvents()
           return true
         }
         return false
@@ -272,6 +274,7 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     async saveEvent(isNew = true) {
+      console.log(isNew)
       const eventData = this.getEventData()
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'
@@ -291,6 +294,7 @@ export const useEventStore = defineStore('eventStore', {
       }
 
       this.event = data.value?.result
+      this.fetchEvents()
       return { data: this.event }
     },
 
@@ -299,7 +303,7 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     updateEvent() {
-      return this.saveEvent(true)
+      return this.saveEvent(false)
     },
 
     async updateEventStatus(eventId, status) {
