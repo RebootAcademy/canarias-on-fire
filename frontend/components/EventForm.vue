@@ -3,7 +3,7 @@
     <EventInfoForm :isEditing="isEditing" />
     <CategorySelector :isEditing="isEditing" />
     <div class="flex w-full justify-end italic text-primary">
-      <p v-if="!isValidated">* Para publicar el evento el organizador debe ser validado por el administrador</p>
+      <p v-if="!isValidated  && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>
     <div class="flex w-full justify-end items-center gap-4">
 
@@ -43,6 +43,7 @@ const router = useRouter()
 const { t } = useI18n()
 
 const isValidated = userStore.userData.isValidated
+const isAdmin = userStore.userData.role
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
