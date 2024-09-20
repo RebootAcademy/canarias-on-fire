@@ -219,7 +219,7 @@ export const useUserStore = defineStore('userStore', {
           if (this.userData && this.userData._id === userId) {
             this.userData = updatedUser
           }
-
+          this.fetchAndSetUser(this.userData.email)
           return { success: true, user: updatedUser }
         } else {
           return {

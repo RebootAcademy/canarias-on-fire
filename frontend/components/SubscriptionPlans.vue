@@ -78,9 +78,9 @@
           <NuxtLink
             v-if="getSubscriptionAction(plan) === 'subscribe'"
             @click="subscribeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="cursor-pointer inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
-            Subscribe
+            {{$t('buttons.subscribe')}}
           </NuxtLink>
           <NuxtLink
             v-else-if="getSubscriptionAction(plan) === 'upgrade'"
@@ -96,13 +96,20 @@
           >
             Downgrade
           </NuxtLink>
-          <Button
-            v-else-if="getSubscriptionAction(plan) === 'current'"
-            disabled
-            class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
-          >
-            Current Plan
+          <div v-else-if="getSubscriptionAction(plan) === 'current'">
+            <Button
+              disabled
+              class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
+            >
+            {{$t('buttons.current')}}
+            </Button>
+             <Button
+              class="cursor-pointer mt-2 inline-block w-full bg-grey border-2 border-red-400  text-red-400 font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-500 hover:border-none hover:text-white transition-colors"
+              @click="cancelSubscription(plan)"
+            >
+            {{$t('buttons.cancel')}}
           </Button>
+          </div>
           <Button
             v-else-if="getSubscriptionAction(plan) === 'disabled'"
             disabled
@@ -110,6 +117,7 @@
           >
             Downgrade Scheduled
           </Button>
+          
         </div>
       </div>
     </div>
@@ -241,9 +249,24 @@ const subscribeToPlan = async (plan) => {
       } else {
         console.error(result?.error || 'Failed to create subscription')
       }
+      await userStore.fetchAndSetUser(userStore.userData.email)
     }
   } catch (error) {
     console.error('Error creating subscription:', error)
+  }
+}
+
+const cancelSubscription = async (plan) => {
+  try {
+    const userId = getUserId()
+    const result = await subscriptionStore.cancelSubscription(userId, plan._id)
+    if (result.success) {
+      await userStore.updateUserSubscription(userId, plan._id, 'canceled')
+    } else {
+      console.error(result?.error || 'Failed to cancel subscription')
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error)
   }
 }
 

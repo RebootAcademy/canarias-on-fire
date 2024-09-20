@@ -3,6 +3,9 @@ const Company = require('../models/company.model')
 const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Subscription = require('../models/subscription.model')
+const { addSubscriptionToCompany } = require('../controllers/subscription.controller')
+const sendEmail = require('../services/nodemailer/nodemailer.service')
+
 
 /* const handleChargeSucceeded = async (charge) => {
   console.log('Charge succeeded:', charge.id)
@@ -10,6 +13,26 @@ const Subscription = require('../models/subscription.model')
 } */
 
 const handleCheckoutSessionCompleted = async (session) => {
+  console.log(`session`)
+  console.log(session)
+
+  if (session.metadata && session.mode === 'subscription' && session.metadata.firstHire === 'true') {
+      const paymentInvoice = await stripe.invoices.retrieve(session.invoice)
+      const { payment_intent, total } = paymentInvoice
+      const paid_at = new Date(
+        parseInt(paymentInvoice.status_transitions.paid_at) * 1000
+      )
+      const subscriptionId = session.subscription
+
+      const { userId, planId } = session.metadata
+      await stripe.subscriptions.update(subscriptionId, {
+        metadata: session.metadata,
+      })
+      console.log('Session guardada')
+
+      await addSubscriptionToCompany(userId, planId, paid_at, subscriptionId)
+
+  }
   if (session.metadata && session.metadata.isUpgrade === 'true') {
     try {
       const company = await Company.findOne({ 'stripe.customerId': session.customer })
@@ -263,9 +286,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       return
     }
 
-    console.log('Company found:', company._id)
-    console.log('Current invoices:', company.invoices)
-
     const newInvoice = {
       id: invoice.id,
       amount: amount_paid,
@@ -288,21 +308,61 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     company.activeSubscription.currentPeriodEnd = new Date(period_end * 1000)
     company.activeSubscription.lastInvoice = newInvoice
     company.invoices.push(newInvoice)
-    console.log('Invoice added to company')
+    await sendEmail('sendInvoice', company)
 
-    console.log('Company before save:', company)
 
     await company.save()
-    console.log('Company saved successfully')
-    console.log('Updated invoices:', company.invoices)
 
   } catch (error) {
     console.error('Error in handleInvoicePaymentSucceeded:', error)
   }
 }
 
+const handleSubscriptionUpdated = async (event) => {
+  console.log('subscription object')
+  console.log(event)
+  const subscriptionId = event.id
+  const customerId = event.customer
+  const company = await Company.findById(event.metadata.userId)
+
+  if (!company) {
+    console.error('Company not found for subscription:', subscriptionId)
+    return
+  }
+
+  // Actualizar el estado de cancelación programada en la base de datos
+  if (event.cancel_at_period_end) {
+    company.activeSubscription.status = 'canceled'
+    company.activeSubscription.cancelAtPeriodEnd = true
+    company.activeSubscription.canceledAt = new Date(
+      event.current_period_end * 1000
+    )
+    await company.save()
+    console.log('Subscription updated: cancellation scheduled.')
+  }
+}
+
+const handleCustomerCreated = async (customer) => {
+  console.log(customer)
+  const user = await User.findById(customer.metadata.userId)
+  if (!user) {
+    console.error('User not found for customer:', customer.id)
+    return
+  }
+
+  user.stripe = {
+    ...user.stripe,
+    customerId: customer.id,
+  }
+  user.save()
+  console.log('Customer created:', customer.id)
+  // Implementa la lógica para manejar la creación del cliente
+}
+
 module.exports = {
   'checkout.session.completed': handleCheckoutSessionCompleted,
   'invoice.payment_succeeded': handleInvoicePaymentSucceeded,
+  'customer.created': handleCustomerCreated,
+  'customer.subscription.updated': handleSubscriptionUpdated,
   // 'customer.subscription.created': handleCustomerSubscriptionCreated,
 }

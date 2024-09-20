@@ -9,6 +9,7 @@ exports.handleWebhook = async (req, res) => {
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret)
+    console.log(`Event type received is: ${event.type}`)
   } catch (err) {
     console.error(`Webhook Error: ${err.message}`)
     return res.status(400).send(`Webhook Error: ${err.message}`)
@@ -24,7 +25,8 @@ exports.handleWebhook = async (req, res) => {
     }
   } else {
     console.log(`Unhandled event type ${event.type}`)
-  }
-
+  } 
+  
   res.json({ received: true })
+
 }
