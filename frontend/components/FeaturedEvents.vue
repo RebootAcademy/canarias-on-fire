@@ -13,7 +13,7 @@
               <CardContent class="bg-black">
                 <NuxtLink :to="`/events/${event._id}`" >
                   <NuxtImg v-if="event.coverImage" :src="event.coverImage" class="object-scale-down h-96 w-80" />
-                  <NuxtImg v-else :src="event.eventImages[0].url" class="object-scale-down h-96 w-80" />
+                  <NuxtImg v-else :src="event.eventImages[0]?.url" class="object-scale-down h-96 w-80" />
                 </NuxtLink>
               </CardContent>
             </Card>

@@ -11,7 +11,7 @@
           v-if="plan.name === 'premium'"
           class="absolute top-0 left-0 right-0 bg-black text-center py-1 rounded-t-lg"
         >
-          Recommended option
+          {{ $t('payments.recommendedOption') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ plan.name }}
@@ -66,7 +66,7 @@
           </li>
           <li v-for="key in plan.features" v-show="typeof key === 'number'">
             <p class="ml-3 text-base text-gray-700">
-              Prioridad de lectura:
+              {{$t('featuresDescriptions.readingPriority')}}
               <span class="font-semibold">{{
                 getReadingPriorityText(key)
               }}</span>
@@ -104,11 +104,18 @@
             {{$t('buttons.current')}}
             </Button>
              <Button
+              v-if="!isCanceled"
               class="cursor-pointer mt-2 inline-block w-full bg-grey border-2 border-red-400  text-red-400 font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-500 hover:border-none hover:text-white transition-colors"
               @click="cancelSubscription(plan)"
             >
             {{$t('buttons.cancel')}}
-          </Button>
+            </Button>
+            <p 
+              v-if="isCanceled" 
+              class="mt-2 text-center text-whitegray text-xs italic font-semibold"
+            >
+              {{$t('promotions.canceledSubscrition')}} {{ new Date (userStore.userData.activeSubscription?.canceledAt).toLocaleDateString() }}
+            </p>
           </div>
           <Button
             v-else-if="getSubscriptionAction(plan) === 'disabled'"
@@ -143,17 +150,26 @@ const props = defineProps({
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
+const {t} = useI18n()
 
-const featureDescriptions = {
-  eventPublication: 'Publicación de eventos',
-  eventPhotos: 'Fotos del evento o cartelería del mismo',
-  readingPriority: 'Prioridad de lectura',
+const isCanceled = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    return true
+  } else {
+    return false
+  }
+})
+
+const featureDescriptions = computed(() => ({
+  eventPublication: t('featuresDescriptions.promotionPublication'),
+  eventPhotos: t('featuresDescriptions.eventPhotos'),
+  readingPriority: t('featuresDescriptions.readingPriority'),
   increasedCharacterLimit:
-    'Aumento del número de caracteres para la información',
-  websiteLink: 'Enlace a la página web',
-  offerPublication: 'Publicación de ofertas',
-  rssPublication: 'Publicación en RRSS',
-}
+    t('featuresDescriptions.increasedCharacterLimit'),
+  websiteLink: t('featuresDescriptions.websiteLink'),
+  offerPublication: t('featuresDescriptions.offerPublication'),
+  rssPublication: t('featuresDescriptions.rssPublication'),
+}))
 
 const getReadingPriorityText = (value) => {
   switch (value) {
@@ -209,9 +225,10 @@ const getSubscriptionAction = (plan) => {
     return currentSubscription.nextPlan && currentSubscription.nextPlan === plan._id ? 'current' : 'disabled'
   }
 
-  if (currentSubscription.status === 'canceled' || currentSubscription.status === 'inactive') {
+  if ( currentSubscription.status === 'inactive') {
     return 'subscribe'
   }
+  
 
   if (currentPlanIndex === newPlanIndex) {
     return 'current'
