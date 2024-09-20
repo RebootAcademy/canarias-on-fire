@@ -21,12 +21,6 @@
         extraStyles="w-[110px]"
       />
     </div>
-    <p
-      v-if="message"
-      class="text-xl mt-4 text"
-    >
-      {{ message }}
-    </p>
   </div>
 </template>
 

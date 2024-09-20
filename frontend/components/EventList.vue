@@ -1,6 +1,7 @@
 <template>
   <div class="lg:px-6 w-full ">
-<div class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">      <EventCard 
+    <div class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
+      <EventCard 
         v-for="event in limitedEvents" 
         :key="event._id" 
         :event="event" 
@@ -22,7 +23,10 @@
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
+const { 
+  filteredEvents, 
+  filteredEventsByDate 
+} = storeToRefs(eventStore)
 
 const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
@@ -30,7 +34,7 @@ const eventsByDate = computed(() => {
 
 const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
-    return [];
+    return []
   }
   
   return eventsByDate.value

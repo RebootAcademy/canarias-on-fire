@@ -2,6 +2,7 @@
   "userManagement": "Panel de control de Usuarios",
   "userCompanies": "Empresas",
   "basicUsers": "Usuarios básicos",
+  "notValidatedCompanies": "Validar empresas",
   "userName": "Nombre de usuario",
   "addUser": "Añadir usuario",
   "email": "Correo electrónico",
@@ -34,6 +35,5 @@
       "nightlife": "Ocio nocturno",
       "activities": "Actividades"
     }
-
   }
 }
