@@ -88,5 +88,6 @@
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
     "featurePayedEvents": "* Feature only available for Gold and Premium events."
-  }
+  },
+  "galleryLimit": "You have reached your plan's image capacity limit"
 }

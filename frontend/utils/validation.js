@@ -9,9 +9,9 @@ const errors = reactive({
   location: '',
   categories: ''
 })
-
+console.log(eventStore)
 const priceRules = () => {
-  return eventStore.isFree ? '' : 'required'
+  return !eventStore.isFree && eventStore.eventType === 'event' ? 'required' : ''
 }
 
 const validateEventDate = (t) => {
@@ -47,7 +47,7 @@ const validateCategories = (t) => {
 const validateFields = (t) => {
   errors.eventName = eventStore.eventName ? '' : t('eventNameRequired')
   errors.eventDate = validateEventDate(t) 
-  errors.startTime = eventStore.startTime ? '' : t('startTimeRequired')
+  errors.startTime = !(eventStore.eventType === 'event' && eventStore.startTime) ? '' : t('startTimeRequired')
   errors.description = eventStore.eventDescription ? '' : t('descriptionRequired')
   errors.location = validateEventLocation(t)
   errors.price = priceRules() === 'required' && !eventStore.eventPrice ? t('priceRequired') : ''
