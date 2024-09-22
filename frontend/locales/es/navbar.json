@@ -4,6 +4,11 @@
   "login": "Iniciar Sesión",
   "logout": "Cerrar Sesión",
   "dashboard": "Dashboard",
+  "languages": "Idiomas",
+  "languagesOptions": {
+    "en": "Inglés",
+    "es": "Español"
+  },
   "eventText": "Encuentre las mejores planes en las islas con nuestro sitio web.",
   "findEvents": {
     "label": "Encontrar eventos",
@@ -47,6 +52,7 @@
   },
   "dashboardNav": {
     "events": "Eventos",
+    "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",
     "articles": "Artículos",
     "statistics": "Estadísticas",
