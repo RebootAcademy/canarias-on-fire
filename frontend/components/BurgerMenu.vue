@@ -57,12 +57,12 @@
               </NuxtLink>
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Dashboard Section -->
-              <NuxtLink to="/pricing" class="font-bold text-md">
-                <MenubarItem class="font-bold text-md">
+              <NuxtLink  v-if="userStore?.isAuthenticated" to="/pricing" class="font-bold text-md">
+                <MenubarItem  class="font-bold text-md">
                   {{$t('dashboard')}}
                 </MenubarItem>
               </NuxtLink>
-              <MenubarSeparator class="mx-2 mb-4"/>
+              <MenubarSeparator v-if="userStore?.isAuthenticated" class="mx-2 mb-4"/>
               <!-- Languages Section -->
              <details class="custom-details p-2 cursor-pointer">
               <summary class="font-bold hover:text-primary">
