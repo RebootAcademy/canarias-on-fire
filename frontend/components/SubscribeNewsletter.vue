@@ -25,12 +25,20 @@
 </template>
 
 <script setup>
-const store = useUserStore()
-const { t } = useI18n()
+  import { useToast } from '@/components/ui/toast/use-toast'
+
+  const store = useUserStore()
+  const { toast } = useToast()
+  const { t } = useI18n()
+
   const email = ref('')
-  const message= ref('')
+
   const subscribe = async () => {
     const result = await store.subscribeToNewsletter(email.value)
-    message.value = result ? t('newsletter.success') : t('newsletter.error')
+    toast({
+      description: result ? t('newsletter.success') : t('newsletter.error'),
+      variant: result ? '' : 'destructive',
+      position: 'top-right',
+    })
   }
 </script>

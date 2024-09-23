@@ -1,6 +1,7 @@
 {
   "eventAdvice": "Don't miss the upcoming most anticipated events",
   "createEvent": "Create a new event",
+  "editEvent": "Edit event",
   "preview": "Preview",
   "eventType": "Event type",
   "event": "Event in a determined date",
@@ -19,6 +20,7 @@
   "pickPeriod": "Pick the dates",
   "startTime": "Start time",
   "endTime": "End time",
+  "changeLocation": " Change location",
   "eventInfoDescription": "Select the name, date and time when the event will take place.",
   "eventNameLabel": "Event Name",
   "eventDescription": "Descripción",
@@ -33,6 +35,7 @@
   "externalUrl": "External site",
   "notEventsFound": "Not events found.",
   "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
+  "validateByAdmin": "*  To publish the event the organizer must be validated by the administrator.",
   "payments": {
     "manageSub": "Manage Subscription for ",
     "currentPlan": "Current plan: ",
@@ -93,5 +96,6 @@
     "manageSubscription": "Manage Subscription for ",
     "chooseSubscriptionPlan": "Choose your subscription plan",
     "descriptionPlan": "Find the perfect plan that suits your event needs."
-  }
+  },
+  "galleryLimit": "You have reached your plan's image capacity limit"
 }

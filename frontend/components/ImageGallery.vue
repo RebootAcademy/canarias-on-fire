@@ -5,7 +5,9 @@
       <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
     </div>
     <div class="flex flex-col lg:flex-row gap-4 items-center">
-      <div class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40">
+      <div 
+        v-if="images?.length < checkMaxImages()"
+        class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40">
         <label class="flex items-center justify-center h-32 border-2 border-primary rounded-lg cursor-pointer hover:bg-gray-800">
           <span class="text-primary text-4xl">+</span>
           <input type="file" @change="onFileChange" multiple class="hidden" />
@@ -22,6 +24,8 @@
 </template>
 
 <script setup>
+import { useToast } from '@/components/ui/toast/use-toast'
+
 const props = defineProps({
   storeType: {
     type: String,
@@ -30,13 +34,29 @@ const props = defineProps({
   }
 })
 
+const {t} = useI18n()
+const { toast } = useToast()
 const eventStore = useEventStore()
-const cloudName = 'drs1a2bso'
-const uploadPreset = 'evdhvl07'
+const config = useRuntimeConfig()
+const cloudName = config.public.cloudinaryCloudName
+const uploadPreset = config.public.cloudinaryUploadPreset
 
 const store = computed(() => {
   return props.storeType === 'event' ? useEventStore() : useArticleStore()
 })
+
+const checkMaxImages = () => {
+  if (!store?.value?.event?.payment?.name) return 10
+  if (store?.value?.event?.eventType === 'promotion') return 10
+  switch (store.value.event.payment.name) {
+    case 'gold':
+      return 5
+    case 'premium':
+      return 10
+    default:
+      return 0
+  }
+}
 
 const images = computed(() => store.value[`${props.storeType}Images`])
 const coverImage = computed(() => store.value.coverImage)
@@ -56,6 +76,13 @@ const onFileChange = async (event) => {
       const data = await response.json()
       if (data.secure_url) {
         store.value[`add${props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)}Image`]({ url: data.secure_url })
+      }
+
+      if (images.value.length === checkMaxImages()) {
+        toast({
+          description: t('galleryLimit'),
+          variant: 'destructive'
+        })
       }
     } catch (error) {
       console.error('Error uploading image:', error)
