@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/devtools',
     '@nuxtjs/i18n',
-    '@element-plus/nuxt'
+    '@element-plus/nuxt',
   ],
   i18n: {
     locales: ['en', 'es'],
@@ -21,8 +21,8 @@ export default defineNuxtConfig({
       useCookie: true,
       cookieKey: 'i18n_redirected',
       alwaysRedirect: false,
-      fallbackLocale: 'es'
-    }
+      fallbackLocale: 'es',
+    },
   },
   vite: {
     define: {
@@ -50,6 +50,10 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL,
       auth0Audience: process.env.AUTH0_AUDIENCE,
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
+      cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+      cloudinaryApiKey: process.env.CLOUDINARY_API_KEY
     },
   },
   build: {

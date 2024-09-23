@@ -218,7 +218,6 @@ const validateUser = async () => {
   if (result.success){
     toast({
        description: t('companyValidated'),
-       position: 'top-right',
      });
      router.push('/dashboard/users')
   } else {

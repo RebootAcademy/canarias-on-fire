@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col text-gray-500 xs:w-full md:w-1/2 ">
-    <Label for="eventDate" class="text-xs">{{ $t('eventPeriod') }}</Label>
+  <div class="flex flex-col text-gray-500 w-full">
+    <Label for="eventDate" class="text-xs mb-2">{{ $t('eventPeriod') }}</Label>
     <Popover>
       <PopoverTrigger as-child>
         <Button
           variant="ghost"
-          :class="cn(' bg-gray justify-start text-left w-full lg:w-2/4', !eventStore.eventDate && 'text-muted-foreground', )"
+          :class="cn(' bg-gray justify-start text-left w-full', !eventStore.eventDate && 'text-muted-foreground', )"
         >
         <CalendarIcon class="mr-2 h-4 w-4" />
-        {{ eventStore.eventDate ? 
+        {{ eventStore.eventDate?.start && eventStore.eventDate?.end ? 
           `${new Date(eventStore.eventDate.start).toLocaleDateString()} - ${new Date(eventStore.eventDate.end).toLocaleDateString()}` 
           : $t('pickPeriod')
         }}

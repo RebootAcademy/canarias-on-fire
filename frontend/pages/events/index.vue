@@ -29,7 +29,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-
+const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
 
@@ -79,5 +79,9 @@ function compareDates(dateA, dateB) {
   if (dateA.month !== dateB.month) return dateA.month - dateB.month
   return dateA.day - dateB.day;
 }
+
+onMounted(() => {
+  userStore.fetchAndSetUser(userStore.userData.email)
+})
 
 </script>

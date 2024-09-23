@@ -103,6 +103,7 @@
     "validate": "Validate",
     "update": "Update",
     "desactivate": "Desactivate",
-    "activate": "Activate"
+    "activate": "Activate",
+    "current": "Current Plan"
   }
 }

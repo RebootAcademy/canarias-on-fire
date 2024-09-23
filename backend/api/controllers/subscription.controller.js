@@ -70,31 +70,53 @@ const createSubscription = async (req, res) => {
       customer = await createStripeCustomer(company._id, company.companyEmail || company.email)
     }
 
-    const subscription = await stripe.subscriptions.create({
+    if (!company.stripe) {
+      company.stripe = {}
+    }
+    if (!company.stripe.customerId) {
+      company.stripe.customerId = customer.id
+    }
+
+/*     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ price: planId }],
       payment_behavior: 'default_incomplete',
       expand: ['latest_invoice.payment_intent'],
-    })
+    }) */
 
     // Crear una sesión de Checkout
-    const session = await stripe.checkout.sessions.create({
-      customer: customer.id,
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: planId,
-          quantity: 1,
+    try {
+
+      const session = await stripe.checkout.sessions.create({
+        customer: customer.id,
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: planId,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        metadata:{
+          userId: String(company._id),
+          planId: String(subscriptionPlan._id),
+          firstHire: 'true',
         },
-      ],
-      mode: 'subscription',
-      success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
-    })
+        success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
+      })      
+      res.status(200).json({ 
+        success: true, 
+        sessionId: session.id, 
+        sessionUrl: session.url
+      })
+    
+    } catch (error) {
+      console.error(`Error creating Stripe session: ${error.message}`, error)
+      return res.status(500).json({ success: false, error: 'Error creating Stripe session', message: error.message })
+    }
 
-    // console.log('Stripe Checkout Session:', JSON.stringify(session, null, 2))
-
-    // Guardar el customerId en la base de datos si es nuevo
+    /* // Guardar el customerId en la base de datos si es nuevo
     if (!company.stripe) {
       company.stripe = {}
     }
@@ -120,9 +142,38 @@ const createSubscription = async (req, res) => {
       sessionId: session.id, 
       sessionUrl: session.url,
       subscription: company.activeSubscription
-    })
+    }) */
   } catch (error) {
     res.status(500).json({ success: false, error: 'Error creating subscription', message: error.message })
+  }
+}
+
+const addSubscriptionToCompany = async (userId, planId , paidAt, subscription) => {
+  try {
+    const company = await Company.findById(userId)
+    if (!company) {
+      throw new Error('Company not found')
+    }
+    if (!company.stripe) {
+      company.stripe = {}
+    }
+
+    company.activeSubscription = {
+      status: 'active',
+      plan: planId,
+      currentPeriodStart: paidAt,
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), 
+    }
+
+    company.stripe = { ...company.stripe, subscriptionId: subscription }
+
+    await company.save()
+
+    return true
+
+  } catch (error) {
+    console.log(error.message)
+    throw new Error('Error adding subscription to database')
   }
 }
 
@@ -137,29 +188,59 @@ const cancelSubscription = async (req, res) => {
 
     const stripeSubscriptionId = company.stripe.subscriptionId
 
-    // Cancelar la suscripción en Stripe al final del período actual
-    const canceledSubscription = await stripe.subscriptions.update(
+    let subscription
+
+    try {
+      subscription = await stripe.subscriptions.retrieve(
+       stripeSubscriptionId
+     )
+      
+    } catch (error) {
+       if (error.code === 'resource_missing') {
+          console.error(`Subscription ${subscriptionId} does not exist.`)
+          return res
+            .status(404)
+            .json({ error: 'Subscription does not exist' })
+       } else {
+         // Si es otro tipo de error, lanzar la excepción para que se maneje en el siguiente bloque catch
+         console.log('Error retrieving subscription. \n', error)
+         throw new Error('Error retrieving subscription. \n' + error.message)
+       }
+    }
+
+     if (!subscription) {
+       return res.status(404).json({ error: 'Subscription not found' })
+     }
+
+    const updatedSubscription = await stripe.subscriptions.update(
       stripeSubscriptionId,
       {
         cancel_at_period_end: true,
       }
     )
 
-    // Actualizar el estado de la suscripción en nuestra base de datos
-    company.activeSubscription.status = 'canceling'
-    company.activeSubscription.cancelAtPeriodEnd = true
-    company.activeSubscription.canceledAt = new Date()
+    res.json({
+      success: true,
+      message:
+        'Subscription scheduled for cancellation at the end of the current period',
+      cancelDate: new Date(updatedSubscription.current_period_end * 1000),
+    })
 
-    await company.save()
+/*     // Actualizar el estado de la suscripción en nuestra base de datos
+    company.activeSubscription.status = 'canceled'
+    company.activeSubscription.cancelAtPeriodEnd = true
+    company.activeSubscription.canceledAt = new Date() */
+
+/*     await company.save()
 
     res.json({
       message:
         'Subscription scheduled for cancellation at the end of the current period',
       cancelDate: new Date(canceledSubscription.current_period_end * 1000),
-    })
+    }) */
   } catch (error) {
     console.error('Error canceling subscription:', error)
-    res.status(500).json({ error: 'Error canceling subscription' })
+    res.status(500).json({ success: false, message: 'Error canceling subscription' })
   }
 }
 
@@ -394,6 +475,7 @@ const updateExpiredSubscriptions = async () => {
 module.exports = {
   getSubscriptions,
   createSubscription,
+  addSubscriptionToCompany,
   cancelSubscription,
   reactivateSubscription,
   upgradeSubscription,

@@ -4,7 +4,7 @@
       class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
-        'bg-primary-gradient text-black': isPremiumPayment,
+        'bg-primary-gradient text-black test-shine': isPremiumPayment,
       }"
     >
       <div
@@ -158,3 +158,39 @@ const formattedDate = () => {
   })
 }
 </script>
+
+<style scoped>
+  .test-shine:after {
+    content: "";
+    position: absolute;
+      top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    opacity: 0;
+    transform: rotate(30deg);
+
+    background: rgba(255, 255, 255, 0.13);
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.13) 77%,
+      rgba(255, 255, 255, 0.5) 92%,
+      rgba(255, 255, 255, 0.0) 100%
+    );
+  }
+
+  /* Hover state - trigger effect */
+  .test-shine:hover:after {
+    opacity: 1;
+    left: 130%;
+    transition-property: left, top, opacity;
+    transition-duration: 0.7s, 0.7s, 0.15s;
+    transition-timing-function: ease;
+  }
+
+  /* Active state */
+  .test-shine:active:after {
+    opacity: 0;
+  }
+</style>
