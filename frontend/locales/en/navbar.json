@@ -4,6 +4,11 @@
   "login": "Log in",
   "logout": "Log out",
   "dashboard": "Dashboard",
+  "languages": "Languages",
+  "languagesOptions": {
+    "en": "English",
+    "es": "Spanish"
+  },
   "eventText": "Find the best plans on the islands with our website.",
   "findEvents": {
     "label": "Find events",
@@ -48,6 +53,7 @@
   },
   "dashboardNav": {
     "events": "Events",
+    "manageEvents": "Manage Events",
     "myEvents": "My events",
     "articles": "Articles",
     "statistics": "Statistics",
