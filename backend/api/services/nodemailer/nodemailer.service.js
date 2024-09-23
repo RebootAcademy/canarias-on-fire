@@ -44,6 +44,8 @@ const switchSubject = (type, company ) => {
       return 'Bienvenido a Evente'
     case 'validatedCompany':
       return 'Cuenta validada'
+    case 'canceledSubscription':
+      return 'Suscripción cancelada'
     case 'sendInvoice':
       return 'Factura'
   }
@@ -86,6 +88,13 @@ const sendEmail = async (type, company) => {
         templatePath = './emailTemplates/sendInvoice.html'
         replacements = {
           invoicepdf: company?.activeSubscription?.lastInvoice?.pdf,
+        }
+        break
+      case 'canceledSubscription':
+        templatePath = './emailTemplates/canceledSubscription.html',
+        replacements = {
+          companyName: company.companyName,
+          endDate: new Date(company?.activeSubscription?.canceledAt).toLocaleString()
         }
         break
     }

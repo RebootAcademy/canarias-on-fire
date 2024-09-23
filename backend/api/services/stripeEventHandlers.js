@@ -337,6 +337,7 @@ const handleSubscriptionUpdated = async (event) => {
     company.activeSubscription.canceledAt = new Date(
       event.current_period_end * 1000
     )
+    await sendEmail('canceledSubscription', company)
     await company.save()
     console.log('Subscription updated: cancellation scheduled.')
   }
