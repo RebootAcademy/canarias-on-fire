@@ -6,7 +6,7 @@
         <NuxtImg src="logo_color.png" class="w-28 md:w-36" />
       </NuxtLink>
     </div>
-    <div class="hidden md:flex w-1/3 justify-cente">
+    <div class="hidden md:flex w-1/3 justify-center">
       <NavMenu />
     </div>
     <div class="hidden md:flex text-sm font-bold  md:gap-4 sm:w-1/3 justify-end">

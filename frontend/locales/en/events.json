@@ -42,7 +42,8 @@
     "choose": "Choose your payment",
     "findPerfect": "Find the perfect payment that suits your event needs.",
     "recommendedOption": "Recommended option",
-    "readPriority": "Reading priority: "
+    "readPriority": "Reading priority: ",
+    "payForEvent": "Payments for the event"
   },
   "featuresDescriptions": {
     "eventPublication": "Events publication",
@@ -52,7 +53,8 @@
     "increasedCharacterLimit": "Increase in the number of characters for information",
     "websiteLink": "Link to the website",
     "offerPublication": "Publication of offers",
-    "rssPublication": "Publication in RRSS"
+    "rssPublication": "Publication in RRSS",
+    "limitPhotos": "Limit photos:"
   },
   "priorities": {
     "high": "High",
