@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 ">
+    <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16 xl:gap-20 xl:px-48">
       <div
         v-for="plan in filteredPlans"
         :key="plan._id"
@@ -8,25 +8,25 @@
         :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
       >
         <div
-          v-if="plan.name === 'premium'"
-          class="absolute top-0 left-0 right-0 bg-black text-center py-1 rounded-t-lg"
+          v-if="plan.name === 'gold'"
+          class="absolute top-0 left-0 right-0 bg-primary-gradient text-center py-1 rounded-t-lg"
         >
           {{ $t('payments.recommendedOption') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ plan.name }}
         </h3>
-        <div class="mt-4">
-          <span class="text-4xl font-extrabold text-gray-900"
+        <div class="mt-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
+          <span class="text-4xl font-extrabold t"
             >{{ plan.pricing }}€</span
           >
-          <span class="text-base font-medium text-gray-500"> / MO</span>
+          <span class="text-base font-medium "> / MO</span>
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
           <li v-for="(key, value) in plan.features" :key="key">
             <div
-              v-if="value && typeof key !== 'number'"
+              v-if="value && typeof key !== 'number' && typeof key !== 'string'"
               class="flex justify-between"
             >
               <p class="ml-3 text-base text-gray-700">
@@ -64,7 +64,15 @@
               </svg>
             </div>
           </li>
-          <li v-for="key in plan.features" v-show="typeof key === 'number'">
+          <li v-for="key in plan.features" v-show="typeof key === 'string'" :key="key">
+            <p class="ml-3 text-base text-gray-700">
+              {{$t('featuresDescriptions.limitPhotos')}}
+              <span class="font-semibold ml-1">{{
+                Number(key)
+              }}</span>
+            </p>
+          </li>
+          <li v-for="key in plan.features" v-show="typeof key === 'number'" :key="key">
             <p class="ml-3 text-base text-gray-700">
               {{$t('featuresDescriptions.readingPriority')}}
               <span class="font-semibold">{{
@@ -74,7 +82,7 @@
           </li>
         </ul>
 
-        <div class="mt-8">
+        <div v-if="userStore.isAuthenticated" class="mt-8" >
           <NuxtLink
             v-if="getSubscriptionAction(plan) === 'subscribe'"
             @click="subscribeToPlan(plan)"
@@ -169,6 +177,7 @@ const featureDescriptions = computed(() => ({
   websiteLink: t('featuresDescriptions.websiteLink'),
   offerPublication: t('featuresDescriptions.offerPublication'),
   rssPublication: t('featuresDescriptions.rssPublication'),
+  limitPhotos: t('featuresDescriptions.limitPhotos')
 }))
 
 const getReadingPriorityText = (value) => {
@@ -185,7 +194,7 @@ const getReadingPriorityText = (value) => {
 }
 
 const filteredPlans = computed(() => {
-  return props.plans.filter(plan => (plan.name !== 'premium' && plan.name !== 'basic'))
+  return props.plans.filter(plan => (plan.name !== 'premium'))
 })
 
 const getFullPlanInfo = (planId) => {
@@ -193,10 +202,10 @@ const getFullPlanInfo = (planId) => {
 }
 
 const getActiveSubscription = () => {
-  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
+  if (userStore.userData?.role === 'admin' && userStore?.selectedUser) {
     return userStore.selectedUser.activeSubscription || {}
   } else {
-    return userStore.userData.activeSubscription || {}
+    return userStore.userData?.activeSubscription || {}
   }
 }
 
@@ -232,11 +241,11 @@ const getSubscriptionAction = (plan) => {
 
   if (currentPlanIndex === newPlanIndex) {
     return 'current'
-  } else if (newPlanIndex > currentPlanIndex) {
+  } /* else if (newPlanIndex > currentPlanIndex) {
     return 'upgrade'
   } else {
     return 'downgrade'
-  }
+  } */
 }
 
 const getUserId = () => {

@@ -42,7 +42,9 @@
     "choose": "Elige tu pago",
     "findPerfect": "Encuentra el pago perfecto que se ajuste a las necesidades de tu evento.",
     "recommendedOption": "Opción recomendada",
-    "readPriority": "Prioridad de lectura: "
+    "readPriority": "Prioridad de lectura: ",
+    "payForEvent": "Pago por evento",
+    "payForEventDescription": "Planes perfecto para la publicación de tu evento."
   },
   "featuresDescriptions": {
     "eventPublication": "Publicación de eventos",
@@ -52,7 +54,8 @@
     "increasedCharacterLimit": "Aumento del número de caracteres para la información",
     "websiteLink": "Enlace a la página web",
     "offerPublication": "Publicación de ofertas",
-    "rssPublication": "Publicación en RRSS"
+    "rssPublication": "Publicación en RRSS",
+    "limitPhotos": "Límite de fotos:"
   },
   "priorities": {
     "high": "Alta",

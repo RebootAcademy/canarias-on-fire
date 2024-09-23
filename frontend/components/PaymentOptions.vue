@@ -31,7 +31,7 @@
         <ul class="mt-6 space-y-4 text-left">
           <li v-for="(key, value) in payment.features" :key="key">
             <div
-              v-if="value && typeof key !== 'number'"
+              v-if="value && typeof key !== 'number' && typeof key !== 'string'"
               class="flex justify-between"
             >
               <p class="ml-3 text-base text-gray-700">
@@ -68,6 +68,17 @@
                 />
               </svg>
             </div>
+          </li>
+          <li v-for="(feature, index) in payment.features" 
+            :key="index" 
+            v-show="typeof feature === 'string'"
+          >
+            <p class="ml-3 text-base text-gray-700">
+              {{ $t('featuresDescriptions.limitPhotos')}}
+              <span class="font-semibold">
+                {{ Number(feature) }}
+              </span>
+            </p>
           </li>
           <li v-for="(feature, index) in payment.features" 
             :key="index" 
@@ -132,7 +143,9 @@ const featureDescriptions = computed(() => ({
   increasedCharacterLimit: t('featuresDescriptions.increasedCharacterLimit'),
   websiteLink: t('featuresDescriptions.websiteLink'),
   offerPublication: t('featuresDescriptions.offerPublication'),
-  rssPublication: t('featuresDescriptions.rssPublication')
+  rssPublication: t('featuresDescriptions.rssPublication'),
+  limitPhotos: t('featuresDescriptions.limitPhotos')
+
 }))
 
 const getReadingPriorityText = (value) => {

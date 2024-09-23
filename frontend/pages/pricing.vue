@@ -6,7 +6,7 @@
         {{$t('promotions.currentPlan')}} {{ getCurrentPlanName.toUpperCase() }}
       </p>
     </div>
-    <div v-else class="text-center mb-4">
+    <div v-else class="text-center ">
       <h2 class="text-2xl font-bold text-gray-900">{{ $t('promotions.chooseSubscriptionPlan') }}</h2>
       <p class="mt-2 text-md text-gray-500">
         {{$t('promotions.descriptionPlan')}}
@@ -18,6 +18,16 @@
       :selectedPlan="userStore.selectedUser ? userStore.selectedUser.subscription : null"
       @planSelected="handlePlanSelection"
     />
+    <hr  class="mx-6 md:mx-24 my-10 "/>
+    <div class="text-center mt-8">
+      <h2 class="text-2xl font-bold text-gray-900">
+        {{ $t('payments.payForEvent') }}
+      </h2>
+      <p class="mt-2 text-md font-medium text-gray-300">
+        {{ $t('payments.payForEventDescription') }}
+      </p>
+    </div>
+    <PaymentOptions :payments="paymentStore.payments"/>
   </div>
 </template>
 
@@ -25,6 +35,7 @@
 const route = useRoute()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
+const paymentStore = usePaymentStore()
 
 onMounted(async () => {
   const userId = route.query.userId
@@ -35,7 +46,7 @@ onMounted(async () => {
 })
 
 const getCurrentPlanName = computed(() => {
-  if (!userStore.selectedUser || !userStore.selectedUser.activeSubscription || !userStore.selectedUser.activeSubscription.plan) {
+  if (!userStore.selectedUser || !userStore.selectedUser?.activeSubscription || !userStore.selectedUser.activeSubscription.plan) {
     return 'No plan'
   }
   const subscription = subscriptionStore.subscriptions.find(

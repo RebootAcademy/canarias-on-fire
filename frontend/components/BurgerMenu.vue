@@ -116,8 +116,7 @@ const closeMenuManually = () => {
 }
 
 [data-radix-popper-content-wrapper] {
-  transform: translate(0px, 0px) !important; 
-
+  transform: auto !important; 
 }
 
 .custom-details summary {
@@ -131,6 +130,12 @@ const closeMenuManually = () => {
 .custom-details[open] .icon-tabler-chevron-down {
   transform: rotate(180deg); /* Rota el ícono cuando se abre */
   transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  [data-radix-popper-content-wrapper] {
+    transform: translate(0px, 0px) !important;
+  }
 }
 
 </style>
