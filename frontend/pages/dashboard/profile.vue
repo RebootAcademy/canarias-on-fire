@@ -70,8 +70,8 @@ const uploadImage = async () => {
     return
   }
 
-  const cloudName = 'drs1a2bso' // Reemplaza con tu cloud name de Cloudinary
-  const uploadPreset = 'evdhvl07' // Reemplaza con tu upload preset de Cloudinary
+  const cloudName = config.public.cloudinaryCloudName
+  const uploadPreset = config.public.cloudinaryUploadPreset
 
   const formDataForUpload = new FormData()
   formDataForUpload.append('file', selectedFile.value)

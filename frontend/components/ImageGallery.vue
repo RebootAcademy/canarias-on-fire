@@ -78,6 +78,10 @@ const onFileChange = async (event) => {
         store.value[`add${props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)}Image`]({ url: data.secure_url })
       }
 
+      if(!coverImage.value && files.length) {
+        eventStore.coverImage = data.secure_url
+      }
+
       if (images.value.length === checkMaxImages()) {
         toast({
           description: t('galleryLimit'),
@@ -85,6 +89,7 @@ const onFileChange = async (event) => {
         })
       }
     } catch (error) {
+      console.log(error.message)
       console.error('Error uploading image:', error)
     }
   }

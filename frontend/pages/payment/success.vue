@@ -1,8 +1,11 @@
 <template>
-  <div>
-    <h1>Suscripción Exitosa</h1>
-    <p>Gracias por suscribirte. Estamos procesando tu pago.</p>
-    <NuxtLink to="/">Volver a la página principal</NuxtLink>
+  <div class="flex h-screen flex-col gap-8 items-center justify-center ">
+    <h1 class="text-3xl ">{{  $t('successView.title') }}</h1>
+    <NuxtLink to="/">
+      <div class="bg-primary-gradient p-4 px-8 font-bold rounded-md hover:opacity-90">
+        {{ $t('buttons.backHome') }}
+      </div>
+    </NuxtLink>
   </div>
 </template>
 
