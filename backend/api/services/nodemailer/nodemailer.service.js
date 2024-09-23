@@ -44,6 +44,8 @@ const switchSubject = (type, company ) => {
       return 'Bienvenido a Evente'
     case 'validatedCompany':
       return 'Cuenta validada'
+    case 'sendInvoice':
+      return 'Factura'
   }
 }
 
@@ -78,6 +80,14 @@ const sendEmail = async (type, company) => {
           companyName: company.companyName,
           dashboardUrl: `${process.env.FRONTEND_URL}/pricing/`,
         }
+        break
+      
+      case 'sendInvoice':
+        templatePath = './emailTemplates/sendInvoice.html'
+        replacements = {
+          invoicepdf: company?.activeSubscription?.lastInvoice?.pdf,
+        }
+        break
     }
 
     const html = await loadTemplate(templatePath, replacements)

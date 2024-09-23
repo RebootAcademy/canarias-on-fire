@@ -46,6 +46,7 @@
   },
   "featuresDescriptions": {
     "eventPublication": "Publicación de eventos",
+    "promotionPublication": "Publication de promociones",
     "eventPhotos": "Fotos del evento o cartelería del mismo",
     "readingPriority": "Prioridad de lectura",
     "increasedCharacterLimit": "Aumento del número de caracteres para la información",
@@ -88,6 +89,13 @@
     "dateAndTime": "Fecha y hora",
     "organizer": "Organizador",
     "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
+  },
+  "promotions": {
+    "canceledSubscrition": "Podrá disfrutar de su suscripción hasta el ",
+    "currentPlan": "Plan actual: ",
+    "manageSubscription": "Gestionar Suscripción para ",
+    "chooseSubscriptionPlan": "Elija su plan de suscripción",
+    "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de eventos."
   },
   "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan"
 }

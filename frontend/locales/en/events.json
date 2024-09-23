@@ -46,6 +46,7 @@
   },
   "featuresDescriptions": {
     "eventPublication": "Events publication",
+    "promotionPublication": "Publication of promotions",
     "eventPhotos": "Photos of the event or event posters",
     "readingPriority": "Reading priority",
     "increasedCharacterLimit": "Increase in the number of characters for information",
@@ -88,6 +89,13 @@
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
     "featurePayedEvents": "* Feature only available for Gold and Premium events."
+  },
+  "promotions": {
+    "canceledSubscrition": "Your subscription will be valid until  ",
+    "currentPlan": "Current plan: ",
+    "manageSubscription": "Manage Subscription for ",
+    "chooseSubscriptionPlan": "Choose your subscription plan",
+    "descriptionPlan": "Find the perfect plan that suits your event needs."
   },
   "galleryLimit": "You have reached your plan's image capacity limit"
 }
