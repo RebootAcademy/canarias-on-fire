@@ -81,7 +81,7 @@ function compareDates(dateA, dateB) {
 }
 
 onMounted(() => {
-  userStore.fetchAndSetUser(userStore.userData.email)
+  userStore.fetchAndSetUser(userStore.userData?.email)
 })
 
 </script>
