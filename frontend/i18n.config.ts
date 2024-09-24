@@ -18,6 +18,8 @@ import dashboardES from './locales/es/dashboard.json'
 import dashboardEN from './locales/en/dashboard.json'
 import toastES from './locales/es/toast.json'
 import toastEN from './locales/en/toast.json'
+import questionsES from './locales/es/questions.json'
+import questionsEN from './locales/en/questions.json'
 
 
 
@@ -35,7 +37,8 @@ export default defineI18nConfig(() => ({
       ...bandsEN,
       ...restaurantsEN,
       ...dashboardEN,
-      ...toastEN
+      ...toastEN,
+      ...questionsEN,
     },
     es: {
       ...navbarEs,
@@ -47,7 +50,8 @@ export default defineI18nConfig(() => ({
       ...bandsES,
       ...restaurantsES,
       ...dashboardES,
-      ...toastES
+      ...toastES,
+      ...questionsES,
     },
   },
 }))

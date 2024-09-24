@@ -61,6 +61,17 @@
     "password": "Contraseña",
     "users": "Listado de usuarios",
     "dashboard": "Dashboard",
-    "home": "Home"
+    "home": "Home",
+    "help": "Ayuda"
+  },
+  "sideBarHelp": {
+    "label": "Ayuda",
+    "subtext": "FaQ",
+    "description": "Preguntas frecuentes",
+    "general": "General",
+    "subscriptions": "Suscripciones",
+    "payments": "Pagos",
+    "technical": "Problemas técnicos",
+    "account": "Gestionar cuenta"
   }
 }

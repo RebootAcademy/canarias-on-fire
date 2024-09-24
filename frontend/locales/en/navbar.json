@@ -62,6 +62,17 @@
     "password": "Password",
     "users": "Users List",
     "dashboard": "Dashboard",
-    "home": "Home"
+    "home": "Home",
+    "help": "Help"
+  },
+  "sideBarHelp": {
+    "label": "Help",
+    "subtext": "FaQ",
+    "description": "Frequently Asked Questions",
+    "general": "General",
+    "subscriptions": "Subscriptions",
+    "payments": "Payments",
+    "technical": "Technical Issues",
+    "account": "Account Management"
   }
 }

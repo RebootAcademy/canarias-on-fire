@@ -1,6 +1,10 @@
 
 
 export function validateRole(roles, user) {
+  if (roles.includes('all')) {
+    return true
+  }
+
   return roles.includes(user)
 }
 

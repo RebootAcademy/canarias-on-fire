@@ -1,0 +1,198 @@
+{
+  "helpTitle": "FaQs",
+  "general": {
+    "title": "General questions",
+    "question1": {
+      "question": "How can I create an event?",
+      "answer": "To create an event, log in, go to the 'Create Event' section, fill in the required fields, and publish."
+    },
+    "question2": {
+      "question": "Can I edit an event after it has been published?",
+      "answer": "Yes, you can edit your event in the 'My Events' section as long as it hasn't started."
+    },
+    "question3": {
+      "question": "Do I need to register to view events?",
+      "answer": "No, you can view events without registering, but you will need an account to create and manage events."
+    },
+    "question4": {
+      "question": "How can I search for specific events?",
+      "answer": "Use the search engine on the main page and filter by category, date, or location."
+    },
+    "question5": {
+      "question": "What types of events can I publish?",
+      "answer": "You can publish any type of event, such as concerts, workshops, conferences, or special promotions."
+    },
+    "question6": {
+      "question": "Can I cancel an event once it's created?",
+      "answer": "Yes, you can cancel an event from the 'My Events' section if you no longer want it to happen."
+    },
+    "question7": {
+      "question": "How long does a published event stay on the platform?",
+      "answer": "The event will be visible until the event date has passed or you choose to remove it."
+    },
+    "question8": {
+      "question": "How can I highlight my event?",
+      "answer": "We offer options to highlight your event through subscriptions and additional payments."
+    },
+    "question9": {
+      "question": "Can I share my event on social media?",
+      "answer": "Yes, you can directly share your event on social media from its detail page."
+    }
+  },
+  "subscriptions": {
+    "title": "Subscriptions Questions",
+    "question1": {
+      "question": "What does the monthly subscription include?",
+      "answer": "The monthly subscription allows you to publish unlimited promotions for your events."
+    },
+    "question2": {
+      "question": "How can I subscribe?",
+      "answer": "You can subscribe from your user profile in the 'Subscriptions' section."
+    },
+    "question3": {
+      "question": "Can I cancel my subscription?",
+      "answer": "Yes, you can cancel your subscription at any time, but it will remain active until the end of the paid period."
+    },
+    "question4": {
+      "question": "Are subscriptions automatically renewable?",
+      "answer": "Yes, subscriptions are automatically renewed each month unless you cancel them."
+    },
+    "question5": {
+      "question": "Can I change my subscription plan?",
+      "answer": "Yes, you can change your plan from the 'Subscriptions' section in your account."
+    },
+    "question6": {
+      "question": "What happens if I don’t pay my subscription?",
+      "answer": "If you don’t pay your subscription, you will no longer be able to publish more promotions until the payment is regularized."
+    },
+    "question7": {
+      "question": "Do I receive a reminder before my subscription is renewed?",
+      "answer": "Yes, we will send you an email reminder before the renewal."
+    },
+    "question8": {
+      "question": "Do subscriptions include any discount for featured events?",
+      "answer": "Yes, subscribers get discounts to highlight events on the platform."
+    },
+    "question9": {
+      "question": "Can I get an annual subscription?",
+      "answer": "We currently only offer monthly subscriptions, but we are evaluating other options."
+    }
+  },
+  "payments": {
+    "title": "Payments Questions",
+    "question1": {
+      "question": "What payment methods are available?",
+      "answer": "We accept credit cards, debit cards, and PayPal payments."
+    },
+    "question2": {
+      "question": "Can I pay for a single event instead of subscribing?",
+      "answer": "Yes, you can pay for events individually without needing a subscription."
+    },
+    "question3": {
+      "question": "How are subscription payments made?",
+      "answer": "The payment is made automatically each month using the method you registered."
+    },
+    "question4": {
+      "question": "What happens if my subscription payment fails?",
+      "answer": "We will notify you, and you will have time to update your payment method before the subscription is suspended."
+    },
+    "question5": {
+      "question": "Can I get a refund for a paid event?",
+      "answer": "Event payments are non-refundable unless the event is canceled by the organizer."
+    },
+    "question6": {
+      "question": "Is VAT included in the prices?",
+      "answer": "Yes, all prices include the applicable VAT."
+    },
+    "question7": {
+      "question": "How can I check my invoices?",
+      "answer": "You can review and download your invoices from the 'Payment History' section in your profile."
+    },
+    "question8": {
+      "question": "Can I change my payment method?",
+      "answer": "Yes, you can update your payment method in the 'Payments' section of your account."
+    },
+    "question9": {
+      "question": "Is there an additional cost for highlighting an event?",
+      "answer": "Yes, highlighting an event has an additional cost depending on the visibility you want to achieve."
+    }
+  },
+  "technicalIssues": {
+    "title": "Technical Issues Questions",
+    "question1": {
+      "question": "I can't access my account, what should I do?",
+      "answer": "Try resetting your password from the 'Forgot your password?' option on the login page."
+    },
+    "question2": {
+      "question": "The site is not loading correctly, how can I fix it?",
+      "answer": "Check your internet connection or try clearing your browser's cache and cookies."
+    },
+    "question3": {
+      "question": "My event is not showing, what can I do?",
+      "answer": "Make sure the event has been published correctly and is not marked as a draft."
+    },
+    "question4": {
+      "question": "How do I report a technical issue?",
+      "answer": "You can report issues from the 'Technical Support' section in your account or by emailing us at {supportEmail}."
+    },
+    "question5": {
+      "question": "My subscription payment failed, how do I resolve it?",
+      "answer": "Try updating your payment method or contact support if the issue persists."
+    },
+    "question6": {
+      "question": "How do I fix image upload errors?",
+      "answer": "Make sure the image meets the size and format requirements, then try again."
+    },
+    "question7": {
+      "question": "The site is down, how long until it's back online?",
+      "answer": "Our team is working to resolve the issue as soon as possible. We will notify you once it's operational."
+    },
+    "question8": {
+      "question": "I am having trouble updating my event, what should I do?",
+      "answer": "Ensure your connection is stable and that all required fields are filled out."
+    },
+    "question9": {
+      "question": "The search system isn't finding my event, why?",
+      "answer": "It may take a few minutes to index after publication. If the issue persists, contact technical support."
+    }
+  },
+  "accountManagement": {
+    "title": "Account Management Questions",
+    "question1": {
+      "question": "How can I create an account?",
+      "answer": "Click 'Sign Up' on the main page and follow the steps to create your account."
+    },
+    "question2": {
+      "question": "How can I change my password?",
+      "answer": "You can change your password from the 'Account Settings' section in your profile."
+    },
+    "question3": {
+      "question": "Can I delete my account?",
+      "answer": "Yes, you can delete your account from the settings, but you will lose all your events and associated data."
+    },
+    "question4": {
+      "question": "How can I update my personal information?",
+      "answer": "Go to 'My Profile' and edit the information you need to update."
+    },
+    "question5": {
+      "question": "Can I link my account to social media?",
+      "answer": "We currently do not offer direct social media integration, but you can share your events on them."
+    },
+    "question6": {
+      "question": "What should I do if I forget my password?",
+      "answer": "Use the 'Forgot your password?' option on the login page to reset it."
+    },
+    "question7": {
+      "question": "How can I verify my email?",
+      "answer": "After registering, you will receive an email with a verification link to activate your account."
+    },
+    "question8": {
+      "question": "How do I protect my account from unauthorized access?",
+      "answer": "Enable two-factor authentication in the 'Security' section of your profile."
+    },
+    "question9": {
+      "question": "How do I manage my notifications?",
+      "answer": "You can manage your notification preferences from the 'Settings' section in your account."
+    }
+  }
+}
