@@ -28,7 +28,14 @@
     "error": "Parece que algo no ha salido bien! Inténtalo de nuevo, y si el error persiste contáctanos."
   },
   "exploreSection": {
-    "description": ["Explora ", "los momentos más ", "emocionantes y memorables ", "de nuestra lista de ", "eventos, o crea los tuyos ", "y compártelos con el resto."],
+    "description": [
+      "Explora ",
+      "los momentos más ",
+      "emocionantes y memorables ",
+      "de nuestra lista de ",
+      "eventos, o crea los tuyos ",
+      "y compártelos con el resto."
+    ],
     "button": "Empieza ahora"
   },
   "onBoarding": {
@@ -104,7 +111,14 @@
     "update": "Actualizar",
     "desactivate": "Desactivar",
     "activate": "Activar",
-    "current": "Plan actual"
-    
+    "current": "Plan actual",
+    "backHome": "Volver al Inicio",
+    "pricing": "Ver precios"
+  },
+  "successView": {
+    "title": "Su pago se ha realizado correctamente"
+  },
+  "canceledView": {
+    "title": "El intento de pago se ha cancelado correctamente"
   }
 }
