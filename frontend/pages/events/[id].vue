@@ -115,7 +115,7 @@ if (error) {
 }
 
 const isOwner = computed(() => {
-  return eventStore.event?.userId._id === userStore.userData._id
+  return eventStore.event?.userId._id === userStore.userData?._id
 })
 
 const editEvent = () => {
