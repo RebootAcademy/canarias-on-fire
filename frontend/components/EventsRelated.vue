@@ -27,10 +27,10 @@ const currentEventCategories = computed(() => {
 const relatedEvents = computed(() => {
   if (!currentEventCategories.value.length) return []
 
-  return events.value.filter(e => 
-    e._id !== event.value._id && // Excluir el evento actual
+   return events.value.filter(e => 
+    e._id !== event.value._id && e.status === 'published' &&
     e.categories.some(cat => 
-      currentEventCategories.value.some(currentCat => currentCat._id === cat._id)
+      currentEventCategories.value.some(currentCat => currentCat._id === cat._id )
     )
   ).slice(0, 5) // Limitar a 5 eventos relacionados
 })
