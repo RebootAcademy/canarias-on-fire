@@ -56,7 +56,9 @@ module.exports = {
       },
       backgroundImage: {
         'primary-gradient':
-          'linear-gradient(to right, #FBB03B, #F7931E, #F15A24, #ED1C24)', // Aquí se coloca el gradiente
+          'linear-gradient(to right, #FBB03B, #F7931E, #F15A24, #ED1C24)',
+        'secondary-gradient':
+          'radial-gradient(circle at right, #FBB03B, #F7931E, #F15A24, #ED1C24)',
       },
       borderRadius: {
         xl: 'calc(var(--radius) + 4px)',

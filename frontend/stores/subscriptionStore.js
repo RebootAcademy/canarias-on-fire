@@ -148,4 +148,9 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
       }
     },
   },
+  getters: {
+    getSubscriptionById: (state) => (id) => {
+      return state.subscriptions.find((sub) => sub.id === id)
+    },
+  }
 })
