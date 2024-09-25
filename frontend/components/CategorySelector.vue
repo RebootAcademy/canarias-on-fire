@@ -1,15 +1,15 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col text-secondary gap-2">
     <p class="font-semibold">{{ $t('tags') }}</p>
-    <p class="text-xs text-gray-500 mb-2">{{ $t('chooseTags') }}</p>
+    <p class="text-xs text-secondary mb-2">{{ $t('chooseTags') }}</p>
     <div class="flex flex-wrap gap-2 p-2 mb-4">
       <Badge 
         v-for="category in eventStore.categories"
         :key="category.id"
-        :class="{'bg-transparent border-primary ' : isSelected(category), 'bg-gray' : !isSelected(category)}"
+        :class="{'bg-transparent border-primary text-primary' : isSelected(category), 'bg-gray text-secondary' : !isSelected(category)}"
         @click="toggleCategory(category)"
         variant="secondary"
-        class="p-2 px-4 cursor-pointer text-white hover:bg-black"
+        class="p-2 px-4 cursor-pointer hover:bg-secondary hover:text-primary"
       >{{ $t(`values.${category.name}`) }}</Badge>
     </div>
     <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{ errors.categories }}</span>

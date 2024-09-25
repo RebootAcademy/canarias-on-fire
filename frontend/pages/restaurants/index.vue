@@ -1,5 +1,5 @@
 <template>
-    <div class=" px-8 py-4 sm:px-8 md:px-16 lg:px-40 mt-8 ">
+    <div class=" px-8 py-4 sm:px-8 md:px-16 lg:px-40 mt-8 text-secondary">
         <div class="flex flex-row justify-between items-center">
             <h2 class="xs:text-xl sm:text-2xl md:text-4xl font-semibold text-primary mb-8">{{ $t('title') }}</h2>
             <SearchInput v-model="searchQuery"/>

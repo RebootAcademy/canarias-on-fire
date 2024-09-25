@@ -150,7 +150,7 @@
         <button
           type="submit"
           @click="submitForm"
-          class="w-full bg-black text-white px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
+          class="w-full bg-background text-secondary px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
         >
           {{ $t('buttons.completeReg') }}
         </button>

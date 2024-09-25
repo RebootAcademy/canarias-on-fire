@@ -4,11 +4,11 @@
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger
-            class=" bg-transparent text-white hover:bg-gray active:bg-primary focus:bg-transparent"
+            class=" bg-transparent text-secondary hover:bg-gray active:bg-primary focus:bg-transparent"
           >
             <NuxtLink
               :to="switchLocalePath(currentLocale)"
-              class="flex items-center bg-transparent text-white px-3 py-2 rounded-md"
+              class="flex items-center bg-transparent text-secondary px-3 py-2 rounded-md"
             >
               <NuxtImg
                 :src="getFlagSrc(currentLocale)"
@@ -18,13 +18,13 @@
               {{ currentLocale.toUpperCase() }}
             </NuxtLink>
           </NavigationMenuTrigger>
-          <NavigationMenuContent class="bg-[#1C1F1F] text-white">
+          <NavigationMenuContent class="bg-background text-secondary">
             <ul class="p-2">
               <li v-for="lang in languages" :key="lang.code">
                 <NavigationMenuLink as-child>
                   <button
                     @click="setLocale(lang.code)"
-                    class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray"
+                    class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray active:bg-primary"
                     :class="locale === lang.code ? 'bg-gray' : ''"
                   >
                     <NuxtImg :src="lang.flag" width="20" class="mr-2 xs:w-4 sm:w-6" />

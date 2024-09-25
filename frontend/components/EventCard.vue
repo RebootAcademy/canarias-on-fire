@@ -1,10 +1,11 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
     <div
-      class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
+      class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
         'bg-primary-gradient text-black test-shine': isPremiumPayment,
+        'bg-background': !isGoldPayment && !isPremiumPayment,
       }"
     >
       <div
@@ -21,7 +22,7 @@
         <span
           v-show="userStore.userData && userStore.userData.role === 'admin'"
           :class="[
-            'absolute top-2 left-2 text-xs font-semibold bg-white rounded-xl px-2 py-1 text-black',
+            'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
             { 'text-red-500 italic': event.status === 'draft' },
           ]"
         >
@@ -46,7 +47,7 @@
             <span
               v-for="category in event.categories"
               :key="category._id"
-              class="bg-gray-700 text-white text-xs font-normal px-2.5 py-0.5 rounded-xl self-center"
+              class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
             >
               {{ category.name }}
             </span>
@@ -75,23 +76,23 @@
           </div>
         </div>
         <div class="flex flex-col justify-between items-start px-3">
-          <h3 class="text-xl font-semibold mb-2">{{ event.eventName }}</h3>
+          <h3 class="text-xl text-secondary font-semibold mb-2">{{ event.eventName }}</h3>
           <p
             class="text-sm"
             :class="{
-              'text-gray-300': isBasicPayment,
+              ' text-secondary': isBasicPayment,
             }"
           >
             {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
           </p>
-          <p class="text-sm line-clamp-1">
+          <p class="text-sm text-secondary line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
           <p
             class="absolute text-md font-semibold mt-2 bottom-2"
             :class="{
               'text-primary': isBasicPayment,
-              'text-gray-100': isGoldPayment || isPremiumPayment,
+              'text-black': isGoldPayment || isPremiumPayment,
             }"
           >
             {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}

@@ -13,7 +13,7 @@
       >
         <component :is="getIcon(category.icon)" class="w-6 h-6 lg:w-10 lg:h-10 " />
       </div>
-      <span class="mt-1.5 text-xs text-white font-bold">{{ $t(`values.${category.name}`) }}</span>
+      <span class="mt-1.5 text-xs text-secondary font-bold">{{ $t(`values.${category.name}`) }}</span>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 text-secondary">
     <!-- EVENT TYPE -->
     <hr v-if="!isEditing"/>
     <div v-if="!isEditing" class="flex flex-col">

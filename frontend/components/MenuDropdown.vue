@@ -6,11 +6,11 @@
         <AvatarFallback>{{ userInitials }}</AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
-    <DropdownMenuContent class="bg-black text-white ">
-      <DropdownMenuItem @click="navigateTo()" class="hover:bg-gray hover:text-primary">
+    <DropdownMenuContent class="bg-background text-secondary ">
+      <DropdownMenuItem @click="navigateTo()" class="cursor-pointer hover:bg-foreground-muted hover:text-primary">
         {{ $t('dashboard') }}
       </DropdownMenuItem>
-      <DropdownMenuItem v-if="auth0?.isAuthenticated" @click="handleLogout" class="hover:bg-gray hover:text-primary">
+      <DropdownMenuItem v-if="auth0?.isAuthenticated" @click="handleLogout" class="cursor-pointer hover:bg-foreground-muted hover:text-primary">
         {{ $t('logout') }}
       </DropdownMenuItem>
     </DropdownMenuContent>

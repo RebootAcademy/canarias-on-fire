@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center text-secondary">
     <Hero />
     <div class="md:w-3/4 lg:w-2/3">
       <div class="flex items-center justify-between w-full px-4 mb-4">
@@ -7,7 +7,7 @@
         <div class="flex gap-4">
           <SearchInput v-model="searchQuery" />
           <div class="bg-primary-gradient p-0.5 rounded-md">
-            <Button @click="openFilterModal" class="text-sm px-3 bg-black hover:text-white hover:bg-primary-gradient">
+            <Button @click="openFilterModal" class="text-sm px-3 bg-gray hover:text-white hover:bg-primary-gradient">
               {{ $t('filterBtn') }}
             </Button>
           </div>

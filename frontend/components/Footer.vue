@@ -1,20 +1,32 @@
 <template>
-  <div class="h-44 bg-black flex flex-col items-center justify-evenly text-gray-200 text-xs">
+  <div class="h-44 bg-background flex flex-col items-center justify-evenly text-secondary text-xs">
     <div class="flex space-x-4">
       <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-        <Twitter class="w-6 h-6" />
+        <Twitter class="w-6 h-6 text-secondary" />
       </a>
       <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <Instagram class="w-6 h-6" />
+        <Instagram class="w-6 h-6 text-secondary" />
       </a>
       <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <Facebook class="w-6 h-6" />
+        <Facebook class="w-6 h-6 text-secondary" />
       </a>
     </div>
-    <div class="flex space-x-4 text-base">
-      <a href="/contact" class="hover:underline">{{ $t('footer.contactUs') }}</a>
-      <a href="/about" class="hover:underline">{{ $t('footer.aboutUs') }}</a>
-      <a href="/privacy-policy" class="hover:underline">{{ $t('footer.privacy') }}</a>
+    <div class="flex space-x-4 text-base ">
+      <a href="/contact" class="hover:underline">
+        <span class="text-secondary hover:text-primary">
+          {{ $t('footer.contactUs') }}
+        </span>
+      </a>
+      <a href="/about" class="hover:underline">
+        <span class="text-secondary hover:text-primary">
+          {{ $t('footer.aboutUs') }}
+        </span>
+      </a>
+      <a href="/privacy-policy" class="hover:underline">
+        <span class="text-secondary hover:text-primary">
+          {{ $t('footer.privacy') }}
+        </span>
+      </a>
     </div>
     <div>{{ $t('footer.copyright') }}</div>
   </div>

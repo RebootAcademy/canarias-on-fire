@@ -2,15 +2,23 @@
   <div>
     <div class="flex flex-col-reverse gap-4 md:flex-row items-center justify-between w-full mb-6">
       <Tabs v-model="activeTab" class="w-auto">
-        <TabsList>
+        <TabsList >
           <TabsTrigger value="companies">
-            {{ $t('userCompanies') }}
+            <span 
+            :class="activeTab === 'companies' ? 'text-primary' : 'text-white'"
+            >{{ $t('userCompanies') }}</span>
           </TabsTrigger>
           <TabsTrigger v-if="isThereNotValidatedCompany.length" value="validateCompanies"  class="relative">
             <div  class="absolute top-0 right-0 rounded-full  bg-red-500 w-2 h-2 animate-pulse "/>
-            {{ $t('notValidatedCompanies') }}
+            <span :class="activeTab === 'validateCompanies' ? 'text-primary' : 'text-white'">
+              {{ $t('notValidatedCompanies') }}
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="basicUsers">{{ $t('basicUsers') }}</TabsTrigger>
+          <TabsTrigger value="basicUsers">
+            <span :class="activeTab === 'basicUsers' ? 'text-primary' : 'text-white'">
+              {{ $t('basicUsers') }}
+            </span>
+          </TabsTrigger>
           
         </TabsList>
       </Tabs>

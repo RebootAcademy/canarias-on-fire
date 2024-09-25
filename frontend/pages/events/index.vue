@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center bg-black">
+  <div class="flex flex-col items-center bg-background">
     <Hero />
     <div class="w-2/3">
       <div class="flex items-center justify-between w-full px-4 mb-4">
@@ -20,7 +20,7 @@
           :event="event"
         />
       </div>
-      <p v-if="limitedEvents.length === 0" class="text-gray-500 mt-4">
+      <p v-if="limitedEvents.length === 0" class="text-secondary mt-4">
        {{ $t('notEventsFound')}}
       </p>
     </div>
