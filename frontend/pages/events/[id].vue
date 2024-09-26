@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-black">
+  <div class="relative bg-background text-secondary">
     <NuxtImg
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
@@ -10,7 +10,7 @@
         <span
           v-for="category in event.categories"
           :key="category._id"
-          class="bg-gray text-white text-xs font-semibold px-4 py-1 rounded-xl"
+          class="bg-gray text-secondary text-xs font-semibold px-4 py-1 rounded-full"
         >
           {{ category.name }}
         </span>
@@ -21,7 +21,7 @@
         <Trash v-if="isAdmin" class="mr-2  w-8 cursor-pointer hover:text-primary"   @click="deleteEvent"/>
       </div>
   </div>
-  <div class="px-8 bg-black text-white">
+  <div class="px-8 bg-background text-secondary">
     <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
     <div class="flex justify-between">
       <div class="flex flex-col gap-1 mt-2">

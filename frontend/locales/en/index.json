@@ -113,5 +113,8 @@
   },
   "canceledView": {
     "title": "Your payment intent was canceled"
+  },
+  "gallery": {
+    "title": "Gallery"
   }
 }

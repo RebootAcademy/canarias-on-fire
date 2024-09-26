@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full bg-black w-full !flex !flex-col gap-2 items-center">
+  <div class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
     <Hero />
     <div class="w-full flex flex-col items-center h-fit">
       <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-16 bg-black flex items-end justify-between px-4 py-2">
+  <div class="h-16 bg-background text-secondary flex items-end justify-between px-4 py-2">
     
     <div class="flex xs:justify-center md:justify-start xs:2/4 sm:w-1/3 text-3xl ml-1 font-extrabold">
       <NuxtLink to="/" class="flex items-end">
@@ -9,13 +9,14 @@
     <div class="hidden md:flex w-1/3 justify-center">
       <NavMenu />
     </div>
-    <div class="hidden md:flex text-sm font-bold  md:gap-4 sm:w-1/3 justify-end">
+    <div class="hidden md:flex items-center text-sm font-bold  md:gap-4 sm:w-1/3 justify-end">
       <LangSelector />
       <Notifications />
+      <ThemeSwitcher />
       <Button 
         v-if="!auth0?.isAuthenticated"
         @click="login"
-        class="hover:underline text-white"
+        class="hover:underline text-secondary hover:text-primary hover:bg-transparent"
         variant="ghost"
       >
         {{ $t('login') }}
@@ -34,7 +35,16 @@
 import { useAuth0 } from '@auth0/auth0-vue'
 
 const auth0 = ref(null)
-
+const theme = ref('dark')
+function toggleTheme() {
+  if (theme.value === 'dark') {
+    document.body.classList.add('light');
+    theme.value = 'light';
+  } else {
+    document.body.classList.remove('light');
+    theme.value = 'dark';
+  }
+}
 onMounted(() => {
   auth0.value = useAuth0()
 })

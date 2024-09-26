@@ -120,5 +120,8 @@
   },
   "canceledView": {
     "title": "El intento de pago se ha cancelado correctamente"
+  },
+  "gallery": {
+    "title": "Galería"
   }
 }

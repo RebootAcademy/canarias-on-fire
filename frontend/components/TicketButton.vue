@@ -3,7 +3,7 @@
     v-if="hasBorder"
     class="flex flex-col items-center gap-2 bg-primary-gradient rounded-sm p-0.5 w-fit"
   >
-  <div class="flex flex-col items-center gap-2 bg-black rounded-sm px-6 py-3 w-fit">
+  <div class="flex flex-col items-center gap-2 bg-background text-secondary rounded-sm px-6 py-3 w-fit">
 
 
     <h1 class="text-lg font-normal">Ticket price / <span>{{ eventStore.event.eventPrice }} €</span></h1>

@@ -4,8 +4,8 @@
       @click="action"
       class="cursor-pointer bg-primary-gradient p-0.5 rounded-md"
     >
-      <button :class="['bg-black w-full h-full p-2 px-4 rounded-md hover:bg-transparent', extraStyles || '']">
-        <span class="text-center font-semibold text-white">{{ title }}</span>
+      <button :class="['bg-background w-full h-full p-2 px-4 rounded-md hover:bg-transparent', extraStyles || '']">
+        <span class="text-center font-semibold text-secondary">{{ title }}</span>
       </button> 
       <slot />
     </div>

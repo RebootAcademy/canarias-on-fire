@@ -12,11 +12,11 @@
           class="bg-gray   p-6 rounded-lg hover:bg-gray transition duration-300 flex flex-col items-center"
           :class="{
             'ring-2 ring-primary': selectedRole === 'company',
-            'ring-1 ring-white': selectedRole !== 'company'
+            'ring-1 ring-secondary': selectedRole !== 'company'
           }"
         >
           <!-- <img src="/path-to-company-icon.svg" alt="Company" class="w-16 h-16 mb-4"> -->
-          <BriefcaseBusiness size="32" class="text-white mb-4"/>
+          <BriefcaseBusiness size="32" class="text-secondary mb-4"/>
           <h2 class="text-xl font-semibold mb-2">{{ $t('onBoarding.step1Company')}}</h2>
           <p class="text-gray-400 text-center">{{  $t('onBoarding.step1CompanyDescription') }}</p>
         </button>
@@ -26,11 +26,11 @@
           class="bg-gray border-1  p-6 rounded-lg hover:bg-gray transition duration-300 flex flex-col items-center"
           :class="{
             'ring-2 ring-primary': selectedRole === 'band',
-            'ring-1 ring-white': selectedRole !== 'band'
+            'ring-1 ring-secondary': selectedRole !== 'band'
           }"
         >
           <!-- <img src="/path-to-band-icon.svg" alt="Music Band" class="w-16 h-16 mb-4"> -->
-          <Music size="32" class="text-white mb-4" />
+          <Music size="32" class="text-secondary mb-4" />
           <h2 class="text-xl font-semibold mb-2">{{ $t('onBoarding.step1MusicBand')}}</h2>
           <p class="text-gray-400 text-center">{{  $t('onBoarding.step1MusicBandDescription') }}</p>
         </button>
@@ -40,7 +40,7 @@
           <Button
             @click="continueToNextStep"
             variant="ghost"
-            class="w-full bg-black text-white px-6 py-2 rounded-sm font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
+            class="w-full bg-background text-secondary px-6 py-2 rounded-sm font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
             :disabled="!selectedRole"
           >
             {{ $t('buttons.continue')}}

@@ -1,10 +1,10 @@
 <template>
-    <Menubar  class="relative  data-[state=open]:bg-transparent bg-transparent border-none focus:bg-transparentactive:bg-transparent">
+    <Menubar  class="relative data-[state=open]:bg-transparent bg-transparent border-none focus:bg-transparente active:bg-transparent">
         <MenubarMenu>
           <MenubarTrigger class="data-[state=open]:bg-transparent focus:bg-transparent" >
             <AlignJustify class="text-white cursor-pointer" @click="toggleMenu"/>
         </MenubarTrigger>
-          <MenubarContent v-if="isMenuOpen"  class="bg-black pb-72 overflow-auto translate-y-0 xs:w-screen md:hidden text-white border-none">
+          <MenubarContent v-if="isMenuOpen"  class="bg-background pb-72 overflow-auto translate-y-0 xs:w-screen md:hidden text-secondary border-none">
             <div class="flex p-2 mt-2 px-6 justify-between items-center">
               <NuxtLink to="/" class="flex items-end">
                 <NuxtImg src="logo_color.png" class="w-28"/>
@@ -77,6 +77,9 @@
               <!-- Logout Section -->
               <AuthenticationBurgerMenu />
               <MenubarSeparator class="mx-2 mb-4"/>
+              <div class="flex w-full justify-end pr-6 ">
+                <ThemeSwitcher />
+              </div>
             </div>
           </MenubarContent>
         </MenubarMenu>
