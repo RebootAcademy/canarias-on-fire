@@ -82,6 +82,9 @@ export const useEventStore = defineStore('eventStore', {
     setEventDate(dateRange) {
       this.eventDate = dateRange
     },
+    setSearchQuery(query) {
+      this.searchQuery = query
+    },
 
     setPlaceDetails(place) {
       const { formatted_address, geometry, address_components, website } = place
@@ -393,86 +396,86 @@ export const useEventStore = defineStore('eventStore', {
 
       return this.events.filter((event) => {
         const eventDate = new Date(
-        event.eventDate.year,
-        event.eventDate.month - 1,
-        event.eventDate.day
-      )
-
-      const [hours, minutes] = event.startTime.split(':').map(Number)
-      
-      const eventDateTime = new Date(
-        eventDate.getFullYear(),
-        eventDate.getMonth(),
-        eventDate.getDate(),
-        hours,
-        minutes
-      )
-        
-      if (event.status !== 'closed' && eventDateTime < today) {
-        this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
-      }
-
-      // Filter events by active and validated users
-      if (!event.userId?.isActive || !event.userId?.isValidated) {
-        return false
-      }
-
-      if (this.searchQuery) {
-        // Search
-        const lowercaseQuery = this.searchQuery.toLowerCase()
-        if (
-          !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-          !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-        ) {
-          return false
-        }
-      }
-
-      // Filter by Categories
-      if (this.filters.categories.length > 0) {
-        const eventCategoryIds = event.categories.map((cat) => cat._id)
-        if (
-          !this.filters.categories.some((id) => eventCategoryIds.includes(id))
-        ) {
-          return false
-        }
-      }
-
-      // Filtrar por categorías seleccionadas
-      if (this.selectedCategories.length > 0) {
-        const eventCategoryIds = event.categories.map((c) => c._id)
-        const hasMatchingCategory = this.selectedCategories.some((sc) =>
-          eventCategoryIds.includes(sc.id)
+          event.eventDate.year,
+          event.eventDate.month - 1,
+          event.eventDate.day
         )
 
-        if (!hasMatchingCategory) {
-          return false
-        }
-      }
+        const [hours, minutes] = event.startTime.split(':').map(Number)
 
-      // Filter by islands
-      if (this.filters.islands.length > 0) {
-        const eventIsland = getIslandFromPostalCode(
-          event.eventLocation.postalCode
+        const eventDateTime = new Date(
+          eventDate.getFullYear(),
+          eventDate.getMonth(),
+          eventDate.getDate(),
+          hours,
+          minutes
         )
-        if (!this.filters.islands.includes(eventIsland)) {
-          return false
-        }
-      }
 
-      // Filter by date
-      if (this.filters.date) {
-        const filterDate = this.filters.date
-        const eventDate = event.eventDate
-        if (
-          !eventDate ||
-          eventDate.year !== filterDate.year ||
-          eventDate.month !== filterDate.month ||
-          eventDate.day !== filterDate.day
-        ) {
+        if (event.status !== 'closed' && eventDateTime < today) {
+          this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
+        }
+
+        // Filter events by active and validated users
+        if (!event.userId?.isActive || !event.userId?.isValidated) {
           return false
         }
-      }
+
+        if (this.searchQuery) {
+          // Search
+          const lowercaseQuery = this.searchQuery.toLowerCase()
+          if (
+            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          ) {
+            return false
+          }
+        }
+
+        // Filter by Categories
+        if (this.filters.categories.length > 0) {
+          const eventCategoryIds = event.categories.map((cat) => cat._id)
+          if (
+            !this.filters.categories.some((id) => eventCategoryIds.includes(id))
+          ) {
+            return false
+          }
+        }
+
+        // Filtrar por categorías seleccionadas
+        if (this.selectedCategories.length > 0) {
+          const eventCategoryIds = event.categories.map((c) => c._id)
+          const hasMatchingCategory = this.selectedCategories.some((sc) =>
+            eventCategoryIds.includes(sc.id)
+          )
+
+          if (!hasMatchingCategory) {
+            return false
+          }
+        }
+
+        // Filter by islands
+        if (this.filters.islands.length > 0) {
+          const eventIsland = getIslandFromPostalCode(
+            event.eventLocation.postalCode
+          )
+          if (!this.filters.islands.includes(eventIsland)) {
+            return false
+          }
+        }
+
+        // Filter by date
+        if (this.filters.date) {
+          const filterDate = this.filters.date
+          const eventDate = event.eventDate
+          if (
+            !eventDate ||
+            eventDate.year !== filterDate.year ||
+            eventDate.month !== filterDate.month ||
+            eventDate.day !== filterDate.day
+          ) {
+            return false
+          }
+        }
 
         return true
       })
@@ -480,7 +483,7 @@ export const useEventStore = defineStore('eventStore', {
     eventsCount() {
       return this.events.length
     },
-  
+
     getCategoryById: (state) => (id) => {
       return state.categories.find(
         (category) => category.id === id || category._id === id
@@ -495,7 +498,9 @@ export const useEventStore = defineStore('eventStore', {
 
       // Calculate the difference between today and the Monday of this week
       const startOfWeek = new Date(today)
-      startOfWeek.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)) // Set to Monday
+      startOfWeek.setDate(
+        today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)
+      ) // Set to Monday
 
       // Calculate the end of the week (Sunday)
       const endOfWeek = new Date(startOfWeek)
@@ -507,7 +512,7 @@ export const useEventStore = defineStore('eventStore', {
       // Check if eventDate falls within the current week
       return eventDate >= startOfWeek && eventDate <= endOfWeek
     },
-  
+
     filteredEventsByDate: (state) => (array) => {
       return array.filter((event) => {
         let eventDate = null
@@ -516,7 +521,7 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate.year,
             event.eventDate.month - 1,
             event.eventDate.day
-          )  
+          )
         }
         switch (state.selectedFilterByDate) {
           case 'all':
