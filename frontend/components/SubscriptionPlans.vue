@@ -88,7 +88,7 @@
             @click="subscribeToPlan(plan)"
             class="cursor-pointer inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
-            {{$t('buttons.subscribe')}}
+            {{plan.name === 'basic' && isHired ? $t('buttons.choose') : $t('buttons.subscribe')}}
           </NuxtLink>
           <NuxtLink
             v-else-if="getSubscriptionAction(plan) === 'upgrade'"
@@ -153,6 +153,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  isHired: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const router = useRouter()
@@ -165,6 +169,16 @@ const isCanceled = computed(() => {
     return true
   } else {
     return false
+  }
+})
+
+const isCanceledAndOutOfDate = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    if (new Date() > new Date(userStore.userData.activeSubscription?.canceledAt)) {
+      return true
+    } else {
+      return false
+    }
   }
 })
 
@@ -236,6 +250,11 @@ const getSubscriptionAction = (plan) => {
 
   if ( currentSubscription.status === 'inactive') {
     return 'subscribe'
+  }
+
+  if (currentSubscription.status === 'canceled' && isCanceledAndOutOfDate.value) {
+    return 'subscribe'
+    
   }
   
 

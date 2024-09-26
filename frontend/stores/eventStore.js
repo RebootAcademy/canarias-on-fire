@@ -312,7 +312,6 @@ export const useEventStore = defineStore('eventStore', {
       }
 
       this.event = data.value?.result
-      this.fetchEvents()
       return { data: this.event }
     },
 

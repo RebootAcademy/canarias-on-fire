@@ -59,7 +59,7 @@ const EventSchema = new mongoose.Schema({
   status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'],
-    default: ['draft']
+    default: 'draft'
   },
 /*   date: {
     type: Date,
@@ -76,6 +76,10 @@ const EventSchema = new mongoose.Schema({
   payment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'payment'
+  },
+  subscription: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'subscription'
   }
 })
 
