@@ -1,4 +1,6 @@
 {
     "companyValidated": "Company validated successfully",  
-    "errorCompanyValidated": "Error validating company"
+    "errorCompanyValidated": "Error validating company",
+    "contactMailSent": "Contact mail sent successfully. If its necessary, we will contact you.",
+    "errorContactMailSent": "Something went wrong sending contact mail. Try again later"
 }

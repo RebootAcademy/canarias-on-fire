@@ -107,7 +107,8 @@
     "current": "Current Plan",
     "backHome": "Back Home",
     "pricing": "See Pricings",
-    "choose": "CHOOSE THE PLAN BASIC"
+    "choose": "CHOOSE THE PLAN BASIC",
+    "send": "Send"
   },
   "successView": {
     "title": "Your payment was successful"
@@ -117,5 +118,22 @@
   },
   "gallery": {
     "title": "Gallery"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "description": "We are here to assist with any questions or concerns. Reach out to our team, and we will respond promptly.",
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "subject": "Subject",
+    "errorfirstNameRequired": "First name is required",
+    "errorlastNameRequired": "Last name is required",
+    "erroremailRequired": "Email is required",
+    "errorphoneRequired": "Phone is required",
+    "errorsubjectRequired": "Subject is required",
+    "errormessageRequired": "Message is required"
   }
+  
 }
