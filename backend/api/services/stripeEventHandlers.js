@@ -14,8 +14,6 @@ const sendEmail = require('../services/nodemailer/nodemailer.service')
 
 const handleCheckoutSessionCompleted = async (session) => {
   console.log(`session`)
-  console.log(session)
-
   if (session.metadata && session.mode === 'subscription' && session.metadata.firstHire === 'true') {
       const paymentInvoice = await stripe.invoices.retrieve(session.invoice)
       const { payment_intent, total } = paymentInvoice
@@ -40,6 +38,9 @@ const handleCheckoutSessionCompleted = async (session) => {
         // console.error('Company not found for customer:', session.customer)
         return
       }
+
+      console.log('Session guardada')
+
 
       const oldSubscriptionId = session.metadata.oldSubscriptionId
       const newPlanId = session.metadata.newPlanId
@@ -320,7 +321,7 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
 
 const handleSubscriptionUpdated = async (event) => {
   console.log('subscription object')
-  console.log(event)
+
   const subscriptionId = event.id
   const customerId = event.customer
   const company = await Company.findById(event.metadata.userId)

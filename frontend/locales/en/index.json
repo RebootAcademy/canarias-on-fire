@@ -28,7 +28,14 @@
     "error": "It seems something didn't go as planned! Try again and if the error persists, contact us."
   },
   "exploreSection": {
-    "description": ["Explore ", "the most ", "exciting and memorable ", "moments in our list of ", "events, or create your own ", "and share it with others."],
+    "description": [
+      "Explore ",
+      "the most ",
+      "exciting and memorable ",
+      "moments in our list of ",
+      "events, or create your own ",
+      "and share it with others."
+    ],
     "button": "Start now"
   },
   "onBoarding": {
@@ -110,10 +117,12 @@
     "choose": "CHOOSE THE PLAN BASIC"
   },
   "successView": {
-    "title": "Your payment was successful"
+    "paymentTitle": "Your payment has been successful completed",
+    "subscriptionTitle": "Your subscription has been successfully activated."
   },
   "canceledView": {
-    "title": "Your payment intent was canceled"
+    "paymentTitle": "Your payment attempt has been successfully cancelled.",
+    "subscriptionTitle": "Your subscription attempt has been successfully cancelled."
   },
   "gallery": {
     "title": "Gallery"

@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const Company = require('../models/company.model')
 const Subscription = require('../models/subscription.model')
 const { createStripeCustomer } = require('../services/stripeService')
+const { createCheckoutSession } = require('../services/subscriptionService')
 
 const getSubscriptions = async (req, res) => {
   try {
@@ -61,15 +62,7 @@ const createSubscription = async (req, res) => {
         subscription: company.activeSubscription,
       })
     }
-
-    if (
-      company.activeSubscription &&
-      company.activeSubscription.status === 'active'
-    ) {
-      req.body.newPlanId = planId
-      return upgradeSubscription(req, res)
-    }
-
+    
     let customer
     if (company.stripe && company.stripe.customerId) {
       customer = await stripe.customers.retrieve(company.stripe.customerId)
@@ -79,6 +72,15 @@ const createSubscription = async (req, res) => {
         company.companyEmail || company.email
       )
     }
+    if (
+      company.activeSubscription &&
+      company.activeSubscription.status === 'active'
+    ) {
+      req.body.newPlanId = planId
+      console.log('upgradeSubscription called with params:', req.params, 'and body:', req.body)
+      return upgradeSubscription(req, res)
+    }
+
 
     if (!company.stripe) {
       company.stripe = {}
@@ -86,40 +88,7 @@ const createSubscription = async (req, res) => {
     if (!company.stripe.customerId) {
       company.stripe.customerId = customer.id
     }
-    try {
-      const session = await stripe.checkout.sessions.create({
-        customer: customer.id,
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            price: planId,
-            quantity: 1,
-          },
-        ],
-        mode: 'subscription',
-        metadata: {
-          userId: String(company._id),
-          planId: String(subscriptionPlan._id),
-          firstHire: 'true',
-        },
-        success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
-      })
-      res.status(200).json({
-        success: true,
-        sessionId: session.id,
-        sessionUrl: session.url,
-      })
-    } catch (error) {
-      console.error(`Error creating Stripe session: ${error.message}`, error)
-      return res
-        .status(500)
-        .json({
-          success: false,
-          error: 'Error creating Stripe session',
-          message: error.message,
-        })
-    }
+    return await createCheckoutSession(customer, company, subscriptionPlan, planId, res)
   } catch (error) {
     res
       .status(500)
@@ -169,30 +138,61 @@ const cancelSubscription = async (req, res) => {
     const { companyId } = req.params
     const company = await Company.findById(companyId)
 
-    if (!company || !company.stripe.subscriptionId) {
-      return res.status(404).json({ error: 'No active subscription found' })
+    if (!company) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'Company not found' })
     }
 
-    const stripeSubscriptionId = company.stripe.subscriptionId
-    let subscription = await checkSubscriptionInStripe(stripeSubscriptionId)
 
-    if (!subscription) {
-      return res.status(404).json({ error: 'Subscription not found' })
+
+    if (!company ) {
+      return res.status(404).json({ error: 'Not company found' })
     }
 
-    const updatedSubscription = await stripe.subscriptions.update(
-      stripeSubscriptionId,
-      {
-        cancel_at_period_end: true,
+    let basicSubscription = await Subscription.findOne({name: 'basic'})
+    console.log(basicSubscription._id)
+    console.log(company.activeSubscription.plan)
+
+    if (String(basicSubscription._id) === String(company.activeSubscription.plan)) {
+      
+      company.activeSubscription = {
+        status: 'inactive',
       }
-    )
 
-    res.json({
-      success: true,
-      message:
-        'Subscription scheduled for cancellation at the end of the current period',
-      cancelDate: new Date(updatedSubscription.current_period_end * 1000),
-    })
+      await company.save()
+
+      return res.json({
+        success: true,
+        message:
+          'Subscription scheduled for cancellation at the end of the current period',
+      })
+
+    } else {
+      const stripeSubscriptionId = company.stripe.subscriptionId
+  
+      console.log('Hola')
+      let subscription = await checkSubscriptionInStripe(stripeSubscriptionId)
+  
+      if (!subscription) {
+        return res.status(404).json({ error: 'Subscription not found' })
+      }
+  
+      const updatedSubscription = await stripe.subscriptions.update(
+        stripeSubscriptionId,
+        {
+          cancel_at_period_end: true,
+        }
+      )
+  
+      return res.json({
+        success: true,
+        message:
+          'Subscription scheduled for cancellation at the end of the current period',
+        cancelDate: new Date(updatedSubscription.current_period_end * 1000),
+      })
+    }
+
   } catch (error) {
     console.error('Error canceling subscription:', error)
     res
@@ -290,19 +290,20 @@ const upgradeSubscription = async (req, res) => {
     console.log('Is upgrading from basic:', isUpgradingFromBasic)
 
     // Crear un cliente de Stripe si no existe
-    if (!company.stripe || !company.stripe.customerId) {
-      const customer = await stripe.customers.create({
-        email: company.companyEmail || company.email,
-        metadata: { userId: company._id.toString() },
-      })
-      company.stripe = { customerId: customer.id }
-      await company.save()
+    let customer
+    if (company.stripe && company.stripe.customerId) {
+      customer = await stripe.customers.retrieve(company.stripe.customerId)
+    } else {
+      customer = await createStripeCustomer(
+        company._id,
+        company.companyEmail || company.email
+      )
     }
 
     let session
     if (isUpgradingFromBasic || !company.stripe.subscriptionId) {
       // Crear una nueva suscripción
-      session = await stripe.checkout.sessions.create({
+      /* session = await stripe.checkout.sessions.create({
         customer: company.stripe.customerId,
         payment_method_types: ['card'],
         line_items: [
@@ -314,7 +315,8 @@ const upgradeSubscription = async (req, res) => {
         mode: 'subscription',
         success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
-      })
+      }) */
+     await createCheckoutSession(customer, company, newPlan, newPlanId, res)
     } else {
       // Actualizar la suscripción existente
       const subscription = await stripe.subscriptions.retrieve(
@@ -336,21 +338,21 @@ const upgradeSubscription = async (req, res) => {
       })
     }
 
+    console.log('Created Stripe session:', session)
     // Actualizar la información de la suscripción en la base de datos
-    company.activeSubscription = {
+    /* company.activeSubscription = {
       plan: newPlan._id,
       stripeSessionId: session.id,
       status: 'active',
     }
-    await company.save()
+    await company.save() */
 
-    console.log('Created Stripe session:', session)
 
-    return res.json({
+    /* return res.json({
       success: true,
       sessionId: session.id,
       sessionUrl: session.url,
-    })
+    }) */
   } catch (error) {
     console.error('Error in upgradeSubscription:', error)
     res
@@ -470,6 +472,7 @@ const updateExpiredSubscriptions = async () => {
     console.error('Error updating expired subscriptions:', error)
   }
 }
+
 
 module.exports = {
   getSubscriptions,

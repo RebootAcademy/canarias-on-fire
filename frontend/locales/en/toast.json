@@ -1,4 +1,6 @@
 {
-    "companyValidated": "Company validated successfully",  
-    "errorCompanyValidated": "Error validating company"
+  "companyValidated": "Company validated successfully",
+  "errorCompanyValidated": "Error validating company",
+  "canceledPlan": "Subscription has been successfully canceled",
+  "subscribedPlan": "Subscription has been successfully completed"
 }

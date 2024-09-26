@@ -117,10 +117,12 @@
     "choose": "ELEGIR EL PLAN BÁSICO"
   },
   "successView": {
-    "title": "Su pago se ha realizado correctamente"
+    "paymentTitle": "Su pago se ha realizado correctamente",
+    "subscriptionTitle": "Su suscripción se ha activado correctamente."
   },
   "canceledView": {
-    "title": "El intento de pago se ha cancelado correctamente"
+    "paymentTitle": "El intento de pago se ha cancelado correctamente",
+    "subscriptionTitle": "Su intento de suscripción se ha cancelado correctamente"
   },
   "gallery": {
     "title": "Galería"
