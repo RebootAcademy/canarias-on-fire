@@ -47,20 +47,32 @@ const limitedPromotions = computed(() => {
   return filteredEvents.value
     .filter(promotion => promotion.status === 'published' && promotion.eventType === 'promotion' && promotion.userId?.isActive && promotion.userId?.isValidated)
     .sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
+      const priorityA = getPromoPriority(a)
+      const priorityB = getPromoPriority(b)
 
       if (priorityA !== priorityB) {
-        return priorityA - priorityB
+        return priorityB - priorityA
       }
       return compareDates(a.eventDate, b.eventDate)
     })
 })
 
-function getEventPriority(promotion) {
-  const subscriptionId = promotion.type === 'promotion' ? promotion.subscription._id : 'basic'
-  const payment = subscriptionStore.getSubscriptionById(subscriptionId._id) || 'low'
-  return payment?.features?.readPriority || 'low'
+console.log(limitedPromotions.value)
+
+function getPromoPriority(promotion) {
+  console.log(promotion.subscription.name)
+  const subscriptionName =
+    promotion.subscription.name 
+
+  let priority;
+  if (subscriptionName === 'gold') {
+    priority = 2
+  } else if (subscriptionName === 'basic') {
+    priority = 1
+  } else {
+    priority = 0
+  }
+  return priority
 }
 
 function compareDates(dateA, dateB) {

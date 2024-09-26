@@ -11,7 +11,7 @@
           v-if="plan.name === 'gold'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient text-center py-1 rounded-t-lg"
         >
-          {{ $t('payments.recommendedOption') }}
+          {{ $t('recommended') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ plan.name }}
