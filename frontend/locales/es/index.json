@@ -113,7 +113,8 @@
     "activate": "Activar",
     "current": "Plan actual",
     "backHome": "Volver al Inicio",
-    "pricing": "Ver precios"
+    "pricing": "Ver precios",
+    "choose": "ELEGIR EL PLAN BÁSICO"
   },
   "successView": {
     "title": "Su pago se ha realizado correctamente"

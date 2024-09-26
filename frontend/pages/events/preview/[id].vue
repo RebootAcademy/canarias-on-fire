@@ -82,12 +82,18 @@ onMounted(async () => {
 })
 
 const publishEvent = async () => {
+  const today = new Date().getTime() // Evitar posibles diferencias en la comparación de fechas
+  const canceledAt = userStore.userData?.activeSubscription?.canceledAt
+    ? new Date (userStore.userData?.activeSubscription?.canceledAt).getTime()
+    : 0
   if (eventStore.event.eventType === 'event') {
     // Para eventos, redirigir a la página de pago
     router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
     console.log('status: ', eventStore.event.status)
   } else if (eventStore.event.eventType === 'promotion') {
-    if (userStore.userData.activeSubscription?.status === 'active' || userStore.userData.role === 'admin') {
+    if (userStore.userData.activeSubscription?.status === 'active' || 
+      (userStore.userData.activeSubscription.status === 'canceled' && canceledAt > today) ||
+     userStore.userData.role === 'admin') {
       const result = await eventStore.updateEventStatus(eventId, 'published')
       if (result) {
         router.push(`/events/${eventId}`)
@@ -95,7 +101,7 @@ const publishEvent = async () => {
         console.error('Failed to publish promotion')
       }
     } else {
-      router.push(`/pricing?id=${eventId}&type=${eventStore.event.eventType}`)
+      router.push(`/subscription?id=${eventId}&type=${eventStore.event.eventType}`)
     }
   }
 }

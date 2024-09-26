@@ -106,7 +106,8 @@
     "activate": "Activate",
     "current": "Current Plan",
     "backHome": "Back Home",
-    "pricing": "See Pricings"
+    "pricing": "See Pricings",
+    "choose": "CHOOSE THE PLAN BASIC"
   },
   "successView": {
     "title": "Your payment was successful"
