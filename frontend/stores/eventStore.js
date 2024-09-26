@@ -9,6 +9,7 @@ export const useEventStore = defineStore('eventStore', {
     },
     categories: [],
     selectedCategories: [],
+    selectedCategoriesForPromotion: [],
     selectedFilterByDate: 'all',
     searchQuery: '',
     eventName: '',
@@ -65,6 +66,17 @@ export const useEventStore = defineStore('eventStore', {
         this.selectedCategories.push(category)
       } else {
         this.selectedCategories.splice(index, 1)
+      }
+    },
+
+    toogleCategoryForPromotions(category) {
+      const index = this.selectedCategoriesForPromotion.findIndex(
+        (c) => c.id === category.id
+      )
+      if (index === -1) {
+        this.selectedCategoriesForPromotion.push(category)
+      } else {
+        this.selectedCategoriesForPromotion.splice(index, 1)
       }
     },
 
@@ -126,6 +138,9 @@ export const useEventStore = defineStore('eventStore', {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
     setSelectedCategories(categories) {
+      this.selectedCategories = categories
+    },
+    setSelectedCategoriesForPromotions(categories) {
       this.selectedCategories = categories
     },
     setFilterModalOpen(isOpen) {
