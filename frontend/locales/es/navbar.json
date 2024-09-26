@@ -15,11 +15,11 @@
     "subtext": "Busque y descubra eventos cerca de usted o en su área de interés."
   },
   "eventCreate": {
-    "label": "Crear eventos",
+    "label": "Crear eventos o promociones",
     "subtext": "Planifica y organiza tus propios eventos."
   },
   "myEvents": {
-    "label": "Mis eventos",
+    "label": "Mis eventos o promociones",
     "subtext": "Ver mis eventos creados."
   },
   "findArticles": {
@@ -52,6 +52,7 @@
   },
   "dashboardNav": {
     "events": "Eventos",
+    "eventsAndPromotions": "Eventos y Promociones",
     "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",
     "articles": "Artículos",
