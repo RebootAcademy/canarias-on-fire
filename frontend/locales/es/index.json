@@ -114,7 +114,9 @@
     "activate": "Activar",
     "current": "Plan actual",
     "backHome": "Volver al Inicio",
-    "pricing": "Ver precios"
+    "pricing": "Ver precios",
+    "choose": "ELEGIR EL PLAN BÁSICO",
+    "send": "Enviar"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",
@@ -126,5 +128,21 @@
   },
   "gallery": {
     "title": "Galería"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "description": "Estamos aquí para ayudarle con cualquier pregunta o duda. Póngase en contacto con nuestro equipo y le responderemos lo antes posible.",
+    "firstname": "Nombre",
+    "lastname": "Apellido",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "subject": "Motivo",
+    "errorfirstNameRequired": "El nombre es requerido",
+    "errorlastNameRequired": "El apellido es requerido",
+    "erroremailRequired": "El correo electrónico es requerido",
+    "errorphoneRequired": "El teléfono es requerido",
+    "errorsubjectRequired": "El motivo es requerido",
+    "errormessageRequired": "El mensaje es requerido"
   }
 }
