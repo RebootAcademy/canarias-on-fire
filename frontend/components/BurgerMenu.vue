@@ -54,7 +54,7 @@
                <DetailsItemMenu 
                 :title="$t('help')"
                 :options="[
-                  { label: t('helping.label'), path: '/help', roles: ['all'] },
+                  { label: t('helping.label'), path: '/help/general', roles: ['all'] },
                   { label: t('contactUs.label'), path: '/contact', roles: ['all'] }                ]"
               />
               <MenubarSeparator class="mx-2 mb-4"/>
