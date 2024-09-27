@@ -2,7 +2,7 @@
   "companyValidated": "Empresa validada correctamente",
   "errorCompanyValidated": "Error validando la empresa",
   "contactMailSent": "Email enviado correctamente. En caso de ser necesario, nos pondremos en contacto contigo.",
-  "errorContactMailSent": "Algo salió mal al enviar el email de contacto. Vuelva a intentarlo pasado unos minutos"
+  "errorContactMailSent": "Algo salió mal al enviar el email de contacto. Vuelva a intentarlo pasado unos minutos",
   "canceledPlan": "Suscripción cancelada correctamente",
   "subscribedPlan": "Suscripción activada correctamente"
 }
