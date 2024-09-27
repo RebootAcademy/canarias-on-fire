@@ -14,7 +14,7 @@
           class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
          
           >
-          {{ $t('payments.recommendedOption')}}
+          {{ $t('recommended')}}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ payment.name }}
@@ -85,7 +85,7 @@
             v-show="typeof feature === 'number'"
           >
             <p class="ml-3 text-base text-gray-700">
-              {{ $t('payments.readPriority')}}
+              {{ $t('paymentsOption.readPriority')}}
               <span class="font-semibold">{{
                 getReadingPriorityText(feature)
               }}</span>

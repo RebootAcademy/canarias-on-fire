@@ -42,7 +42,11 @@
             <span
               v-for="category in promotion.categories"
               :key="category._id"
-              class="bg-gray text-background text-xs font-normal px-2.5 py-0.5 rounded-xl self-center"
+              class="text-background text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
+              :class="{
+                'text-primary': isBasicPayment,
+                'text-secondary': isGoldPayment
+              }"
             >
               {{ category.name }}
             </span>
@@ -78,8 +82,27 @@
               'text-gray-300': isBasicPayment,
             }"
           >
-            {{ formattedDate() }} at {{ promotion.startTime }} - {{ promotion.endTime }}
+            {{ formattedDate() }} 
           </p>
+          <div v-if="promotion.startTime" class="flex flex-row gap-2">
+            <p
+              v-if="promotion.startTime" 
+              class="text-sm"
+              :class="{
+                'text-gray-300': isBasicPayment,
+              }"> 
+              {{  promotion.startTime }}
+            </p>
+            <p
+              v-if="promotion.endTime" 
+              class="text-sm"
+              :class="{
+                'text-gray-300': isBasicPayment,
+              }"> 
+              {{  promotion.endTime }} 
+            </p>
+          </div>
+          
           <p class="text-sm line-clamp-1">
             {{ promotion.eventLocation.address }}
           </p>
@@ -123,19 +146,13 @@ const formattedDate = () => {
   if (!props.promotion.eventDate) {
     return 'Date not available'
   }
-  const { year, month, day } = props.promotion.eventDate
-  const date = new Date(year, month - 1, day)
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const startDate = new Date(props.promotion.eventDate.start.year, props.promotion.eventDate.start.month - 1, props.promotion.eventDate.start.day).toLocaleDateString()
+  const endDate = new Date(props.promotion.eventDate.end.year, props.promotion.eventDate.end.month - 1, props.promotion.eventDate.end.day).toLocaleDateString()
+  return startDate + ' - ' + endDate
 }
 
-console.log(props.event)
-
 const getPaymentType = computed(() => {
-  switch (props.promotion?.payment?.name) {
+  switch (props.promotion?.subscription?.name) {
     case 'basic':
       return 'basic'
     case 'gold':

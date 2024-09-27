@@ -9,6 +9,7 @@
   "restaurant": "Restaurantes",
   "explore": "Explora",
   "pricing": "Precios",
+  "promotionsTitle": "Promociones",
   "help": "Ayuda",
   "titles": {
     "featuresEvents": "Eventos destacados"
@@ -113,8 +114,7 @@
     "activate": "Activar",
     "current": "Plan actual",
     "backHome": "Volver al Inicio",
-    "pricing": "Ver precios",
-    "choose": "ELEGIR EL PLAN BÁSICO"
+    "pricing": "Ver precios"
   },
   "successView": {
     "title": "Su pago se ha realizado correctamente"

@@ -36,14 +36,15 @@
   "notEventsFound": "Not events found.",
   "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
   "validateByAdmin": "*  To publish the event the organizer must be validated by the administrator.",
-  "payments": {
+  "paymentsOption": {
     "manageSub": "Manage Subscription for ",
     "currentPlan": "Current plan: ",
     "choose": "Choose your payment",
     "findPerfect": "Find the perfect payment that suits your event needs.",
     "recommendedOption": "Recommended option",
     "readPriority": "Reading priority: ",
-    "payForEvent": "Payments for the event"
+    "payForEvent": "Payments for the event",
+    "payForEventDescription": "Perfect plans for the publication of your event."
   },
   "featuresDescriptions": {
     "eventPublication": "Events publication",
@@ -87,7 +88,7 @@
   },
   "previewText": {
     "aboutEvent": "About the event",
-    "showMap":"Show map",
+    "showMap": "Show map",
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
     "featurePayedEvents": "* Feature only available for Gold and Premium events."
@@ -99,5 +100,6 @@
     "chooseSubscriptionPlan": "Choose your subscription plan",
     "descriptionPlan": "Find the perfect plan that suits your event needs."
   },
-  "galleryLimit": "You have reached your plan's image capacity limit"
+  "galleryLimit": "You have reached your plan's image capacity limit",
+  "recommended": "Recommended option"
 }

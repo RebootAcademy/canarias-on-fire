@@ -21,10 +21,10 @@
     <hr  class="mx-6 md:mx-24 my-10 "/>
     <div class="text-center mt-8">
       <h2 class="text-2xl font-bold text-gray-900">
-        {{ $t('payments.payForEvent') }}
+        {{ $t('paymentsOption.payForEvent') }}
       </h2>
       <p class="mt-2 text-md font-medium text-gray-300">
-        {{ $t('payments.payForEventDescription') }}
+        {{ $t('paymentsOption.payForEventDescription') }}
       </p>
     </div>
     <PaymentOptions :payments="paymentStore.payments"/>
