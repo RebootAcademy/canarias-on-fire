@@ -1,6 +1,8 @@
 {
-    "companyValidated": "Company validated successfully",  
-    "errorCompanyValidated": "Error validating company",
-    "contactMailSent": "Contact mail sent successfully. If its necessary, we will contact you.",
-    "errorContactMailSent": "Something went wrong sending contact mail. Try again later"
+  "companyValidated": "Company validated successfully",  
+  "errorCompanyValidated": "Error validating company",
+  "contactMailSent": "Contact mail sent successfully. If its necessary, we will contact you.",
+  "errorContactMailSent": "Something went wrong sending contact mail. Try again later"
+  "canceledPlan": "Subscription has been successfully canceled",
+  "subscribedPlan": "Subscription has been successfully completed"
 }

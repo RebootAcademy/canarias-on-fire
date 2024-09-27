@@ -39,6 +39,7 @@ function toggleTheme() {
 }
 .tdnn {
   font-size: 4px;
+  cursor: pointer;
   position: relative;
   height: 30px;
   width: 60px;

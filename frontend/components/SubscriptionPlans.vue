@@ -11,7 +11,7 @@
           v-if="plan.name === 'gold'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient text-center py-1 rounded-t-lg"
         >
-          {{ $t('payments.recommendedOption') }}
+          {{ $t('recommended') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ plan.name }}
@@ -88,19 +88,19 @@
             @click="subscribeToPlan(plan)"
             class="cursor-pointer inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
-            {{plan.name === 'basic' && isHired ? $t('buttons.choose') : $t('buttons.subscribe')}}
+            {{$t('buttons.subscribe')}}
           </NuxtLink>
           <NuxtLink
             v-else-if="getSubscriptionAction(plan) === 'upgrade'"
             @click="upgradeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
             Upgrade
           </NuxtLink>
           <NuxtLink
-            v-else-if="getSubscriptionAction(plan) === 'downgrade'"
+            v-else-if=" getSubscriptionAction(plan) === 'downgrade'"
             @click="downgradeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="inline-block cursor-pointer w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
             Downgrade
           </NuxtLink>
@@ -140,6 +140,8 @@
 </template>
 
 <script setup>
+  import { useToast } from '@/components/ui/toast/use-toast'
+
 const props = defineProps({
   plans: {
     type: Array,
@@ -159,10 +161,11 @@ const props = defineProps({
   }
 })
 
+const { toast } = useToast()
+const {t} = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
-const {t} = useI18n()
 
 const isCanceled = computed(() => {
   if (userStore.userData.activeSubscription?.status === 'canceled') {
@@ -171,6 +174,7 @@ const isCanceled = computed(() => {
     return false
   }
 })
+
 
 const isCanceledAndOutOfDate = computed(() => {
   if (userStore.userData.activeSubscription?.status === 'canceled') {
@@ -190,7 +194,6 @@ const featureDescriptions = computed(() => ({
     t('featuresDescriptions.increasedCharacterLimit'),
   websiteLink: t('featuresDescriptions.websiteLink'),
   offerPublication: t('featuresDescriptions.offerPublication'),
-  rssPublication: t('featuresDescriptions.rssPublication'),
   limitPhotos: t('featuresDescriptions.limitPhotos')
 }))
 
@@ -231,6 +234,8 @@ const getSubscriptionAction = (plan) => {
   }
 
   const currentPlan = getFullPlanInfo(currentSubscription.plan)
+
+
   
   if (!currentPlan) {
     return 'unknown'
@@ -260,11 +265,11 @@ const getSubscriptionAction = (plan) => {
 
   if (currentPlanIndex === newPlanIndex) {
     return 'current'
-  } /* else if (newPlanIndex > currentPlanIndex) {
+  }  else if (newPlanIndex > currentPlanIndex) {
     return 'upgrade'
-  } else {
-    return 'downgrade'
-  } */
+  } else if (newPlanIndex < currentPlanIndex) {
+    return ''
+  } 
 }
 
 const getUserId = () => {
@@ -282,6 +287,9 @@ const subscribeToPlan = async (plan) => {
       const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
       if (result.success) {
         await userStore.updateUserSubscription(userId, plan._id, 'active')
+        toast({
+          description: t('subscribedPlan')
+        })
         router.push('/subscription/success')
       } else {
         console.error(result?.error || 'Failed to create basic subscription')
@@ -307,6 +315,11 @@ const cancelSubscription = async (plan) => {
     const result = await subscriptionStore.cancelSubscription(userId, plan._id)
     if (result.success) {
       await userStore.updateUserSubscription(userId, plan._id, 'canceled')
+      if (plan.name === 'basic') {
+        toast({
+          description: t('canceledPlan')
+        })
+      }
     } else {
       console.error(result?.error || 'Failed to cancel subscription')
     }

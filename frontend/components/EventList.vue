@@ -40,6 +40,7 @@ const limitedEvents = computed(() => {
   return eventsByDate.value
     ?.filter(event => 
       event.status === 'published'
+      && event.eventType === 'event'
     )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)

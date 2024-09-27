@@ -9,10 +9,10 @@
         <EventList />
       </div>
       <Explore />
-      <div class="w-full flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
-        <h2>Promotions</h2>
+      <div class="w-full flex flex-col gap-4 sm:w-3/4 md:w-3/4 lg:w-2/3">
+        <h2 class="text-3xl font-semibold text-primary my-6">{{ $t('promotionsTitle') }}</h2>
         <CategoriesFilter />
-        <PromotionsList />
+        <PromotionList />
       </div>
       <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <FeaturedEvents />

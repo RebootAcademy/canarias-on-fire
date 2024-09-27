@@ -36,7 +36,7 @@
   "notEventsFound": "No se encontraron eventos.",
   "availablePremium": "* Seleccione su imagen de portada  (Función sólo disponible para eventos Gold y Premium).",
   "validateByAdmin": "* Para publicar el evento el organizador debe ser validado por el administrador.",
-  "payments": {
+  "paymentsOption": {
     "manageSub": "Gestionar Suscripción para ",
     "currentPlan": "Plan actual: ",
     "choose": "Elige tu pago",
@@ -100,5 +100,6 @@
     "chooseSubscriptionPlan": "Elija su plan de suscripción",
     "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de eventos."
   },
-  "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan"
+  "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan",
+  "recommended": "Opción recomendada"
 }
