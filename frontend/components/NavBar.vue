@@ -9,9 +9,9 @@
     <div class="hidden md:flex w-1/3 justify-center">
       <NavMenu />
     </div>
-    <div class="hidden md:flex items-center text-sm font-bold  md:gap-4 sm:w-1/3 justify-end">
+    <div class="hidden md:flex items-center text-sm font-bold  md:gap-4 md:w-1/3 justify-end">
       <LangSelector />
-      <Notifications />
+     <!--  <Notifications /> -->
       <ThemeSwitcher />
       <Button 
         v-if="!auth0?.isAuthenticated"
