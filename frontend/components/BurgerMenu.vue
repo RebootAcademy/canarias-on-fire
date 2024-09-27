@@ -17,6 +17,7 @@
                 :title="$t('events')"
                 :options="[
                   { label: t('findEvents.label'), path: '/events', roles: ['all'] },
+                  { label: t('findPromotions.label'), path: '/promotions', roles: ['all'] },
                   { label: t('eventCreate.label'), path: '/events/create', roles: ['company', 'admin'] },
                   { label: isAdmin ? t('dashboardNav.manageEvents') : t('myEvents.label') , path: '/dashboard/events', roles: ['company', 'admin'] },
                   { label: 'Planea tu fiesta', path: '/', roles: ['all'] }
@@ -50,11 +51,12 @@
               </NuxtLink>
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Help Section -->
-              <NuxtLink to="/help" class="font-bold text-md">
-                <MenubarItem class="font-bold text-md">
-                  {{$t('help')}}
-                </MenubarItem>
-              </NuxtLink>
+               <DetailsItemMenu 
+                :title="$t('help')"
+                :options="[
+                  { label: t('helping.label'), path: '/help/general', roles: ['all'] },
+                  { label: t('contactUs.label'), path: '/contact', roles: ['all'] }                ]"
+              />
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Dashboard Section -->
               <NuxtLink  v-if="userStore?.isAuthenticated" to="/pricing" class="font-bold text-md">
