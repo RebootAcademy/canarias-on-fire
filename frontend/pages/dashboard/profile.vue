@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-xl font-semibold mb-2">Profile</h2>
+    <h2 class="text-xl font-semibold mb-2">{{ $t('userProfile.profile') }}</h2>
     <hr class="mb-4">
     <div v-if="userStore.isAuthenticated">
       <div class="flex items-center mb-4">
@@ -14,21 +14,31 @@
       </div>
       <form @submit.prevent="updateProfile">
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-300">Profile Image</Label>
+          <Label class="block text-sm font-medium text-gray-300">{{ $t('userProfile.userImage') }}</Label>
           <Input type="file" @change="handleFileChange" accept="image/*" />
-            <Button type="button" @click="uploadImage" class="mt-2 bg-transparent border-2 border-primary hover:bg-primary-gradient hover:border-1">Upload Image</Button>
+            <Button 
+              type="button" 
+              @click="uploadImage" 
+              class="mt-2 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
+              >
+                {{ $t('buttons.upload') }}
+              </Button>
         </div>
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-300">Username</Label>
+          <Label class="block text-sm font-medium text-gray-300">{{$t('userName')}}</Label>
           <Input class="mt-1 block w-full text-gray-500" v-model="formData.username" />
         </div>
         <div class="mb-4">
-          <Label class="block text-sm font-medium text-gray-300">Email</Label>
+          <Label class="block text-sm font-medium text-gray-300">{{$t('email')}}</Label>
           <Input class="mt-1 block w-full text-gray-500" v-model="formData.email"  />
         </div>
-        <Button type="submit" :disabled="isUpdating" class="mt-2 bg-transparent border-2 border-primary hover:bg-primary-gradient hover:border-1">
-        {{ isUpdating ? 'Updating...' : 'Update profile' }}
+        <Button type="submit" :disabled="isUpdating" class=" bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1">
+        {{ isUpdating ? $t('buttons.updating'): $t('buttons.update') }}
         </Button>
+
+        <div v-if="userStore.userData.role === 'musician'" class="mb-4 mt-2 w-full lg:w-1/2">
+          <CreateNextPerformance />
+        </div>
       </form>
     </div>
     <div v-else>
@@ -39,6 +49,10 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useToast } from '@/components/ui/toast/use-toast'
+const {toast} = useToast()
+const {t} = useI18n()
+
 
 definePageMeta({
   layout: 'dashboard'
@@ -57,6 +71,8 @@ const formData = reactive({
   email: userStore.userData?.email || '',
   profileImg: userStore.userData?.profileImg || ''
 })
+
+
 const isUpdating = ref(false)
 const selectedFile = ref(null)
 
@@ -98,9 +114,15 @@ async function updateProfile() {
     const dataToUpdate = { ...formData, _id: userStore.userData?._id }
     const result = await userStore.updateUserProfile(dataToUpdate)
     if (result.success) {
-      console.log('Profile updated successfully')
+      toast({
+        description: t('updatedProfile'),
+      })
+      console.log('result', result)
     } else {
-      console.error('Failed to update profile:', result.message)
+      toast({
+        description: t('errorUpdatedProfile'),
+        variant: 'destructive',
+      })
     }
   } finally {
     isUpdating.value = false

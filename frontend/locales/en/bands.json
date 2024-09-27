@@ -1,6 +1,7 @@
 {
   "musicBands": "Music Bands",
-  "bandNextPerformance": "Next performance: ",
+  "NextPerformance": "Next performance: ",
+  "addNextPerformance": "Add next performance",
   "notFoundBands": "Don't found music bands yet",
   "loadingBands": "Loading music bands...",
   "performanceDate": "Performance Date",

@@ -12,6 +12,7 @@
     "userProfile": {
       "profile": "Profile",
       "events": "Events",
+      "userImage": "Profile Image",
       "subscriptions": "Subscriptions",
       "desactivated": "Desactivated",
       "userName": "Username",

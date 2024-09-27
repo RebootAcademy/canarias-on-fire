@@ -4,5 +4,9 @@
   "contactMailSent": "Email enviado correctamente. En caso de ser necesario, nos pondremos en contacto contigo.",
   "errorContactMailSent": "Algo salió mal al enviar el email de contacto. Vuelva a intentarlo pasado unos minutos",
   "canceledPlan": "Suscripción cancelada correctamente",
-  "subscribedPlan": "Suscripción activada correctamente"
+  "subscribedPlan": "Suscripción activada correctamente",
+  "updatedProfile": "Perfil actualizado correctamente",
+  "errorUpdatedProfile": "Error actualizando perfil",
+  "updatedPerformance": "Próxima actuación actualizado correctamente",
+  "errorPerformance": "Error actualizando la próxima actuación"
 }

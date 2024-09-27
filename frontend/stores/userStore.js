@@ -84,6 +84,7 @@ export const useUserStore = defineStore('userStore', {
           if (this.userData.id === profileData._id) {
             this.userData = { ...this.userData, ...response.result }
           }
+          this.setUser(response)
           return { success: true, user: response.result }
         } else {
           return { success: false, message: response.data.message }

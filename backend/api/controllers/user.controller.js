@@ -200,11 +200,13 @@ const updateUser = async (req, res) => {
       })
     }
 
+    console.log(req.body)
+
     const oldRole = user.role
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'refCode']
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
@@ -233,7 +235,6 @@ const updateUser = async (req, res) => {
       Object.assign(user, updateData)
       await user.save()
     }
-
     // Si es una compañía y tiene un plan de suscripción activo, lo poblamos
     if (user.role === 'company' && user.activeSubscription && user.activeSubscription.plan) {
       await user.populate('activeSubscription.plan');

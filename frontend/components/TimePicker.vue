@@ -22,7 +22,7 @@ const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
   id: String,
   label: String,
-  modelValue: String
+  modelValue: String,
 })
 
 const eventStore = useEventStore()
