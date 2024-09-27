@@ -22,7 +22,10 @@
     "label": "My events or promotions",
     "subtext": "View and manage all the events you have created."
   },
-
+  "findPromotions": {
+    "label": "Find promotions",
+    "subtext": "Search and discover promotions near you or in your area of interest."
+  },
   "findArticles": {
     "label": "Find articles",
     "subtext": "Search and discover articles near you or in your area of interest."
@@ -46,6 +49,10 @@
   "helping": {
     "label": "Questions & Answers",
     "subtext": "Frequently Asked Questions"
+  },
+  "contactUs": {
+    "label": "Contact us",
+    "subtext": "Get in touch with us"
   },
   "princingNav": {
     "label": "Princing",

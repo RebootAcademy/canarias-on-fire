@@ -30,9 +30,9 @@
                   to="/promotions"
                   class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary  focus:text-accent-foreground"
                 >
-                  <div class="text-sm font-medium leading-none"> Find promotions  </div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground text-white">
-                    Encuentra las mejores promociones
+                  <div class="text-sm font-medium leading-none">{{  $t('findPromotions.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    {{  $t('findPromotions.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>
@@ -150,6 +150,19 @@
                   <div class="text-sm font-medium leading-none">{{  $t('helping.label') }}</div>
                   <p class="line-clamp-2 text-sm leading-snug text-muted-foreground ">
                     {{  $t('helping.subtext') }}
+                  </p>
+                </NuxtLink>
+              </NavigationMenuLink>
+            </li>
+             <li>
+              <NavigationMenuLink as-child>
+                <NuxtLink
+                  to="/contact"
+                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                >
+                  <div class="text-sm font-medium leading-none">{{  $t('contactUs.label') }}</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground ">
+                    {{  $t('contactUs.subtext') }}
                   </p>
                 </NuxtLink>
               </NavigationMenuLink>

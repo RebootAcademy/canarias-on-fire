@@ -22,6 +22,10 @@
     "label": "Mis eventos o promociones",
     "subtext": "Ver mis eventos creados."
   },
+  "findPromotions": {
+    "label": "Encontrar promociones",
+    "subtext": "Busque y encuentre promociones cerca de usted o en su área de interés."
+  },
   "findArticles": {
     "label": "Encontrar artículos",
     "subtext": "Busque y descubra artículos cerca de usted o en su área de interés."
@@ -45,6 +49,10 @@
   "helping": {
     "label": "Preguntas y respuestas",
     "subtext": "Preguntas frecuentes"
+  },
+  "contactUs": { 
+    "label": "Contáctanos",
+    "subtext": "Ponte en contacto con nosotros"
   },
   "princingNav": {
     "label": "Precios",
