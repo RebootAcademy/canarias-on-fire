@@ -54,6 +54,7 @@
     "step2SelectGenres": "Seleccione género",
     "step2Genres": {
       "label": "Géneros",
+      "all": "Ver todos",
       "djs": "Djs",
       "electronic": "Electronic",
       "rock": "Rock/Heavy",
@@ -73,6 +74,7 @@
       "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
     },
     "step2CompanyName": "Nombre de la Compañía",
+    "step2CommercialName": "Nombre comercial",
     "step2Email": "Correo de contacto",
     "step2Phone": "Teléfono",
     "step2CIF": "CIF",
@@ -87,6 +89,20 @@
       "restoration": "Restauración",
       "nigthlife": "Ocio nocturno",
       "activities": "Actividades"
+    },
+    "foodType": {
+      "label": "Tipo de comida",
+      "placeholder": "Selecciona el tipo de comida",
+      "family": "Familiar",
+      "mexican": "Mexicana",
+      "asian": "Asiática",
+      "vegan": "Vegana",
+      "vegetarian": "Vegetariana",
+      "fastfood": "Comida rápida",
+      "tapas": "Tapas",
+      "italian": "Italiana",
+      "spanish": "Española",
+      "other": "Otra"
     },
     "step2CodRef": "Código de vendedor",
     "step2TermsPart1": "Acepto los  ",

@@ -216,7 +216,7 @@ const updateUser = async (req, res) => {
 
     if (newRole === 'company') {
       // Agregar campos de compañía si el nuevo rol es 'company'
-      ;['companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'isValidated'].forEach((field) => {
+      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'refCode', 'isValidated'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
     }
@@ -274,7 +274,7 @@ const updateUserProfile = async (req, res) => {
     // Filtrar campos válidos para actualización
     let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
     if (newRole === 'company') {
-      validFields.push( 'companyName', 'postalCode', 'cif', 'companyEmail', 'sector', 'address', 'refCode')
+      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'preferredLocations', 'refCode')
     }  
     
     if (newRole === 'musician') {
@@ -309,7 +309,12 @@ const updateUserProfile = async (req, res) => {
 
     if (newRole === 'company' && oldRole !== 'company') {
       await User.findByIdAndDelete(req.params.id)
+            console.log('userdata 1', updateData)
+
       user = await Company.create({ ...user.toObject(), ...updateData })
+      user.preferredLocations = [...user.preferredLocations, updateData.preferredLocations]
+      
+      console.log('userdata', updateData)
       await sendEmail('registeredCompany', user)
       await sendEmail('messageToCompany', user)
     } 

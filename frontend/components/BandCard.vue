@@ -1,6 +1,9 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[250px] sm:h-[270px] xl:h-[250px]" >
-    <p class="text-whiteGray text-2xl font-bold"> {{band.bandName }}</p>
+<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[250px] sm:h-[270px] xl:h-[270px]" >
+    <div class="flex justify-between">
+        <p class="text-whiteGray text-2xl font-bold"> {{band.bandName }}</p>
+        <p class="text-secondary italic text-sm">{{ band.genre }}</p>
+    </div>
     <div class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center text-secondary italic">
             <AtSign size="20"/>
@@ -34,7 +37,7 @@
             </div>
             <div class="flex flex-row gap-2 items-center">
                 <MapPin  size="20" />
-                <p>{{ band.nextPerformance.location.address}} </p>
+                <p class="text-xs lg:text-base">{{ band.nextPerformance.location.address}} </p>
             </div>
         </div>
     </div>
