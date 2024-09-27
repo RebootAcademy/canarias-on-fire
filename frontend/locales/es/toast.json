@@ -1,4 +1,6 @@
 {
   "companyValidated": "Empresa validada correctamente",
-  "errorCompanyValidated": "Error validando la empresa"
+  "errorCompanyValidated": "Error validando la empresa",
+  "canceledPlan": "Suscripción cancelada correctamente",
+  "subscribedPlan": "Suscripción activada correctamente"
 }
