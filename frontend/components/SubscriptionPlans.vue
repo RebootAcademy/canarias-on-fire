@@ -82,7 +82,7 @@
           </li>
         </ul>
 
-        <div v-if="userStore.isAuthenticated" class="mt-8" >
+        <div v-if="userStore.isAuthenticated && !isInformation" class="mt-8" >
           <NuxtLink
             v-if="getSubscriptionAction(plan) === 'subscribe'"
             @click="subscribeToPlan(plan)"
@@ -158,6 +158,10 @@ const props = defineProps({
   isHired: {
     type: Boolean,
     default: false,
+  },
+  isInformation: {
+    type: Boolean,
+    default: false
   }
 })
 

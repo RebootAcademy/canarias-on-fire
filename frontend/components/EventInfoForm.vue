@@ -22,8 +22,13 @@
         <span class="text-sm text-gray-500">{{ $t('showMoreInfo')}}</span>
         <CustomDialog :title="$t('showPlans')" >
           <PaymentOptions 
+            v-if="eventStore.eventType === 'event'"
             :payments="paymentStore.payments" 
           />
+          <SubscriptionPlans  v-else 
+            :plans="subscriptionStore.subscriptions"
+            :isInformation="true"
+            />
         </CustomDialog>
       </div>
     </div>
@@ -202,6 +207,7 @@ import { Info } from 'lucide-vue-next'
 
 import { errors, validateFields } from '../utils/validation'
 const paymentStore = usePaymentStore()
+const subscriptionStore = useSubscriptionStore()
 const props = defineProps({
   isEditing: {
     type: Boolean,
