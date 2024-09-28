@@ -1,6 +1,6 @@
 <template>
-  <div v-if="bandNextPerformance" class="mt-8">
-    <div v-if="!addNew" class="border-secondary border rounded-md p-4">
+  <div v-if="performanceInStore" class="mt-8">
+    <div v-if="!addNew && performanceInStore.location" class="border-secondary border rounded-md p-4">
       <Label class="text-gray-300 font-bold text-lg">{{
         $t('NextPerformance')
       }}</Label>
@@ -9,7 +9,7 @@
         <p>{{ userStore.userData?.nextPerformance?.location.address }}</p>
         <details>
           <summary class="text-primary">
-            {{ $t('previewText.showMap') }}
+            {{ $t('previewText.showMap') }}do
           </summary>
           <NuxtImg
             :src="userStore.userData?.nextPerformance?.location.mapImageUrl"
