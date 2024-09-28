@@ -59,7 +59,7 @@
               />
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Dashboard Section -->
-              <NuxtLink  v-if="userStore?.isAuthenticated" to="/pricing" class="font-bold text-md">
+              <NuxtLink  v-if="userStore?.isAuthenticated" to="/dashboard/profile" class="font-bold text-md">
                 <MenubarItem  class="font-bold text-md">
                   {{$t('dashboard')}}
                 </MenubarItem>

@@ -56,6 +56,9 @@ const CompanySchema = new mongoose.Schema({
       ref: 'location', */
     },
   ],
+  postalCode: {
+    type: String,
+  },
   activeSubscription: {
     status: {
       type: String,
