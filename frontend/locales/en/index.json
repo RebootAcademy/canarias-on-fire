@@ -162,6 +162,10 @@
     "errorphoneRequired": "Phone is required",
     "errorsubjectRequired": "Subject is required",
     "errormessageRequired": "Message is required"
+  },
+  "plansSection": {
+    "title": "Plans",
+    "PromoSubscription": "Promotion Subscription",
+    "eventPayments": "Event Payments"
   }
-  
 }

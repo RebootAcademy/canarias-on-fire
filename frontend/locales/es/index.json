@@ -162,5 +162,10 @@
     "errorphoneRequired": "El teléfono es requerido",
     "errorsubjectRequired": "El motivo es requerido",
     "errormessageRequired": "El mensaje es requerido"
+  },
+  "plansSection": {
+    "title": "Planes",
+    "PromoSubscription": "Suscripción para promociones",
+    "eventPayments": "Pago para publicar eventos"
   }
 }
