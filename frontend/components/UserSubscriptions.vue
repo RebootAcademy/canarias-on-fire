@@ -129,7 +129,7 @@ const paymentHistory = computed(() => {
 const managePlans = () => {
   if (props.user && props.user._id) {
     router.push({
-      path: '/pricing',
+      path: '/pricing/promotions',
       query: { userId: props.user._id },
     })
   } else {
@@ -197,7 +197,7 @@ const toggleSubscription = async () => {
       case 'inactive':
       default:
         // Redirigir al usuario a la página de planes para suscribirse
-        router.push('/pricing')
+        router.push('/pricing/promotions')
         break
     }
     if (result && !result.success) {
