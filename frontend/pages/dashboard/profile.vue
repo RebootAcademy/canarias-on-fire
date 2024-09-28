@@ -9,7 +9,8 @@
           <AvatarFallback>{{ formData.username?.charAt(0) }}</AvatarFallback>
         </Avatar>
         <div class="ml-4">
-          <h3 class="text-lg font-semibold">{{ formData.username }}</h3>
+          <h3 v-if="userRole !== 'company'" class="text-lg font-semibold">{{ formData.username }}</h3>
+          <h3 v-if="userRole === 'company'" class="text-lg font-semibold">{{ formData.companyName }}</h3>
         </div>
       </div>
       <form @submit.prevent="updateProfile">
@@ -24,9 +25,17 @@
                 {{ $t('buttons.upload') }}
               </Button>
         </div>
-        <div class="mb-4">
+        <div v-if="userRole !== 'company'" class="mb-4">
           <Label class="block text-sm font-medium text-gray-300">{{$t('userName')}}</Label>
           <Input class="mt-1 block w-full text-gray-500" v-model="formData.username" />
+        </div>
+        <div v-if="userRole === 'company'" class="mb-4">
+          <Label class="block text-sm font-medium text-gray-300">{{$t('userProfile.companyName')}}</Label>
+          <Input class="mt-1 block w-full text-gray-500" v-model="formData.companyName" />
+        </div>
+        <div v-if="userRole === 'company'" class="mb-4">
+          <Label class="block text-sm font-medium text-gray-300">{{$t('userProfile.commercialName')}}</Label>
+          <Input class="mt-1 block w-full text-gray-500" v-model="formData.commercialName" />
         </div>
         <div class="mb-4">
           <Label class="block text-sm font-medium text-gray-300">{{$t('email')}}</Label>
@@ -64,10 +73,13 @@ useHead({
 
 const { user, isAuthenticated } = useAuth0()
 const userStore = useUserStore()
+const userRole = computed(() => userStore.userData?.role)
 
 const formData = reactive({
   _id: userStore.userData?._id,
   username: userStore.userData?.username || '',
+  companyName: userStore.userData?.companyName || '',
+  commercialName: userStore.userData?.commercialName || '',
   email: userStore.userData?.email || '',
   profileImg: userStore.userData?.profileImg || ''
 })

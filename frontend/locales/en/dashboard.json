@@ -1,40 +1,56 @@
 {
-    "userManagement": "User Management",
-    "userCompanies": "Companies",
-    "basicUsers": "Basic Users",
-    "notValidatedCompanies": "Validate companies",
+  "userManagement": "User Management",
+  "userCompanies": "Companies",
+  "basicUsers": "Basic Users",
+  "notValidatedCompanies": "Validate companies",
+  "userName": "Username",
+  "addUser": "Add User",
+  "email": "Email",
+  "subscription": "Subcription",
+  "role": "Role",
+  "search": "Search",
+  "userProfile": {
+    "profile": "Profile",
+    "events": "Events",
+    "userImage": "Profile Image",
+    "subscriptions": "Subscriptions",
+    "desactivated": "Desactivated",
     "userName": "Username",
-    "addUser": "Add User",
     "email": "Email",
-    "subscription": "Subcription",
     "role": "Role",
-    "search": "Search",
-    "userProfile": {
-      "profile": "Profile",
-      "events": "Events",
-      "userImage": "Profile Image",
-      "subscriptions": "Subscriptions",
-      "desactivated": "Desactivated",
-      "userName": "Username",
-      "email": "Email",
-      "role": "Role",
-      "selectedRole": {
-        "label": "Select role",
-        "basis": "Basis",
-        "company": "Company",
-        "admin": "Admin"
-      },
-      "companyName": "Company Name",
-      "phone": "Contact Phone",
-      "cif": "CIF",
-      "address": "Address",
-      "sector": {
-        "label": "Sector",
-        "select": "Select sector",
-        "restoration": "Restoration",
-        "services": "Services",
-        "nightlife": "Nightlife",
-        "activities": "Activities"
-      }
+    "selectedRole": {
+      "label": "Select role",
+      "basis": "Basis",
+      "company": "Company",
+      "admin": "Admin"
+    },
+    "companyName": "Company Name",
+    "commercialName": "Commercial Name",
+    "phone": "Contact Phone",
+    "cif": "CIF",
+    "address": "Address",
+    "sector": {
+      "label": "Sector",
+      "select": "Select sector",
+      "restoration": "Restoration",
+      "services": "Services",
+      "nightlife": "Nightlife",
+      "activities": "Activities"
     }
+  },
+  "paymentsSection": {
+    "label": "Payments",
+    "mySubscription": "My Subscription",
+    "noSubscription": "There is no active subscription",
+    "SubDescription": "Here you can see your payments and their status.",
+    "renuewDate": "Next renuew date: ",
+    "cancelAt": "Canceled at: ",
+    "paymentHistory": "Payment History",
+    "paymentDetails": "See history of your payment plan invoice",
+    "paymentDate": "Date",
+    "paymentAmount": "Amount (€)",
+    "paymentInvoice": "Invoice",
+    "paymentDownload": "Download",
+    "noInvoices": "There are no invoices"
+  }
 }

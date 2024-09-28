@@ -206,7 +206,7 @@ const updateUser = async (req, res) => {
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'commercialName', 'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {

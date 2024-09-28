@@ -134,7 +134,9 @@
     "backHome": "Back Home",
     "pricing": "See Pricings",
     "choose": "CHOOSE THE PLAN BASIC",
-    "send": "Send"
+    "send": "Send",
+    "manage": "Manage",
+    "download": "Donwload"
   },
   "successView": {
     "paymentTitle": "Your payment has been successful completed",
