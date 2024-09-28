@@ -49,9 +49,9 @@ const checkMaxImages = () => {
   if (!store?.value?.event?.payment?.name) return 10
   if (store?.value?.event?.eventType === 'promotion') return 10
   switch (store.value.event.payment.name) {
-    case 'gold':
+    case 'optima':
       return 5
-    case 'premium':
+    case 'optima plus':
       return 10
     default:
       return 0

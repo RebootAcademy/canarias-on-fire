@@ -120,18 +120,18 @@ const getPaymentType = computed(() => {
   switch (props.event.payment?.name) {
     case 'basic':
       return 'basic'
-    case 'gold':
-      return 'gold'
-    case 'premium':
-      return 'premium'
+    case 'optima':
+      return 'optima'
+    case 'optima plus':
+      return 'optima plus'
     default:
       return 'unknown'
   }
 })
 
 const isBasicPayment = computed(() => getPaymentType.value === 'basic')
-const isGoldPayment = computed(() => getPaymentType.value === 'gold')
-const isPremiumPayment = computed(() => getPaymentType.value === 'premium')
+const isGoldPayment = computed(() => getPaymentType.value === 'optima')
+const isPremiumPayment = computed(() => getPaymentType.value === 'optima plus')
 
 const editEvent = () => {
   router.push(`/events/edit/${props.event._id}`)
