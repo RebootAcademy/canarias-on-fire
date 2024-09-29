@@ -12,7 +12,7 @@
 const eventStore = useEventStore()
 
 const activeEventsCount = computed(() => {
-  return eventStore.events.filter(event => event.status === 'published' && 
+  return eventStore.events.filter(event => event.status === 'published' && event.eventType === 'event' &&
   event.userId?.isActive && 
   event.userId?.isValidated).length 
 })
