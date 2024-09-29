@@ -155,16 +155,16 @@ const getPaymentType = computed(() => {
   switch (props.promotion?.subscription?.name) {
     case 'basic':
       return 'basic'
-    case 'gold':
-      return 'gold'
-    case 'premium':
-      return 'premium'
+    case 'optima':
+      return 'optima'
+    case 'optima plus':
+      return 'optima plus'
     default:
       return 'unknown'
   }
 })
  const isBasicPayment = computed(() => getPaymentType.value === 'basic')
-const isGoldPayment = computed(() => getPaymentType.value === 'gold') 
+const isGoldPayment = computed(() => getPaymentType.value === 'optima') 
 
 </script>
 
