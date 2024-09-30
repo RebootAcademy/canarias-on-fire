@@ -28,6 +28,7 @@ export const useEventStore = defineStore('eventStore', {
     startTime: '',
     endTime: '',
     externalUrl: '',
+    eventImages: [],
     eventDiscount: '',
     coverImage: null,
     selectedFile: null,
