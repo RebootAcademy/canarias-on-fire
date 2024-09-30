@@ -28,6 +28,16 @@
   "eventLocation": "Ubicación",
   "eventLocationDescription": "Especifica la ubicación exacta donde se llevará a cabo tu evento. Esta información ayudará a los asistentes a planificar su visita con antelación.",
   "eventPrice": "Precio",
+  "eventDiscount": "Tipo de descuento",
+  "eventTypeDiscount": {
+    "free": "Gratis",
+    "10-30": "10% - 30%",
+    "30-50": "30% - 50%",
+    "50-70": "50% - 70%",
+    "2x1": "2x1",
+    "other": "Otro",
+    "notSpecificied": "No especificado"
+  },
   "free": "Evento gratuito",
   "capacity": "Aforo",
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
