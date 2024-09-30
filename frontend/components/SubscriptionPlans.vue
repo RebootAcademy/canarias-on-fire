@@ -8,7 +8,7 @@
         :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
       >
         <div
-          v-if="plan.name === 'gold'"
+          v-if="plan.name === 'optima'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient text-center py-1 rounded-t-lg"
         >
           {{ $t('recommended') }}
@@ -215,7 +215,7 @@ const getReadingPriorityText = (value) => {
 }
 
 const filteredPlans = computed(() => {
-  return props.plans.filter(plan => (plan.name !== 'premium'))
+  return props.plans.filter(plan => (plan.name !== 'optima plus'))
 })
 
 const getFullPlanInfo = (planId) => {
@@ -245,7 +245,7 @@ const getSubscriptionAction = (plan) => {
     return 'unknown'
   }
 
-  const planOrder = ['basic', 'gold', 'premium'] // Corregido el orden de los planes
+  const planOrder = ['basic', 'optima', 'optima plus'] // Corregido el orden de los planes
   const currentPlanIndex = planOrder.indexOf(currentPlan.name)
   const newPlanIndex = planOrder.indexOf(plan.name)
 

@@ -206,7 +206,7 @@ const updateUser = async (req, res) => {
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'commercialName', 'postalCode' ,'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
@@ -216,7 +216,7 @@ const updateUser = async (req, res) => {
 
     if (newRole === 'company') {
       // Agregar campos de compañía si el nuevo rol es 'company'
-      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'refCode', 'isValidated'].forEach((field) => {
+      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'refCode', 'postalCode', 'isValidated'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
     }
@@ -274,7 +274,7 @@ const updateUserProfile = async (req, res) => {
     // Filtrar campos válidos para actualización
     let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
     if (newRole === 'company') {
-      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'preferredLocations', 'refCode')
+      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'postalCode', 'preferredLocations', 'refCode')
     }  
     
     if (newRole === 'musician') {

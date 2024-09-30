@@ -10,7 +10,7 @@
         class="text-center bg-gray border border-primary rounded-lg shadow-sm p-6 pt-12 relative"
       >
         <div
-          v-if="payment.name === 'premium'"
+          v-if="payment.name === 'optima plus'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
          
           >
@@ -98,7 +98,7 @@
             <NuxtLink
               @click="choosePayment(payment)"
               class="inline-block w-full bg-black text-white font-semibold py-4 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
-              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'premium' }"
+              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'optima plus' }"
               >
               {{ $t('buttons.subscribe')}}
             </NuxtLink>

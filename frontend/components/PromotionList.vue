@@ -42,7 +42,7 @@ function getPromoPriority(promotion) {
     promotion.subscription.name 
 
   let priority;
-  if (subscriptionName === 'gold') {
+  if (subscriptionName === 'optima') {
     priority = 2
   } else if (subscriptionName === 'basic') {
     priority = 1

@@ -31,12 +31,12 @@ const eventStore = useEventStore()
 const today = new Date()
 
 const premiumEvents = ref([])
-/* const somePremium = eventStore?.events.filter((event) => event?.payment?.name === 'premium' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today )
+/* const somePremium = eventStore?.events.filter((event) => event?.payment?.name === 'optima plus' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today )
 console.log(somePremium) */
 watchEffect(() => {
   if (eventStore.events) {
     premiumEvents.value = eventStore?.events.filter((event) => 
-      event?.payment?.name === 'premium' && 
+      event?.payment?.name === 'optima plus' && 
       new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today 
     )
   }

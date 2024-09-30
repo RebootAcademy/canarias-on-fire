@@ -134,7 +134,9 @@
     "backHome": "Volver al Inicio",
     "pricing": "Ver precios",
     "choose": "ELEGIR EL PLAN BÁSICO",
-    "send": "Enviar"
+    "send": "Enviar",
+    "manage": "Administrar",
+    "download": "Descargar"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",

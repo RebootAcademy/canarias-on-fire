@@ -50,7 +50,8 @@ module.exports = {
         },
         black: '#1C1F1F',
         white: '#FAFAFA',
-        gray: 'rgba(125, 125, 125, 0.20)',
+        gray: 'hsl(var(--gray))',
+        grayForeground: 'hsl(var(--gray-foreground))',
         whiteGray: '#8989A1',
       },
       backgroundImage: {
