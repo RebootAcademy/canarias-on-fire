@@ -8,16 +8,36 @@
       :promotion="promotion"
     />
   </div>
+  <div v-if="limitedPromotions?.length === 0" class="inline-block text-gray-500 mt-4">
+    {{ $t('notPromotionsFound') }}
+  </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
+const {t} = useI18n()
+const props = defineProps({
+  filteredOption: { type: String, default: '' },
+})
 
 const { filteredEvents } = storeToRefs(eventStore)
 
 const limitedPromotions = computed(() => {
-  return filteredEvents.value
+  console.log('prop', props.filteredOption)
+  let filteredPromotions = filteredEvents.value
+
+  if (props.filteredOption) {
+    filteredPromotions = filteredEvents.value.filter((event) =>
+      event.categories.some((category) =>
+        category.name
+          .toLowerCase()
+          .includes(props.filteredOption.toLowerCase())
+      )
+    )
+  }
+
+  return filteredPromotions
     .filter(
       (promotion) =>
         promotion.status === 'published' &&
@@ -34,14 +54,13 @@ const limitedPromotions = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
+    .slice(0, 9)
 })
 
-
 function getPromoPriority(promotion) {
-  const subscriptionName =
-    promotion.subscription.name 
+  const subscriptionName = promotion.subscription.name
 
-  let priority;
+  let priority
   if (subscriptionName === 'optima') {
     priority = 2
   } else if (subscriptionName === 'basic') {

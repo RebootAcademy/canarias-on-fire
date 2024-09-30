@@ -10,6 +10,7 @@ export const useEventStore = defineStore('eventStore', {
     categories: [],
     selectedCategories: [],
     selectedCategoriesForPromotion: [],
+    selectCategoryForFilterCompany: null,
     selectedFilterByDate: 'all',
     searchQuery: '',
     eventName: '',
@@ -144,6 +145,13 @@ export const useEventStore = defineStore('eventStore', {
     setSelectedCategoriesForPromotions(categories) {
       this.selectedCategories = categories
     },
+    setTypeOfCompanyCategory(type) {
+      if (this.selectCategoryForFilterCompany !== type) {
+        this.selectCategoryForFilterCompany = type
+      } else {
+        this.selectCategoryForFilterCompany = null
+      }
+    },
     setFilterModalOpen(isOpen) {
       this.isFilterModalOpen = isOpen
     },
@@ -249,6 +257,7 @@ export const useEventStore = defineStore('eventStore', {
             id: category._id,
             name: category.name,
             icon: category.icon,
+            type: category.type,
           }))
         } else {
           throw new Error(

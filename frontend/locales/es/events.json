@@ -111,5 +111,16 @@
     "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de eventos."
   },
   "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan",
-  "recommended": "Opción recomendada"
+  "notPromotionsFound": "No se encontraron promociones.",
+  "recommended": "Opción recomendada",
+  "buttonsEvents": { 
+    "events": "EVENTOS",
+    "nightlifePromotion": "OFERTAS Y PROMOCIONES DE OCIO NOCTURNO",
+    "food&DrinksPromotion": "OFERTAS Y PROMOCIONES DE BARES Y RESTAURANTES",
+    "kidsPromotion": "ACTIVIDADES PARA LOS MAS PEQUEÑOS",
+    "servicesPromotion": "OFERTAS Y PROMOCIONES EN SERVICIOS Y MATERIAL",
+    "activitiesPromotion": "OFERTAS ACTIVIDADES",
+    "plansPromotion": "OFERTAS ESCAPADAS",
+    "planYourParty": "PLANEA TU PROPIA FIESTA"
+  } 
 }

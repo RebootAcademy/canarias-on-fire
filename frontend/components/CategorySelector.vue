@@ -4,7 +4,7 @@
     <p class="text-xs text-secondary mb-2">{{ $t('chooseTags') }}</p>
     <div class="flex flex-wrap gap-2 p-2 mb-4">
       <Badge 
-        v-for="category in eventStore.categories"
+        v-for="category in filteredCategories"
         :key="category.id"
         :class="{'bg-transparent border-primary text-primary' : isSelected(category), 'bg-gray text-secondary' : !isSelected(category)}"
         @click="toggleCategory(category)"
@@ -25,6 +25,19 @@ const props = defineProps({
   isEditing: {
     type: Boolean,
     default: false
+  },
+  type: {
+    type: String,
+    required: true,
+    default: 'event',
+  }
+})
+
+const filteredCategories = computed(() => {
+  if (props.type === 'event') {
+    return eventStore.categories.filter(cat => cat.type === 'event')
+  } else {
+    return eventStore.categories.filter(cat => cat.type !== 'event')
   }
 })
 
