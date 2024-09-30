@@ -44,7 +44,7 @@
               />
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Pricing Section -->
-              <NuxtLink to="/pricing" class="font-bold text-md">
+              <NuxtLink to="/pricing/promotions" class="font-bold text-md">
                 <MenubarItem class="font-bold text-md">
                   {{$t('pricing')}}
                 </MenubarItem>
