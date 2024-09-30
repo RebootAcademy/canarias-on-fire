@@ -230,8 +230,8 @@ const eventDiscounts = computed(() => {
     { label: t('eventTypeDiscount.30-50'), value: '30-50' },
     { label: t('eventTypeDiscount.50-70'), value: '50-70' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
-    { label: t('eventTypeDiscount.free'), value: 'Gratis' },
-    { label: t('eventTypeDiscount.other'), value: 'Otro' },
+    { label: t('eventTypeDiscount.free'), value: 'free' },
+    { label: t('eventTypeDiscount.other'), value: 'other' },
   ]
 })
 

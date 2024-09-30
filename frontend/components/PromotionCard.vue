@@ -17,7 +17,7 @@
         <span
           v-show="userStore.userData && userStore.userData.role === 'admin' "
           :class="[
-            'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-secondary',
+            'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
             { 'text-red-500 italic': promotion.status === 'draft' },
           ]"
         >
@@ -42,9 +42,9 @@
             <span
               v-for="category in promotion.categories"
               :key="category._id"
-              class="text-background text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
+              class="text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
               :class="{
-                'text-primary': isBasicPayment,
+                'text-secondary': isBasicPayment,
                 'text-secondary': isGoldPayment
               }"
             >
