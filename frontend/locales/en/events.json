@@ -28,6 +28,16 @@
   "eventLocation": "Location",
   "eventLocationDescription": "Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.",
   "eventPrice": "Price",
+  "eventDiscount": "Type of discount",
+  "eventTypeDiscount": {
+    "free": "Free",
+    "10-30": "10% - 30%",
+    "30-50": "30% - 50%",
+    "50-70": "50% - 70%",
+    "2x1": "2x1",
+    "other": "Other",
+    "notSpecificied": "Not specified"
+  },
   "free": "My tickets are free",
   "capacity": "Capacity",
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",

@@ -198,13 +198,21 @@
         </div>
       </div>
     </div>
+    <div v-if="eventStore.eventType === 'promotion'" class="flex flex-col w-full gap-4 py-4">
+      <hr />
+      <div class="w-full md:w-1/3 ">
+        <p class="font-semibold mb-4">{{ $t('eventPrice') }}</p>
+          <CustomSelect v-model:selected="eventStore.eventDiscount" :items="eventDiscounts" :placeholder="$t('eventTypeDiscount.notSpecificied')"/>
+      </div>
+    </div>
   </div>
   <hr class="mb-4" />
 </template>
 
 <script setup>
 import { Info } from 'lucide-vue-next'
-
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n()
 import { errors, validateFields } from '../utils/validation'
 const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
@@ -216,8 +224,19 @@ const props = defineProps({
 })
 const changeMap = ref(props.isEditing)
 
+const eventDiscounts = computed(() => {
+  return [
+    { label: t('eventTypeDiscount.10-30'), value: '10-30' },
+    { label: t('eventTypeDiscount.30-50'), value: '30-50' },
+    { label: t('eventTypeDiscount.50-70'), value: '50-70' },
+    { label: t('eventTypeDiscount.2x1'), value: '2x1' },
+    { label: t('eventTypeDiscount.free'), value: 'Gratis' },
+    { label: t('eventTypeDiscount.other'), value: 'Otro' },
+  ]
+})
+
 const eventStore = useEventStore()
-const { t, locale } = useI18n()
+
 
 const isClickTypeOfPay = ref(false)
 
@@ -235,6 +254,7 @@ onMounted(() => {
     eventStore.eventDate = eventStore.event.eventDate
     eventStore.startTime = eventStore.event.startTime
     eventStore.endTime = eventStore.event.endTime
+    eventStore.eventDiscount = eventStore.event.eventDiscount
     eventStore.eventDescription = eventStore.event.eventDescription
     eventStore.eventLocation = eventStore.event.eventLocation
     eventStore.eventPrice = eventStore.event.eventPrice

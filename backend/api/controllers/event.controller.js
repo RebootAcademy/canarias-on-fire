@@ -26,6 +26,7 @@ const createPromotion = async (req, res) => {
       ...req.body,
       eventType: 'promotion'
     }
+
     const newPromotion = await Event.create(promotionData)
     res.status(201).json({
       success: true,

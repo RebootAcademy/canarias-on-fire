@@ -45,6 +45,9 @@ const EventSchema = new mongoose.Schema({
   eventImages: {
     type: Array
   },
+  eventDiscount: {
+    type: String
+  },
   coverImage: {
     type: String
   },

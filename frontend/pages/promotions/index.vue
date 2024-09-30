@@ -5,6 +5,12 @@
       <div class="flex items-center justify-between w-full px-4 mb-4">
         <h2 class="text-3xl font-semibold text-primary">{{ $t('promotionsTitle') }}</h2>
         <div class="flex gap-4 items-center">
+          <CustomSelect 
+            :items="eventDiscounts" 
+            :placeholder="selectedPromotion"
+            :optionDefault="selectedPromotion"
+            v-model:selected="selectedPromotion"
+          />
           <SearchInput v-model="searchQuery" />
           <CustomBtn
             :title="$t('filterBtn')"
@@ -29,10 +35,24 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+const {t} = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
+
+const selectedPromotion = ref('all')
+const eventDiscounts = computed(() => {
+  return [
+    { label:t('onBoarding.step2Genres.all'), value: 'all' },
+    { label: t('eventTypeDiscount.10-30'), value: '10-30' },
+    { label: t('eventTypeDiscount.30-50'), value: '30-50' },
+    { label: t('eventTypeDiscount.50-70'), value: '50-70' },
+    { label: t('eventTypeDiscount.2x1'), value: '2x1' },
+    { label: t('eventTypeDiscount.free'), value: 'Gratis' },
+    { label: t('eventTypeDiscount.other'), value: 'Otro' },
+  ]
+})
 
 const searchQuery = computed({
   get: () => eventStore.searchQuery,
@@ -44,7 +64,14 @@ const openFilterModal = () => {
 }
 
 const limitedPromotions = computed(() => {
-  return filteredEvents.value
+  let filterDiscount
+  if (selectedPromotion.value === 'all'){
+    filterDiscount = filteredEvents.value
+  } else {
+    filterDiscount = filteredEvents.value.filter((event) => event.eventDiscount === selectedPromotion.value)
+  }
+
+  return filterDiscount
     .filter(promotion => promotion.status === 'published' && promotion.eventType === 'promotion' && promotion.userId?.isActive && promotion.userId?.isValidated)
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)
@@ -57,10 +84,7 @@ const limitedPromotions = computed(() => {
     })
 })
 
-console.log(limitedPromotions.value)
-
 function getPromoPriority(promotion) {
-  console.log(promotion.subscription.name)
   const subscriptionName =
     promotion.subscription.name 
 
