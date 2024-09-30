@@ -32,6 +32,7 @@ const optionsDashboard = computed(() => {
 
   return [
     { label: t('dashboardNav.events'), path: '/dashboard/events', roles: ['admin', 'company'] },
+    { label: t('dashboardNav.promotions'), path: '/dashboard/promotions', roles: ['admin', 'company'] },
     { label: t('dashboardNav.articles'), path: '/dashboard/articles', roles: ['admin'] },
     { label: t('dashboardNav.users'), path: '/dashboard/users', roles: ['admin'] },
     { label: t('dashboardNav.payments'), path: '/dashboard/payments', roles: ['company'] },
