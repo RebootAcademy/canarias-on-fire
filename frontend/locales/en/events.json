@@ -43,6 +43,7 @@
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",
   "location": "Enter a location",
   "externalUrl": "External site",
+  "externalUrlDescription": "If you have an external website (e.g. ticket purchase), please specify it here.",
   "notEventsFound": "Not events found.",
   "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
   "validateByAdmin": "*  To publish the event the organizer must be validated by the administrator.",

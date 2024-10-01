@@ -148,8 +148,11 @@
     
     <!-- EXTERNAL URL -->
     <hr />
-    <div class="flex flex-col mb-6 w-full lg:w-2/3">
+    <div class="flex flex-col mb-4 w-full lg:w-2/3">
       <Label for="externalUrl" class="text-xs ml-1 mb-1">{{ $t('externalUrl') }}</Label>
+      <p v-if="!isEditing" class="text-xs text-gray-500 mb-2">
+        {{ $t('externalUrlDescription') }}
+      </p>
       <Input
       v-model="eventStore.externalUrl"
       id="externalUrl"
@@ -160,29 +163,31 @@
 
 
     <!-- EVENT PRICE & CAPACITY -->
-    <hr />
-    <p class="font-semibold">{{ $t('eventPrice') }}</p>
-    <p class="text-xs text-gray-500 mb-2">
-      {{ $t('eventPriceDescription') }}
-    </p>
-
-    <div class="flex justify-center sm:justify-start gap-4">
-      <div 
-        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
-        :class="isClickTypeOfPay && eventStore.isFree === true ? 'border-primary' : 'border-whiteGray'"
-        @click="modifyTypeOfEvent(true)"
+    <div v-if="eventStore.eventType === 'event'" class="flex flex-col gap-2">
+      <hr />
+      <p class="font-semibold">{{ $t('eventPrice') }}</p>
+      <p class="text-xs text-gray-500 mb-2">
+        {{ $t('eventPriceDescription') }}
+      </p>
+  
+      <div  class="flex justify-center sm:justify-start gap-4">
+        <div 
+          class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
+          :class="isClickTypeOfPay && eventStore.isFree === true ? 'border-primary' : 'border-whiteGray'"
+          @click="modifyTypeOfEvent(true)"
+          >
+          <p>{{ $t('buttons.free') }}</p>
+        </div>
+        <div 
+          class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
+          :class="isClickTypeOfPay && eventStore.isFree === false ? 'border-primary' : 'border-whiteGray'"
+          @click="modifyTypeOfEvent(false)"
         >
-        <p>{{ $t('buttons.free') }}</p>
-      </div>
-      <div 
-        class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
-        :class="isClickTypeOfPay && eventStore.isFree === false ? 'border-primary' : 'border-whiteGray'"
-        @click="modifyTypeOfEvent(false)"
-      >
-        <p>{{ $t('buttons.pay') }}</p>
+          <p>{{ $t('buttons.pay') }}</p>
+        </div>
       </div>
     </div>
-    <div v-show="eventStore.eventType === 'event' && isClickTypeOfPay || eventStore.isFree" class="flex flex-col gap-1">
+    <div v-show="(eventStore.eventType === 'event' && isClickTypeOfPay) || (eventStore.eventType === 'event' && eventStore.isFree)" class="flex flex-col gap-1">
       <div class="flex items-start gap-4">
         <div class="w-1/6">
           <PriceInput v-model="eventStore.eventPrice"  />
@@ -193,7 +198,7 @@
             {{ errors.price }}
           </span>
         </div>
-        <div class="w-1/6">
+        <div v-if="eventStore.eventType === 'event'" class="w-1/6">
           <CapacityInput />
         </div>
       </div>
@@ -201,7 +206,7 @@
     <div v-if="eventStore.eventType === 'promotion'" class="flex flex-col w-full gap-4 py-4">
       <hr />
       <div class="w-full md:w-1/3 ">
-        <p class="font-semibold mb-4">{{ $t('eventPrice') }}</p>
+        <p class="font-semibold mb-4">{{ $t('eventDiscount') }}</p>
           <CustomSelect v-model:selected="eventStore.eventDiscount" :items="eventDiscounts" :placeholder="$t('eventTypeDiscount.notSpecificied')"/>
       </div>
     </div>
@@ -228,7 +233,6 @@ const eventDiscounts = computed(() => {
   return [
     { label: t('eventTypeDiscount.10-30'), value: '10-30' },
     { label: t('eventTypeDiscount.30-50'), value: '30-50' },
-    { label: t('eventTypeDiscount.50-70'), value: '50-70' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
     { label: t('eventTypeDiscount.free'), value: 'free' },
     { label: t('eventTypeDiscount.other'), value: 'other' },

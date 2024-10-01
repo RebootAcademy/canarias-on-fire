@@ -9,8 +9,8 @@ export const useEventStore = defineStore('eventStore', {
     },
     categories: [],
     selectedCategories: [],
-    selectedCategoriesForPromotion: [],
-    selectCategoryForFilterCompany: null,
+    selectedCategoriesByServices: [],
+    selectCategoryForFilterCompany: 'all',
     selectedFilterByDate: 'all',
     searchQuery: '',
     eventName: '',
@@ -142,12 +142,13 @@ export const useEventStore = defineStore('eventStore', {
     setSelectedCategories(categories) {
       this.selectedCategories = categories
     },
-    setSelectedCategoriesForPromotions(categories) {
-      this.selectedCategories = categories
+    setSelectedCategoriesOfServices(categories) {
+      if (categories === 'delete') return this.selectedCategoriesByServices = []
+      this.selectedCategoriesByServices = categories
     },
     setTypeOfCompanyCategory(type) {
-      if (this.selectCategoryForFilterCompany !== type) {
-        this.selectCategoryForFilterCompany = type
+      if (this.selectCategoryForFilterCompany !== type.value) {
+        this.selectCategoryForFilterCompany = type.value
       } else {
         this.selectCategoryForFilterCompany = null
       }
@@ -192,6 +193,29 @@ export const useEventStore = defineStore('eventStore', {
         categories: [],
       }
       this.eventDate = null
+    },
+
+    resetCreateEventForm () {
+      this.resetFilters()
+      this.eventLocation = null
+      this.eventImages = []
+      this.coverImage = null
+      this.eventDate = null
+      this.selectedCategories= [],
+      this.selectedCategoriesByServices = [],
+      this.eventName = '',
+      this.eventType = '',
+      this.eventDescription = '',
+      this.externalUrl = '',
+      this.hasTriedSubmit = false
+      this.eventDiscount = '',
+      this.eventPrice = 0,
+      this.eventCapacity = 0,
+      this.isFree = false,
+      this.payment = null,
+      this.status = null,
+      this.startTime = '',
+      this.endTime = ''
     },
 
     async fetchEvents() {
@@ -391,6 +415,7 @@ export const useEventStore = defineStore('eventStore', {
         categories: this.selectedCategories.map((cat) =>
           typeof cat === 'object' ? cat.id : cat
         ),
+        categoriesOfServices: this.selectedCategoriesByServices,
         status: this.status,
         userId: this.userId,
         payment: this.payment,

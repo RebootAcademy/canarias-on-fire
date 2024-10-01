@@ -4,7 +4,7 @@ import { PlanYourParty } from '../.nuxt/components';
     <div
       v-for="item in options"
       :key="item.value"
-      class="flex text-xs md:text-md items-center text-center  min-w-40 max-w-full md:max-w-64 md:min-h-16 justify-center bg-gray rounded-lg px-4 py-2 cursor-pointer hover:bg-primary hover:text-background"
+      class="flex text-xs md:text-md items-center text-center min-w-40 max-w-full md:max-w-64 md:min-h-16 justify-center bg-gray rounded-lg px-4 py-2 cursor-pointer hover:bg-primary hover:text-background"
       @click="selectedOption = item.value"
       :class="{
         'bg-transparent border-2 border-primary': selectedOption === item.value,
@@ -25,15 +25,14 @@ import { PlanYourParty } from '../.nuxt/components';
       selectedOption === 'food&drinks' ||
       selectedOption === 'activities' ||
       selectedOption === 'plans' ||
-      selectedOption === 'kids' ||
-      selectedOption === 'services'
+      selectedOption === 'kids'
     "
     class="mt-4"
   >
     <PromotionList :filteredOption="selectedOption" />
   </div>
   <div v-if="selectedOption === 'createEvent'" class="mt-4">
-    <CategoriesFilter type="promotion" isCompany />
+    <CategoriesPlanYourParty />
     <PlanYourParty />
   </div>
 </template>
@@ -50,10 +49,9 @@ const options = computed(() => [
     label: t('buttonsEvents.food&DrinksPromotion'),
     value: 'food&drinks',
   },
-  { label: t('buttonsEvents.servicesPromotion'), value: 'services' },
   { label: t('buttonsEvents.kidsPromotion'), value: 'kids' },
   { label: t('buttonsEvents.activitiesPromotion'), value: 'activities' },
   { label: t('buttonsEvents.plansPromotion'), value: 'plans' },
-  { label: t('buttonsEvents.planYourParty'), value: 'createEvent' }
+  { label: t('buttonsEvents.planYourParty'), value: 'createEvent' },
 ])
 </script>

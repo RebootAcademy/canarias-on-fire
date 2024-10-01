@@ -43,6 +43,7 @@
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
   "location": "Introduce una ubicación",
   "externalUrl": "Sitio web",
+  "externalUrlDescription": "Si tiene un sitio web (por ejemplo, la compra de compra de entrada), introducela aquí.",
   "notEventsFound": "No se encontraron eventos.",
   "availablePremium": "* Seleccione su imagen de portada  (Función sólo disponible para eventos Gold y Premium).",
   "validateByAdmin": "* Para publicar el evento el organizador debe ser validado por el administrador.",
@@ -113,7 +114,7 @@
   "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan",
   "notPromotionsFound": "No se encontraron promociones.",
   "recommended": "Opción recomendada",
-  "buttonsEvents": { 
+  "buttonsEvents": {
     "events": "EVENTOS",
     "nightlifePromotion": "OFERTAS Y PROMOCIONES DE OCIO NOCTURNO",
     "food&DrinksPromotion": "OFERTAS Y PROMOCIONES DE BARES Y RESTAURANTES",
@@ -122,5 +123,5 @@
     "activitiesPromotion": "OFERTAS ACTIVIDADES",
     "plansPromotion": "OFERTAS ESCAPADAS",
     "planYourParty": "PLANEA TU PROPIA FIESTA"
-  } 
+  }
 }

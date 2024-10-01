@@ -11,6 +11,14 @@
   <div v-if="limitedPromotions?.length === 0" class="inline-block text-gray-500 mt-4">
     {{ $t('notPromotionsFound') }}
   </div>
+  <div v-if="numOfPromotions > 9" class="mt-6 w-full flex justify-center">
+      <div class="w-1/3">
+        <CustomBtn
+          :title="t('buttons.seeMore')"
+          :action="() => router.push('/promotions')"
+        />
+      </div>
+    </div>
 </template>
 
 <script setup>
@@ -20,6 +28,8 @@ const {t} = useI18n()
 const props = defineProps({
   filteredOption: { type: String, default: '' },
 })
+
+const numOfPromotions = ref('')
 
 const { filteredEvents } = storeToRefs(eventStore)
 
@@ -52,6 +62,7 @@ const limitedPromotions = computed(() => {
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
+      numOfPromotions.value = filteredPromotions.length
       return compareDates(a.eventDate, b.eventDate)
     })
     .slice(0, 9)

@@ -68,7 +68,7 @@ const filteredBands = computed(() => {
   }
 
   const search = searchQuery.value.trim().toLowerCase(); 
-  
+  genreBands = sortBandsByNextPerformance(genreBands);
   if (!search) {
     return genreBands;
   }
@@ -77,4 +77,47 @@ const filteredBands = computed(() => {
     return band.bandName.toLowerCase().includes(search); // Verificar coincidencia parcial
   });
 });
+
+function sortBandsByNextPerformance(bands) {
+  return bands.sort((a, b) => {
+    const hasValidNextPerformanceA = isValidNextPerformance(a.nextPerformance)
+      ? 1
+      : 0
+    const hasValidNextPerformanceB = isValidNextPerformance(b.nextPerformance)
+      ? 1
+      : 0
+
+    if (hasValidNextPerformanceA !== hasValidNextPerformanceB) {
+      return hasValidNextPerformanceB - hasValidNextPerformanceA
+    }
+
+    if (hasValidNextPerformanceA && hasValidNextPerformanceB) {
+      const dateA = new Date(
+        a.nextPerformance.date.year,
+        a.nextPerformance.date.month - 1,
+        a.nextPerformance.date.day
+      )
+      const dateB = new Date(
+        b.nextPerformance.date.year,
+        b.nextPerformance.date.month - 1,
+        b.nextPerformance.date.day
+      )
+
+      return dateA - dateB
+    }
+    return 0
+  })
+}
+
+function isValidNextPerformance(nextPerformance) {
+  if (!nextPerformance) return false
+  const hasValidLocation =
+    nextPerformance.location && nextPerformance.location !== ''
+  const hasValidDate =
+    nextPerformance.date &&
+    nextPerformance.date.year &&
+    nextPerformance.date.month &&
+    nextPerformance.date.day
+  return hasValidLocation && hasValidDate
+}
 </script>

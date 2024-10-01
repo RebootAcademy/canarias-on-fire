@@ -6,3 +6,10 @@
     </div>
   </div>
 </template>
+
+<script setup>
+const eventStore = useEventStore()
+onMounted(() => {
+  eventStore.resetCreateEventForm()
+})
+</script>
