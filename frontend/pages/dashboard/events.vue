@@ -1,12 +1,12 @@
 <template>
   <div v-if="userStore.isAuthenticated && userRole === 'admin'">
     <div class="w-full flex flex-row  items-center justify-between xs:gap-2 lg:px-4 mb-4">
-      <div class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2 ">
+      <div class="xs:hidden lg:flex items-center bg-gray rounded-lg border-1 border-gray p-2 ">
         <div 
             v-for="option in optionsFilters" 
             :key="option.label" 
             class="flex justify-start cursor-pointer rounded-sm w-[100px] "
-            :class="selectOption === option.value ? 'bg-black  hover:bg-none' : 'hover:bg-zinc-800'"
+            :class="selectOption === option.value ? 'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'"
             @click="selectOption = option.value"
           >
             <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
