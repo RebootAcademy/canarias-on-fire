@@ -29,6 +29,7 @@
   "eventLocationDescription": "Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.",
   "eventPrice": "Price",
   "eventDiscount": "Type of discount",
+  "eventServices": "Services",
   "eventTypeDiscount": {
     "free": "Free",
     "10-30": "10% - 30%",
@@ -99,6 +100,7 @@
   },
   "previewText": {
     "aboutEvent": "About the event",
+    "aboutPromo": "About the promotion",
     "showMap": "Show map",
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
@@ -123,5 +125,8 @@
     "activitiesPromotion": "ACTIVITY OFFERS",
     "plansPromotion": "ESCAPADES OFFERS",
     "planYourParty": "PLAN YOUR OWN PARTY"
-  }
+  },
+  "relatedEvent": "Related events",
+  "relatedPromotion": "Related promotions",
+  "relatedArticle": "Related articles"
 }
