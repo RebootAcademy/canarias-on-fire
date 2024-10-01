@@ -29,6 +29,7 @@
   "eventLocationDescription": "Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.",
   "eventPrice": "Price",
   "eventDiscount": "Type of discount",
+  "eventServices": "Services",
   "eventTypeDiscount": {
     "free": "Free",
     "10-30": "10% - 30%",
@@ -43,6 +44,7 @@
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",
   "location": "Enter a location",
   "externalUrl": "External site",
+  "externalUrlDescription": "If you have an external website (e.g. ticket purchase), please specify it here.",
   "notEventsFound": "Not events found.",
   "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
   "validateByAdmin": "*  To publish the event the organizer must be validated by the administrator.",
@@ -96,6 +98,7 @@
   },
   "previewText": {
     "aboutEvent": "About the event",
+    "aboutPromo": "About the promotion",
     "showMap": "Show map",
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
@@ -108,6 +111,20 @@
     "chooseSubscriptionPlan": "Choose your subscription plan",
     "descriptionPlan": "Find the perfect plan that suits your event needs."
   },
+  "notPromotionsFound": "Not promotions found.",
   "galleryLimit": "You have reached your plan's image capacity limit",
-  "recommended": "Recommended option"
+  "recommended": "Recommended option",
+  "buttonsEvents": {
+    "events": "EVENTS",
+    "nightlifePromotion": "NIGHTLIFE OFFERS AND PROMOTIONS",
+    "food&DrinksPromotion": "BARS AND RESTAURANTS OFFERS AND PROMOTIONS",
+    "kidsPromotion": "ACTIVITIES FOR CHILDREN",
+    "servicesPromotion": "SERVICES AND EQUIPMENT OFFERS AND PROMOTIONS",
+    "activitiesPromotion": "ACTIVITY OFFERS",
+    "plansPromotion": "ESCAPADES OFFERS",
+    "planYourParty": "PLAN YOUR OWN PARTY"
+  },
+  "relatedEvent": "Related events",
+  "relatedPromotion": "Related promotions",
+  "relatedArticle": "Related articles"
 }

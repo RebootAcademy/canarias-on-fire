@@ -64,6 +64,10 @@ const EventSchema = new mongoose.Schema({
     enum: ['draft', 'published', 'closed'],
     default: 'draft'
   },
+  categoriesOfServices: {
+    type: Array || String,
+    default: ''
+  },
 /*   date: {
     type: Date,
     required: true

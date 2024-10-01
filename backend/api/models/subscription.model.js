@@ -26,10 +26,10 @@ const SubscriptionSchema = new mongoose.Schema({
       min: 1, 
       max: 3, 
     },
-    rssPublication: { 
+ /*    rssPublication: { 
       type: Boolean, 
       default: false 
-    },
+    }, */
     increasedCharacterLimit: { 
       type: Boolean, default: false 
     },

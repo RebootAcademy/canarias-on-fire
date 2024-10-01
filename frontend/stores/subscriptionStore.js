@@ -24,6 +24,10 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
       return this.subscriptions.find(sub => sub.name === 'basic')
     },
 
+    getTypeOfSubscription(subscription) {
+      return this.subscriptions.find(sub => sub._id === subscription)
+    },
+
     async createSubscription(companyId, planId) {
       try {
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/create/${companyId}`, {

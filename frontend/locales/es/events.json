@@ -29,6 +29,7 @@
   "eventLocationDescription": "Especifica la ubicación exacta donde se llevará a cabo tu evento. Esta información ayudará a los asistentes a planificar su visita con antelación.",
   "eventPrice": "Precio",
   "eventDiscount": "Tipo de descuento",
+  "eventServices": "Servicios:",
   "eventTypeDiscount": {
     "free": "Gratis",
     "10-30": "10% - 30%",
@@ -43,6 +44,7 @@
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
   "location": "Introduce una ubicación",
   "externalUrl": "Sitio web",
+  "externalUrlDescription": "Si tiene un sitio web (por ejemplo, la compra de compra de entrada), introducela aquí.",
   "notEventsFound": "No se encontraron eventos.",
   "availablePremium": "* Seleccione su imagen de portada  (Función sólo disponible para eventos Gold y Premium).",
   "validateByAdmin": "* Para publicar el evento el organizador debe ser validado por el administrador.",
@@ -96,6 +98,7 @@
   },
   "previewText": {
     "aboutEvent": "Sobre el evento",
+    "aboutPromo": "Sobre la promoción",
     "showMap": "Mostrar mapa",
     "dateAndTime": "Fecha y hora",
     "organizer": "Organizador",
@@ -109,5 +112,19 @@
     "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de eventos."
   },
   "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan",
-  "recommended": "Opción recomendada"
+  "notPromotionsFound": "No se encontraron promociones.",
+  "recommended": "Opción recomendada",
+  "buttonsEvents": {
+    "events": "EVENTOS",
+    "nightlifePromotion": "OFERTAS Y PROMOCIONES DE OCIO NOCTURNO",
+    "food&DrinksPromotion": "OFERTAS Y PROMOCIONES DE BARES Y RESTAURANTES",
+    "kidsPromotion": "ACTIVIDADES PARA LOS MAS PEQUEÑOS",
+    "servicesPromotion": "OFERTAS Y PROMOCIONES EN SERVICIOS Y MATERIAL",
+    "activitiesPromotion": "OFERTAS ACTIVIDADES",
+    "plansPromotion": "OFERTAS ESCAPADAS",
+    "planYourParty": "PLANEA TU PROPIA FIESTA"
+  },
+  "relatedEvent": "Eventos relacionados",
+  "relatedPromotion": "Promociones relacionadas",
+  "relatedArticle": "Artículos relacionados"
 }

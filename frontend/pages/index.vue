@@ -4,16 +4,17 @@
     <div class="w-full flex flex-col items-center h-fit">
       <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <EventsCounter />
-        <CategoriesFilter :isEvents="true"/>
-        <EventsHeader />
-        <EventList />
+        <!-- <CategoriesFilter :isEvents="true"/>
+        <EventsHeader /> 
+        <EventList />-->
+        <FilteredEventsHome />
       </div>
       <Explore />
-      <div class="w-full flex flex-col gap-4 sm:w-3/4 md:w-3/4 lg:w-2/3">
+      <!-- <div class="w-full flex flex-col gap-4 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <h2 class="text-3xl font-semibold text-primary my-6">{{ $t('promotionsTitle') }}</h2>
         <CategoriesFilter />
         <PromotionList />
-      </div>
+      </div> -->
       <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <FeaturedEvents />
         <ArticlesHeader />
@@ -30,9 +31,37 @@ useHead({
 })
 
 const eventStore = useEventStore()
+const userStore = useUserStore()
 const articleStore = useArticleStore()
+import { useRuntimeConfig } from '#app'
+
+
+
+
+const users = ref([])
+
+async function fetchUsers() {
+  try {
+    const config = useRuntimeConfig()
+    const response = await fetch(`${config.public.apiBaseUrl}/users`)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    const data = await response.json()
+    
+    if (data && data.result) {
+      users.value = data.result
+      userStore.users = data.result
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error)
+  }
+}
 
 onMounted(() => {
+  fetchUsers()
   eventStore.resetFilters()
 })
 

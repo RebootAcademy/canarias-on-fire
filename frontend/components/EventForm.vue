@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col mt-4 gap-4">
     <EventInfoForm :isEditing="isEditing" />
-    <CategorySelector :isEditing="isEditing" />
+    <CategorySelector :isEditing="isEditing" :type="eventStore.eventType"/>
     <div class="flex w-full justify-end italic text-primary">
       <p v-if="!isValidated  && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>

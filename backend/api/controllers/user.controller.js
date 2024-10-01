@@ -75,7 +75,8 @@ const createUser = async (req, res) => {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().lean()
+    let query = req.query || {}
+    const users = await User.find(query).lean()
 
     const populatedUsers = await Promise.all(
       users.map(async (user) => {
