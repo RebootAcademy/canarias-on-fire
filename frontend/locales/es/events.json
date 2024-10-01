@@ -91,12 +91,10 @@
     "categoriesDescription": "Selecciona hasta 3 categorías para encontrar eventos que coincidan con tus intereses."
   },
   "eventsDashboard": {
-    "optionsFilter": {
-      "all": "Todos",
-      "draft": "Borradores",
-      "published": "Publicados",
-      "closed": "Cerrados"
-    }
+    "all": "Todos",
+    "draft": "Borradores",
+    "published": "Publicados",
+    "closed": "Cerrados"
   },
   "previewText": {
     "aboutEvent": "Sobre el evento",

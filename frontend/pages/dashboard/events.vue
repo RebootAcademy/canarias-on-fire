@@ -1,12 +1,12 @@
 <template>
   <div v-if="userStore.isAuthenticated && userRole === 'admin'">
     <div class="w-full flex flex-row  items-center justify-between xs:gap-2 lg:px-4 mb-4">
-      <div class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2 ">
+      <div class="xs:hidden lg:flex items-center bg-gray rounded-lg border-1 border-gray p-2 ">
         <div 
             v-for="option in optionsFilters" 
             :key="option.label" 
-            class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
-            :class="selectOption === option.value ? 'bg-black  hover:bg-none' : 'hover:bg-zinc-800'"
+            class="flex justify-start cursor-pointer rounded-sm w-[100px] "
+            :class="selectOption === option.value ? 'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'"
             @click="selectOption = option.value"
           >
             <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
@@ -41,9 +41,29 @@
   </div>
 
   <div v-if="userStore.isAuthenticated && userRole === 'company'">
-    <div class="flex items-center justify-between w-full px-4 mb-4">
-      <h2 class="text-xl font-semibold">{{$t('events')}}</h2>
-      <div class="flex gap-4">
+    <div class="w-full flex flex-row  items-center justify-between xs:gap-2 lg:px-4 mb-4">
+      <div class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2 ">
+        <div 
+            v-for="option in optionsFilters" 
+            :key="option.label" 
+            class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
+            :class="selectOption === option.value ? 'bg-black  hover:bg-none' : 'hover:bg-zinc-800'"
+            @click="selectOption = option.value"
+          >
+            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
+          </div>
+      </div>
+      <div class="lg:hidden w-1/3 mr-2">
+        <CustomSelect :selectOption="selectOption" :optionsFilters="optionsFilters" @update:selected="handleSelection"/>
+      </div>
+      <div class="flex items-center justify-end gap-4 xs:w-2/3 sm:w-1/2  lg:w-auto">
+        
+        <SearchInput v-model="searchQuery" />
+        <CustomBtn
+          :title="$t('filterBtn')"
+          @click="openFilterModal"
+        />
+        <FilterModal />
       </div>
     </div>
     <hr class="mb-4" />
@@ -63,7 +83,7 @@
 </template>
 
 <script setup>
-import CustomSelect from './CustomSelect.vue'
+import CustomSelect from '../../components/CustomSelect.vue'
 const { t } = useI18n()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
@@ -90,15 +110,22 @@ const openFilterModal = () => {
 
 const optionsFilters = computed(() => {
   return [
-    {label: t('eventsDashboard.optionsFilter.all'), value: "all"},
-    {label: t('eventsDashboard.optionsFilter.draft'), value: "draft"},
-    {label: t('eventsDashboard.optionsFilter.published'), value: "published"},
-    {label: t('eventsDashboard.optionsFilter.closed'), value: "closed"}
+    {label: t('eventsDashboard.all'), value: "all"},
+    {label: t('eventsDashboard.draft'), value: "draft"},
+    {label: t('eventsDashboard.published'), value: "published"},
+    {label: t('eventsDashboard.closed'), value: "closed"}
   ]
 })
 
 const myEvents = computed(() => {
-  return eventStore.events
+  let eventsType 
+  if (selectOption.value !== 'all') {
+    eventsType = eventStore.events.filter(event => event.status === selectOption.value)
+  } else{
+    eventsType = eventStore.events
+  }
+
+  return eventsType
     .filter(event => event.userId && event.userId?._id === userStore.userData._id)
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
@@ -114,7 +141,7 @@ const myEvents = computed(() => {
 
 const adminEvents = computed(() => {
   return eventStore.events
-    .filter((event) => event.status === selectOption.value || selectOption.value === 'all')
+    .filter((event) => event.eventType === 'event' && event.status === selectOption.value || selectOption.value === 'all')
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)

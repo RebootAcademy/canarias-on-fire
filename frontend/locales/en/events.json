@@ -91,12 +91,10 @@
     "categoriesDescription": "Select up to 3 categories to find events that match your interests."
   },
   "eventsDashboard": {
-    "optionsFilter": {
-      "all": "All",
-      "draft": "Draft",
-      "published": "Published",
-      "closed": "Closed"
-    }
+    "all": "All",
+    "draft": "Draft",
+    "published": "Published",
+    "closed": "Closed"
   },
   "previewText": {
     "aboutEvent": "About the event",
