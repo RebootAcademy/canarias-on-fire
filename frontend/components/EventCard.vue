@@ -20,7 +20,7 @@
       <div class="relative  w-full h-full rounded-lg">
         <!-- Event status -->
         <span
-          v-show="userStore.userData && userStore.userData.role === 'admin'"
+          v-show="userStore.userData && (userStore.userData.role === 'admin' || isOwner)"
           :class="[
             'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
             { 'text-red-500 italic': event.status === 'draft' },
@@ -54,7 +54,7 @@
           </div>
           <!-- Options menu -->
           <div
-            v-show="userStore.userData && userStore.userData.role === 'admin'"
+            v-show="userStore.userData && (userStore.userData.role === 'admin' || isOwner)"
           >
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -112,6 +112,11 @@ const router = useRouter()
 
 const props = defineProps({
   event: Object,
+})
+
+const isOwner = computed(() => {
+  if (!userStore.userData || !eventStore.event.userId) return false
+  return eventStore?.event?.userId._id === userStore.userData?._id
 })
 
 const defaultImage = './defaultImg.png'

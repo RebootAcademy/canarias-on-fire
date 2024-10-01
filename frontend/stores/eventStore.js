@@ -196,15 +196,13 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     resetCreateEventForm () {
-      this.resetFilters()
-      this.eventLocation = null
       this.eventImages = []
       this.coverImage = null
       this.eventDate = null
       this.selectedCategories= [],
       this.selectedCategoriesByServices = [],
       this.eventName = '',
-      this.eventType = '',
+      this.eventType = 'event',
       this.eventDescription = '',
       this.externalUrl = '',
       this.hasTriedSubmit = false

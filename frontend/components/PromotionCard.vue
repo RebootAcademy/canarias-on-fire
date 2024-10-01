@@ -133,6 +133,7 @@ const props = defineProps({
 })
 
 const defaultImage = './defaultImg.png'
+import { formatEventDate } from '@/utils/dateUtils'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -146,9 +147,9 @@ const formattedDate = () => {
   if (!props.promotion.eventDate) {
     return 'Date not available'
   }
-  const startDate = new Date(props.promotion.eventDate.start.year, props.promotion.eventDate.start.month - 1, props.promotion.eventDate.start.day).toLocaleDateString()
-  const endDate = new Date(props.promotion.eventDate.end.year, props.promotion.eventDate.end.month - 1, props.promotion.eventDate.end.day).toLocaleDateString()
-  return startDate + ' - ' + endDate
+  return `${formatEventDate(
+      props.promotion.eventDate.start
+    )} - ${formatEventDate(props.promotion.eventDate.end)}`
 }
 
 const getPaymentType = computed(() => {
