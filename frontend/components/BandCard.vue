@@ -1,5 +1,5 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[250px] sm:h-[270px] xl:h-[270px]" >
+<div class="flex flex-col gap-2 border border-whiteGray w-full rounded p-4 h-auto xs:min-h-[250px] sm:min-h-[270px] xl:min-h-[270px]" >
     <div class="flex justify-between">
         <p class="text-whiteGray text-2xl font-bold"> {{band.bandName }}</p>
         <p class="text-secondary italic text-sm">{{ band.genre }}</p>

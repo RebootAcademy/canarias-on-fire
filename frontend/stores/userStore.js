@@ -28,9 +28,11 @@ export const useUserStore = defineStore('userStore', {
 
     async fetchUsers() {
       try {
-        const { data } = await useFetch(
+        const { data } = await fetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users`
         )
+
+        console.log('data.value', data.value)
         if (data.value) {
           this.users = data.value.result
         }

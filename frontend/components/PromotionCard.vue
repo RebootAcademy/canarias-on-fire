@@ -1,7 +1,7 @@
 <template>
     <NuxtLink :to="`/events/${promotion._id}`">
     <div
-      class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
+      class="relative h-[380px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
       :class="isGoldPayment && 'bg-secondary-gradient text-black test-shine'"
     >
       <div
@@ -17,7 +17,7 @@
         <span
           v-show="userStore.userData && userStore.userData.role === 'admin' "
           :class="[
-            'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-secondary',
+            'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
             { 'text-red-500 italic': promotion.status === 'draft' },
           ]"
         >
@@ -42,9 +42,9 @@
             <span
               v-for="category in promotion.categories"
               :key="category._id"
-              class="text-background text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
+              class="text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
               :class="{
-                'text-primary': isBasicPayment,
+                'text-secondary': isBasicPayment,
                 'text-secondary': isGoldPayment
               }"
             >
@@ -84,7 +84,7 @@
           >
             {{ formattedDate() }} 
           </p>
-          <div v-if="promotion.startTime" class="flex flex-row gap-2">
+         <!--  <div v-if="promotion.startTime" class="flex flex-row gap-2">
             <p
               v-if="promotion.startTime" 
               class="text-sm"
@@ -101,7 +101,7 @@
               }"> 
               {{  promotion.endTime }} 
             </p>
-          </div>
+          </div> -->
           
           <p class="text-sm line-clamp-1">
             {{ promotion.eventLocation.address }}

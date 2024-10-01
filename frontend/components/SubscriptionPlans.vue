@@ -9,7 +9,7 @@
       >
         <div
           v-if="plan.name === 'optima'"
-          class="absolute top-0 left-0 right-0 bg-primary-gradient text-center py-1 rounded-t-lg"
+          class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
         >
           {{ $t('recommended') }}
         </div>
