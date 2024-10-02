@@ -84,7 +84,7 @@ const limitedEvents = computed(() => {
 })
 
 function getPromoPriority(promotion) {
-  const subscriptionName = promotion.subscription.name
+  const subscriptionName = promotion.subscription?.name
 
   let priority
   if (subscriptionName === 'optima') {

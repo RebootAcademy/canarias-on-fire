@@ -1,7 +1,11 @@
 <template>
   <div class="relative">
-    <NuxtImg :src="eventStore.event.coverImage || defaultImage" alt="Event Image" class="w-full h-96 object-cover" />
-     <div class="flex  gap-2 justify-between">
+    <NuxtImg
+      :src="eventStore.event.coverImage || defaultImage"
+      alt="Event Image"
+      class="w-full h-96 object-cover"
+    />
+    <div class="flex gap-2 justify-between">
       <div class="flex p-8 gap-2">
         <span
           v-for="category in eventStore.selectedCategories"
@@ -33,21 +37,25 @@
       </div>
     </div>
     <div class="mt-8">
-      <h2 class="text-2xl font-semibold">{{$t('previewText.aboutEvent')}}</h2>
+      <h2 class="text-2xl font-semibold">{{ $t('previewText.aboutEvent') }}</h2>
       <div class="prose max-w-none" v-html="eventStore.eventDescription"></div>
     </div>
     <div class="flex flex-col gap-2 my-8">
-      <h2 class="text-2xl font-semibold">{{$t('eventLocation')}}</h2>
+      <h2 class="text-2xl font-semibold">{{ $t('eventLocation') }}</h2>
       <div class="flex gap-2">
         <MapPin size="20" />
         <p>{{ eventStore.eventLocation.address }}</p>
       </div>
       <details class="w-full lg:w-2/3">
-        <summary class="text-primary">{{$t('previewText.showMap')}}</summary>
-        <NuxtImg :src="eventStore.eventLocation.mapImageUrl" alt="Event Location" class="w-full h-60 lg:h-[500px] object-cover mt-4" />
+        <summary class="text-primary">{{ $t('previewText.showMap') }}</summary>
+        <NuxtImg
+          :src="eventStore.eventLocation.mapImageUrl"
+          alt="Event Location"
+          class="w-full h-60 lg:h-[500px] object-cover mt-4"
+        />
       </details>
     </div>
-<!--     <div class="mt-8">
+    <!--     <div class="mt-8">
       <h2 class="text-2xl font-semibold">Organizador</h2>
       <div class="flex items-center gap-2 mt-4">
         <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
@@ -59,15 +67,21 @@
     </div>
     <div>
       <EventGallery />
-      <p class="text-xs text-primary">{{ $t('previewText.featurePayedEvents')}}</p>
+      <p class="text-xs text-primary">
+        {{ $t('previewText.featurePayedEvents') }}
+      </p>
     </div>
-    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">{{ $t('buttons.publish') }}</Button>
+    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">{{
+      $t('buttons.publish')
+    }}</Button>
   </div>
 </template>
 
 <script setup>
-import { MapPin} from 'lucide-vue-next'
-
+import { MapPin } from 'lucide-vue-next'
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
+const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const route = useRoute()
@@ -82,28 +96,55 @@ onMounted(async () => {
 })
 
 const publishEvent = async () => {
-  const today = new Date().getTime() // Evitar posibles diferencias en la comparación de fechas
-  const canceledAt = userStore.userData?.activeSubscription?.canceledAt
-    ? new Date (userStore.userData?.activeSubscription?.canceledAt).getTime()
-    : 0
-  if (eventStore.event.eventType === 'event') {
-    // Para eventos, redirigir a la página de pago
-    router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
-    console.log('status: ', eventStore.event.status)
-  } else if (eventStore.event.eventType === 'promotion') {
-    if (userStore.userData.activeSubscription?.status === 'active' || 
-      (userStore.userData.activeSubscription.status === 'canceled' && canceledAt > today) ||
-     userStore.userData.role === 'admin') {
-      const result = await eventStore.updateEventStatus(eventId, 'published')
-      if (result) {
-        router.push(`/events/${eventId}`)
+  try {
+    const today = new Date().getTime()
+    const activeSubscription = userStore.userData?.activeSubscription
+    const canceledAt = activeSubscription?.canceledAt
+      ? new Date(activeSubscription.canceledAt).getTime()
+      : 0
+
+    const isSubscriptionValid =
+      activeSubscription?.status === 'active' ||
+      (activeSubscription?.status === 'canceled' && canceledAt > today)
+
+    const isAdmin = userStore.userData.role === 'admin'
+
+    const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
+
+    if (eventStore.event.eventType === 'promotion') {
+      if ((isSubscriptionValid || isAdmin) && !hasPublishedPromotions) {
+        const result = await eventStore.updateEventStatus(eventId, 'published')
+        if (result) {
+          router.push(`/events/${eventId}`)
+        } else {
+          console.error('Failed to publish promotion')
+        }
+      } else if (hasPublishedPromotions) {
+        toast({
+          description: t('userHasPromotions'),
+          variant: 'destructive',
+        })
       } else {
-        console.error('Failed to publish promotion')
+        router.push(
+          `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
+        )
       }
-    } else {
-      router.push(`/subscription?id=${eventId}&type=${eventStore.event.eventType}`)
+    } else if (eventStore.event.eventType === 'event') {
+      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
+  } catch (error) {
+    console.log('Error al publicar el evento:', error)
   }
 }
 
+const checkIfUserHasPromotions = (event) => {
+  if (event.eventType === 'event') return false
+  const hasPromotions = eventStore.events.filter(
+    (event) =>
+      event.eventType === 'promotion' &&
+      event.status === 'published' &&
+      event.userId?._id === userStore.userData?._id
+  )
+  return hasPromotions.length > 0
+}
 </script>

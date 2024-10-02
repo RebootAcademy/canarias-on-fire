@@ -32,6 +32,10 @@ const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
 }) 
 
+console.log(
+  filteredEvents.value
+)
+
 const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []

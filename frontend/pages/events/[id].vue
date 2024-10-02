@@ -104,7 +104,7 @@
             @click="publishEvent"
           >
             <Button
-              class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
+              class="px-4 bg-background rounded-md hover:text-white hover:bg-primary-gradient"
             >
               {{ $t('buttons.publish') }}
             </Button>
@@ -226,33 +226,59 @@ const formatPrice = computed(() => {
 })
 
 const publishEvent = async () => {
-  const today = new Date().getTime() // Evitar posibles diferencias en la comparación de fechas
-  const canceledAt = userStore.userData?.activeSubscription?.canceledAt
-    ? new Date(userStore.userData?.activeSubscription?.canceledAt).getTime()
-    : 0
-  if (eventStore.event.eventType === 'event') {
-    // Para eventos, redirigir a la página de pago
-    router.push(`/payment?id=${eventId}&type=${eventStore.eventType}`)
-    console.log('status: ', eventStore.event.status)
-  } else if (eventStore.event.eventType === 'promotion') {
-    if (
-      userStore.userData.activeSubscription?.status === 'active' ||
-      (userStore.userData.activeSubscription.status === 'canceled' &&
-        canceledAt > today) ||
-      userStore.userData.role === 'admin'
-    ) {
-      const result = await eventStore.updateEventStatus(eventId, 'published')
-      if (result) {
-        router.push(`/events/${eventId}`)
+  try {
+    const today = new Date().getTime()
+    const activeSubscription = userStore.userData?.activeSubscription
+    const canceledAt = activeSubscription?.canceledAt
+      ? new Date(activeSubscription.canceledAt).getTime()
+      : 0
+
+    const isSubscriptionValid =
+      activeSubscription?.status === 'active' ||
+      (activeSubscription?.status === 'canceled' && canceledAt > today)
+
+    const isAdmin = userStore.userData.role === 'admin'
+
+    const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
+
+    if (eventStore.event.eventType === 'promotion') {
+      if ((isSubscriptionValid || isAdmin) && !hasPublishedPromotions) {
+        const result = await eventStore.updateEventStatus(eventId, 'published')
+        if (result) {
+          router.push(`/events/${eventId}`)
+        } else {
+          console.error('Failed to publish promotion')
+        }
+      } else if (hasPublishedPromotions) {
+        toast({
+          description: t('userHasPromotions'),
+          variant: 'destructive',
+        })
       } else {
-        console.error('Failed to publish promotion')
+        router.push(
+          `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
+        )
       }
-    } else {
-      router.push(
-        `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
-      )
+    } else if (eventStore.event.eventType === 'event') {
+      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
+  } catch (error) {
+    console.log('Error al publicar el evento:', error)
   }
+}
+
+const checkIfUserHasPromotions = (event) => {
+  if (event.eventType === 'event') return false
+  const hasPromotions = eventStore.events.filter(
+    (event) =>
+      event.eventType === 'promotion' &&
+      event.status === 'published' &&
+      event.userId?._id === userStore.userData?._id
+  )
+  if (hasPromotions.length === 0) return false
+  if (hasPromotions._id === event._id) return false
+
+  return true
 }
 
 const copyToClipboard = async () => {

@@ -13,7 +13,7 @@
         >
           {{ $t('recommended') }}
         </div>
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
+        <h3 class="text-lg leading-6 font-medium text-secondary">
           {{ plan.name }}
         </h3>
         <div class="mt-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
@@ -27,9 +27,9 @@
           <li v-for="(key, value) in plan.features" :key="key">
             <div
               v-if="value && typeof key !== 'number' && typeof key !== 'string'"
-              class="flex justify-between"
+              class="flex justify-between "
             >
-              <p class="ml-3 text-base text-gray-700">
+              <p class="ml-3 text-base text-secondary">
                 {{ featureDescriptions[value] }}
               </p>
               <svg
@@ -50,7 +50,7 @@
               <svg
                 v-else
                 class="flex-shrink-0 h-6 w-6 text-red-500"
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://www.w3.org/2000/svg"background
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -65,7 +65,7 @@
             </div>
           </li>
           <li v-for="key in plan.features" v-show="typeof key === 'string'" :key="key">
-            <p class="ml-3 text-base text-gray-700">
+            <p class="ml-3 text-base text-secondary">
               {{$t('featuresDescriptions.limitPhotos')}}
               <span class="font-semibold ml-1">{{
                 Number(key)
@@ -73,7 +73,7 @@
             </p>
           </li>
           <li v-for="key in plan.features" v-show="typeof key === 'number'" :key="key">
-            <p class="ml-3 text-base text-gray-700">
+            <p class="ml-3 text-base text-secondary">
               {{$t('featuresDescriptions.readingPriority')}}
               <span class="font-semibold">{{
                 getReadingPriorityText(key)
@@ -206,7 +206,7 @@ const getReadingPriorityText = (value) => {
     case 1:
       return 'Alta'
     case 2:
-      return 'Media'
+      return 'Alta'
     case 3:
       return 'Baja'
     default:

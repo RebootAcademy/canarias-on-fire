@@ -464,7 +464,7 @@ export const useEventStore = defineStore('eventStore', {
         }
 
         // Filter events by active and validated users
-        if (!event.userId?.isActive || !event.userId?.isValidated) {
+        if (!event.userId?.isActive ) {
           return false
         }
 

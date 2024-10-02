@@ -13,5 +13,6 @@
   "deleteEventSuccess": "Event deleted successfully",
   "deletePromoSuccess": "Promotion deleted successfully",
   "deleteUserSuccess": "User deleted successfully",
-  "errorDeleteUser": "Error deleting user"
+  "errorDeleteUser": "Error deleting user",
+  "userHasPromotions": "You can only have one active promotion subscription"
 }

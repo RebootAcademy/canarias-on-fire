@@ -73,6 +73,7 @@ const userStore = useUserStore()
 const eventStore = useEventStore()
 const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
+const userData = computed(() => userStore.userData)
 
 const userRole = computed(() => userStore.userData?.role)
 
@@ -110,17 +111,18 @@ const openFilterModal = () => {
 
 const limitedPromotions = computed(() => {
   let filterDiscount
+   
   if (selectedPromotion.value === 'all') {
     filterDiscount = filteredEvents.value
+
   } else {
     filterDiscount = filteredEvents.value.filter(
       (event) => event.eventDiscount === selectedPromotion.value
     )
   }
-
   if (userRole.value === 'company') {
     filterDiscount = filterDiscount.filter(
-      (event) => event.userId?._id === userStore.userData?._id
+      (event) => String(event.userId?._id) === String(userData.value?._id)
     )
   }
 
@@ -130,13 +132,11 @@ const limitedPromotions = computed(() => {
     )
   }
 
-  return filterDiscount
+  const filterSecond = filterDiscount
     .filter(
       (promotion) =>
-        promotion.status === 'published' &&
         promotion.eventType === 'promotion' &&
-        promotion.userId?.isActive &&
-        promotion.userId?.isValidated
+        promotion.userId?.isActive 
     )
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)
@@ -147,10 +147,12 @@ const limitedPromotions = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
+    console.log(filterSecond)
+    return filterSecond
 })
 
 function getPromoPriority(promotion) {
-  const subscriptionName = promotion.subscription.name
+  const subscriptionName = promotion.subscription?.name
 
   let priority
   if (subscriptionName === 'optima') {
