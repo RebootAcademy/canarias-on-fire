@@ -12,18 +12,18 @@
 <script setup>
 /* import { Sun, Moon } from 'lucide-vue-next'
  */
-const theme = ref('dark')
-const themeIconClass = computed(() => (theme.value === 'dark' ? 'moon' : 'sun'))
-const themeClass = computed(() => (theme.value === 'light' ? 'bg-sun' : 'bg-moon'))
+const theme = ref('light')
+const themeIconClass = computed(() => (theme.value === 'light' ? 'sun' : 'moon'))
+const themeClass = computed(() => (theme.value === 'dark' ? 'bg-moon' : 'bg-sun'))
 
 
 function toggleTheme() {
-  if (theme.value === 'dark') {
-    document.body.classList.add('light');
-    theme.value = 'light';
-  } else {
-    document.body.classList.remove('light');
+  if (theme.value === 'light') {
+    document.body.classList.add('dark');
     theme.value = 'dark';
+  } else {
+    document.body.classList.remove('dark');
+    theme.value = 'light';
   }
 }
 </script>
@@ -75,7 +75,7 @@ function toggleTheme() {
   transform: rotate(0deg);
   width: 18px;
   height: 18px;
-  background: #fff;
+  background: #ffffff;
   box-shadow: 
      1.67em 1.67em 0 2.8em #ffff inset, 
     0 -2.8em 0 -1.5em #ffff, 

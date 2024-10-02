@@ -2,7 +2,7 @@ const animate = require("tailwindcss-animate")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  safelist: ['light'],
+  safelist: ['dark'],
   prefix: '',
 
   theme: {
