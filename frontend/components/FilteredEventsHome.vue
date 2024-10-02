@@ -1,4 +1,3 @@
-import { PlanYourParty } from '../.nuxt/components';
 <template>
   <div class="flex flex-wrap justify-center gap-4">
     <div
