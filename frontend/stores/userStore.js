@@ -28,11 +28,10 @@ export const useUserStore = defineStore('userStore', {
 
     async fetchUsers() {
       try {
-        const { data } = await fetch(
+        const { data } = await useFetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users`
         )
 
-        console.log('data.value', data.value)
         if (data.value) {
           this.users = data.value.result
         }
@@ -86,7 +85,7 @@ export const useUserStore = defineStore('userStore', {
           if (this.userData.id === profileData._id) {
             this.userData = { ...this.userData, ...response.result }
           }
-          this.setUser(response)
+          //this.setUser(response)
           return { success: true, user: response.result }
         } else {
           return { success: false, message: response.data.message }

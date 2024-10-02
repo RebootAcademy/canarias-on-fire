@@ -68,7 +68,7 @@ const limitedEvents = computed(() => {
 })
 
 function getEventPriority(event) {
-  const paymentId = event.type === 'event' ? event.payment._id : event.payment
+  const paymentId = event.eventType === 'event' ? event.payment._id : event.payment
   const payment = paymentStore.getPaymentById(paymentId?._id)
   return payment?.features?.readPriority
 }

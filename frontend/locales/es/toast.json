@@ -8,5 +8,10 @@
   "updatedProfile": "Perfil actualizado correctamente",
   "errorUpdatedProfile": "Error actualizando perfil",
   "updatedPerformance": "Próxima actuación actualizado correctamente",
-  "errorPerformance": "Error actualizando la próxima actuación"
+  "errorPerformance": "Error actualizando la próxima actuación",
+  "copyLink": "Enlace copiado correctamente al portapapeles",
+  "deleteEventSuccess": "El evento se ha eliminado correctamente",
+  "deletePromoSuccess": "La promoción se ha eliminado correctamente",
+  "deleteUserSuccess": "El usuario se ha eliminado correctamente",
+  "errorDeleteUser": "Error eliminando usuario"
 }

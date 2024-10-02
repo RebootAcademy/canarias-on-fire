@@ -63,13 +63,13 @@
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem @select="editEvent">
+                <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                   <Pencil class="mr-2 h-4 w-4" />
-                  <span>Edit</span>
+                  <span>{{ $t('buttons.edit') }}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem @select="deleteEvent">
+                <DropdownMenuItem @select="isOpen = true" class="cursor-pointer">
                   <Trash class="mr-2 h-4 w-4" />
-                  <span>Delete</span>
+                  <span>{{ $t('buttons.delete') }}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -101,11 +101,27 @@
       </div>
     </div>
   </NuxtLink>
+   <CustomModal v-model:open="isOpen">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">{{ event.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}</p>
+    <div class="flex justify-end gap-4 mt-2">
+      <!-- <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />  -->
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
 import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
-
+const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const router = useRouter()
@@ -113,6 +129,8 @@ const router = useRouter()
 const props = defineProps({
   event: Object,
 })
+
+const isOpen = ref(false)
 
 const isOwner = computed(() => {
   if (!userStore.userData || !eventStore.event.userId) return false
@@ -145,7 +163,12 @@ const editEvent = () => {
 const deleteEvent = async () => {
   const success = await eventStore.deleteEvent(props.event._id)
   if (success) {
-    console.log('Event deleted successfully')
+    toast({
+    description:
+      props.event.eventType === 'event'
+        ? t('deleteEventSuccess')
+        : t('deletePromoSuccess'),
+  })
   } else {
     console.error('Failed to delete event')
   }

@@ -14,6 +14,7 @@ const {
   updateUserSubscription,
   deleteUser,
   contactMail,
+  checkUserExists,
 } = require('../controllers/user.controller')
 
 router
@@ -32,5 +33,6 @@ router
     /* isAuth, checkRole('admin', 'company'), */ updateUserSubscription
   )
   .post('/contact', contactMail)
+  .post('/exist', checkUserExists)
 
 module.exports = router

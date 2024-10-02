@@ -20,8 +20,8 @@ import toastES from './locales/es/toast.json'
 import toastEN from './locales/en/toast.json'
 import questionsES from './locales/es/questions.json'
 import questionsEN from './locales/en/questions.json'
-
-
+import modalsES from './locales/es/modals.json'
+import modalsEN from './locales/en/modals.json'
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -39,6 +39,7 @@ export default defineI18nConfig(() => ({
       ...dashboardEN,
       ...toastEN,
       ...questionsEN,
+      ...modalsEN,
     },
     es: {
       ...navbarEs,
@@ -52,6 +53,7 @@ export default defineI18nConfig(() => ({
       ...dashboardES,
       ...toastES,
       ...questionsES,
+      ...modalsES,
     },
   },
 }))

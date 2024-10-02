@@ -120,7 +120,7 @@
       </div>
       <div class="flex gap-4 mt-12">
         <Button 
-          @click="deleteUser" 
+          @click="isOpenDeleteModal = true" 
           variant="outline"
           class="px-6 border-red-600 hover:bg-red-600 hover:text-white" 
         >
@@ -145,7 +145,7 @@
         </Button>
         <Button
           v-if="!checkValidatedCompany"
-          @click="validateUser"
+          @click="isOpenValidateModal = true"
           variant="outline"
           :disabled="!editedUser.isActive"
           class="px-6 border-primary text-white hover:bg-primary-gradient hover:text-white"
@@ -155,6 +155,32 @@
       </div>
     </form>
   </div>
+  <CustomModal v-model:open="isOpenValidateModal">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">{{ $t('validateCompanyMessage') }}</p>
+    <div class="flex justify-end gap-4 mt-2">
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="validateUser" />
+    </div>
+  </CustomModal>
+   <CustomModal v-model:open="isOpenDeleteModal">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">{{ $t('deleteUser') }}</p>
+    <div class="flex justify-end gap-4 mt-2">
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="deleteUser" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
@@ -164,6 +190,7 @@ const props = defineProps({
     required: true,
   },
 })
+const emit = defineEmits(['back'])
 import { useToast } from '@/components/ui/toast/use-toast'
 
 const router = useRouter()
@@ -171,6 +198,9 @@ const userStore = useUserStore()
 const editedUser = reactive({ ...props.user })
 const { toast } = useToast()
 const {t} = useI18n()
+const isOpenValidateModal = ref(false)
+const isOpenDeleteModal = ref(false)
+
 
 watch(
   () => editedUser.role,
@@ -213,6 +243,7 @@ const updateUser = async () => {
 }
 
 const validateUser = async () => {
+  isOpenValidateModal.value = false
   const result = await userStore.validateCompany(editedUser._id)
      
   if (result.success){
@@ -240,9 +271,18 @@ const toggleUserActivation = async () => {
 const deleteUser = async () => {
   const result = await userStore.deleteUser(editedUser._id)
   if (result.success) {
-    console.log('User deleted successfully')
-    // Aquí podrías redirigir al usuario o mostrar un mensaje de éxito
-    router.push('/dashboard')
+    isOpenDeleteModal.value = false
+     toast({
+       description: t('deleteUserSuccess'),
+     });
+     emit('back')
+    //router.replace('/dashboard/events')
+  } else {
+     toast({
+       description: t('errorDeleteUser'),
+       variant: 'destructive'
+     });
+    
   }
 }
 </script>

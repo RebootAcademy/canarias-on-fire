@@ -126,7 +126,7 @@ const myEvents = computed(() => {
   }
 
   return eventsType
-    .filter(event => event.userId && event.userId?._id === userStore.userData._id)
+    .filter(event => event.userId && event.userId?._id === userStore.userData._id && event.eventType === 'event')
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)

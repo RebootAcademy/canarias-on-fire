@@ -1,0 +1,11 @@
+{
+  "areYouSure": "¿Estás completamente seguro/a?",
+  "deleteUser": "Por favor, confirma que quieres borrar permanentemente esta cuenta. Asegúrate de que realmente quieres hacerlo.",
+  "desactivateUser": "Por favor, confirma que quieres desactivar este perfil. Asegúrate de que realmente quieres hacerlo.",
+  "updateProfile": "Por favor, confirma que quieres hacer cambios en este perfil. Asegúrate de que realmente quieres hacerlo.",
+  "changePassword": "Por favor, confirma que quieres cambiar tu contraseña. Asegúrate de que realmente quieres hacerlo.",
+  "validateCompanyMessage": "Por favor, confirma que quieres validar esta empresa. Asegúrate de que realmente quieres hacerlo.",
+  "changeMyProfile": "Por favor, confirma que quieres hacer cambios en tu perfil. Asegúrate de que realmente quieres hacerlo.",
+  "deleteEvent": "Por favor, confirma que quieres borrar este evento. Asegúrate de que realmente quieres hacerlo.",
+  "deletePromo": "Por favor, confirma que quieres borrar esta promoción. Asegúrate de que realmente quieres hacerlo."
+}

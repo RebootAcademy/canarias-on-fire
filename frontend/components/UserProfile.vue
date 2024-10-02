@@ -22,6 +22,7 @@
     <hr />
     <UserProfileDetails 
       v-if="activeTab === 'profile'" 
+      @back="onBack"
       :user="user"
     />
   </div>
@@ -44,6 +45,10 @@ const activeTab = ref('profile')
 const onTabChange = (newTab) => {
   emit('tabChange', newTab)
 }
+
+const onBack = () => {
+  emit('back')
+};
 
 watch(activeTab, (newTab) => {
   emit('tabChange', newTab)

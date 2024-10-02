@@ -172,28 +172,29 @@
       </NavigationMenuItem>
 
       <!-- PRICING SECTION -->
-      <NavigationMenuItem >
-        <NavigationMenuTrigger class="bg-transparent text-secondary hover:bg-gray hover:text-secondary before:bg-orange-600">
-          {{ $t('pricing') }}
-        </NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <ul class="grid gap-3 p-6 bg-background text-secondary border-1 border-white md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
-            <li>
-              <NavigationMenuLink as-child>
-                <NuxtLink
-                  to="/pricing/promotions"
-                  class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
-                >
-                  <div class="text-sm font-medium leading-none">{{  $t('princingNav.label') }}</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    {{  $t('princingNav.subtext') }}
-                  </p>
-                </NuxtLink>
-              </NavigationMenuLink>
-            </li>
-          </ul>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
+      <NavigationMenuItem v-if="isLogged">
+
+          <NavigationMenuTrigger  class="bg-transparent text-secondary hover:bg-gray hover:text-secondary before:bg-orange-600">
+            {{ $t('pricing') }}
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul class="grid gap-3 p-6 bg-background text-secondary border-1 border-white md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
+              <li>
+                <NavigationMenuLink as-child>
+                  <NuxtLink
+                    to="/pricing/promotions"
+                    class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray focus:bg-primary focus:text-accent-foreground"
+                  >
+                    <div class="text-sm font-medium leading-none">{{  $t('princingNav.label') }}</div>
+                    <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                      {{  $t('princingNav.subtext') }}
+                    </p>
+                  </NuxtLink>
+                </NavigationMenuLink>
+              </li>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu> 
 
@@ -205,8 +206,10 @@ const userStore = useUserStore()
 const userRole = computed(() => userStore.userData?.role)
 const auth0 = ref(null)
 const route = useRouter()
-const isAdmin = userStore.userData?.role === 'admin'
-const isLogged = userStore.isAuthenticated
+const isAdmin = computed(() => userStore?.userData?.role === 'admin')
+const isLogged = computed(() => userStore.isAuthenticated )
+
+
 
 auth0.value = useAuth0()
 

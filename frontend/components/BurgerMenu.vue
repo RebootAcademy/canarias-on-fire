@@ -44,12 +44,12 @@
               />
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Pricing Section -->
-              <NuxtLink to="/pricing/promotions" class="font-bold text-md">
-                <MenubarItem class="font-bold text-md">
+              <NuxtLink v-if="isLogged" to="/pricing/promotions" class="font-bold text-md">
+                <MenubarItem  class="font-bold text-md">
                   {{$t('pricing')}}
                 </MenubarItem>
               </NuxtLink>
-              <MenubarSeparator class="mx-2 mb-4"/>
+              <MenubarSeparator v-if="isLogged" class="mx-2 mb-4"/>
               <!-- Help Section -->
                <DetailsItemMenu 
                 :title="$t('help')"
@@ -59,12 +59,12 @@
               />
               <MenubarSeparator class="mx-2 mb-4"/>
               <!-- Dashboard Section -->
-              <NuxtLink  v-if="userStore?.isAuthenticated" to="/dashboard/profile" class="font-bold text-md">
+              <NuxtLink  v-if="isLogged" to="/dashboard/profile" class="font-bold text-md">
                 <MenubarItem  class="font-bold text-md">
                   {{$t('dashboard')}}
                 </MenubarItem>
               </NuxtLink>
-              <MenubarSeparator v-if="userStore?.isAuthenticated" class="mx-2 mb-4"/>
+              <MenubarSeparator v-if="isLogged" class="mx-2 mb-4"/>
               <!-- Languages Section -->
              <details class="custom-details p-2 cursor-pointer">
               <summary class="font-bold hover:text-primary">
@@ -97,6 +97,7 @@ const isMenuOpen = ref(false)
 const { t } = useI18n()
 const userStore = useUserStore()
 const isAdmin = computed(() => userStore?.userData?.role === 'admin')
+const isLogged = computed(() => userStore.isAuthenticated )
 
 
 // Función para alternar el menú

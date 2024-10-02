@@ -58,17 +58,17 @@
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <MoreVertical
-                  class="h-4 w-4 text-gray-500 hover:text-gray-700"
+                  class="h-4 w-4 text-gray-500 hover:text-secondary"
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem @select="editEvent">
+                <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                   <Pencil class="mr-2 h-4 w-4" />
-                  <span>Edit</span>
+                  <span>{{ $t('buttons.edit')}}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem @select="deleteEvent">
+                <DropdownMenuItem @select="isOpen = true" class="cursor-pointer">
                   <Trash class="mr-2 h-4 w-4" />
-                  <span>Delete</span>
+                  <span>{{ $t('buttons.delete')}}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -112,18 +112,31 @@
               <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
                 {{ promotion.userId.companyName }}
               </p>
-
             </div>
           </div>
         </div>
       </div>
     </div>
   </NuxtLink>
+  <CustomModal v-model:open="isOpen">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">{{  promotion.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}</p>
+    <div class="flex justify-end gap-4 mt-2">
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
-import { get } from '@vueuse/core'
-
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
+const { t } = useI18n()
 import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
  
 const props = defineProps({
@@ -131,6 +144,8 @@ const props = defineProps({
     type: Object,
   }
 })
+const isOpen = ref(false)
+
 
 const defaultImage = './defaultImg.png'
 import { formatEventDate } from '@/utils/dateUtils'
@@ -150,6 +165,24 @@ const formattedDate = () => {
   return `${formatEventDate(
       props.promotion.eventDate.start
     )} - ${formatEventDate(props.promotion.eventDate.end)}`
+}
+
+const editEvent = () => {
+  router.push(`/events/edit/${props.promotion._id}`)
+}
+
+const deleteEvent = async () => {
+  const success = await eventStore.deleteEvent(props.promotion._id)
+  if (success) {
+    toast({
+    description:
+      props.promotion.eventType === 'event'
+        ? t('deleteEventSuccess')
+        : t('deletePromoSuccess'),
+  })
+  } else {
+    console.error('Failed to delete event')
+  }
 }
 
 const getPaymentType = computed(() => {

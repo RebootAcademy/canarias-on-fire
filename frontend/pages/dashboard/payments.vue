@@ -1,8 +1,8 @@
 <template>
-  <div v-if="userStore.userData.role === 'company'" class="flex flex-col gap-4">
+  <div v-if="userData.role === 'company'" class="flex flex-col gap-4">
     <div
-      v-if="userStore.userData.activeSubscription"
-      class="flex flex-col gap-4 w-full lg:w-1/2"
+      v-if="userData.activeSubscription.status !== 'inactive'"
+      class="flex flex-col gap-4 w-full lg:w-1/isAuthenticated2"
     >
       <h1 class="text-xl font-semibold">{{ $t('paymentsSection.mySubscription')}}</h1>
       <p class="text-grayForeground">{{ $t('paymentsSection.SubDescription')}}</p>
@@ -10,12 +10,12 @@
         <div class="bg-background p-4 px-6 rounded-md">
             <div class="flex gap-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
                 <Gem class="text-primary"/>
-                <p class="font-bold ">{{ subscriptionInformation.name }}</p>
+                <p class="font-bold ">{{ subscriptionInformation?.name }}</p>
             </div>
           <div class="flex flex-row gap-4 mt-4">
-            <p class="font-bold">{{ subscriptionInformation.pricing }} €</p>
+            <p class="font-bold">{{ subscriptionInformation?.pricing }} €</p>
             <p
-              v-if="userStore.userData?.activeSubscription?.status === 'active'"
+              v-if="userData?.activeSubscription?.status === 'active'"
               class="text-grayForeground"
             >
               ({{ $t('paymentsSection.renuewDate') }} {{ nextPaymentDate }} )
@@ -28,7 +28,7 @@
               ( {{ $t('paymentsSection.cancelAt') }}
               {{
                 new Date(
-                  userStore.userData?.activeSubscription?.canceledAt
+                  userData?.activeSubscription?.canceledAt
                 ).toLocaleDateString()
               }}
               )
@@ -49,7 +49,7 @@
         >
       </div>
     </div>
-    <div v-else class="w-full lg:w-1/2">
+    <div v-if="userData.activeSubscription.status === 'inactive' && userData.role === 'company'" class=" flex flex-col w-full gap-2 lg:w-1/2">
       <h1 class="text-xl font-semibold">{{ $t('paymentsSection.mySubscription') }}</h1>
       <p class="text-grayForeground">{{ $t('paymentsSection.noSubscription')}}</p>
         <Button
@@ -59,7 +59,7 @@
             () => 
               router.replace('/pricing')
           "
-          class="w-full bg-gray hover:bg-primary-gradient"
+          class="w-full md:w-1/2 bg-gray hover:bg-primary-gradient"
           >{{$t('buttons.subscribe')}}</Button
         >
     </div>
@@ -67,7 +67,7 @@
   <div class="mt-8">
     <p class="text-xl font-semibold">{{ $t('paymentsSection.paymentHistory') }}</p>
     <p class="text-grayForeground mt-4">{{ $t('paymentsSection.paymentDetails') }}</p>
-    <div v-idivf="formattedInvoices.length" class="container mx-auto p-4">
+    <div v-idivf="formattedInvoices?.length" class="container mx-auto p-4">
       <table class="table-auto w-full">
         <thead>
           <tr class="text-grayForeground border-b-2 border-gray">
@@ -90,7 +90,7 @@
             </td>
             <td class="p-2">
               <a
-                :href="invoice.pdf"
+                :href="invoice?.pdf"
                 class="text-blue-600 underline"
                 target="_blank"
                 >{{ $t('buttons.download') }} {{ $t('paymentsSection.paymentInvoice') }}</a
@@ -111,7 +111,7 @@ import { Gem } from 'lucide-vue-next'
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
-
+const userData = computed(() => userStore.userData)
 const subscriptionInformation = computed(() => {
   return subscriptionStore.subscriptions.find(
     (sub) => sub._id === userStore.userData?.activeSubscription?.plan

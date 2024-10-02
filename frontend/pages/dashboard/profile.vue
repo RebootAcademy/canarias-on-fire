@@ -101,7 +101,7 @@
         </div>
 
         <Button
-          type="submit"
+          @click="isOpen = true"
           :disabled="isUpdating"
           class="bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
         >
@@ -120,6 +120,19 @@
       <p>Please log in to view your profile.</p>
     </div>
   </div>
+  <CustomModal v-model:open="isOpen">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">{{ $t('changeMyProfile') }}</p>
+    <div class="flex justify-end gap-4 mt-2">
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @action="updateProfile" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
@@ -127,6 +140,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
 const { t } = useI18n()
+const isOpen = ref(false)
 
 definePageMeta({
   layout: 'dashboard',
@@ -192,6 +206,7 @@ const uploadImage = async () => {
 
 async function updateProfile() {
   isUpdating.value = true
+  isOpen.value = false
   try {
     const dataToUpdate = { ...formData, _id: userStore.userData?._id }
     const result = await userStore.updateUserProfile(dataToUpdate)

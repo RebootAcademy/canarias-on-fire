@@ -3,6 +3,29 @@ const Company = require('../models/company.model')
 const Musician = require('../models/musician.model')
 const Subscription = require('../models/subscription.model')
 const sendEmail = require('../services/nodemailer/nodemailer.service')
+
+const checkUserExists = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (user && user.role !== 'basic') {
+      return res.status(400).json({
+        exist: true,
+        message: 'User already exists.',
+      })
+    }
+
+    return res.status(200).json({
+      exist: false,
+      message: 'User not found.',
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error checking if user exists.',
+      description: error.message,
+    })
+  }
+}
 const createUser = async (req, res) => {
   try {
     let newUser
@@ -492,4 +515,5 @@ module.exports = {
   updateUserSubscription,
   deleteUser,
   contactMail,
+  checkUserExists
 }

@@ -16,7 +16,10 @@
         </span>
       </div>
       <div class="flex items-center gap-2 my-6 mr-6">
-        <Share2 class="mr-2 w-8 cursor-pointer hover:text-primary" />
+        <Share2
+          class="mr-2 w-8 cursor-pointer hover:text-primary"
+          @click="copyToClipboard"
+        />
         <Pencil
           v-if="isAdmin || isOwner"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
@@ -24,12 +27,14 @@
         />
         <Trash
           v-if="isAdmin || isOwner"
-          class="mr-2 w-8 cursor-pointer hover:text-primary"
-          @click="deleteEvent"
+          class="mr-2 w-8 cursor-pointer hover:text-red-500"
+          @click="isOpen = true"
         />
       </div>
     </div>
-    <div class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between px-8  text-secondary">
+    <div
+      class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between px-8 text-secondary"
+    >
       <div class="flex flex-col gap-4 sm:w-3/5 md:w-4/5">
         <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
         <div class="flex justify-between">
@@ -105,24 +110,41 @@
             </Button>
           </div>
         </div>
-
       </div>
       <div v-if="evenType === 'event'">
-         <TicketButton hasBorder="hasBorder" />
-       </div>
-       <div v-else>
-         <DiscountSquare  :event="event"/>
-       </div>
+        <TicketButton hasBorder="hasBorder" />
+      </div>
+      <div v-else>
+        <DiscountSquare :event="event" />
+      </div>
     </div>
   </div>
   <div class="px-8">
-    <EventsRelated :type="evenType"/>
+    <EventsRelated :type="evenType" />
   </div>
+  <CustomModal v-model:open="isOpen">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">
+      {{ eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}
+    </p>
+    <div class="flex justify-end gap-4 mt-2">
+      <!-- <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />  -->
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
 import { Share2, Pencil, Trash, Clock, Calendar, MapPin } from 'lucide-vue-next'
-
+const { t } = useI18n()
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
 import { formatEventDate } from '@/utils/dateUtils'
 import { storeToRefs } from 'pinia'
 import DiscountSquare from '~/components/DiscountSquare.vue'
@@ -133,6 +155,8 @@ const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
 const route = useRoute()
 const router = useRouter()
+
+const isOpen = ref(false)
 
 const eventType = computed(() => {
   return eventStore.event.eventType
@@ -145,13 +169,15 @@ const isAdmin = userStore.userData?.role === 'admin'
 const isValidated = userStore?.userData?.isValidated
 
 const isBasicPayment = computed(() => {
-if (eventType !== 'event') {
-  const subscription = subscriptionStore.getTypeOfSubscription(eventStore.event?.subscription?._id)
-  return subscription?.name === 'basic'
-} else {
-  const payment = paymentStore.getPaymentById(eventStore.event.payment)
-  return payment?.name === 'basic'
-}
+  if (eventType !== 'event') {
+    const subscription = subscriptionStore.getTypeOfSubscription(
+      eventStore.event?.subscription?._id
+    )
+    return subscription?.name === 'basic'
+  } else {
+    const payment = paymentStore.getPaymentById(eventStore.event.payment)
+    return payment?.name === 'basic'
+  }
 })
 
 console.log(isBasicPayment.value)
@@ -176,6 +202,12 @@ const editEvent = () => {
 
 const deleteEvent = async () => {
   await eventStore.deleteEvent(event.value._id)
+  toast({
+    description:
+      eventType.value === 'event'
+        ? t('deleteEventSuccess')
+        : t('deletePromoSuccess'),
+  })
   router.push('/')
 }
 
@@ -220,6 +252,17 @@ const publishEvent = async () => {
         `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
       )
     }
+  }
+}
+
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href)
+    toast({
+      description: t('copyLink'),
+    })
+  } catch (err) {
+    console.error('Error al copiar el enlace: ', err)
   }
 }
 </script>
