@@ -48,7 +48,7 @@ const limitedEvents = computed(() => {
   const firstFilteredEvent = eventsByDate.value?.filter(
     (event) =>
       event.status === 'published' &&
-      event.eventType === 'promotion' &&
+      event.eventType === 'promotion' && 
       (event.categories.some((c) => c.name === 'services') ||
         event.categories.some((c) => c.name === 'restoration'))
   )

@@ -20,7 +20,7 @@
     "role": "Role",
     "selectedRole": {
       "label": "Select role",
-      "basis": "Basis",
+      "basis": "Basic",
       "company": "Company",
       "admin": "Admin"
     },

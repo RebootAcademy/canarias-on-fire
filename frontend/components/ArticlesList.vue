@@ -1,5 +1,5 @@
 <template>
-  <div class="px-10">
+  <div class="px-6 sm:px-10">
     <div class="overflow-x-auto ">
       <div class="flex space-x-8 pb-4">
         <ArticleCard 

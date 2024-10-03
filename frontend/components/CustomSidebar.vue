@@ -2,7 +2,7 @@
       <!-- Sidebar -->
       <aside class="flex flex-wrap items-center lg:flex-col lg:w-64 p-4 lg:mt-8 ">
         <nav class="flex w-full ">
-          <ul class=" flex flex-wrap gap-4 md:gap-2 lg:gap-0 items-center justify-center lg:flex-col lg:items-stretch lg:w-full">
+          <ul class=" flex flex-wrap gap-2   lg:gap-0 items-center justify-center lg:flex-col lg:items-stretch lg:w-full">
             <li v-for="(link, idx) in links" :key="idx" >
                 <NuxtLink 
                     v-show="validateRole(link.roles, userRole)"

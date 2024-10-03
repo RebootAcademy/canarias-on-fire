@@ -230,7 +230,7 @@ const updateUser = async (req, res) => {
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'commercialName', 'postalCode' ,'companyEmail', 'phone', 'sector', 'refCode', 'nextPerformance']
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName','preferences' ,'commercialName', 'postalCode' ,'companyEmail', 'phone', 'sector', 'refCode', 'profileImg', 'auth0Id', 'nextPerformance']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
@@ -296,7 +296,7 @@ const updateUserProfile = async (req, res) => {
     console.log(req.body)
 
     // Filtrar campos válidos para actualización
-    let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
+    let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'profileImg', 'preferences']
     if (newRole === 'company') {
       validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'postalCode', 'preferredLocations', 'refCode')
     }  

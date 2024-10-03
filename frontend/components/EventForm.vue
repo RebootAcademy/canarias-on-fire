@@ -6,14 +6,14 @@
       <p v-if="!isValidated && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>
     <div class="flex w-full justify-end items-center gap-4">
-      <CustomBtn
-        :title="$t('buttons.cancel')"
-        :withoutGradient="true"
-        @click="router.push('/events')"
-      />
+      <Button
+          @click="router.push('/events')"
+          class="bg-gray text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
+          >{{ $t('buttons.cancel') }}</Button
+        >
       <CustomBtn
         v-if="isValidated || isAdmin"
-        :title="isEditing ? $t('update') : $t('preview')"
+        :title="isEditing ? $t('buttons.update') : $t('buttons.preview')"
         :action="onSubmit"
       />
       <CustomBtn
@@ -55,7 +55,8 @@ const onSubmit = async () => {
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)
-      if (!checkIfUserHasPromotions(eventStore.event)) {
+      
+      if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
         if (result) {
           router.push(

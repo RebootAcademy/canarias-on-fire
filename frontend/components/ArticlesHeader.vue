@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between w-full px-4">
       <div>
         <p class="text-primary text-2xl font-bold">{{ $t('articles') }}</p>
-        <p class="text-xs text-gray-500">{{ $t('articlesDesc') }}</p>
+        <p class="text-sm text-gray-500">{{ $t('articlesDesc') }}</p>
       </div>
     </div>
   </div>

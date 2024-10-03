@@ -2,7 +2,7 @@
   <div class="p-6">
     <div class="flex items-center space-x-6 mb-4">
       <div
-        class="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold text-white"
+        class="bg-gray-300 rounded-full w-24 h-24 flex items-center justify-center text-3xl font-bold text-secondary"
       >
         {{
           (editedUser.role === 'company'
@@ -130,7 +130,7 @@
           v-if="checkValidatedCompany"
           @click="toggleUserActivation"
           variant="outline"
-          class="border-primary text-white hover:bg-primary-gradient hover:text-white"
+          class="border-primary text-secondary hover:bg-primary-gradient hover:text-secondary"
         >
           {{ editedUser.isActive ? $t('buttons.desactivate') : $t('buttons.activate') }}
         </Button>
@@ -139,7 +139,7 @@
           @click="updateUser"
           variant="outline"
           :disabled="!editedUser.isActive"
-          class="px-6 border-primary text-white hover:bg-primary-gradient hover:text-white"
+          class="px-6 border-primary text-secondary hover:bg-primary-gradient hover:text-secondary"
         >
           {{ $t('buttons.update')}}
         </Button>
@@ -148,7 +148,7 @@
           @click="isOpenValidateModal = true"
           variant="outline"
           :disabled="!editedUser.isActive"
-          class="px-6 border-primary text-white hover:bg-primary-gradient hover:text-white"
+          class="px-6 border-primary text-secondary hover:bg-primary-gradient hover:text-secondary"
         >
           {{ $t('buttons.validate')}}
         </Button>

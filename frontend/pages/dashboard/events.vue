@@ -1,21 +1,21 @@
 <template>
   <div v-if="userStore.isAuthenticated && userRole === 'admin'">
-    <div class="w-full flex flex-row  items-center justify-between xs:gap-2 lg:px-4 mb-4">
-      <div class="xs:hidden lg:flex items-center bg-gray rounded-lg border-1 border-gray p-2 ">
+    <div class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4">
+      <div class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2  ">
         <div 
             v-for="option in optionsFilters" 
             :key="option.label" 
-            class="flex justify-start cursor-pointer rounded-sm w-[100px] "
+            class="flex justify-start  cursor-pointer rounded-sm w-[80px] md:w-[100px] "
             :class="selectOption === option.value ? 'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'"
             @click="selectOption = option.value"
           >
             <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
           </div>
       </div>
-      <div class="lg:hidden w-1/3 mr-2">
-        <CustomSelect :selectOption="selectOption" :optionsFilters="optionsFilters" @update:selected="handleSelection"/>
-      </div>
-      <div class="flex items-center justify-end gap-4 xs:w-2/3 sm:w-1/2  lg:w-auto">
+      <!-- <div class="lg:hidden w-full md:w-1/3 mr-2">
+        <CustomSelect :optionDefault="selectOption" :items="optionsFilters" @update:selected="handleSelection"/>
+      </div> -->
+      <div class="flex items-center justify-end gap-4 sm:w-1/2  lg:w-auto">
         
         <SearchInput v-model="searchQuery" />
         <CustomBtn

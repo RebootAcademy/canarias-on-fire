@@ -30,7 +30,7 @@
       <div class="flex justify-end mt-20 gap-4">
         <Button
           @click="cancelCreate"
-          class="bg-gray hover:bg-red-500 hover:text-white"
+          class="text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
           >{{ $t('buttons.cancel') }}</Button
         >
         <Button type="submit" class="px-6 hover:bg-primary-gradient">{{ $t('buttons.create') }}</Button>

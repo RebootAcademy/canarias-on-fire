@@ -10,17 +10,18 @@
     "es": "Spanish"
   },
   "eventText": "Find the best plans on the islands with our website.",
+  "events&Promotions": "Events & Promotions",
   "findEvents": {
     "label": "Find events",
     "subtext": "Search and discover events near you or in your area of interest."
   },
   "eventCreate": {
-    "label": "Create events or promotions",
-    "subtext": "Plan and organize your own events."
+    "label": "Create event or promotion",
+    "subtext": "Plan and organize your own events and promotions."
   },
   "myEvents": {
     "label": "My events or promotions",
-    "subtext": "View and manage all the events you have created."
+    "subtext": "View and manage all the events and promotions you have created."
   },
   "findPromotions": {
     "label": "Find promotions",

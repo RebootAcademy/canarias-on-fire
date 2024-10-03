@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 ">
+  <div class="max-w-7xl mx-auto sm:py-4 px-4 sm:px-6 lg:px-8 ">
     <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16 xl:gap-20 xl:px-48">
       <div
         v-for="plan in filteredPlans"

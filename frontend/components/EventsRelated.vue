@@ -1,12 +1,22 @@
 <template>
   <div class="events-related">
     <h2 class="text-xl font-semibold mb-4">{{ type === 'event' ? $t('relatedEvent') : $t('relatedPromotion')}}</h2>
-    <div class="flex customScrollBar overflow-x-auto pb-4 space-x-4">
+    <div v-if="type === 'event'" class="flex customScrollBar overflow-x-auto pb-4 space-x-4">
       <EventCard
         v-for="event in relatedEvents"
         :key="event._id"
         :event="event"
+        :isRelatedPromo="true"
         class="flex-shrink-0 w-64"
+      />
+    </div>
+    <div v-else class="flex customScrollBar overflow-x-auto pb-4 space-x-4">
+      <PromotionCard
+        v-for="promo in relatedEvents"
+        :key="promo._id"
+        :promotion="promo"
+        :isRelatedPromo="true"
+        class="flex-shrink-0"
       />
     </div>
   </div>

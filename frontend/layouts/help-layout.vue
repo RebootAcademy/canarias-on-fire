@@ -2,7 +2,7 @@
 <div class="flex flex-col min-h-screen bg-background text-secondary">
     <NavBar />
     <main class="flex-grow w-full">
-        <div class="flex flex-col min-h-screen px-8 py-12">
+        <div class="flex flex-col min-h-screen md:px-8 py-12">
 
             <div class="flex items-center flex-col lg:flex-row lg:items-start ">      
               <!-- Sidebar -->

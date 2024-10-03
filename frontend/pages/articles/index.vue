@@ -1,16 +1,18 @@
 <template>
   <div class="flex flex-col items-center text-secondary">
-    <Hero />
-    <div class="md:w-3/4 lg:w-2/3">
-      <div class="flex items-center justify-between w-full px-4 mb-4">
-        <h2  class="text-3xl font-semibold text-primary">{{ $t('articles')}}</h2>
+    <Hero class="hidden sm:flex"/>
+    <div class="w-full px-4 mt-8 md:mt-0 md:w-3/4 lg:w-2/3">
+      <div class="flex flex-col gap-2 md:flex-row md:gap-0 items-center justify-between w-full px-4 mb-4">
+        <div class="flex w-full items-start">
+          <h2 class="text-2xl md:text-3xl font-semibold text-primary mb-4 md:mb-0">{{ $t('articles')}}</h2>
+        </div>
         <div class="flex items-center gap-4">
           <SearchInput v-model="searchQuery" />
-          <div class="bg-primary-gradient p-0.5 rounded-md">
+          <!-- <div class="bg-primary-gradient p-0.5 rounded-md">
             <Button @click="openFilterModal" class="text-sm px-3 bg-background hover:text-white hover:bg-primary-gradient">
               {{ $t('filterBtn') }}
             </Button>
-          </div>
+          </div> -->
           <FilterModal />
         </div>
       </div>

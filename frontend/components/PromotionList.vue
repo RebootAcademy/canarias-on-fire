@@ -24,6 +24,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
+const userStore = useUserStore()
 const {t} = useI18n()
 const props = defineProps({
   filteredOption: { type: String, default: '' },
@@ -35,7 +36,7 @@ const { filteredEvents } = storeToRefs(eventStore)
 
 const limitedPromotions = computed(() => {
   let filteredPromotions = filteredEvents.value
-
+  console.log(props.filteredOption)
   if (props.filteredOption) {
     filteredPromotions = filteredEvents.value.filter((event) =>
       event.categories.some((category) =>
@@ -51,20 +52,23 @@ const limitedPromotions = computed(() => {
       (promotion) =>
         promotion.status === 'published' &&
         promotion.eventType === 'promotion' &&
-        promotion.userId?.isActive &&
-        promotion.userId?.isValidated
-    )
-    .sort((a, b) => {
+        ((promotion.userId?.isActive &&
+        promotion.userId?.isValidated) || userStore.userData?.role === 'admin')
+    ).sort((a, b) => {
       const priorityA = getPromoPriority(a)
       const priorityB = getPromoPriority(b)
+
+      console.log('priority A', priorityA, 'priority B', priorityB)
 
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
       numOfPromotions.value = filteredPromotions.length
-      return compareDates(a.eventDate, b.eventDate)
+       return compareDates(a.eventDate, b.eventDate) 
+     
     })
-    .slice(0, 9)
+    .slice(0, 9) 
+  
 })
 
 function getPromoPriority(promotion) {

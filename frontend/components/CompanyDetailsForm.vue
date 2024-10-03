@@ -19,7 +19,7 @@
     <div
       class="flex flex-col justify--center mb-4 border-2 border-gray rounded-md p-4 sm:w-full md:w-2/3 lg:1/2 xl:w-2/5"
     >
-      <ImageUploader />
+      <ImageUploader @image-uploaded="handleImageUploaded"/>
       <form @submit.prevent="submitForm">
         <div class="mb-4">
           <Label class="text-gray-300">
@@ -216,9 +216,13 @@ const formData = ref({
   sector: '',
   type: foodSelected.value,
   termsAccepted: false,
-  imageUrl: '',
+  profileImg: '',
   refCode: '',
 })
+
+const handleImageUploaded = (url) => {
+  formData.value.profile = url; 
+};
 
 onMounted(() => {
   const { userData } = userStore

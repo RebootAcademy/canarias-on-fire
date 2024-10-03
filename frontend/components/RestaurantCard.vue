@@ -1,20 +1,20 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray rounded p-4 xs:h-[170px] sm:h-[170px] xl:h-[170px]" >
+<div class="flex flex-col gap-2 border text-secondary border-whiteGray rounded p-4 xs:h-[170px] sm:h-[170px] xl:h-[170px]" >
     <div class="flex justify-between">
         <p class="text-whiteGray text-2xl font-bold"> {{restaurant.commercialName }}</p>
         <p v-if="restaurant.sector === 'restoration'" class="text-secondary italic text-sm">{{ $t(`onBoarding.foodType.${restaurant.type}`)}}</p>
 
     </div>
     <div class="flex flex-col gap-3">
-        <div class="flex flex-row gap-2 items-center text-white italic">
+        <div class="flex flex-row gap-2 items-center text-secondary italic">
             <MapPin  size="20" />
             <p>{{ restaurant.preferredLocations[0] }}</p>
         </div>
-        <div class="flex flex-row gap-2 items-center text-white italic">
+        <div class="flex flex-row gap-2 items-center text-secondary italic">
             <Phone size="20" />
             <p>{{ restaurant.phone }}</p>
         </div>
-        <div v-if="props.restaurant.socialMedia?.instagram" class="flex flex-row gap-2 items-center text-white">
+        <div v-if="props.restaurant.socialMedia?.instagram" class="flex flex-row gap-2 items-center text-secondary">
             <Instagram size="20"/>
             <a :href="`https://www.instagram.com/${restaurant.socialMedia.instagram}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
                 @{{ restaurant?.socialMedia?.instagram }}

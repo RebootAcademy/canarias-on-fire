@@ -1,21 +1,23 @@
 <template>
-  <div class="flex justify-center mt-[50px] py-[50px] bg-gray w-full">
-    <div class="w-1/2 h-full flex">
-        <img src="/explore.svg" alt="Email Image">
+  <div
+    class="flex flex-col sm:flex-row justify-center mt-[50px] py-[50px] bg-gray w-full"
+  >
+    <div class="w-full h-full flex flex-col px-4 items-center justify-center md:px-8 xl:px-0 xl:w-1/2 md:flex-row md:gap-4">
+      <img src="/explore.svg" alt="Email Image" />
       <div class="flex flex-col items-center">
-        <div>
-          <span 
-            v-for="(item, idx) in tm('exploreSection.description')" 
+        <div class="mt-4 md:mt-0">
+          <span
+            v-for="(item, idx) in tm('exploreSection.description')"
             :key="idx"
-            :class="`text-3xl ${idx % 2 == 0 ? 'text-primary font-bold' : ''}`"
+            :class="`text-xl md:text-3xl ${idx % 2 == 0 ? 'text-primary font-bold' : ''}`"
           >
             {{ item }}
           </span>
         </div>
-        <CustomBtn 
+        <CustomBtn
           :title="t('exploreSection.button').toUpperCase()"
           :action="redirect"
-          class="w-1/2 mt-4"
+          class="w-1/2 mt-4 bg-background"
         />
       </div>
     </div>

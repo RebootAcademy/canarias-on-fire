@@ -57,11 +57,11 @@
     </div>
     <div
       v-if="eventStore.eventType === 'event'"
-      class="flex w-full justify-between items-center p-3"
+      class="flex w-full justify-between items-center"
     >
-      <div class="w-full flex flex-col gap-4">
+      <div class="w-full md:w-1/2 flex flex-col gap-4">
         <div class="w-full flex xs:flex-col lg:flex-row gap-4">
-          <div class="w-full lg:w-[25%] flex flex-col">
+          <div class="w-full md:w-1/2 flex flex-col">
             <DatePicker v-model="endDate" :isEditing="isEditing" />
             <span
               v-if="eventStore.hasTriedSubmit"
@@ -70,10 +70,10 @@
               {{ errors.eventDate }}
             </span>
           </div>
-          <div class="w-full flex flex-col">
+          <div class="w-full md:w-1/2 flex flex-col">
             <div
               v-if="hasEndDate || (isEditing && eventStore.eventEndDate)"
-              class="w-full lg:w-[25%] flex flex-col"
+              class="w-full flex flex-col"
             >
               <DatePicker
                 v-model="endDate"
@@ -88,14 +88,12 @@
             </div>
           </div>
         </div>
-                <label class="flex items-center gap-2">
-              <span class="text-sm text-gray-500"
-                >{{ $t('hasEndTime') }}</span
-              >
-              <input type="checkbox" @click="hasEndDate = !hasEndDate" />
-            </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" @click="hasEndDate = !hasEndDate" />
+          <span class="text-sm text-gray-500">{{ $t('hasEndTime') }}</span>
+        </label>
         <div class="w-full flex">
-          <div class="xs:w-1/2 min-w-[94px] max-w-[120px] flex flex-col">
+          <div class="xs:w-1/2 min-w-[94px] max-w-[140px] flex flex-col">
             <TimePicker
               id="startTime"
               :label="$t('startTime')"
@@ -108,7 +106,7 @@
               {{ errors.startTime }}
             </span>
           </div>
-          <div class="xs:w-1/2 min-w-[94px] max-w-[120px] flex flex-col">
+          <div class="xs:w-1/2 min-w-[100px] max-w-[140px] flex flex-col">
             <TimePicker
               id="endTime"
               :label="$t('endTime')"
@@ -236,13 +234,13 @@
       class="flex flex-col gap-1"
     >
       <div class="flex items-start gap-4">
-        <div class="w-1/6">
+        <div class="md:w-1/6">
           <PriceInput v-model="eventStore.eventPrice" />
           <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-sm">
             {{ errors.price }}
           </span>
         </div>
-        <div v-if="eventStore.eventType === 'event'" class="w-1/6">
+        <div v-if="eventStore.eventType === 'event'" class="w-1/2 md:w-1/6">
           <CapacityInput />
         </div>
       </div>
@@ -292,11 +290,14 @@ const eventDiscounts = computed(() => {
   ]
 })
 
-watch(() => hasEndDate.value, (newVal) => {
-  if (newVal === false && eventStore.eventType === 'event') {
-    eventStore.eventEndDate = eventStore.eventDate
+watch(
+  () => hasEndDate.value,
+  (newVal) => {
+    if (newVal === false && eventStore.eventType === 'event') {
+      eventStore.eventEndDate = eventStore.eventDate
+    }
   }
-})
+)
 
 const eventStore = useEventStore()
 
@@ -330,6 +331,6 @@ onMounted(() => {
 
 <style scoped>
 input {
-  accent-color: #F7931E;
+  accent-color: #f7931e;
 }
 </style>

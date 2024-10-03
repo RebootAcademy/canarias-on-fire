@@ -27,7 +27,7 @@
         <CustomBtn
           :title="$t('addUser')"
           @click="openAddUserModal"
-        />
+        /> 
       </div>
     </div>
     <UserTable 
@@ -56,8 +56,8 @@ const filteredUsers = computed(() => {
     if (!user || typeof user !== 'object') return false
     
     const matchesTab = activeTab.value === 'companies' || activeTab.value === 'validateCompanies'
-      ? user.role === 'company' 
-      : user.role && user.role !== 'company'
+      ? user?.role === 'company' 
+      : user?.role && user?.role !== 'company'
     
     const matchesSearch = (user.username && user.username.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
                           (user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase()))
@@ -68,7 +68,7 @@ const filteredUsers = computed(() => {
 
 const isThereNotValidatedCompany = computed(() => {
   return userStore.users.filter(user => {
-    return user.role === 'company' && !user.isValidated
+    return user?.role === 'company' && !user.isValidated
   })
 })
 

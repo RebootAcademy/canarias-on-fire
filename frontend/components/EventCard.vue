@@ -6,6 +6,7 @@
         'bg-[#FBB03B] text-black': isGoldPayment,
         'bg-primary-gradient text-black test-shine': isPremiumPayment,
         'bg-background': !isGoldPayment && !isPremiumPayment,
+        'max-w-[300px]': isRelatedEvent,
       }"
     >
       <div
@@ -128,6 +129,10 @@ const router = useRouter()
 
 const props = defineProps({
   event: Object,
+  isRelatedEvent: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const isOpen = ref(false)

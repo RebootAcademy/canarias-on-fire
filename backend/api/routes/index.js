@@ -9,6 +9,7 @@ const ArticleRouter = require('./article.router')
 const SubscriptionRouter = require('./subscription.router')
 const PaymentRouter = require('./payment.router')
 const NewsletterRouter = require('./newsletter.router')
+const Auth0CreateUser  = require('../services/auth0-create-user')
 
 router
   .use('/auth', AuthRouter)
@@ -20,5 +21,6 @@ router
   .use('/subscriptions', SubscriptionRouter)
   .use('/payments', PaymentRouter)
   .use('/newsletter', NewsletterRouter)
+  .use('/services/auth0-create-user', Auth0CreateUser)
 
 module.exports = router

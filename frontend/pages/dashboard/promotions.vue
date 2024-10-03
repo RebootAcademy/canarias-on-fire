@@ -1,19 +1,18 @@
 <template>
   <div class="flex flex-col gap-4 items-center bg-background">
     <div
-      class="w-full flex flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
+      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
     >
       <div
-        class="flex flex-col lg:flex-row gap-4 w-full justify-between items-center"
+        class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2 "
       >
-        <div class="flex gap-2 rounded-md bg-gray p-2">
           <div
             v-for="option in optionsFilters"
             :key="option.label"
-            class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
+            class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
             :class="
               selectOption === option.value
-                ?  'bg-black  hover:bg-none' : 'hover:bg-zinc-800'
+                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800'
             "
             @click="selectOption = option.value"
           >
@@ -27,19 +26,21 @@
               >{{ option.value }}</span
             >
           </div>
-        </div>
-        <div class="flex gap-2 items-center">
+       <!--  <div class="flex gap-2 items-center">
           <CustomSelect
             :items="eventDiscounts"
             :placeholder="selectedPromotion"
             :optionDefault="selectedPromotion"
             v-model:selected="selectedPromotion"
           />
-          <SearchInput v-model="searchQuery" />
-          <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-          <FilterModal />
-        </div>
+        </div> -->
       </div>
+            <div class="flex items-center justify-end gap-4 sm:w-1/2  lg:w-auto">
+
+              <SearchInput v-model="searchQuery" />
+              <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
+            </div>
+      <FilterModal />
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"

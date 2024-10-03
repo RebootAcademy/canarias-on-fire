@@ -1,8 +1,9 @@
 <template>
   <div class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
-    <Hero />
+    <img src="/public/logo_color.png" alt="Evente Logo" class="min-w-[100px] max-w-[150px] mt-8 mb-10 sm:hidden" />
+    <Hero class="hidden sm:flex"/>
     <div class="w-full flex flex-col items-center h-fit">
-      <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
+      <div class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <EventsCounter />
         <!-- <CategoriesFilter :isEvents="true"/>
         <EventsHeader /> 
@@ -15,8 +16,9 @@
         <CategoriesFilter />
         <PromotionList />
       </div> -->
-      <div class="flex flex-col gap-2 sm:w-3/4 md:w-3/4 lg:w-2/3">
-        <FeaturedEvents />
+      <div class="flex flex-col gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-2/3">
+        <FeaturedEvents class="hidden sm:block"/>
+        <ScrollXSFeaturedEvents class="block sm:hidden"/>
         <ArticlesHeader />
         <ArticlesList :articles="articleStore.articles"/>
       </div>

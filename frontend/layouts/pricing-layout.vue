@@ -2,14 +2,14 @@
 <div class="flex flex-col min-h-screen bg-background text-secondary">
     <NavBar />
     <main class="flex-grow w-full">
-        <div class="flex flex-col min-h-screen px-8 py-6">
+        <div class="flex flex-col min-h-screen md:px-8 py-4 md:py-6">
 
-            <div class="flex items-center flex-col xl:flex-row lg:items-start ">      
+            <div class="flex w-full flex-col xl:flex-row lg:items-start ">      
               <!-- Sidebar -->
                 <CustomSidebar :links="pricingOptions" :userRole="userRole" />
           
               <!-- Main content -->
-                <main class="w-full md:flex-1 p-8">
+                <main class="w-full md:flex-1 md:p-8">
                     <h1 class="text-4xl text-center font-bold ">{{ $t('plansSection.title')}}</h1>
                     <NuxtPage />
                 </main>

@@ -1,16 +1,19 @@
 <template>
   <Menubar
-    class="relative data-[state=open]:bg-transparent bg-transparent border-none focus:bg-transparente active:bg-transparent"
+    class="relative special data-[state=open]:bg-transparent bg-transparent border-none focus:bg-transparente active:bg-transparent"
   >
     <MenubarMenu>
       <MenubarTrigger
         class="data-[state=open]:bg-transparent focus:bg-transparent"
       >
-        <AlignJustify class="text-secondary cursor-pointer" @click="toggleMenu" />
+        <AlignJustify
+          class="text-secondary cursor-pointer"
+          @click="toggleMenu"
+        />
       </MenubarTrigger>
       <MenubarContent
         v-if="isMenuOpen"
-        class="bg-background pb-72 overflow-auto translate-y-0 xs:w-screen md:hidden text-secondary border-none"
+        class="bg-background pb-72 overflow-y-auto translate-y-0 xs:w-screen md:hidden text-secondary border-none"
       >
         <div class="flex p-2 mt-2 px-6 justify-between items-center">
           <NuxtLink to="/" class="flex items-end">
@@ -18,10 +21,10 @@
           </NuxtLink>
           <X size="30" class="mr-3 cursor-pointer" @click="closeMenuManually" />
         </div>
-        <div class="flex flex-col gap-2 p-2 px-6 mt-6">
+        <div class="flex flex-col text-sm gap-1 p-2 px-6 mt-2">
           <!-- Events Section -->
           <DetailsItemMenu
-            :title="$t('events')"
+            :title="$t('events&Promotions')"
             :options="[
               { label: t('findEvents.label'), path: '/events', roles: ['all'] },
               {
@@ -69,10 +72,7 @@
           <!-- Plan your party -->
 
           <MenubarSeparator class="mx-2 mb-4" />
-          <NuxtLink
-            to="/inspire"
-            class="font-bold text-md"
-          >
+          <NuxtLink to="/inspire" class="font-bold text-md">
             <MenubarItem class="font-bold text-md">
               {{ $t('dashboardNav.plannedYourEvents') }}
             </MenubarItem>
@@ -199,7 +199,11 @@ const closeMenuManually = () => {
 }
 
 @media (max-width: 768px) {
-  [data-radix-popper-content-wrapper] {
+  .special[data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
     transform: translate(0px, 0px) !important;
   }
 }

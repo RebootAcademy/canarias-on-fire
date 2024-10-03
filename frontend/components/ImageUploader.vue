@@ -27,7 +27,10 @@
 
 <script setup>
 const emit = defineEmits(['image-uploaded'])
-const cloudName = 'drs1a2bso'
+const config = useRuntimeConfig()
+const cloudName = config.public.cloudinaryCloudName
+const uploadPreset = config.public.cloudinaryUploadPreset
+
 const selectedFile = ref(null)
 const imageUrl = ref('')
 
@@ -44,7 +47,7 @@ const uploadImage = async () => {
   try {
     const formData = new FormData()
     formData.append("file", selectedFile.value)
-    formData.append("upload_preset", "evdhvl07")
+    formData.append("upload_preset", uploadPreset)
 
     const { data, error } = await useFetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
       method: 'POST',

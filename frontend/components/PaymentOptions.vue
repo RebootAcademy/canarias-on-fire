@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"
+    class="max-w-7xl mx-auto py-12 px-4 text-secondary text-xs md:text-base sm:px-6 lg:px-8"
     :class="isStripePayment ? 'py-12' : 'py-6 mb-12'"
     >
     <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">

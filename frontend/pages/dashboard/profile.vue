@@ -70,7 +70,10 @@
             v-model="formData.email"
           />
         </div>
-        <div v-if="userRole === 'company'" class="flex flex-col gap-2 sm:flex-row sm:gap-4 sm w-full mb-4">
+        <div
+          v-if="userRole === 'company'"
+          class="flex flex-col gap-2 sm:flex-row sm:gap-4 sm w-full mb-4"
+        >
           <div>
             <Label class="block text-sm font-medium text-gray-300">{{
               $t('userProfile.cif')
@@ -174,10 +177,12 @@ const handleFileChange = (event) => {
 }
 
 const uploadImage = async () => {
+  console.log()
   if (!selectedFile.value) {
     console.error('No file selected')
     return
   }
+  const config = useRuntimeConfig()
 
   const cloudName = config.public.cloudinaryCloudName
   const uploadPreset = config.public.cloudinaryUploadPreset
@@ -198,6 +203,7 @@ const uploadImage = async () => {
     const data = await response.json()
     if (data.secure_url) {
       formData.profileImg = data.secure_url
+      updateProfile()
     }
   } catch (error) {
     console.error('Error uploading image:', error)
@@ -214,6 +220,7 @@ async function updateProfile() {
       toast({
         description: t('updatedProfile'),
       })
+      userStore.userData = result.user
     } else {
       toast({
         description: t('errorUpdatedProfile'),

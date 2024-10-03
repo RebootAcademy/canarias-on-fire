@@ -1,18 +1,15 @@
 <template>
   <div>
-    <div class="flex items-center justify-between w-full px-4 mb-4">
-      <h2 class="text-xl font-semibold">Articles</h2>
-      <div class="flex gap-4">
+    <div class="flex items-center justify-center md:justify-end gap-3 mb-4 w-full px-4 bg-red-500mb-4">
         <SearchInput v-model="searchQuery" />
         <CustomBtn
             :title="$t('filterBtn')"
             @click="openFilterModal"
           />
         <FilterModal />
-      </div>
     </div>
     <hr class="mb-4" />
-    <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+    <div class="grid place-items-center grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4">
       <ArticleCard
         v-for="article in filteredArticles"
         :key="article._id"
