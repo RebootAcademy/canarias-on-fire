@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        'https://spectacular-lolly-4096f5.netlify.app',
+        'https://evente.netlify.app',
         'http://localhost:3000',
       ]
       if (allowedOrigins.includes(origin) || !origin) {
