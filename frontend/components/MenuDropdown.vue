@@ -1,16 +1,16 @@
 <template>
-  <DropdownMenu>
+  <DropdownMenu >
     <DropdownMenuTrigger as-child>
       <Avatar>
         <AvatarImage :src="userProfileImage" alt="User Avatar" />
         <AvatarFallback>{{ userInitials }}</AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
-    <DropdownMenuContent>
-      <DropdownMenuItem @click="navigateTo()">
+    <DropdownMenuContent class="bg-background text-secondary ">
+      <DropdownMenuItem @click="navigateTo()" class="cursor-pointer hover:bg-foreground-muted hover:text-primary">
         {{ $t('dashboard') }}
       </DropdownMenuItem>
-      <DropdownMenuItem v-if="auth0?.isAuthenticated" @click="handleLogout">
+      <DropdownMenuItem v-if="auth0?.isAuthenticated" @click="handleLogout" class="cursor-pointer hover:bg-foreground-muted hover:text-primary">
         {{ $t('logout') }}
       </DropdownMenuItem>
     </DropdownMenuContent>
@@ -61,3 +61,10 @@ const navigateTo = () => {
   }
 }
 </script>
+
+<style scope>
+[data-radix-popper-content-wrapper] {
+  transform: auto !important; 
+
+} 
+</style>

@@ -8,7 +8,8 @@ const {
   getEventById,
   getEventsByUserId,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  updateEventByAdmin
 } = require('../controllers/event.controller')
 
 router
@@ -18,6 +19,7 @@ router
   .get('/', getAllEvents)
   .get('/:id', /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById)
   .get('/user/:userId', getEventsByUserId)
+  .patch('/admin/:id', /* isAuth, checkRole('admin'), */ updateEventByAdmin)
   .patch('/:id', /* isAuth, checkRole('admin', 'company'), */ updateEvent)
   .delete('/:id', /* isAuth, checkRole('admin', 'company'), */ deleteEvent)
 

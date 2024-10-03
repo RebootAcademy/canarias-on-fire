@@ -1,6 +1,9 @@
 <template>
   <div class="ml-3">
-    <RadioGroup v-model="eventStore.eventType" default-value="event">
+    <RadioGroup 
+      v-model="eventStore.eventType" 
+      default-value="event"
+    >
       <div class="flex items-center space-x-2">
         <RadioGroupItem id="r1" value="event" />
         <Label for="r1">{{ $t('event') }}</Label>

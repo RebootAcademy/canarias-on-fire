@@ -1,5 +1,5 @@
 {
-  "counter": "Active events in Canary islands: ",
+  "counter": "Active events this week in Canary islands: ",
   "events": "Events",
   "eventsDesc": "Below you will see some of the most notable events.",
   "filterBtn": "Filter",
@@ -8,8 +8,9 @@
   "bands": "Bands",
   "restaurant": "Restaurants",
   "explore": "Explore",
-  "pricing": "Princing",
+  "pricing": "Plans & Prices",
   "help": "Help",
+  "promotionsTitle": "Promotions",
   "titles": {
     "featuresEvents": "Features events"
   },
@@ -28,7 +29,14 @@
     "error": "It seems something didn't go as planned! Try again and if the error persists, contact us."
   },
   "exploreSection": {
-    "description": ["Explore ", "the most ", "exciting and memorable ", "moments in our list of ", "events, or create your own ", "and share it with others."],
+    "description": [
+      "Explore ",
+      "the most ",
+      "exciting and memorable ",
+      "moments in our list of ",
+      "events, or create your own ",
+      "and share it with others."
+    ],
     "button": "Start now"
   },
   "onBoarding": {
@@ -46,13 +54,14 @@
     "step2SelectGenres": "Select genre",
     "step2Genres": {
       "label": "Genres",
-      "rock": "Rock",
-      "pop": "Pop",
-      "jazz": "Jazz",
+      "all": "See all",
+      "djs": "Djs",
       "electronic": "Electronic",
-      "hiphop": "Hip Hop",
+      "rock": "Rock/Heavy",
+      "jazz": "Jazz",
       "metal": "Metal",
-      "indie": "Indie",
+      "latina": "Latin",
+      "classic": "Classic",
       "other": "Other"
     },
     "step2BandMembers": "Band Members",
@@ -65,6 +74,7 @@
       "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
     },
     "step2CompanyName": "Company Name",
+    "step2CommercialName": "Commercial Name",
     "step2Email": "Contact Email",
     "step2Phone": "Phone",
     "step2Address": "Commercial address",
@@ -79,6 +89,20 @@
       "restoration": "Restoration",
       "nigthlife": "Nigthlife",
       "activities": "Activities"
+    },
+    "foodType": {
+      "label": "Food type",
+      "placeholder": "Select the food type",
+      "family": "Family",
+      "mexican": "Mexican",
+      "asian": "Asian",
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "fastfood": "Fast food",
+      "tapas": "Tapas",
+      "italian": "Italian",
+      "spanish": "Spanish",
+      "other": "Other"
     },
     "step2CodRef": "Vendor Code",
     "step2TermsPart1": "I accept the ",
@@ -102,7 +126,51 @@
     "share": "Share",
     "validate": "Validate",
     "update": "Update",
+    "updating": "Updating...",
+    "upload": "Upload",
+    "preview": "Preview",
     "desactivate": "Desactivate",
-    "activate": "Activate"
+    "activate": "Activate",
+    "current": "Current Plan",
+    "backHome": "Back Home",
+    "pricing": "See Pricings",
+    "choose": "CHOOSE THE PLAN BASIC",
+    "send": "Send",
+    "create": "Create",
+    "confirm": "Confirm",
+    "manage": "Manage",
+    "download": "Donwload"
+  },
+  "successView": {
+    "paymentTitle": "Your payment has been successful completed",
+    "subscriptionTitle": "Your subscription has been successfully activated."
+  },
+  "canceledView": {
+    "paymentTitle": "Your payment attempt has been successfully cancelled.",
+    "subscriptionTitle": "Your subscription attempt has been successfully cancelled."
+  },
+  "gallery": {
+    "title": "Gallery"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "description": "We are here to assist with any questions or concerns. Reach out to our team, and we will respond promptly.",
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "subject": "Subject",
+    "errorfirstNameRequired": "First name is required",
+    "errorlastNameRequired": "Last name is required",
+    "erroremailRequired": "Email is required",
+    "errorphoneRequired": "Phone is required",
+    "errorsubjectRequired": "Subject is required",
+    "errormessageRequired": "Message is required"
+  },
+  "plansSection": {
+    "title": "Plans",
+    "PromoSubscription": "Promotion Subscription",
+    "eventPayments": "Event Payments"
   }
 }

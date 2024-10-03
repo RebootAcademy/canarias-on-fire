@@ -1,6 +1,7 @@
 {
   "musicBands": "Bandas Musicales",
-  "bandNextPerformance": "Próxima actuación: ",
+  "NextPerformance": "Próxima actuación: ",
+  "addNextPerformance": "Añadir próxima actuación",
   "notFoundBands": "¡No se han encontrado grupos musicales aún!",
   "loadingBands": "Cargando grupos musicales...",
   "performanceDate": "Fecha de la actuación",

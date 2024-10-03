@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const SubscriptionSchema = new mongoose.Schema({
   name: {
     type: String,
-    enum: ['gold', 'premium', 'basic'],
+    enum: ['optima', 'optima plus', 'basic'],
     default: 'basic'
   },
   pricing: {
@@ -26,10 +26,10 @@ const SubscriptionSchema = new mongoose.Schema({
       min: 1, 
       max: 3, 
     },
-    rssPublication: { 
+ /*    rssPublication: { 
       type: Boolean, 
       default: false 
-    },
+    }, */
     increasedCharacterLimit: { 
       type: Boolean, default: false 
     },

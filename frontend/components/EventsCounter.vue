@@ -11,9 +11,32 @@
 <script setup>
 const eventStore = useEventStore()
 
+function getStartOfWeek(date) {
+  const day = date.getDay()
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1)
+  return new Date(date.setDate(diff))
+}
+
+function getEndOfWeek(date) {
+  const startOfWeek = getStartOfWeek(new Date(date));
+  return new Date(startOfWeek.setDate(startOfWeek.getDate() + 6))
+}
+
+const today = new Date();
+const startOfWeek = getStartOfWeek(today)
+const endOfWeek = getEndOfWeek(today)    
+
 const activeEventsCount = computed(() => {
-  return eventStore.events.filter(event => event.status === 'published' && 
-  event.userId?.isActive && 
-  event.userId?.isValidated).length 
-})
+  return eventStore.events.filter(event => {
+    
+    const eventDate = new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day)
+    return (
+      event.status === 'published' &&
+      event.eventType === 'event' &&
+      event.userId?.isActive &&
+      event.userId?.isValidated &&
+      eventDate >= startOfWeek && eventDate <= endOfWeek 
+    );
+  }).length;
+});
 </script>

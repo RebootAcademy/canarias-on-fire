@@ -3,6 +3,29 @@ const Company = require('../models/company.model')
 const Musician = require('../models/musician.model')
 const Subscription = require('../models/subscription.model')
 const sendEmail = require('../services/nodemailer/nodemailer.service')
+
+const checkUserExists = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (user && user.role !== 'basic') {
+      return res.status(400).json({
+        exist: true,
+        message: 'User already exists.',
+      })
+    }
+
+    return res.status(200).json({
+      exist: false,
+      message: 'User not found.',
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error checking if user exists.',
+      description: error.message,
+    })
+  }
+}
 const createUser = async (req, res) => {
   try {
     let newUser
@@ -75,7 +98,8 @@ const createUser = async (req, res) => {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().lean()
+    let query = req.query || {}
+    const users = await User.find(query).lean()
 
     const populatedUsers = await Promise.all(
       users.map(async (user) => {
@@ -200,11 +224,13 @@ const updateUser = async (req, res) => {
       })
     }
 
+    console.log(req.body)
+
     const oldRole = user.role
     const newRole = req.body.role
 
     // Filtrar campos válidos para actualización
-    const validFields = ['username', 'email', 'role', 'isActive', 'companyName', 'companyEmail', 'phone', 'sector', 'refCode']
+    const validFields = ['username', 'email', 'role', 'isActive', 'companyName','preferences' ,'commercialName', 'postalCode' ,'companyEmail', 'phone', 'sector', 'refCode', 'profileImg', 'auth0Id', 'nextPerformance']
     const updateData = Object.keys(req.body)
       .filter(key => validFields.includes(key))
       .reduce((obj, key) => {
@@ -214,7 +240,7 @@ const updateUser = async (req, res) => {
 
     if (newRole === 'company') {
       // Agregar campos de compañía si el nuevo rol es 'company'
-      ;['companyName', 'companyEmail', 'phone', 'sector', 'refCode', 'isValidated'].forEach((field) => {
+      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'refCode', 'postalCode', 'isValidated'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
     }
@@ -233,7 +259,6 @@ const updateUser = async (req, res) => {
       Object.assign(user, updateData)
       await user.save()
     }
-
     // Si es una compañía y tiene un plan de suscripción activo, lo poblamos
     if (user.role === 'company' && user.activeSubscription && user.activeSubscription.plan) {
       await user.populate('activeSubscription.plan');
@@ -271,9 +296,9 @@ const updateUserProfile = async (req, res) => {
     console.log(req.body)
 
     // Filtrar campos válidos para actualización
-    let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'preferences']
+    let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'profileImg', 'preferences']
     if (newRole === 'company') {
-      validFields.push( 'companyName', 'postalCode', 'cif', 'companyEmail', 'sector', 'address', 'refCode')
+      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'postalCode', 'preferredLocations', 'refCode')
     }  
     
     if (newRole === 'musician') {
@@ -308,7 +333,12 @@ const updateUserProfile = async (req, res) => {
 
     if (newRole === 'company' && oldRole !== 'company') {
       await User.findByIdAndDelete(req.params.id)
+            console.log('userdata 1', updateData)
+
       user = await Company.create({ ...user.toObject(), ...updateData })
+      user.preferredLocations = [...user.preferredLocations, updateData.preferredLocations]
+      
+      console.log('userdata', updateData)
       await sendEmail('registeredCompany', user)
       await sendEmail('messageToCompany', user)
     } 
@@ -455,6 +485,23 @@ const deleteUser = async (req, res) => {
   }
 }
 
+const contactMail = async (req, res) => {
+  try {
+    await sendEmail('contact', req.body)
+    res.status(200).json({
+      success: true,
+      message: 'Message sent successfully.',
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error sending message.',
+      description: error.message,
+    })
+  }
+}
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -467,4 +514,6 @@ module.exports = {
   updateUserProfile,
   updateUserSubscription,
   deleteUser,
+  contactMail,
+  checkUserExists
 }

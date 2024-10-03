@@ -6,6 +6,10 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  commercialName: {
+    type: String,
+    required: true,
+  },
   cif: {
     type: String,
     required: true,
@@ -41,12 +45,20 @@ const CompanySchema = new mongoose.Schema({
     enum: ['restoration', 'services', 'nightlife', 'activities'],
     required: true,
   },
+  type: {
+    type: String,
+    enum: ['family', 'mexican', 'asian', 'vegano', 'vegetarian', 'fastfood', 'tapas', 'italian', 'spanish', 'other'],
+  },
   preferredLocations: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'location',
+      type: String,
+      /*  mongoose.Schema.Types.ObjectId,
+      ref: 'location', */
     },
   ],
+  postalCode: {
+    type: String,
+  },
   activeSubscription: {
     status: {
       type: String,

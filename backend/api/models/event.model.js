@@ -18,6 +18,10 @@ const EventSchema = new mongoose.Schema({
     type: Object, 
     // required: true 
   },
+  eventEndDate: {
+    type: Object,
+    default: null
+  },
   eventLocation: {
     type: Object,
   },
@@ -45,6 +49,9 @@ const EventSchema = new mongoose.Schema({
   eventImages: {
     type: Array
   },
+  eventDiscount: {
+    type: String
+  },
   coverImage: {
     type: String
   },
@@ -59,7 +66,11 @@ const EventSchema = new mongoose.Schema({
   status: { 
     type: String, 
     enum: ['draft', 'published', 'closed'],
-    default: ['draft']
+    default: 'draft'
+  },
+  categoriesOfServices: {
+    type: Array || String,
+    default: ''
   },
 /*   date: {
     type: Date,
@@ -76,6 +87,10 @@ const EventSchema = new mongoose.Schema({
   payment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'payment'
+  },
+  subscription: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'subscription'
   }
 })
 

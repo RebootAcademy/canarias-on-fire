@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"
+    class="max-w-7xl mx-auto py-12 px-4 text-secondary text-xs md:text-base sm:px-6 lg:px-8"
     :class="isStripePayment ? 'py-12' : 'py-6 mb-12'"
     >
     <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -10,11 +10,11 @@
         class="text-center bg-gray border border-primary rounded-lg shadow-sm p-6 pt-12 relative"
       >
         <div
-          v-if="payment.name === 'premium'"
+          v-if="payment.name === 'optima plus'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
          
           >
-          {{ $t('payments.recommendedOption')}}
+          {{ $t('recommended')}}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ payment.name }}
@@ -31,7 +31,7 @@
         <ul class="mt-6 space-y-4 text-left">
           <li v-for="(key, value) in payment.features" :key="key">
             <div
-              v-if="value && typeof key !== 'number'"
+              v-if="value && typeof key !== 'number' && typeof key !== 'string'"
               class="flex justify-between"
             >
               <p class="ml-3 text-base text-gray-700">
@@ -71,10 +71,21 @@
           </li>
           <li v-for="(feature, index) in payment.features" 
             :key="index" 
+            v-show="typeof feature === 'string'"
+          >
+            <p class="ml-3 text-base text-gray-700">
+              {{ $t('featuresDescriptions.limitPhotos')}}
+              <span class="font-semibold">
+                {{ Number(feature) }}
+              </span>
+            </p>
+          </li>
+          <li v-for="(feature, index) in payment.features" 
+            :key="index" 
             v-show="typeof feature === 'number'"
           >
             <p class="ml-3 text-base text-gray-700">
-              {{ $t('payments.readPriority')}}
+              {{ $t('paymentsOption.readPriority')}}
               <span class="font-semibold">{{
                 getReadingPriorityText(feature)
               }}</span>
@@ -87,7 +98,7 @@
             <NuxtLink
               @click="choosePayment(payment)"
               class="inline-block w-full bg-black text-white font-semibold py-4 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
-              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'premium' }"
+              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'optima plus' }"
               >
               {{ $t('buttons.subscribe')}}
             </NuxtLink>
@@ -110,7 +121,6 @@ const props = defineProps({
     }
 })
 
-console.log(props.payments)
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -122,9 +132,6 @@ const sortedPayments = computed(() => {
   return props.payments.sort((a, b) => a.basePrice - b.basePrice)
 })
 
-console.log(sortedPayments.value)
-
-
 const featureDescriptions = computed(() => ({
   eventPublication: t('featuresDescriptions.eventPublication'),
   eventPhotos: t('featuresDescriptions.eventPhotos'),
@@ -132,7 +139,9 @@ const featureDescriptions = computed(() => ({
   increasedCharacterLimit: t('featuresDescriptions.increasedCharacterLimit'),
   websiteLink: t('featuresDescriptions.websiteLink'),
   offerPublication: t('featuresDescriptions.offerPublication'),
-  rssPublication: t('featuresDescriptions.rssPublication')
+  rssPublication: t('featuresDescriptions.rssPublication'),
+  limitPhotos: t('featuresDescriptions.limitPhotos')
+
 }))
 
 const getReadingPriorityText = (value) => {
@@ -179,9 +188,6 @@ const choosePayment = async (plan) => {
     const eventId = eventStore.event._id
     const eventDate = formatDate(eventStore.event.eventDate)
 
-    console.log('Selected plan:', plan)
-    console.log('Event date:', eventDate)
-
     if (plan.name === 'basic') {
       const result = await paymentStore.assignPaymentToEvent(userId, {
         paymentPlanId: plan._id,
@@ -201,8 +207,6 @@ const choosePayment = async (plan) => {
       }
     } else {
       const finalPrice = calculateFinalPrice(plan.basePrice, eventDate)
-      console.log('Calculated final price:', finalPrice)
-
       const result = await paymentStore.createPaymentSession(userId, {
         paymentPlanId: plan._id,
         eventId: eventId,

@@ -2,7 +2,6 @@ const animate = require("tailwindcss-animate")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
   safelist: ['dark'],
   prefix: '',
 
@@ -51,12 +50,15 @@ module.exports = {
         },
         black: '#1C1F1F',
         white: '#FAFAFA',
-        gray: 'rgba(125, 125, 125, 0.20)',
+        gray: 'hsl(var(--gray))',
+        grayForeground: 'hsl(var(--gray-foreground))',
         whiteGray: '#8989A1',
       },
       backgroundImage: {
         'primary-gradient':
-          'linear-gradient(to right, #FBB03B, #F7931E, #F15A24, #ED1C24)', // Aquí se coloca el gradiente
+          'linear-gradient(to right, #FBB03B, #F7931E, #F15A24, #ED1C24)',
+        'secondary-gradient':
+          'radial-gradient(circle at right, #FBB03B, #F7931E, #F15A24, #ED1C24)',
       },
       borderRadius: {
         xl: 'calc(var(--radius) + 4px)',

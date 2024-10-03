@@ -1,4 +1,18 @@
 {
   "companyValidated": "Empresa validada correctamente",
-  "errorCompanyValidated": "Error validando la empresa"
+  "errorCompanyValidated": "Error validando la empresa",
+  "contactMailSent": "Email enviado correctamente. En caso de ser necesario, nos pondremos en contacto contigo.",
+  "errorContactMailSent": "Algo salió mal al enviar el email de contacto. Vuelva a intentarlo pasado unos minutos",
+  "canceledPlan": "Suscripción cancelada correctamente",
+  "subscribedPlan": "Suscripción activada correctamente",
+  "updatedProfile": "Perfil actualizado correctamente",
+  "errorUpdatedProfile": "Error actualizando perfil",
+  "updatedPerformance": "Próxima actuación actualizado correctamente",
+  "errorPerformance": "Error actualizando la próxima actuación",
+  "copyLink": "Enlace copiado correctamente al portapapeles",
+  "deleteEventSuccess": "El evento se ha eliminado correctamente",
+  "deletePromoSuccess": "La promoción se ha eliminado correctamente",
+  "deleteUserSuccess": "El usuario se ha eliminado correctamente",
+  "errorDeleteUser": "Error eliminando usuario",
+  "userHasPromotions": "Solo se puede tener una promoción activa por la subscripción"
 }

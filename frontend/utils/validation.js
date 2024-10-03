@@ -9,9 +9,8 @@ const errors = reactive({
   location: '',
   categories: ''
 })
-
 const priceRules = () => {
-  return eventStore.isFree ? '' : 'required'
+  return !eventStore.isFree && eventStore.eventType === 'event' ? 'required' : ''
 }
 
 const validateEventDate = (t) => {
@@ -26,6 +25,14 @@ const validateEventDate = (t) => {
   }
   return ''
 } 
+
+const validateStartTime = (t) => {
+  if (eventStore.eventType === 'event' && !eventStore.startTime) {
+    return t('startTimeRequired')
+  } else {
+    return ''
+  }
+}
 
 const validateEventLocation = (t) => {
   if (!eventStore.eventLocation || !eventStore.eventLocation.address) {
@@ -47,7 +54,7 @@ const validateCategories = (t) => {
 const validateFields = (t) => {
   errors.eventName = eventStore.eventName ? '' : t('eventNameRequired')
   errors.eventDate = validateEventDate(t) 
-  errors.startTime = eventStore.startTime ? '' : t('startTimeRequired')
+  errors.startTime = validateStartTime(t)
   errors.description = eventStore.eventDescription ? '' : t('descriptionRequired')
   errors.location = validateEventLocation(t)
   errors.price = priceRules() === 'required' && !eventStore.eventPrice ? t('priceRequired') : ''

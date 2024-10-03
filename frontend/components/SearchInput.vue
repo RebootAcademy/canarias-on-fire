@@ -3,10 +3,10 @@
     <Input
       v-model="searchQuery"
       placeholder="Search"
-      class="bg-gray border-primary pl-10 pr-4 rounded-md focus:outline-none focus:ring-1 focus:ring-primary w-full"
+      class="bg-background border-primary pl-10 pr-4 rounded-md focus:outline-none focus:ring-1 focus:ring-primary w-full text-secondary active:border-primary"
       @input="updateValue"
     />
-    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary">
       <SearchIcon size="18"/>
     </span>
   </div>

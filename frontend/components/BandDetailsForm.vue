@@ -76,30 +76,27 @@
               />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
-              <SelectItem value="rock">{{
-                $t('onBoarding.step2Genres.rock')
-              }}</SelectItem>
-              <SelectItem value="pop">{{
-                $t('onBoarding.step2Genres.pop')
-              }}</SelectItem>
-              <SelectItem value="jazz">{{
-                $t('onBoarding.step2Genres.jazz')
-              }}</SelectItem>
-              <SelectItem value="electronic">{{
-                $t('onBoarding.step2Genres.electronic')
-              }}</SelectItem>
-              <SelectItem value="hiphop">{{
-                $t('onBoarding.step2Genres.hiphop')
-              }}</SelectItem>
-              <SelectItem value="metal">{{
-                $t('onBoarding.step2Genres.metal')
-              }}</SelectItem>
-              <SelectItem value="indie">{{
-                $t('onBoarding.step2Genres.indie')
-              }}</SelectItem>
-              <SelectItem value="other">{{
-                $t('onBoarding.step2Genres.other')
-              }}</SelectItem>
+              <SelectItem value="djs">
+                {{$t('onBoarding.step2Genres.djs')}}
+              </SelectItem>
+              <SelectItem value="latina">
+                {{$t('onBoarding.step2Genres.latina')}}
+              </SelectItem>
+              <SelectItem value="electronic">
+                {{$t('onBoarding.step2Genres.electronic')}}
+              </SelectItem>
+              <SelectItem value="rock">
+                {{$t('onBoarding.step2Genres.rock')}}
+              </SelectItem>
+              <SelectItem value="jazz">
+                {{$t('onBoarding.step2Genres.jazz')}}
+              </SelectItem>
+              <SelectItem value="classic">
+                {{$t('onBoarding.step2Genres.classic')}}
+              </SelectItem>
+              <SelectItem value="other">
+                {{$t('onBoarding.step2Genres.other')}}
+              </SelectItem>
             </SelectContent>
           </Select>
           <p v-if="errors.genre" class="text-red-500 text-sm mt-1 italic">
@@ -289,7 +286,6 @@ const handleDateChange = (date) => {
 
 
 const submitForm = async () => {
-  console.log(formData.value.termsAccepted)
   if (formData.value.termsAccepted) {
     errors.value = {
       bandName: '',
@@ -301,13 +297,10 @@ const submitForm = async () => {
     if (!validateForm()) return false
     try {
       const userId = userStore.userData._id
-      console.log('User ID being sent:', userId)
       if (!userId) {
-        console.error('User ID is undefined or null')
         return
       }
 
-      console.log(formData.value)
       const result = await userStore.updateUserProfileToBand({
         ...formData.value,
         _id: userId,

@@ -12,6 +12,7 @@
   "userProfile": {
     "profile": "Perfil",
     "events": "Eventos",
+    "userImage": "Imagen de usuario",
     "subscriptions": "Subscripciones",
     "desactivated": "Desactivado",
     "userName": "Nombre de usuario",
@@ -24,6 +25,7 @@
       "admin": "Administrador"
     },
     "companyName": "Nombre de la Empresa",
+    "commercialName": "Nombre comercial",
     "phone": "Teléfono de contacto",
     "cif": "CIF",
     "address": "Dirección",
@@ -35,5 +37,20 @@
       "nightlife": "Ocio nocturno",
       "activities": "Actividades"
     }
+  },
+  "paymentsSection":{
+    "label": "Pagos",
+    "mySubscription": "Mi Suscripción",
+    "noSubscription": "No hay subscripción activa",
+    "SubDescription": "Puedes ver el historial de tus pagos y sus estadísticas.",
+    "renuewDate": "Fecha de renovación: ",
+    "cancelAt": "Cancelado el: ",
+    "paymentHistory": "Historial de Pagos",
+    "paymentDetails": "Ver historial de sus pagos",
+    "paymentDate": "Fecha",
+    "paymentAmount": "Cantidad (€)",
+    "paymentInvoice": "Factura",
+    "paymentDownload": "Descargar",
+    "noInvoices": "No hay facturas"
   }
 }

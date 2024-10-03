@@ -4,20 +4,29 @@
   "login": "Log in",
   "logout": "Log out",
   "dashboard": "Dashboard",
+  "languages": "Languages",
+  "languagesOptions": {
+    "en": "English",
+    "es": "Spanish"
+  },
   "eventText": "Find the best plans on the islands with our website.",
+  "events&Promotions": "Events & Promotions",
   "findEvents": {
     "label": "Find events",
     "subtext": "Search and discover events near you or in your area of interest."
   },
   "eventCreate": {
-    "label": "Create events",
-    "subtext": "Plan and organize your own events."
+    "label": "Create event or promotion",
+    "subtext": "Plan and organize your own events and promotions."
   },
   "myEvents": {
-    "label": "My events",
-    "subtext": "View and manage all the events you have created."
+    "label": "My events or promotions",
+    "subtext": "View and manage all the events and promotions you have created."
   },
-
+  "findPromotions": {
+    "label": "Find promotions",
+    "subtext": "Search and discover promotions near you or in your area of interest."
+  },
   "findArticles": {
     "label": "Find articles",
     "subtext": "Search and discover articles near you or in your area of interest."
@@ -42,20 +51,40 @@
     "label": "Questions & Answers",
     "subtext": "Frequently Asked Questions"
   },
+  "contactUs": {
+    "label": "Contact us",
+    "subtext": "Get in touch with us"
+  },
   "princingNav": {
-    "label": "Princing",
-    "subtext": "Plan Pricing"
+    "label": "Plans & Prices",
+    "subtext": "Subscription plans and prices per event publication"
   },
   "dashboardNav": {
     "events": "Events",
+    "eventsAndPromotions": "Events & Promotions",
+    "manageEvents": "Manage Events",
     "myEvents": "My events",
+    "plannedYourEvents": "Plan your event",
+    "describePlan": "Find all you need to plan your event",
     "articles": "Articles",
     "statistics": "Statistics",
     "profile": "Profile",
     "payments": "Payments",
     "password": "Password",
+    "promotions": "Promotions",
     "users": "Users List",
     "dashboard": "Dashboard",
-    "home": "Home"
+    "home": "Home",
+    "help": "Help"
+  },
+  "sideBarHelp": {
+    "label": "Help",
+    "subtext": "FaQ",
+    "description": "Frequently Asked Questions",
+    "general": "General",
+    "subscriptions": "Subscriptions",
+    "payments": "Payments",
+    "technical": "Technical Issues",
+    "account": "Account Management"
   }
 }

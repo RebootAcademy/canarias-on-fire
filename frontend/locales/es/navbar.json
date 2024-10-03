@@ -4,18 +4,28 @@
   "login": "Iniciar Sesión",
   "logout": "Cerrar Sesión",
   "dashboard": "Dashboard",
+  "languages": "Idiomas",
+  "languagesOptions": {
+    "en": "Inglés",
+    "es": "Español"
+  },
   "eventText": "Encuentre las mejores planes en las islas con nuestro sitio web.",
+  "events&Promotions": "Eventos y promociones",
   "findEvents": {
     "label": "Encontrar eventos",
     "subtext": "Busque y descubra eventos cerca de usted o en su área de interés."
   },
   "eventCreate": {
-    "label": "Crear eventos",
-    "subtext": "Planifica y organiza tus propios eventos."
+    "label": "Crear evento o promoción",
+    "subtext": "Planifica y organiza tus propios eventos y promociones."
   },
   "myEvents": {
-    "label": "Mis eventos",
-    "subtext": "Ver mis eventos creados."
+    "label": "Mis eventos o promociones",
+    "subtext": "Ver mis eventos y promociones creados."
+  },
+  "findPromotions": {
+    "label": "Encontrar promociones",
+    "subtext": "Busque y encuentre promociones cerca de usted o en su área de interés."
   },
   "findArticles": {
     "label": "Encontrar artículos",
@@ -41,20 +51,40 @@
     "label": "Preguntas y respuestas",
     "subtext": "Preguntas frecuentes"
   },
+  "contactUs": { 
+    "label": "Contáctanos",
+    "subtext": "Ponte en contacto con nosotros"
+  },
   "princingNav": {
-    "label": "Precios",
-    "subtext": "Precios de los planes"
+    "label": "Planes y Precios",
+    "subtext": "Planes de suscripción y precios por publicación de eventos"
   },
   "dashboardNav": {
     "events": "Eventos",
+    "eventsAndPromotions": "Eventos y Promociones",
+    "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",
+    "plannedYourEvents": "Planifica tu fiesta",
+    "describePlan": "Encuentra todo lo que necesita para planificar tu evento",
     "articles": "Artículos",
     "statistics": "Estadísticas",
     "profile": "Perfil",
     "payments": "Pagos",
+    "promotions": "Promociones",
     "password": "Contraseña",
     "users": "Listado de usuarios",
     "dashboard": "Dashboard",
-    "home": "Home"
+    "home": "Home",
+    "help": "Ayuda"
+  },
+  "sideBarHelp": {
+    "label": "Ayuda",
+    "subtext": "FaQ",
+    "description": "Preguntas frecuentes",
+    "general": "General",
+    "subscriptions": "Suscripciones",
+    "payments": "Pagos",
+    "technical": "Problemas técnicos",
+    "account": "Gestionar cuenta"
   }
 }

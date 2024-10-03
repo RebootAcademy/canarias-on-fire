@@ -1,5 +1,5 @@
 {
-  "counter": "Eventos activos en Canarias:",
+  "counter": "Eventos activos esta semana en Canarias:",
   "events": "Eventos",
   "eventsDesc": "A continuación, verás algunos de los eventos más destacados.",
   "filterBtn": "Filtrar",
@@ -8,7 +8,8 @@
   "bands": "Bandas Musicales",
   "restaurant": "Restaurantes",
   "explore": "Explora",
-  "pricing": "Precios",
+  "pricing": "Planes y Precios",
+  "promotionsTitle": "Promociones",
   "help": "Ayuda",
   "titles": {
     "featuresEvents": "Eventos destacados"
@@ -28,7 +29,14 @@
     "error": "Parece que algo no ha salido bien! Inténtalo de nuevo, y si el error persiste contáctanos."
   },
   "exploreSection": {
-    "description": ["Explora ", "los momentos más ", "emocionantes y memorables ", "de nuestra lista de ", "eventos, o crea los tuyos ", "y compártelos con el resto."],
+    "description": [
+      "Explora ",
+      "los momentos más ",
+      "emocionantes y memorables ",
+      "de nuestra lista de ",
+      "eventos, o crea los tuyos ",
+      "y compártelos con el resto."
+    ],
     "button": "Empieza ahora"
   },
   "onBoarding": {
@@ -46,14 +54,15 @@
     "step2SelectGenres": "Seleccione género",
     "step2Genres": {
       "label": "Géneros",
-      "rock": "Rock",
-      "pop": "Pop",
+      "all": "Ver todos",
+      "djs": "Djs",
+      "electronic": "Electronic",
+      "rock": "Rock/Heavy",
       "jazz": "Jazz",
-      "electronic": "Electrónica",
-      "hiphop": "Hip Hop",
       "metal": "Metal",
-      "indie": "Indie",
-      "other": "Other"
+      "latina": "Latina",
+      "classic": "Clásica",
+      "other": "Otros"
     },
     "step2BandMembers": "Integrantes del grupo",
     "step2BandMembersPlaceholder": "ej. John (Bajo), Sarah (Vocalista)",
@@ -65,6 +74,7 @@
       "youtubePlaceholder": "Ex: https://www.youtube.com/c/channel"
     },
     "step2CompanyName": "Nombre de la Compañía",
+    "step2CommercialName": "Nombre comercial",
     "step2Email": "Correo de contacto",
     "step2Phone": "Teléfono",
     "step2CIF": "CIF",
@@ -79,6 +89,20 @@
       "restoration": "Restauración",
       "nigthlife": "Ocio nocturno",
       "activities": "Actividades"
+    },
+    "foodType": {
+      "label": "Tipo de comida",
+      "placeholder": "Selecciona el tipo de comida",
+      "family": "Familiar",
+      "mexican": "Mexicana",
+      "asian": "Asiática",
+      "vegan": "Vegana",
+      "vegetarian": "Vegetariana",
+      "fastfood": "Comida rápida",
+      "tapas": "Tapas",
+      "italian": "Italiana",
+      "spanish": "Española",
+      "other": "Otra"
     },
     "step2CodRef": "Código de vendedor",
     "step2TermsPart1": "Acepto los  ",
@@ -102,7 +126,51 @@
     "share": "Compartir",
     "validate": "Validar",
     "update": "Actualizar",
+    "updating": "Actualizando...",
+    "upload": "Cargar",
+    "preview": "Vista previa",
     "desactivate": "Desactivar",
-    "activate": "Activar"
+    "activate": "Activar",
+    "current": "Plan actual",
+    "backHome": "Volver al Inicio",
+    "pricing": "Ver precios",
+    "choose": "ELEGIR EL PLAN BÁSICO",
+    "confirm": "Confirmar",
+    "send": "Enviar",
+    "create": "Crear",
+    "manage": "Administrar",
+    "download": "Descargar"
+  },
+  "successView": {
+    "paymentTitle": "Su pago se ha realizado correctamente",
+    "subscriptionTitle": "Su suscripción se ha activado correctamente."
+  },
+  "canceledView": {
+    "paymentTitle": "El intento de pago se ha cancelado correctamente",
+    "subscriptionTitle": "Su intento de suscripción se ha cancelado correctamente"
+  },
+  "gallery": {
+    "title": "Galería"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "description": "Estamos aquí para ayudarle con cualquier pregunta o duda. Póngase en contacto con nuestro equipo y le responderemos lo antes posible.",
+    "firstname": "Nombre",
+    "lastname": "Apellido",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "subject": "Motivo",
+    "errorfirstNameRequired": "El nombre es requerido",
+    "errorlastNameRequired": "El apellido es requerido",
+    "erroremailRequired": "El correo electrónico es requerido",
+    "errorphoneRequired": "El teléfono es requerido",
+    "errorsubjectRequired": "El motivo es requerido",
+    "errormessageRequired": "El mensaje es requerido"
+  },
+  "plansSection": {
+    "title": "Planes",
+    "PromoSubscription": "Suscripción para promociones",
+    "eventPayments": "Pago para publicar eventos"
   }
 }

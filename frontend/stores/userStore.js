@@ -31,6 +31,7 @@ export const useUserStore = defineStore('userStore', {
         const { data } = await useFetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users`
         )
+
         if (data.value) {
           this.users = data.value.result
         }
@@ -41,7 +42,6 @@ export const useUserStore = defineStore('userStore', {
 
     async addUser(userData) {
       try {
-        console.log('Sending user data:', userData)
         const response = await $fetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users`,
           {
@@ -84,6 +84,7 @@ export const useUserStore = defineStore('userStore', {
           if (this.userData.id === profileData._id) {
             this.userData = { ...this.userData, ...response.result }
           }
+          //this.setUser(response)
           return { success: true, user: response.result }
         } else {
           return { success: false, message: response.data.message }
@@ -219,7 +220,7 @@ export const useUserStore = defineStore('userStore', {
           if (this.userData && this.userData._id === userId) {
             this.userData = updatedUser
           }
-
+          this.fetchAndSetUser(this.userData.email)
           return { success: true, user: updatedUser }
         } else {
           return {

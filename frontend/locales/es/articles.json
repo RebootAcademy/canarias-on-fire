@@ -1,3 +1,14 @@
 {
-  "notArticlesFound": "No se encontraron artículos."
+  "notArticlesFound": "No se encontraron artículos.",
+  "editArticle": "Editar artículo",
+  "imageArticle": "Imagen",
+  "updateArticleImage": "Actualizar imagen",
+  "updateArticle": "Actualiza la imagen de tu artículo si es necesario.",
+  "articleTitle": "Título",
+  "articleTitleDescription": "Introduce el título de tu artículo.",
+  "articleContent": "Contenido",
+  "articleContentDescription": "Introduce el contenido de tu article.",
+  "loadingArticle": "Cargando artículo...",
+  "createArticle": "Crea un nuevo articulo",
+  "selectImageArticle": "Selecciona las imágenes que deseas mostrar en el artículo."
 }

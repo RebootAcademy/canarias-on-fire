@@ -13,6 +13,8 @@ const {
   updateUserProfile,
   updateUserSubscription,
   deleteUser,
+  contactMail,
+  checkUserExists,
 } = require('../controllers/user.controller')
 
 router
@@ -22,10 +24,15 @@ router
   .get('/restaurants', getAllRestaurants)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/validate/:id', validateCompany)
-  .patch('/:id',/*  isAuth, checkRole('admin'), */ updateUser)
+  .patch('/:id', /*  isAuth, checkRole('admin'), */ updateUser)
   .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)
   .get('/current/:email', getCurrentUser)
   .patch('/:id/profile', updateUserProfile)
-  .patch('/:id/subscription', /* isAuth, checkRole('admin', 'company'), */ updateUserSubscription)
+  .patch(
+    '/:id/subscription',
+    /* isAuth, checkRole('admin', 'company'), */ updateUserSubscription
+  )
+  .post('/contact', contactMail)
+  .post('/exist', checkUserExists)
 
 module.exports = router

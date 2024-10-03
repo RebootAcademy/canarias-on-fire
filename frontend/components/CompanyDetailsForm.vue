@@ -19,7 +19,7 @@
     <div
       class="flex flex-col justify--center mb-4 border-2 border-gray rounded-md p-4 sm:w-full md:w-2/3 lg:1/2 xl:w-2/5"
     >
-      <ImageUploader />
+      <ImageUploader @image-uploaded="handleImageUploaded"/>
       <form @submit.prevent="submitForm">
         <div class="mb-4">
           <Label class="text-gray-300">
@@ -31,7 +31,24 @@
             v-model="formData.companyName"
             class="text-gray-500"
           />
-          <p v-if="errors.companyName" class="text-red-500 text-sm mt-1 italic">{{ errors.companyName }}</p>
+          <p v-if="errors.companyName" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.companyName }}
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <Label class="text-gray-300">
+            {{ $t('onBoarding.step2CommercialName') }}
+            <span class="text-primary">*</span>
+          </Label>
+          <Input
+            id="commercialName"
+            v-model="formData.commercialName"
+            class="text-gray-500"
+          />
+          <p v-if="errors.commercialName" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.commercialName }}
+          </p>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300"
@@ -52,8 +69,9 @@
               <span class="text-primary">*</span>
             </Label>
             <Input id="phone" v-model="formData.phone" class="text-gray-500" />
-            <p v-if="errors.phone" class="text-red-500 text-sm mt-1 italic">{{ errors.phone }}</p>
-
+            <p v-if="errors.phone" class="text-red-500 text-sm mt-1 italic">
+              {{ errors.phone }}
+            </p>
           </div>
           <div class="mb-4">
             <Label class="text-gray-300">
@@ -61,8 +79,9 @@
               <span class="text-primary">*</span>
             </Label>
             <Input id="cif" v-model="formData.cif" class="text-gray-500" />
-            <p v-if="errors.cif" class="text-red-500 text-sm mt-1 italic">{{ errors.cif }}</p>
-
+            <p v-if="errors.cif" class="text-red-500 text-sm mt-1 italic">
+              {{ errors.cif }}
+            </p>
           </div>
           <div class="mb-4">
             <Label class="text-gray-300">
@@ -83,11 +102,12 @@
           </Label>
           <Input
             id="address"
-            v-model="formData.address"
+            v-model="formData.preferredLocations"
             class="text-gray-500"
           />
-          <p v-if="errors.address" class="text-red-500 text-sm mt-1 italic">{{ errors.address }}</p>
-
+          <p v-if="errors.preferredLocations" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.preferredLocations }}
+          </p>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300">
@@ -116,8 +136,24 @@
               }}</SelectItem>
             </SelectContent>
           </Select>
-          <p v-if="errors.sector" class="text-red-500 text-sm mt-1 italic">{{ errors.sector }}</p>
-
+          <p v-if="errors.sector" class="text-red-500 text-sm mt-1 italic">
+            {{ errors.sector }}
+          </p>
+          <div
+            v-if="formData.sector === 'restoration'"
+            class="flex flex-col gap-1 mt-4"
+          >
+            <Label class="text-gray-300">
+              {{ $t('onBoarding.foodType.label') }}
+              <span class="text-primary">*</span>
+            </Label>
+            <CustomSelect
+              :placeholder="placeholderSelect"
+              v-model:selected="formData.type"
+              :items="restorationSectors"
+              :optionDefault="foodSelected"
+            />
+          </div>
         </div>
         <div class="mb-4">
           <Label class="text-gray-300">
@@ -150,7 +186,7 @@
         <button
           type="submit"
           @click="submitForm"
-          class="w-full bg-black text-white px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
+          class="w-full bg-background text-secondary px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
         >
           {{ $t('buttons.completeReg') }}
         </button>
@@ -166,17 +202,27 @@ const userStore = useUserStore()
 const router = useRouter()
 const { t } = useI18n()
 
+const isCompanyNameSynced = ref(true)
+
+const foodSelected = ref('spanish')
+
 const formData = ref({
   companyName: '',
+  commercialName: '',
   phone: '',
   cif: '',
   postalCode: '',
-  address: '',
+  preferredLocations: '',
   sector: '',
+  type: foodSelected.value,
   termsAccepted: false,
-  imageUrl: '',
+  profileImg: '',
   refCode: '',
 })
+
+const handleImageUploaded = (url) => {
+  formData.value.profile = url; 
+};
 
 onMounted(() => {
   const { userData } = userStore
@@ -186,29 +232,70 @@ onMounted(() => {
   }
 })
 
+const placeholderSelect = computed(() => {
+  return t('onBoarding.step2Sector.placeholder')
+})
+
+const restorationSectors = computed(() => {
+  return [
+    { value: 'family', label: t('onBoarding.foodType.family') },
+    { value: 'spanish', label: t('onBoarding.foodType.spanish') },
+    { value: 'italian', label: t('onBoarding.foodType.italian') },
+    { value: 'mexican', label: t('onBoarding.foodType.mexican') },
+    { value: 'asian', label: t('onBoarding.foodType.asian') },
+    { value: 'vegan', label: t('onBoarding.foodType.vegan') },
+    { value: 'vegetarian', label: t('onBoarding.foodType.vegetarian') },
+    { value: 'fastfood', label: t('onBoarding.foodType.fastfood') },
+    { value: 'tapas', label: t('onBoarding.foodType.tapas') },
+    { value: 'other', label: t('onBoarding.foodType.other') },
+  ]
+})
+
+watch(
+  () => formData.value.companyName,
+  (newVal) => {
+    if (isCompanyNameSynced.value) {
+      formData.value.commercialName = newVal
+    }
+  }
+)
+
+watch(
+  () => formData.value.commercialName,
+  (newVal) => {
+    if (newVal !== formData.value.companyName) {
+      isCompanyNameSynced.value = false
+    }
+  }
+)
+
 const errors = ref({
   companyName: '',
+  commercialName: '',
   phone: '',
   cif: '',
-  address: '',
+  preferredLocations: '',
   sector: '',
   termsAccepted: '',
 })
+
 const submitForm = async () => {
   if (formData.value.termsAccepted) {
     errors.value = {
       companyName: '',
+      commercialName: '',
       phone: '',
       cif: '',
-      address: '',
+      preferredLocations: '',
       sector: '',
       termsAccepted: '',
     }
     if (!validateForm()) return false
-    if (!validateCIF(formData.value.cif)) return errors.value.cif = t('onBoarding.step2InvalidCIF')
+    if (!validateCIF(formData.value.cif)) return (errors.value.cif = t('onBoarding.step2InvalidCIF'))
+    
+    if (formData.value.sector !== 'restoration') delete formData.value.type
     try {
       const userId = userStore.userData._id
-      console.log('User ID being sent:', userId) // Añade este log
       if (!userId) {
         console.error('User ID is undefined or null')
         // Manejar el caso de ID faltante (tal vez redirigir al login)
@@ -239,7 +326,14 @@ function validateForm() {
     } else {
       errors.value[key] = ''
     }
-  });
-  return Object.values(errors.value).every(error => error === '')
+  })
+  return Object.values(errors.value).every((error) => error === '')
 }
 </script>
+
+<style scoped>
+input:checked {
+  border: none;
+  background: red;
+}
+</style>

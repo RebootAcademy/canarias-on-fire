@@ -1,6 +1,7 @@
 {
   "eventAdvice": "Don't miss the upcoming most anticipated events",
   "createEvent": "Create a new event",
+  "editEvent": "Edit event",
   "preview": "Preview",
   "eventType": "Event type",
   "event": "Event in a determined date",
@@ -14,11 +15,14 @@
   "selectImageDescription": "Select the image you want to display at the event.",
   "eventInfo": "Name, date and time",
   "eventDate": "Date",
+  "eventEndDate": "End date",
   "pickDate": "Pick a date",
   "eventPeriod": "Dates Range",
   "pickPeriod": "Pick the dates",
   "startTime": "Start time",
   "endTime": "End time",
+  "hasEndTime": "Is there and end date and it's different to the start date?",
+  "changeLocation": " Change location",
   "eventInfoDescription": "Select the name, date and time when the event will take place.",
   "eventNameLabel": "Event Name",
   "eventDescription": "Descripción",
@@ -26,29 +30,46 @@
   "eventLocation": "Location",
   "eventLocationDescription": "Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.",
   "eventPrice": "Price",
+  "eventDiscount": "Type of discount",
+  "eventServices": "Services",
+  "eventTypeDiscount": {
+    "free": "Free",
+    "10-30": "10% - 30%",
+    "30-50": "30% - 50%",
+    "50-70": "50% - 70%",
+    "2x1": "2x1",
+    "other": "Other",
+    "notSpecificied": "Not specified"
+  },
   "free": "My tickets are free",
   "capacity": "Capacity",
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",
   "location": "Enter a location",
   "externalUrl": "External site",
+  "externalUrlDescription": "If you have an external website (e.g. ticket purchase), please specify it here.",
   "notEventsFound": "Not events found.",
   "availablePremium": "* Select your cover image (Feature only available for Gold and Premium events).",
-  "payments": {
+  "validateByAdmin": "*  To publish the event the organizer must be validated by the administrator.",
+  "paymentsOption": {
     "manageSub": "Manage Subscription for ",
     "currentPlan": "Current plan: ",
     "choose": "Choose your payment",
     "findPerfect": "Find the perfect payment that suits your event needs.",
     "recommendedOption": "Recommended option",
-    "readPriority": "Reading priority: "
+    "readPriority": "Reading priority: ",
+    "payForEvent": "Payments for the event",
+    "payForEventDescription": "Perfect plans for the publication of your event."
   },
   "featuresDescriptions": {
     "eventPublication": "Events publication",
+    "promotionPublication": "Publication of promotions",
     "eventPhotos": "Photos of the event or event posters",
     "readingPriority": "Reading priority",
     "increasedCharacterLimit": "Increase in the number of characters for information",
     "websiteLink": "Link to the website",
     "offerPublication": "Publication of offers",
-    "rssPublication": "Publication in RRSS"
+    "rssPublication": "Publication in RRSS",
+    "limitPhotos": "Limit photos:"
   },
   "priorities": {
     "high": "High",
@@ -72,18 +93,40 @@
     "categoriesDescription": "Select up to 3 categories to find events that match your interests."
   },
   "eventsDashboard": {
-    "optionsFilter": {
-      "all": "All",
-      "draft": "Draft",
-      "published": "Published",
-      "closed": "Closed"
-    }
+    "all": "All",
+    "draft": "Draft",
+    "published": "Published",
+    "closed": "Closed"
   },
   "previewText": {
     "aboutEvent": "About the event",
-    "showMap":"Show map",
+    "aboutPromo": "About the promotion",
+    "showMap": "Show map",
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
     "featurePayedEvents": "* Feature only available for Gold and Premium events."
-  }
+  },
+  "promotions": {
+    "canceledSubscrition": "Your subscription will be valid until  ",
+    "currentPlan": "Current plan: ",
+    "manageSubscription": "Manage Subscription for ",
+    "chooseSubscriptionPlan": "Choose your subscription plan",
+    "descriptionPlan": "Find the perfect plan that suits your event needs."
+  },
+  "notPromotionsFound": "Not promotions found.",
+  "galleryLimit": "You have reached your plan's image capacity limit",
+  "recommended": "Recommended option",
+  "buttonsEvents": {
+    "events": "EVENTS",
+    "nightlifePromotion": "NIGHTLIFE OFFERS AND PROMOTIONS",
+    "food&DrinksPromotion": "BARS AND RESTAURANTS OFFERS AND PROMOTIONS",
+    "kidsPromotion": "ACTIVITIES FOR CHILDREN",
+    "servicesPromotion": "SERVICES AND EQUIPMENT OFFERS AND PROMOTIONS",
+    "activitiesPromotion": "ACTIVITY OFFERS",
+    "plansPromotion": "ESCAPADES OFFERS",
+    "planYourParty": "PLAN YOUR OWN PARTY"
+  },
+  "relatedEvent": "Related events",
+  "relatedPromotion": "Related promotions",
+  "relatedArticle": "Related articles"
 }

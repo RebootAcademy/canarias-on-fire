@@ -12,6 +12,26 @@
     "arts": "Arte",
     "nature": "Naturaleza",
     "plans": "Escapadas",
-    "promotions": "Promociones"
+    "theater": "Teatro",
+    "activities": "Actividades",
+    "promotions": "Promociones",
+    "dance": "Danza",
+    "poetry": "Poesía",
+    "talkings": "Charlas",
+    "workshop": "Talleres",
+    "gastronomy": "Gastronomía",
+    "museums": "Museos",
+    "sports": "Deportes",
+    "romerias": "Romerías",
+    "all": "Todos",
+    "other": "Otros",
+    "bands": "Djs y grupos",
+    "catering": "Catering",
+    "lighting": "Sonido e Iluminación",
+    "sound": "Sonido",
+    "photography": "Fotografía",
+    "furniture": "Mobiliario",
+    "places": "Lugares",
+    "workshops": "Talleres"
   }
 }

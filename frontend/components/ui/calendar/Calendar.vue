@@ -29,7 +29,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 <template>
   <CalendarRoot
     v-slot="{ grid, weekDays }"
-    :class="cn('p-3 bg-gray', props.class)"
+    :class="cn('p-3 bg-secondary text-background', props.class)"
     v-bind="forwarded"
   >
     <CalendarHeader>

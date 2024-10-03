@@ -44,6 +44,12 @@ const switchSubject = (type, company ) => {
       return 'Bienvenido a Evente'
     case 'validatedCompany':
       return 'Cuenta validada'
+    case 'canceledSubscription':
+      return 'Suscripción cancelada'
+    case 'sendInvoice':
+      return 'Factura'
+    case 'contact':
+      return 'Email desde Contáctanos de Evente'
   }
 }
 
@@ -78,13 +84,40 @@ const sendEmail = async (type, company) => {
           companyName: company.companyName,
           dashboardUrl: `${process.env.FRONTEND_URL}/pricing/`,
         }
+        break
+      
+      case 'sendInvoice':
+        templatePath = './emailTemplates/sendInvoice.html'
+        replacements = {
+          invoicepdf: company?.activeSubscription?.lastInvoice?.pdf,
+        }
+        break
+      case 'canceledSubscription':
+        templatePath = './emailTemplates/canceledSubscription.html',
+        replacements = {
+          companyName: company.companyName,
+          endDate: new Date(company?.activeSubscription?.canceledAt).toLocaleString()
+        }
+        break
+      case 'contact':
+        templatePath = './emailTemplates/contactMail.html'
+        replacements = {
+          firstname: company.firstName,
+          lastname: company.lastName,
+          email: company.email,
+          message: company.message,
+          phone: company.phone,
+          subject: company.subject
+
+        }
+        break
     }
 
     const html = await loadTemplate(templatePath, replacements)
 
     result = await transporter.sendMail({
       from: process.env.EMAIL,
-      to: type === 'registeredCompany' ? process.env.EMAIL : company.email,
+      to: type === 'registeredCompany' || 'contact' ? process.env.EMAIL : company.email,
       subject: subject,
         html,
     })

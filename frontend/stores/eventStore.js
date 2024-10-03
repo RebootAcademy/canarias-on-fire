@@ -9,11 +9,14 @@ export const useEventStore = defineStore('eventStore', {
     },
     categories: [],
     selectedCategories: [],
+    selectedCategoriesByServices: [],
+    selectCategoryForFilterCompany: 'all',
     selectedFilterByDate: 'all',
     searchQuery: '',
     eventName: '',
     eventType: '',
     eventDate: null,
+    eventEndDate: null,
     eventLocation: {
       address: '',
       coordinates: { lat: null, lng: null },
@@ -28,6 +31,7 @@ export const useEventStore = defineStore('eventStore', {
     endTime: '',
     externalUrl: '',
     eventImages: [],
+    eventDiscount: '',
     coverImage: null,
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
@@ -68,6 +72,17 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    toogleCategoryForPromotions(category) {
+      const index = this.selectedCategoriesForPromotion.findIndex(
+        (c) => c.id === category.id
+      )
+      if (index === -1) {
+        this.selectedCategoriesForPromotion.push(category)
+      } else {
+        this.selectedCategoriesForPromotion.splice(index, 1)
+      }
+    },
+
     addEventImage(image) {
       this.eventImages.push(image)
     },
@@ -81,6 +96,9 @@ export const useEventStore = defineStore('eventStore', {
     },
     setEventDate(dateRange) {
       this.eventDate = dateRange
+    },
+    setSearchQuery(query) {
+      this.searchQuery = query
     },
 
     setPlaceDetails(place) {
@@ -125,6 +143,18 @@ export const useEventStore = defineStore('eventStore', {
     setSelectedCategories(categories) {
       this.selectedCategories = categories
     },
+    setSelectedCategoriesOfServices(categories) {
+      if (categories === 'delete')
+        return (this.selectedCategoriesByServices = [])
+      this.selectedCategoriesByServices = categories
+    },
+    setTypeOfCompanyCategory(type) {
+      if (this.selectCategoryForFilterCompany !== type.value) {
+        this.selectCategoryForFilterCompany = type.value
+      } else {
+        this.selectCategoryForFilterCompany = null
+      }
+    },
     setFilterModalOpen(isOpen) {
       this.isFilterModalOpen = isOpen
     },
@@ -165,6 +195,27 @@ export const useEventStore = defineStore('eventStore', {
         categories: [],
       }
       this.eventDate = null
+    },
+
+    resetCreateEventForm() {
+      this.eventImages = []
+      this.coverImage = null
+      this.eventDate = null
+      ;(this.selectedCategories = []),
+        (this.selectedCategoriesByServices = []),
+        (this.eventName = ''),
+        (this.eventType = 'event'),
+        (this.eventDescription = ''),
+        (this.externalUrl = ''),
+        (this.hasTriedSubmit = false)
+      ;(this.eventDiscount = ''),
+        (this.eventPrice = 0),
+        (this.eventCapacity = 0),
+        (this.isFree = false),
+        (this.payment = null),
+        (this.status = null),
+        (this.startTime = ''),
+        (this.endTime = '')
     },
 
     async fetchEvents() {
@@ -230,6 +281,7 @@ export const useEventStore = defineStore('eventStore', {
             id: category._id,
             name: category.name,
             icon: category.icon,
+            type: category.type,
           }))
         } else {
           throw new Error(
@@ -262,6 +314,8 @@ export const useEventStore = defineStore('eventStore', {
 
         if (data.value?.success) {
           this.event = data.value.result
+
+          this.fetchEvents()
           return true
         }
         return false
@@ -299,7 +353,31 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     updateEvent() {
-      return this.saveEvent(true)
+      return this.saveEvent(false)
+    },
+
+    async updateEventByAdmin(eventId) {
+      const { data, error } = await useFetch(`/events/admin/${eventId}`, {
+        method: 'PATCH',
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
+      })
+
+      if (error.value) {
+        console.error('Error updating event status:', error.value)
+        return { error: error.value }
+      }
+
+      if (data.value?.success) {
+        this.event = data.value.result
+
+        return { data: this.event }
+      } else {
+        const customError = new Error(
+          data.value?.error || 'Failed to update event status'
+        )
+        console.error('Error updating event status:', customError)
+        return { error: customError }
+      }
     },
 
     async updateEventStatus(eventId, status) {
@@ -316,6 +394,7 @@ export const useEventStore = defineStore('eventStore', {
 
       if (data.value?.success) {
         this.event = data.value.result
+
         return { data: this.event }
       } else {
         const customError = new Error(
@@ -346,10 +425,12 @@ export const useEventStore = defineStore('eventStore', {
         eventName: this.eventName,
         eventType: this.eventType,
         eventDate: this.eventDate,
+        eventEndDate: this.eventEndDate,
         startTime: this.startTime,
         endTime: this.endTime,
         eventDescription: this.eventDescription,
         eventLocation: this.eventLocation,
+        eventDiscount: this.eventDiscount,
         eventPrice: this.isFree ? 0 : this.eventPrice,
         isFree: this.isFree,
         eventCapacity: this.eventCapacity,
@@ -359,6 +440,7 @@ export const useEventStore = defineStore('eventStore', {
         categories: this.selectedCategories.map((cat) =>
           typeof cat === 'object' ? cat.id : cat
         ),
+        categoriesOfServices: this.selectedCategoriesByServices,
         status: this.status,
         userId: this.userId,
         payment: this.payment,
@@ -388,87 +470,106 @@ export const useEventStore = defineStore('eventStore', {
       const today = new Date()
 
       return this.events.filter((event) => {
-        const eventDate = new Date(
-        event.eventDate.year,
-        event.eventDate.month - 1,
-        event.eventDate.day
-      )
+        if (event.eventType === 'event'){
 
-      const [hours, minutes] = event.startTime.split(':').map(Number)
-      
-      const eventDateTime = new Date(
-        eventDate.getFullYear(),
-        eventDate.getMonth(),
-        eventDate.getDate(),
-        hours,
-        minutes
-      )
-        
-      if (event.status !== 'closed' && eventDateTime < today) {
-        this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
-      }
+          let endDate = new Date(event.eventEndDate?.year, event.eventEndDate?.month - 1, event.eventEndDate?.day)
+          let eventDate = new Date(
+            event.eventDate?.year,
+            event.eventDate?.month - 1,
+            event.eventDate?.day
+          )
+  
+          const [hours, minutes] = event.startTime.split(':').map(Number)
+          let eventDateTime 
+          if (endDate){
+            eventDateTime = new Date(
+              endDate.getFullYear(),
+              endDate.getMonth(),
+              endDate.getDate(),
+              hours,
+              minutes
+            )
+          } else {
+            eventDateTime = new Date(
+              eventDate.getFullYear(),
+              eventDate.getMonth(),
+              eventDate.getDate(),
+              hours,
+              minutes
+            )
+          }
+  
+          if (event.status !== 'closed' && eventDateTime < today) {
+            this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
+          }
+        } else {
+          let endDate = new Date(event.eventDate?.end.year, event.eventDate?.end.month - 1, event.eventDate?.end.day)
+          if (event.status !== 'closed' && endDate < today) {
+            this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
+          }
+        }
 
-      // Filter events by active and validated users
-      if (!event.userId?.isActive || !event.userId?.isValidated) {
-        return false
-      }
-
-      if (this.searchQuery) {
-        // Search
-        const lowercaseQuery = this.searchQuery.toLowerCase()
-        if (
-          !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-          !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-        ) {
+        // Filter events by active and validated users
+        if (!event.userId?.isActive) {
           return false
         }
-      }
 
-      // Filter by Categories
-      if (this.filters.categories.length > 0) {
-        const eventCategoryIds = event.categories.map((cat) => cat._id)
-        if (
-          !this.filters.categories.some((id) => eventCategoryIds.includes(id))
-        ) {
-          return false
+        if (this.searchQuery) {
+          // Search
+          const lowercaseQuery = this.searchQuery.toLowerCase()
+          if (
+            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          ) {
+            return false
+          }
         }
-      }
 
-      // Filtrar por categorías seleccionadas
-      if (this.selectedCategories.length > 0) {
-        const eventCategoryIds = event.categories.map((c) => c._id)
-        const hasMatchingCategory = this.selectedCategories.some((sc) =>
-          eventCategoryIds.includes(sc.id)
-        )
-
-        if (!hasMatchingCategory) {
-          return false
+        // Filter by Categories
+        if (this.filters.categories.length > 0) {
+          const eventCategoryIds = event.categories.map((cat) => cat._id)
+          if (
+            !this.filters.categories.some((id) => eventCategoryIds.includes(id))
+          ) {
+            return false
+          }
         }
-      }
 
-      // Filter by islands
-      if (this.filters.islands.length > 0) {
-        const eventIsland = getIslandFromPostalCode(
-          event.eventLocation.postalCode
-        )
-        if (!this.filters.islands.includes(eventIsland)) {
-          return false
-        }
-      }
+        // Filtrar por categorías seleccionadas
+        if (this.selectedCategories.length > 0) {
+          const eventCategoryIds = event.categories.map((c) => c._id)
+          const hasMatchingCategory = this.selectedCategories.some((sc) =>
+            eventCategoryIds.includes(sc.id)
+          )
 
-      // Filter by date
-      if (this.filters.date) {
-        const filterDate = this.filters.date
-        const eventDate = event.eventDate
-        if (
-          !eventDate ||
-          eventDate.year !== filterDate.year ||
-          eventDate.month !== filterDate.month ||
-          eventDate.day !== filterDate.day
-        ) {
-          return false
+          if (!hasMatchingCategory) {
+            return false
+          }
         }
-      }
+
+        // Filter by islands
+        if (this.filters.islands.length > 0) {
+          const eventIsland = getIslandFromPostalCode(
+            event.eventLocation.postalCode
+          )
+          if (!this.filters.islands.includes(eventIsland)) {
+            return false
+          }
+        }
+
+        // Filter by date
+        if (this.filters.date) {
+          const filterDate = this.filters.date
+          const eventDate = event.eventDate
+          if (
+            !eventDate ||
+            eventDate.year !== filterDate.year ||
+            eventDate.month !== filterDate.month ||
+            eventDate.day !== filterDate.day
+          ) {
+            return false
+          }
+        }
 
         return true
       })
@@ -476,7 +577,7 @@ export const useEventStore = defineStore('eventStore', {
     eventsCount() {
       return this.events.length
     },
-  
+
     getCategoryById: (state) => (id) => {
       return state.categories.find(
         (category) => category.id === id || category._id === id
@@ -491,7 +592,9 @@ export const useEventStore = defineStore('eventStore', {
 
       // Calculate the difference between today and the Monday of this week
       const startOfWeek = new Date(today)
-      startOfWeek.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)) // Set to Monday
+      startOfWeek.setDate(
+        today.getDate() - (currentDay === 0 ? 6 : currentDay - 1)
+      ) // Set to Monday
 
       // Calculate the end of the week (Sunday)
       const endOfWeek = new Date(startOfWeek)
@@ -503,7 +606,7 @@ export const useEventStore = defineStore('eventStore', {
       // Check if eventDate falls within the current week
       return eventDate >= startOfWeek && eventDate <= endOfWeek
     },
-  
+
     filteredEventsByDate: (state) => (array) => {
       return array.filter((event) => {
         let eventDate = null
@@ -512,7 +615,7 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate.year,
             event.eventDate.month - 1,
             event.eventDate.day
-          )  
+          )
         }
         switch (state.selectedFilterByDate) {
           case 'all':

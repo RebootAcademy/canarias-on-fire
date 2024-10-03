@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div class="max-w-7xl mx-auto sm:py-4 px-4 sm:px-6 lg:px-8 ">
+    <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16 xl:gap-20 xl:px-48">
       <div
         v-for="plan in filteredPlans"
         :key="plan._id"
@@ -8,28 +8,28 @@
         :class="{ 'border-black': getSubscriptionAction(plan) === 'current' }"
       >
         <div
-          v-if="plan.name === 'premium'"
-          class="absolute top-0 left-0 right-0 bg-black text-center py-1 rounded-t-lg"
+          v-if="plan.name === 'optima'"
+          class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
         >
-          Recommended option
+          {{ $t('recommended') }}
         </div>
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
+        <h3 class="text-lg leading-6 font-medium text-secondary">
           {{ plan.name }}
         </h3>
-        <div class="mt-4">
-          <span class="text-4xl font-extrabold text-gray-900"
+        <div class="mt-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
+          <span class="text-4xl font-extrabold t"
             >{{ plan.pricing }}€</span
           >
-          <span class="text-base font-medium text-gray-500"> / MO</span>
+          <span class="text-base font-medium "> / MO</span>
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
           <li v-for="(key, value) in plan.features" :key="key">
             <div
-              v-if="value && typeof key !== 'number'"
-              class="flex justify-between"
+              v-if="value && typeof key !== 'number' && typeof key !== 'string'"
+              class="flex justify-between "
             >
-              <p class="ml-3 text-base text-gray-700">
+              <p class="ml-3 text-base text-secondary">
                 {{ featureDescriptions[value] }}
               </p>
               <svg
@@ -50,7 +50,7 @@
               <svg
                 v-else
                 class="flex-shrink-0 h-6 w-6 text-red-500"
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://www.w3.org/2000/svg"background
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -64,9 +64,17 @@
               </svg>
             </div>
           </li>
-          <li v-for="key in plan.features" v-show="typeof key === 'number'">
-            <p class="ml-3 text-base text-gray-700">
-              Prioridad de lectura:
+          <li v-for="key in plan.features" v-show="typeof key === 'string'" :key="key">
+            <p class="ml-3 text-base text-secondary">
+              {{$t('featuresDescriptions.limitPhotos')}}
+              <span class="font-semibold ml-1">{{
+                Number(key)
+              }}</span>
+            </p>
+          </li>
+          <li v-for="key in plan.features" v-show="typeof key === 'number'" :key="key">
+            <p class="ml-3 text-base text-secondary">
+              {{$t('featuresDescriptions.readingPriority')}}
               <span class="font-semibold">{{
                 getReadingPriorityText(key)
               }}</span>
@@ -74,35 +82,49 @@
           </li>
         </ul>
 
-        <div class="mt-8">
+        <div v-if="userStore.isAuthenticated && !isInformation" class="mt-8" >
           <NuxtLink
             v-if="getSubscriptionAction(plan) === 'subscribe'"
             @click="subscribeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="cursor-pointer inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
-            Subscribe
+            {{$t('buttons.subscribe')}}
           </NuxtLink>
           <NuxtLink
             v-else-if="getSubscriptionAction(plan) === 'upgrade'"
             @click="upgradeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
             Upgrade
           </NuxtLink>
           <NuxtLink
-            v-else-if="getSubscriptionAction(plan) === 'downgrade'"
+            v-else-if=" getSubscriptionAction(plan) === 'downgrade'"
             @click="downgradeToPlan(plan)"
-            class="inline-block w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition-colors"
+            class="inline-block cursor-pointer w-full bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
           >
             Downgrade
           </NuxtLink>
-          <Button
-            v-else-if="getSubscriptionAction(plan) === 'current'"
-            disabled
-            class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
-          >
-            Current Plan
-          </Button>
+          <div v-else-if="getSubscriptionAction(plan) === 'current'">
+            <Button
+              disabled
+              class="inline-block w-full bg-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg text-center cursor-not-allowed"
+            >
+            {{$t('buttons.current')}}
+            </Button>
+             <Button
+              v-if="!isCanceled"
+              class="cursor-pointer mt-2 inline-block w-full bg-grey border-2 border-red-400  text-red-400 font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-500 hover:border-none hover:text-white transition-colors"
+              @click="cancelSubscription(plan)"
+            >
+            {{$t('buttons.cancel')}}
+            </Button>
+            <p 
+              v-if="isCanceled" 
+              class="mt-2 text-center text-whitegray text-xs italic font-semibold"
+            >
+              {{$t('promotions.canceledSubscrition')}} {{ new Date (userStore.userData.activeSubscription?.canceledAt).toLocaleDateString() }}
+            </p>
+          </div>
           <Button
             v-else-if="getSubscriptionAction(plan) === 'disabled'"
             disabled
@@ -110,6 +132,7 @@
           >
             Downgrade Scheduled
           </Button>
+          
         </div>
       </div>
     </div>
@@ -117,6 +140,8 @@
 </template>
 
 <script setup>
+  import { useToast } from '@/components/ui/toast/use-toast'
+
 const props = defineProps({
   plans: {
     type: Array,
@@ -130,29 +155,58 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  isHired: {
+    type: Boolean,
+    default: false,
+  },
+  isInformation: {
+    type: Boolean,
+    default: false
+  }
 })
 
+const { toast } = useToast()
+const {t} = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 
-const featureDescriptions = {
-  eventPublication: 'Publicación de eventos',
-  eventPhotos: 'Fotos del evento o cartelería del mismo',
-  readingPriority: 'Prioridad de lectura',
+const isCanceled = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    return true
+  } else {
+    return false
+  }
+})
+
+
+const isCanceledAndOutOfDate = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    if (new Date() > new Date(userStore.userData.activeSubscription?.canceledAt)) {
+      return true
+    } else {
+      return false
+    }
+  }
+})
+
+const featureDescriptions = computed(() => ({
+  eventPublication: t('featuresDescriptions.promotionPublication'),
+  eventPhotos: t('featuresDescriptions.eventPhotos'),
+  readingPriority: t('featuresDescriptions.readingPriority'),
   increasedCharacterLimit:
-    'Aumento del número de caracteres para la información',
-  websiteLink: 'Enlace a la página web',
-  offerPublication: 'Publicación de ofertas',
-  rssPublication: 'Publicación en RRSS',
-}
+    t('featuresDescriptions.increasedCharacterLimit'),
+  websiteLink: t('featuresDescriptions.websiteLink'),
+  offerPublication: t('featuresDescriptions.offerPublication'),
+  limitPhotos: t('featuresDescriptions.limitPhotos')
+}))
 
 const getReadingPriorityText = (value) => {
   switch (value) {
     case 1:
       return 'Alta'
     case 2:
-      return 'Media'
+      return 'Alta'
     case 3:
       return 'Baja'
     default:
@@ -161,7 +215,7 @@ const getReadingPriorityText = (value) => {
 }
 
 const filteredPlans = computed(() => {
-  return props.plans.filter(plan => (plan.name !== 'premium' && plan.name !== 'basic'))
+  return props.plans.filter(plan => (plan.name !== 'optima plus'))
 })
 
 const getFullPlanInfo = (planId) => {
@@ -169,10 +223,10 @@ const getFullPlanInfo = (planId) => {
 }
 
 const getActiveSubscription = () => {
-  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
+  if (userStore.userData?.role === 'admin' && userStore?.selectedUser) {
     return userStore.selectedUser.activeSubscription || {}
   } else {
-    return userStore.userData.activeSubscription || {}
+    return userStore.userData?.activeSubscription || {}
   }
 }
 
@@ -184,12 +238,14 @@ const getSubscriptionAction = (plan) => {
   }
 
   const currentPlan = getFullPlanInfo(currentSubscription.plan)
+
+
   
   if (!currentPlan) {
     return 'unknown'
   }
 
-  const planOrder = ['basic', 'gold', 'premium'] // Corregido el orden de los planes
+  const planOrder = ['basic', 'optima', 'optima plus'] // Corregido el orden de los planes
   const currentPlanIndex = planOrder.indexOf(currentPlan.name)
   const newPlanIndex = planOrder.indexOf(plan.name)
 
@@ -201,17 +257,23 @@ const getSubscriptionAction = (plan) => {
     return currentSubscription.nextPlan && currentSubscription.nextPlan === plan._id ? 'current' : 'disabled'
   }
 
-  if (currentSubscription.status === 'canceled' || currentSubscription.status === 'inactive') {
+  if ( currentSubscription.status === 'inactive') {
     return 'subscribe'
   }
 
+  if (currentSubscription.status === 'canceled' && isCanceledAndOutOfDate.value) {
+    return 'subscribe'
+    
+  }
+  
+
   if (currentPlanIndex === newPlanIndex) {
     return 'current'
-  } else if (newPlanIndex > currentPlanIndex) {
+  }  else if (newPlanIndex > currentPlanIndex) {
     return 'upgrade'
-  } else {
-    return 'downgrade'
-  }
+  } else if (newPlanIndex < currentPlanIndex) {
+    return ''
+  } 
 }
 
 const getUserId = () => {
@@ -229,6 +291,9 @@ const subscribeToPlan = async (plan) => {
       const result = await subscriptionStore.createSubscription(userId, plan.stripe.planId)
       if (result.success) {
         await userStore.updateUserSubscription(userId, plan._id, 'active')
+        toast({
+          description: t('subscribedPlan')
+        })
         router.push('/subscription/success')
       } else {
         console.error(result?.error || 'Failed to create basic subscription')
@@ -241,22 +306,38 @@ const subscribeToPlan = async (plan) => {
       } else {
         console.error(result?.error || 'Failed to create subscription')
       }
+      await userStore.fetchAndSetUser(userStore.userData.email)
     }
   } catch (error) {
     console.error('Error creating subscription:', error)
   }
 }
 
-const upgradeToPlan = async (plan) => {
-  console.log('upgradeToPlan called with plan:', plan)
+const cancelSubscription = async (plan) => {
   try {
     const userId = getUserId()
-    console.log('Calling subscriptionStore.upgradeSubscription with userId:', userId, 'and planId:', plan.stripe.planId)
+    const result = await subscriptionStore.cancelSubscription(userId, plan._id)
+    if (result.success) {
+      await userStore.updateUserSubscription(userId, plan._id, 'canceled')
+      if (plan.name === 'basic') {
+        toast({
+          description: t('canceledPlan')
+        })
+      }
+    } else {
+      console.error(result?.error || 'Failed to cancel subscription')
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error)
+  }
+}
+
+const upgradeToPlan = async (plan) => {
+  try {
+    const userId = getUserId()
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
-    console.log('Result from upgradeSubscription:', result)
 
     if (result.success && result.sessionUrl) {
-      console.log('Redirecting to Stripe session URL:', result.sessionUrl)
       window.location.href = result.sessionUrl
     } else {
       console.error('Failed to upgrade subscription:', result.error)

@@ -1,7 +1,9 @@
 {
   "tags": "Tags",
   "chooseTags": "Choose up to five tags that best describe your event. These categories will help users quickly understand the type and focus of your event.",
+  "chooseTagsPromo": "Choose up to a tag that best describe your promotion. That category will help users quickly understand the type and focus of your promotion.",
   "mustSelectTag": "Must select at least 1 tag.",
+  "describeSelector": "Choose type of service that your offer",
   "cantSelectMoreTags": "Can't select more than 5 tags.",
   "values": {
     "music": "Music",
@@ -12,6 +14,26 @@
     "arts": "Arts",
     "nature": "Nature",
     "plans": "Plans",
-    "promotions": "Promotions"
+    "theater": "Theater",
+    "activities": "Activities",
+    "promotions": "Promotions",
+    "dance": "Dance",
+    "poetry": "Poetry",
+    "talkings": "Talks",
+    "workshop": "Workshop",
+    "gastronomy": "Gastronomy",
+    "museums": "Museums",
+    "sports": "Sports",
+    "romerias": "Romerias",
+    "all": "All",
+    "other": "Other",
+    "bands": "Djs & Bands",
+    "catering": "Catering",
+    "lighting": "Sound & Lighting",
+    "sound": "Sound",
+    "photography": "Photography",
+    "furniture": "Furniture",
+    "places": "Places",
+    "workshops": "Workshops"
   }
 }

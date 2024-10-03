@@ -1,4 +1,8 @@
+const e = require('express')
 const Event = require('../models/event.model')
+const Company = require('../models/company.model')
+const Subscription = require('../models/subscription.model')
+const Payment = require('../models/payment.model')
 
 const createEvent = async (req, res) => {
   try {
@@ -24,6 +28,7 @@ const createPromotion = async (req, res) => {
       ...req.body,
       eventType: 'promotion'
     }
+
     const newPromotion = await Event.create(promotionData)
     res.status(201).json({
       success: true,
@@ -42,7 +47,7 @@ const createPromotion = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('categories location userId payment')
+    const events = await Event.find().populate('categories location userId payment subscription')
     res.status(200).json({
       success: true,
       message: 'Events successfully fetched.',
@@ -60,7 +65,7 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id).populate('categories location userId payment')
+    const event = await Event.findById(req.params.id).populate('categories location userId payment subscription')
 
     if (!event) {
       return res.status(404).json({
@@ -118,12 +123,90 @@ const updateEvent = async (req, res) => {
       runValidators: true,
     })
 
+    console.log(event)
+
     if (!event) {
       return res.status(404).json({
         success: false,
         message: 'Event not found',
       })
     }
+
+    if (event.eventType === 'promotion') {
+      const company = await Company.findById(event.userId)
+      if (!company) {
+        return res.status(404).json({
+          success: false,
+          message: 'Company not found',
+        })
+      }
+
+      const today = new Date().getTime() // Evitar posibles diferencias en la comparación de fechas
+      const canceledAt = company.activeSubscription.canceledAt
+        ? company.activeSubscription.canceledAt.getTime()
+        : 0
+
+      if (
+        company.activeSubscription.status === 'active' ||
+        (company.activeSubscription.status === 'canceled' && canceledAt > today)
+      ) {
+        event.subscription = company.activeSubscription.plan
+      } else {
+        const basicSubscription = await Subscription.findOne({ name: 'basic' })
+        if (!basicSubscription) {
+          return res.status(500).json({
+            success: false,
+            message: 'Basic subscription not found',
+          })
+        }
+        event.subscription = basicSubscription._id
+      }
+      await event.save()
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Event successfully updated.',
+      result: event,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating event.',
+      description: error.message,
+    })
+  }
+}
+
+const updateEventByAdmin = async (req, res) => {
+  try {
+    const subscription = await Subscription.findOne({ name: 'optima' })
+    if (!subscription) {
+      return res.status(500).json({
+        success: false,
+        message: 'Optima subscription not found',
+      })
+    }
+    const paymentPlan = await Payment.findOne({ name: 'optima plus' })
+    const event = await Event.findById(req.params.id)
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      })
+    }
+
+    if (event.eventType === 'promotion') {
+      event.subscription = subscription._id
+    }
+
+    if (event.eventType === 'event') {
+      event.payment = paymentPlan._id
+    }
+    event.status = 'published'
+    await event.save()
+
 
     res.status(200).json({
       success: true,
@@ -172,5 +255,6 @@ module.exports = {
   getEventById,
   getEventsByUserId,
   updateEvent,
+  updateEventByAdmin,
   deleteEvent,
 }

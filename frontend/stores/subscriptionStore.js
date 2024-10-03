@@ -24,6 +24,10 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
       return this.subscriptions.find(sub => sub.name === 'basic')
     },
 
+    getTypeOfSubscription(subscription) {
+      return this.subscriptions.find(sub => sub._id === subscription)
+    },
+
     async createSubscription(companyId, planId) {
       try {
         const response = await $fetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/create/${companyId}`, {
@@ -58,7 +62,6 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
     },
 
     async upgradeSubscription(companyId, newPlanId) {
-      console.log('upgradeSubscription called with companyId:', companyId, 'and newPlanId:', newPlanId)
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${companyId}`, {
           method: 'PATCH',
@@ -67,10 +70,8 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
             'Content-Type': 'application/json',
           },
         })
-        console.log('Response from backend:', data.value)
 
         if (data.value && data.value.success) {
-          console.log('Upgrade successful, returning sessionUrl:', data.value.sessionUrl)
           return { 
             success: true, 
             sessionUrl: data.value.sessionUrl 
@@ -148,4 +149,9 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
       }
     },
   },
+  getters: {
+    getSubscriptionById: (state) => (id) => {
+      return state.subscriptions.find((sub) => sub.id === id)
+    },
+  }
 })

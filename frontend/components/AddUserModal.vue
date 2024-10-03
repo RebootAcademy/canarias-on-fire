@@ -1,11 +1,8 @@
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 z-2 flex items-center justify-center"
-  >
-    <div class="rounded-lg p-6 w-11/12 max-w-md bg-black border">
+  <div v-if="isOpen" class="fixed inset-0 z-2 flex items-center justify-center">
+    <div class="rounded-lg p-6 w-11/12 max-w-md bg-background border">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Add New User</h2>
+        <h2 class="text-xl font-semibold">{{ $t('addUser') }}</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
           <span class="text-2xl">&times;</span>
         </button>
@@ -13,33 +10,59 @@
       <form @submit.prevent="handleSubmit">
         <div class="grid gap-4 py-4">
           <div class="gap-4">
-            <Label for="username">Username</Label>
-            <Input id="username" v-model="formData.username" required class="text-gray-500" />
+            <Label for="username">{{ $t('userName') }}</Label>
+            <Input
+              id="username"
+              v-model="formData.username"
+              required
+              class="text-gray-500"
+            />
           </div>
           <div class="gap-4">
-            <Label for="email">Email</Label>
-            <Input id="email" v-model="formData.email" type="email" required class="text-gray-500" />
+            <Label for="email">{{ $t('email') }}</Label>
+            <Input
+              id="email"
+              v-model="formData.email"
+              type="email"
+              required
+              class="text-gray-500"
+            />
           </div>
           <div class="gap-4">
-            <Label for="role">Role</Label>
+            <Label for="role">{{ $t('role') }}</Label>
             <Select v-model="formData.role">
               <SelectTrigger>
-                <SelectValue placeholder="Select role" />
+                <SelectValue
+                  :placeholder="t('userProfile.selectedRole.label')"
+                />
               </SelectTrigger>
               <SelectContent class="text-gray-500">
-                <SelectItem value="basic">Basic</SelectItem>
-                <SelectItem value="company">Company</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="basic">{{
+                  $t('userProfile.selectedRole.basis')
+                }}</SelectItem>
+                <SelectItem value="company">{{
+                  $t('userProfile.selectedRole.company')
+                }}</SelectItem>
+                <SelectItem value="admin">{{
+                  $t('userProfile.selectedRole.admin')
+                }}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <template v-if="formData.role === 'company'">
             <div class="gap-4">
-              <Label for="companyName">Company Name</Label>
-              <Input id="companyName" v-model="formData.companyName" required class="text-gray-500" />
+              <Label for="companyName">{{
+                $t('userProfile.companyName')
+              }}</Label>
+              <Input
+                id="companyName"
+                v-model="formData.companyName"
+                required
+                class="text-gray-500"
+              />
             </div>
             <div class="gap-4">
-              <Label for="companyEmail">Company Email</Label>
+              <Label for="companyEmail">{{ $t('userProfile.email') }}</Label>
               <Input
                 id="companyEmail"
                 v-model="formData.companyEmail"
@@ -49,32 +72,75 @@
               />
             </div>
             <div class="gap-4">
-              <Label for="phone">Phone</Label>
-              <Input id="phone" v-model="formData.phone" class="text-gray-500"/>
+              <Label for="companyEmail">{{ $t('userProfile.commercialName') }}</Label>
+              <Input
+                id="commercialName"
+                v-model="formData.commercialName"
+                type="email"
+                required
+                class="text-gray-500"
+              />
             </div>
             <div class="gap-4">
-              <Label for="sector">Sector</Label>
+              <Label for="address">{{ $t('userProfile.cif') }}</Label>
+              <Input
+                id="cif"
+                v-model="formData.cif"
+                type="text"
+                required
+                class="text-gray-500"
+              />
+            </div>
+            <div class="gap-4">
+              <Label for="phone">{{ $t('userProfile.phone') }}</Label>
+              <Input
+                id="phone"
+                v-model="formData.phone"
+                class="text-gray-500"
+              />
+            </div>
+            <div class="gap-4">
+              <Label for="sector">{{ $t('userProfile.sector.label') }}</Label>
               <Select v-model="formData.sector" required>
                 <SelectTrigger>
                   <SelectValue placeholder="Select sector" />
                 </SelectTrigger>
                 <SelectContent class="text-gray-500">
-                  <SelectItem value="restoration">Restoration</SelectItem>
-                  <SelectItem value="services">Services</SelectItem>
-                  <SelectItem value="nightlife">Nightlife</SelectItem>
-                  <SelectItem value="activities">Activities</SelectItem>
+                  <SelectItem value="restoration">{{
+                    $t('userProfile.sector.restoration')
+                  }}</SelectItem>
+                  <SelectItem value="services">{{
+                    $t('userProfile.sector.services')
+                  }}</SelectItem>
+                  <SelectItem value="activities">{{
+                    $t('userProfile.sector.activities')
+                  }}</SelectItem>
+                  <SelectItem value="nightlife">{{
+                    $t('userProfile.sector.nightlife')
+                  }}</SelectItem>
+                  <SelectItem value="activities">{{
+                    $t('userProfile.sector.activities')
+                  }}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </template>
         </div>
         <div class="flex justify-end gap-4 mt-6 z-10">
-         
-          <Button type="button" variant="ghost" @click="closeModal" class="bg-gray"
-            >Cancel</Button
+          <Button
+            type="button"
+            variant="ghost"
+            @click="closeModal"
+            class="bg-gray"
+            >{{ $t('buttons.cancel') }}</Button
           >
           <div class="bg-primary-gradient p-0.5 rounded-md">
-            <Button type="submit" variant="ghost" class="text-white bg-black hover:bg-primary-gradient hover:text-white">Accept</Button>
+            <Button
+              type="submit"
+              variant="ghost"
+              class="text-white bg-black hover:bg-primary-gradient hover:text-white"
+              >{{ $t('buttons.accept') }}</Button
+            >
           </div>
         </div>
       </form>
@@ -103,8 +169,10 @@ const formData = reactive({
   role: 'basic',
   companyName: '',
   companyEmail: '',
+  cif: '',
+  commercialName: '',
   phone: '',
-  sector: ''
+  sector: '',
 })
 
 const isFormValid = computed(() => {
@@ -114,6 +182,25 @@ const isFormValid = computed(() => {
   }
   return true
 })
+
+
+watch(
+  () => formData.value?.companyName,
+  (newVal) => {
+    if (isCompanyNameSynced.value) {
+      formData.value.commercialName = newVal
+    }
+  }
+)
+
+watch(
+  () => formData.value?.commercialName,
+  (newVal) => {
+    if (newVal !== formData.value.companyName) {
+      isCompanyNameSynced.value = false
+    }
+  }
+)
 
 const closeModal = () => {
   emit('close')

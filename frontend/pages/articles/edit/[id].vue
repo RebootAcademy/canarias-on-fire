@@ -1,35 +1,35 @@
 <template>
   <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col">
-    <h1 class="text-3xl font-bold mb-6">Edit Article</h1>
+    <h1 class="text-3xl font-bold mb-6">{{ $t('editArticle') }}</h1>
     <form @submit.prevent="updateArticle" v-if="article">
       <div class="mb-6">
-        <h3 class="text-xl font-bold">Image</h3>
-        <p class="text-sm opacity-60 mb-2">Update the image for your article if needed.</p>
-        <ImageUploader @image-uploaded="onImageUploaded" :initial-image="article.image" />
+        <h3 class="text-xl font-bold">{{  $t('imageArticle') }}</h3>
+        <p class="text-sm opacity-60 mb-2">{{ $t('updateArticleImage') }}</p>
+        <ImageGallery store-type="article" />
       </div>
       <div class="mb-6">
-        <h3 class="text-xl font-bold">Title</h3>
-        <p class="text-sm opacity-60 mb-2">Please enter the title of your article.</p>
+        <h3 class="text-xl font-bold">{{ $t('articleTitle') }}</h3>
+        <p class="text-sm opacity-60 mb-2">{{ $t('updateArticle') }}</p>
         <Input id="title" v-model="article.title" required />
       </div>
       <div class="mb-6">
-        <h3 class="text-xl font-bold">Content</h3>
-        <p class="text-sm opacity-60 mb-2">Please enter the full content of your article.</p>
+        <h3 class="text-xl font-bold">{{ $t('articleContent') }}</h3>
+        <p class="text-sm opacity-60 mb-2">{{ $t('articleContentDescription') }}</p>
         <client-only>
           <QuillEditor v-model:content="article.content" contentType="html" theme="snow" toolbar="minimal" />
         </client-only>
       </div>
       <div class="flex justify-end mt-20 gap-8">
         <div class="bg-primary-gradient p-0.5 rounded-md">
-          <Button @click="cancelEdit" class="bg-gray-300 hover:bg-gray-400 text-gray-800">Cancel</Button>
+          <Button @click="cancelEdit" class="bg-gray-300 hover:bg-gray-400 text-gray-800">{{ $t('buttons.cancel') }}</Button>
         </div>
         <div class="bg-primary-gradient p-0.5 rounded-md">
-          <Button type="submit">Update Article</Button>
+          <Button type="submit">{{ $t('buttons.update') }}</Button>
         </div>
       </div>
     </form>
     <div v-else class="text-center py-8">
-      Loading article...
+      {{ $t('loadingArticle') }}
     </div>
   </div>
 </template>

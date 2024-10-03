@@ -1,0 +1,198 @@
+{
+  "helpTitle": "Preguntas Frecuentes",
+  "general": {
+    "title": "Preguntas generales",
+    "question1": {
+      "question": "¿Cómo puedo crear un evento?",
+      "answer": "Para crear un evento, inicia sesión, dirígete a la sección de 'Crear Evento', llena los campos necesarios y publica."
+    },
+    "question2": {
+      "question": "¿Puedo editar un evento después de haberlo publicado?",
+      "answer": "Sí, puedes editar tu evento en la sección de 'Mis eventos' siempre y cuando no haya comenzado."
+    },
+    "question3": {
+      "question": "¿Es necesario registrarse para ver los eventos?",
+      "answer": "No, puedes ver los eventos sin registrarte, pero necesitarás una cuenta para crear y gestionar eventos."
+    },
+    "question4": {
+      "question": "¿Cómo puedo buscar eventos específicos?",
+      "answer": "Utiliza el motor de búsqueda en la página principal y filtra por categoría, fecha o ubicación."
+    },
+    "question5": {
+      "question": "¿Qué tipos de eventos puedo publicar?",
+      "answer": "Puedes publicar eventos de cualquier tipo, como conciertos, talleres, conferencias o promociones especiales."
+    },
+    "question6": {
+      "question": "¿Puedo cancelar un evento una vez creado?",
+      "answer": "Sí, puedes cancelar un evento desde la sección de 'Mis eventos' si ya no deseas que se lleve a cabo."
+    },
+    "question7": {
+      "question": "¿Cuánto tiempo dura un evento publicado en la plataforma?",
+      "answer": "El evento estará visible hasta que haya pasado la fecha del evento o decidas eliminarlo."
+    },
+    "question8": {
+      "question": "¿Cómo puedo destacar mi evento?",
+      "answer": "Ofrecemos opciones para destacar tu evento mediante suscripciones y pagos adicionales."
+    },
+    "question9": {
+      "question": "¿Puedo compartir mi evento en redes sociales?",
+      "answer": "Sí, puedes compartir directamente tu evento en redes sociales desde su página de detalles."
+    }
+  },
+  "subscriptions": {
+    "title": "Preguntas sobre suscripciones",
+    "question1": {
+      "question": "¿Qué incluye la suscripción mensual?",
+      "answer": "La suscripción mensual te permite publicar promociones ilimitadas para tus eventos."
+    },
+    "question2": {
+      "question": "¿Cómo puedo suscribirme?",
+      "answer": "Puedes suscribirte desde tu perfil de usuario en la sección de 'Suscripciones'."
+    },
+    "question3": {
+      "question": "¿Puedo cancelar mi suscripción?",
+      "answer": "Sí, puedes cancelar tu suscripción en cualquier momento, pero seguirá activa hasta el final del periodo pagado."
+    },
+    "question4": {
+      "question": "¿Las suscripciones son renovables automáticamente?",
+      "answer": "Sí, las suscripciones se renuevan automáticamente cada mes a menos que las canceles."
+    },
+    "question5": {
+      "question": "¿Puedo cambiar de plan de suscripción?",
+      "answer": "Sí, puedes cambiar de plan desde la sección de 'Suscripciones' en tu cuenta."
+    },
+    "question6": {
+      "question": "¿Qué sucede si no pago mi suscripción?",
+      "answer": "Si no pagas tu suscripción, no podrás publicar más promociones hasta que regularices el pago."
+    },
+    "question7": {
+      "question": "¿Recibo un recordatorio antes de que se renueve mi suscripción?",
+      "answer": "Sí, te enviaremos un recordatorio por correo electrónico antes de la renovación."
+    },
+    "question8": {
+      "question": "¿Las suscripciones incluyen algún descuento para eventos destacados?",
+      "answer": "Sí, los suscriptores tienen descuentos para destacar eventos en la plataforma."
+    },
+    "question9": {
+      "question": "¿Puedo obtener una suscripción anual?",
+      "answer": "Actualmente solo ofrecemos suscripciones mensuales, pero estamos evaluando otras opciones."
+    }
+  },
+  "payments": {
+    "title": "Preguntas sobre pagos",
+    "question1": {
+      "question": "¿Qué métodos de pago están disponibles?",
+      "answer": "Aceptamos tarjetas de crédito, débito y pagos por PayPal."
+    },
+    "question2": {
+      "question": "¿Puedo pagar solo por un evento en lugar de suscribirme?",
+      "answer": "Sí, puedes pagar por evento de forma individual sin necesidad de suscripción."
+    },
+    "question3": {
+      "question": "¿Cómo se realiza el pago de las suscripciones?",
+      "answer": "El pago se realiza automáticamente cada mes usando el método que hayas registrado."
+    },
+    "question4": {
+      "question": "¿Qué ocurre si el pago de mi suscripción falla?",
+      "answer": "Te notificaremos y tendrás un plazo para actualizar tu método de pago antes de suspender la suscripción."
+    },
+    "question5": {
+      "question": "¿Puedo obtener un reembolso por un evento pagado?",
+      "answer": "Los pagos por eventos no son reembolsables a menos que el evento sea cancelado por el organizador."
+    },
+    "question6": {
+      "question": "¿El IVA está incluido en los precios?",
+      "answer": "Sí, todos los precios incluyen el IVA correspondiente."
+    },
+    "question7": {
+      "question": "¿Cómo puedo verificar mis facturas?",
+      "answer": "Puedes revisar y descargar tus facturas desde la sección de 'Historial de Pagos' en tu perfil."
+    },
+    "question8": {
+      "question": "¿Puedo cambiar el método de pago?",
+      "answer": "Sí, puedes actualizar tu método de pago desde la sección de 'Pagos' en tu cuenta."
+    },
+    "question9": {
+      "question": "¿Existe algún costo adicional por destacar un evento?",
+      "answer": "Sí, destacar un evento tiene un costo adicional que dependerá de la visibilidad que quieras obtener."
+    }
+  },
+  "technicalIssues": {
+    "title":"Preguntas sobre problemas técnicos",
+    "question1": {
+      "question": "No puedo acceder a mi cuenta, ¿qué hago?",
+      "answer": "Intenta restablecer tu contraseña desde la opción '¿Olvidaste tu contraseña?' en la página de inicio de sesión."
+    },
+    "question2": {
+      "question": "El sitio no carga correctamente, ¿cómo lo soluciono?",
+      "answer": "Revisa tu conexión a internet o intenta borrar la caché y las cookies de tu navegador."
+    },
+    "question3": {
+      "question": "Mi evento no se muestra, ¿qué puedo hacer?",
+      "answer": "Verifica que el evento haya sido publicado correctamente y que no esté marcado como borrador."
+    },
+    "question4": {
+      "question": "¿Cómo reporto un problema técnico?",
+      "answer": "Puedes reportar problemas desde la sección 'Soporte Técnico' en tu cuenta o enviándonos un correo a {supportEmail}."
+    },
+    "question5": {
+      "question": "El pago de mi suscripción ha fallado, ¿cómo lo resuelvo?",
+      "answer": "Intenta actualizar tu método de pago o contacta a soporte si el problema persiste."
+    },
+    "question6": {
+      "question": "¿Cómo soluciono errores al cargar imágenes?",
+      "answer": "Verifica que la imagen cumpla con los requisitos de tamaño y formato, y vuelve a intentarlo."
+    },
+    "question7": {
+      "question": "El sitio está caído, ¿cuánto tiempo tardará en volver a estar operativo?",
+      "answer": "Nuestro equipo está trabajando para solucionarlo lo antes posible. Te notificaremos en cuanto esté operativo."
+    },
+    "question8": {
+      "question": "Tengo problemas para actualizar mi evento, ¿qué hago?",
+      "answer": "Asegúrate de que tu conexión es estable y de que todos los campos requeridos están completados."
+    },
+    "question9": {
+      "question": "El sistema de búsqueda no encuentra mi evento, ¿por qué?",
+      "answer": "Puede tardar unos minutos en indexarse después de publicarlo. Si persiste, contacta a soporte técnico."
+    }
+  },
+  "accountManagement": {
+    "title": "Preguntas sobre el manejo de la cuenta",
+    "question1": {
+      "question": "¿Cómo puedo crear una cuenta?",
+      "answer": "Haz clic en 'Registrarse' en la página principal y sigue los pasos para crear tu cuenta."
+    },
+    "question2": {
+      "question": "¿Cómo puedo cambiar mi contraseña?",
+      "answer": "Puedes cambiar tu contraseña desde la sección 'Configuración de la cuenta' en tu perfil."
+    },
+    "question3": {
+      "question": "¿Puedo eliminar mi cuenta?",
+      "answer": "Sí, puedes eliminar tu cuenta desde la configuración, pero perderás todos tus eventos y datos asociados."
+    },
+    "question4": {
+      "question": "¿Cómo puedo actualizar mi información personal?",
+      "answer": "Dirígete a 'Mi perfil' y edita la información que necesites actualizar."
+    },
+    "question5": {
+      "question": "¿Puedo conectar mi cuenta con redes sociales?",
+      "answer": "Actualmente no ofrecemos integración directa con redes sociales, pero puedes compartir tus eventos en ellas."
+    },
+    "question6": {
+      "question": "¿Qué hago si olvido mi contraseña?",
+      "answer": "Usa la opción '¿Olvidaste tu contraseña?' en la página de inicio de sesión para restablecerla."
+    },
+    "question7": {
+      "question": "¿Cómo puedo verificar mi correo electrónico?",
+      "answer": "Después de registrarte, recibirás un correo con un enlace de verificación que debes seguir para activar tu cuenta."
+    },
+    "question8": {
+      "question": "¿Cómo protejo mi cuenta de accesos no autorizados?",
+      "answer": "Activa la autenticación en dos pasos en la sección de 'Seguridad' en tu perfil."
+    },
+    "question9": {
+      "question": "¿Cómo gestiono mis notificaciones?",
+      "answer": "Puedes gestionar tus preferencias de notificación desde la sección de 'Ajustes' en tu cuenta."
+    }
+  }
+}

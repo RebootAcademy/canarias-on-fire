@@ -22,14 +22,13 @@ const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
   id: String,
   label: String,
-  modelValue: String
+  modelValue: String,
 })
 
 const eventStore = useEventStore()
 const time = computed({
   get: () => eventStore[props.modelValue],
   set: (value) =>{ 
-    console.log('Emitiendo el valor', value)
     emit('update:modelValue', value)
     eventStore[props.modelValue] = value
   }

@@ -1,6 +1,6 @@
 <template>
   <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-black border-2 rounded-lg p-6 w-11/12 max-w-2xl">
+    <div class="bg-background border-2 rounded-lg p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
         <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -10,7 +10,7 @@
       <div>
         <h3 class="font-semibold">{{ $t('modalFilter.ubication')}}</h3>
         <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.selectIsland')}}</p>
-        <div class="grid grid-cols-3 gap-2 mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 md:gap-2 md:mb-4">
           <label v-for="island in islands" :key="island" class="flex items-center">
             <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2 accent-primary">
             {{ island }}
@@ -18,7 +18,7 @@
         </div>
         <h3 class="font-semibold">{{ $t('modalFilter.date')}}</h3>
         <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p>
-        <div class="grid grid-cols-3 gap-2 mb-4 place-items-end">
+        <div class="w-full">
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
         </div>
