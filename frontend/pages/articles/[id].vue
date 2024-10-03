@@ -1,6 +1,6 @@
 <template>
-  <div class="flex max-w-6xl mx-auto px-4 py-8 bg-black">
-    <div class="flex-grow">
+  <div class="flex max-w-6xl mx-auto px-4 py-8 bg-background">
+    <div class="flex-grow ">
       <div v-if="article" class="max-w-4xl">
         <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>
         <div class="flex items-center mb-4">
@@ -21,58 +21,59 @@
           class="w-full h-64 object-cover mb-6 rounded-lg"
           alt="Article Image"
         />
+        <div class="flex w-full justify-end">
+           <Share2
+           class="mr-2 w-8 cursor-pointer hover:text-primary"
+            @click="copyToClipboard"
+          />
+        <Pencil
+          v-if="isAdmin"
+          class="mr-2 w-8 cursor-pointer hover:text-primary"
+          @click="editArticle"
+        />
+        <Trash
+          v-if="isAdmin"
+          class="mr-2 w-8 cursor-pointer hover:text-red-500"
+          @click="isOpen = true"
+        />
+        </div>
         <div class="prose max-w-none" v-html="article.content"></div>
         <ArticleGallery />
       </div>
       <div v-else class="text-center py-8">Loading article...</div>
-      <div class="flex gap-2 mt-6 mb-6">
-        <div class="bg-primary-gradient p-0.5 rounded-md">
-          <Button
-            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-          >
-            <Share2 class="mr-2 h-4 w-4" />
-            Share
-          </Button>
-        </div>
-        <div
-          v-if="userStore.userData.role === 'admin'"
-          class="bg-primary-gradient p-0.5 rounded-md"
-        >
-          <Button
-            @click="editArticle"
-            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-          >
-            <Pencil class="mr-2 h-4 w-4" />
-            Edit
-          </Button>
-        </div>
-        <div
-          v-if="userStore.userData.role === 'admin'"
-          class="bg-primary-gradient p-0.5 rounded-md"
-        >
-          <Button
-            v-if="userStore.userData.role === 'admin'"
-            @click="deleteArticle"
-            class="px-4 bg-black hover:text-white hover:bg-primary-gradient"
-          >
-            <Trash class="mr-2 h-4 w-4" />
-            Delete
-          </Button>
-        </div>
-      </div>
+     
     </div>
     <ArticleSidebar :articles="otherArticles" />
   </div>
+  <CustomModal v-model:open="isOpen">
+    <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
+    <p class="text-lg">
+      {{  $t('deleteArticle') }}
+    </p>
+    <div class="flex justify-end gap-4 mt-2">
+      <button
+        @click="isOpen = false"
+        class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
+      >
+        {{ $t('buttons.cancel') }}
+      </button>
+      <CustomBtn :title="$t('buttons.confirm')" @click="deleteArticle" />
+    </div>
+  </CustomModal>
 </template>
 
 <script setup>
 import { Share2, Pencil, Trash } from 'lucide-vue-next'
-
+const {t} = useI18n()
 const route = useRoute()
 const router = useRouter()
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
 const articleStore = useArticleStore()
 const userStore = useUserStore()
+const isOpen = ref(false)
 
+const isAdmin = userStore.userData?.role === 'admin'
 const { article } = storeToRefs(articleStore)
 
 const articleId = route.params.id
@@ -102,9 +103,20 @@ const deleteArticle = async () => {
   if (result.success) {
     console.log(result.message)
     await articleStore.fetchArticles()
-    router.push('/')
+    router.push('/articles')
   } else {
     console.error(result.message)
+  }
+}
+
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href)
+    toast({
+      description: t('copyLink'),
+    })
+  } catch (err) {
+    console.error('Error al copiar el enlace: ', err)
   }
 }
 </script>

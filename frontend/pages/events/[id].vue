@@ -128,7 +128,6 @@
       {{ eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}
     </p>
     <div class="flex justify-end gap-4 mt-2">
-      <!-- <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />  -->
       <button
         @click="isOpen = false"
         class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
@@ -180,7 +179,6 @@ const isBasicPayment = computed(() => {
   }
 })
 
-console.log(isBasicPayment.value)
 
 const categoryServices = computed(() => {
   return eventStore.event?.categoriesOfServices
@@ -259,7 +257,7 @@ const publishEvent = async () => {
           `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
         )
       }
-    } else if (eventStore.event.eventType === 'event') {
+    } else if (eventStore.event.eventType === 'event') {copyToClipboard
       router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
   } catch (error) {

@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="`/articles/${article._id}`" class="block">
-    <div class="bg-slate-900 text-background shadow-md rounded-md overflow-hidden w-auto min-w-[300px] max-w-[400px] flex flex-col">
+    <div class="bg-slate-900 text-background shadow-md rounded-md overflow-hidden w-auto min-w-[330px] max-w-[330px] min-h-[250px] max-h-[250px] flex flex-col">
       <NuxtImg :src="article.coverImage" class="w-full h-40 object-cover" alt="Article Image" />
       <div class="p-4 flex flex-col justify-between flex-grow">
         <h3 class="text-xl font-semibold mb-2 line-clamp-2 text-white">{{ article.title }}</h3>

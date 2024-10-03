@@ -3,10 +3,10 @@
     <div
       v-for="item in options"
       :key="item.value"
-      class="flex text-xs md:text-md items-center text-center min-w-40 max-w-full md:max-w-64 md:min-h-16 justify-center bg-gray rounded-lg px-4 py-2 cursor-pointer hover:bg-primary hover:text-background"
+      class="flex text-xs md:text-lg items-center text-center  min-w-40 max-w-full md:max-w-64 md:min-h-24 justify-center bg-gray rounded-lg px-4 py-2 cursor-pointer hover:bg-primary hover:text-background "
       @click="selectedOption = item.value"
       :class="{
-        'bg-transparent border-2 border-primary': selectedOption === item.value,
+        'bg-transparent border-2 border-primary font-bold': selectedOption === item.value,
       }"
     >
       <p>{{ item.label }}</p>

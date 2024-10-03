@@ -1,6 +1,6 @@
 <template>
   <div class="px-10">
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto ">
       <div class="flex space-x-8 pb-4">
         <ArticleCard 
           v-for="article in articles" 
@@ -40,7 +40,9 @@ const props = defineProps({
 
 <style scoped>
 .overflow-x-auto {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e0 #f7fafc;
+  scrollbar-width: thin; /* Firefox: barra de desplazamiento más delgada */
+  scrollbar-color: #fbb03b #f7fafc; /* Color para Firefox: thumb y track */
 }
+
+
 </style>

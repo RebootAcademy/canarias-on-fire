@@ -37,14 +37,14 @@ const props = defineProps({
 const {t} = useI18n()
 const { toast } = useToast()
 const eventStore = useEventStore()
+const articleStore = useArticleStore()
 const config = useRuntimeConfig()
 const cloudName = config.public.cloudinaryCloudName
 const uploadPreset = config.public.cloudinaryUploadPreset
 
 const store = computed(() => {
-  return props.storeType === 'event' ? useEventStore() : useArticleStore()
+  return props.storeType === 'event' ? eventStore : articleStore
 })
-
 const checkMaxImages = () => {
   if (!store?.value?.event?.payment?.name) return 10
   if (store?.value?.event?.eventType === 'promotion') return 10
@@ -58,7 +58,12 @@ const checkMaxImages = () => {
   }
 }
 
-const images = computed(() => store.value[`${props.storeType}Images`])
+const images = computed(() =>{ 
+  if (props.storeType === 'article') return store.value[props.storeType][`${props.storeType}Images`]
+  else return store.value[`${props.storeType}Images`]}
+)
+
+console.log(images.value)
 const coverImage = computed(() => store.value.coverImage)
 
 const onFileChange = async (event) => {
