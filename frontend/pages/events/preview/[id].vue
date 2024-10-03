@@ -106,15 +106,25 @@ const publishEvent = async () => {
     const isSubscriptionValid =
       activeSubscription?.status === 'active' ||
       (activeSubscription?.status === 'canceled' && canceledAt > today)
-
     const isAdmin = userStore.userData.role === 'admin'
 
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
-
+    
+    if (isAdmin) {
+      console.log('entro aquí')
+      const result = await eventStore.updateEventByAdmin(eventId)
+        if (result) {
+          await eventStore.fetchEvents()
+          return router.push(`/events/${eventId}`)
+        } else {
+          console.error('Failed to publish promotion')
+        }
+    }
     if (eventStore.event.eventType === 'promotion') {
-      if ((isSubscriptionValid || isAdmin) && !hasPublishedPromotions) {
+      if (isSubscriptionValid  && !hasPublishedPromotions) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
+          await eventStore.fetchEvents()
           router.push(`/events/${eventId}`)
         } else {
           console.error('Failed to publish promotion')

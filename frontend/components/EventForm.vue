@@ -12,7 +12,7 @@
         @click="router.push('/events')"
       />
       <CustomBtn
-        v-if="isValidated"
+        v-if="isValidated || isAdmin"
         :title="isEditing ? $t('update') : $t('preview')"
         :action="onSubmit"
       />

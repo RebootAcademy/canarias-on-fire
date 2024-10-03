@@ -4,7 +4,7 @@
       for="eventDate" 
       :class="props.band ? 'text-md' : 'text-sm'"
     >
-    {{ $t('eventDate') }}
+    {{ endDate ? $t('eventEndDate') : $t('eventDate') }}
   </Label>
     <Popover>
       <PopoverTrigger as-child>
@@ -31,6 +31,7 @@
 <script setup>
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-vue-next'
+const {t} = useI18n
 const today = new Date()
 const eventStore = useEventStore()
 const dateError = ref('')
@@ -45,26 +46,83 @@ const props = defineProps({
   isEditing: {
     typeof: Boolean, 
     default: false
+  },
+  endDate: {
+    type: Boolean,
+    default: false
   }
 })
 
+/* const modelToSelect = () => {
+  if (props.endDate) return eventStore.eventEndDate
+  if (props.isEditing && props.endDate) return editingDate.value
+  return props.isEditing ? editingDate.value : eventStore.eventDate
+}
+ */
 const modelToSelect = () => {
+  if (props.endDate) {
+    return props.isEditing ? editingDate.value : eventStore.eventEndDate
+  }
   return props.isEditing ? editingDate.value : eventStore.eventDate
 }
 
 const formattedDate = computed(() => {
+  if (props.endDate) {
+    if (!eventStore.eventEndDate) return ''
+    
+    if (props.isEditing) {
+      if (!editingDate.value) {
+        const { year, month, day } = eventStore.eventEndDate || {}
+        return year ? new Date(year, month - 1, day).toLocaleDateString() : ''
+      }
+      return new Date(editingDate.value).toLocaleDateString()
+    }
+
+    const { year, month, day } = eventStore.eventEndDate || {}
+    return year ? new Date(year, month - 1, day).toLocaleDateString() : ''
+  }
+
   if (!eventStore.eventDate) return ''
-  if (props.isEditing && !editingDate.value) return new Date (eventStore.eventDate.year, eventStore.eventDate.month - 1, eventStore.eventDate.day).toLocaleDateString()
-  return new Date(eventStore.eventDate).toLocaleDateString()
+  
+  if (props.isEditing) {
+    if (!editingDate.value) {
+      const { year, month, day } = eventStore.eventDate || {}
+      return year ? new Date(year, month - 1, day).toLocaleDateString() : ''
+    }
+    return new Date(editingDate.value).toLocaleDateString()
+  }
+
+  const { year, month, day } = eventStore.eventDate || {}
+  return year ? new Date(year, month - 1, day).toLocaleDateString() : ''
 })
 
 const updateDate = (newDate) => {
-  eventStore.eventDate = newDate
-   if (props.band) {
+  if (props.endDate) {
+    // Caso 2: Validar que la fecha final no sea anterior a la de inicio
+    if (newDate < eventStore.eventDate) {
+      dateError.value = t('eventEndDateError')
+      return
+    }
+    eventStore.eventEndDate = newDate
+  } else {
+    eventStore.eventDate = newDate
+  }
+  
+  if (props.band) {
     emit('dateChanged', eventStore.eventDate)
   }
+  
+  dateError.value = ''
 }
 const isDisabledDate = (date) => {
   if (today > date) return true
 }
+
+watch(() => props.isEditing, (newVal) => {
+  if (newVal && props.endDate) {
+    editingDate.value = eventStore.eventEndDate
+  } else if (newVal) {
+    editingDate.value = eventStore.eventDate
+  }
+})
 </script>

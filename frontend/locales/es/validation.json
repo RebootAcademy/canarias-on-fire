@@ -5,6 +5,7 @@
   "descriptionRequired": "La descripción es obligatoria",
   "locationRequired": "La ubicación del evento es obligatoria",
   "priceRequired": "El precio es obligatorio",
+  "eventEndDateError": "La fecha de finalización debe ser posterior a la fecha de inicio",
   "categoriesRequired": "Debe seleccionar al menos una categoría",
   "categoriesMax": "No puede seleccionar más de 5 categorías"
 }

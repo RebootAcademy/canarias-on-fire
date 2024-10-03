@@ -1,6 +1,8 @@
 const e = require('express')
 const Event = require('../models/event.model')
 const Company = require('../models/company.model')
+const Subscription = require('../models/subscription.model')
+const Payment = require('../models/payment.model')
 
 const createEvent = async (req, res) => {
   try {
@@ -177,6 +179,50 @@ const updateEvent = async (req, res) => {
   }
 }
 
+const updateEventByAdmin = async (req, res) => {
+  try {
+    const subscription = await Subscription.findOne({ name: 'optima' })
+    if (!subscription) {
+      return res.status(500).json({
+        success: false,
+        message: 'Optima subscription not found',
+      })
+    }
+    const paymentPlan = await Payment.findOne({ name: 'optima plus' })
+    const event = await Event.findById(req.params.id)
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      })
+    }
+
+    if (event.eventType === 'promotion') {
+      event.subscription = subscription._id
+    }
+
+    if (event.eventType === 'event') {
+      event.payment = paymentPlan._id
+    }
+    event.status = 'published'
+    await event.save()
+
+
+    res.status(200).json({
+      success: true,
+      message: 'Event successfully updated.',
+      result: event,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error updating event.',
+      description: error.message,
+    })
+  }
+}
+
 const deleteEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndDelete(req.params.id)
@@ -209,5 +255,6 @@ module.exports = {
   getEventById,
   getEventsByUserId,
   updateEvent,
+  updateEventByAdmin,
   deleteEvent,
 }

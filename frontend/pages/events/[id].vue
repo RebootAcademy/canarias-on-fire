@@ -111,7 +111,7 @@
           </div>
         </div>
       </div>
-      <div v-if="evenType === 'event'">
+      <div v-if="eventType === 'event'">
         <TicketButton hasBorder="hasBorder" />
       </div>
       <div v-else>
@@ -211,7 +211,8 @@ const deleteEvent = async () => {
 
 const formattedDate = computed(() => {
   if (eventStore.event.eventType === 'event') {
-    return formatEventDate(event.value?.eventDate)
+
+    return event.value?.eventEndDate ? formatEventDate(event.value?.eventDate) + ' - ' + formatEventDate(event.value?.eventEndDate) : formatEventDate(event.value?.eventDate)
   } else {
     return `${formatEventDate(
       event.value?.eventDate.start
@@ -238,9 +239,18 @@ const publishEvent = async () => {
     const isAdmin = userStore.userData.role === 'admin'
 
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
+      
+    if (isAdmin) {
+      const result = await eventStore.updateEventByAdmin(eventId)
+        if (result) {
+          router.push(`/events/${eventId}`)
+        } else {
+          console.error('Failed to publish promotion')
+        }
+    }
 
     if (eventStore.event.eventType === 'promotion') {
-      if ((isSubscriptionValid || isAdmin) && !hasPublishedPromotions) {
+      if (isSubscriptionValid && !hasPublishedPromotions) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
           router.push(`/events/${eventId}`)

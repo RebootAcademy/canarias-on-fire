@@ -18,6 +18,10 @@ const EventSchema = new mongoose.Schema({
     type: Object, 
     // required: true 
   },
+  eventEndDate: {
+    type: Object,
+    default: null
+  },
   eventLocation: {
     type: Object,
   },

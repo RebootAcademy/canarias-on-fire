@@ -5,6 +5,7 @@
   "descriptionRequired": "Description is required",
   "locationRequired": "Event location is required",
   "priceRequired": "Price is required",
+  "eventEndDateError": "End date must be after start date",
   "categoriesRequired": "You must select at least one category",
   "categoriesMax": "You cannot select more than 5 categories"
 }
