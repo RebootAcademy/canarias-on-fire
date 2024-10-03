@@ -39,7 +39,6 @@ const props = defineProps({
     // This is only for filter companies in Plan your party
   },
 })
-console.log(props.type)
 const eventStore = useEventStore()
 const {
   categories,

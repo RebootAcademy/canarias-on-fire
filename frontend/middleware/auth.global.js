@@ -8,7 +8,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const config = useRuntimeConfig()
 
     if (isAuthenticated.value && user.value && !userStore.isAuthenticated) {
-      console.log('User authenticated, registering and fetching user data')
       try {
         const token = await getAccessTokenSilently()
         const roles = user.value['https://localhost:3000/roles'] || []
@@ -31,10 +30,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         await userStore.fetchAndSetUser(user.value.email)
         
         if (!response.ok) {
-          console.log('Failed to register user:', response.statusText)
-          // Considerar redirigir a una página de error o manejar este caso
         } else {
-          console.log('User registered and data fetched successfully')
         }
       } catch (error) {
         console.error('Error registering user or fetching data:', error)

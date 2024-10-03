@@ -214,7 +214,6 @@ async function updateProfile() {
       toast({
         description: t('updatedProfile'),
       })
-      console.log('result', result)
     } else {
       toast({
         description: t('errorUpdatedProfile'),

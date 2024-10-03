@@ -43,15 +43,12 @@ nextMonth.setMonth(today.getMonth() + 1)
 const defaultDateRange = { start: today, end: nextMonth }
 
 const onDateChange = (event) => {
-  console.log('Evento @change disparado con:', event)
 }
 const updateDateRange = (newDateRange) => {
-  console.log('update:modelValue disparado con:', newDateRange)
   eventStore.eventDate = newDateRange
 }
 // Función para manejar cambios de input
 const onInputDateChange = (event) => {
-  console.log('Evento @input disparado con:', event)
 }
 
 </script>

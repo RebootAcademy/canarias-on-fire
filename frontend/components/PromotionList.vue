@@ -34,7 +34,6 @@ const numOfPromotions = ref('')
 const { filteredEvents } = storeToRefs(eventStore)
 
 const limitedPromotions = computed(() => {
-  console.log('prop', props.filteredOption)
   let filteredPromotions = filteredEvents.value
 
   if (props.filteredOption) {

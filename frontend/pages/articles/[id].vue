@@ -101,7 +101,6 @@ const editArticle = () => {
 const deleteArticle = async () => {
   const result = await articleStore.deleteArticle(articleId)
   if (result.success) {
-    console.log(result.message)
     await articleStore.fetchArticles()
     router.push('/articles')
   } else {

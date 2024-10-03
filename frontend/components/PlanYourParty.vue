@@ -40,10 +40,6 @@ const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
 })
 
-watch(selectCategoryForFilterCompany, (newValue) => {
-  console.log('selectCategoryForFilterCompany changed:', newValue)
-})
-
 const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []

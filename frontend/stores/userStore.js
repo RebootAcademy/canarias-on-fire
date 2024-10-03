@@ -42,7 +42,6 @@ export const useUserStore = defineStore('userStore', {
 
     async addUser(userData) {
       try {
-        console.log('Sending user data:', userData)
         const response = await $fetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users`,
           {

@@ -326,7 +326,6 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     async saveEvent(isNew = true) {
-      console.log(isNew)
       const eventData = this.getEventData()
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'

@@ -172,7 +172,6 @@ function compareDates(dateA, dateB) {
 
 
 const handleSelection = (selectedValue) => {
-  console.log('Selected value from child:', selectedValue);
  if (selectOption.value !== selectedValue) {
     selectOption.value = selectedValue;
   }

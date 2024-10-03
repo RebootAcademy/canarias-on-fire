@@ -62,16 +62,6 @@ const isThereService = computed(() => {
   return selectedCategories.value.some((c) => c?.name === 'services')
 })
 
-watch(
-  () => eventStore.selectedCategories,
-  (newValue) => {
-    console.log(
-      eventStore.selectedCategories.some((c) => c.name === 'services')
-    )
-    console.log('selectedCategories changed:', newValue)
-  },
-  { deep: true }
-)
 
 const props = defineProps({
   isEditing: {
@@ -110,8 +100,6 @@ const isServiceSelected = (category) => {
 }
 
 const toggleCategory = (category) => {
-  console.log('Category received:', category)
-
   if (!category || !category.id) {
     console.error('Invalid category:', category)
     return
@@ -162,7 +150,6 @@ const toogleServicesCategory = (category) => {
 
   eventStore.setSelectedCategoriesOfServices(updatedCategories)
 
-  console.log('ev', eventStore.selectedCategoriesByServices)
 }
 
 

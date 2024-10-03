@@ -48,7 +48,6 @@ const isAdmin = userStore.userData.role
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
   validateFields(t)
-  console.log(errors)
   if (Object.values(errors).every((error) => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()

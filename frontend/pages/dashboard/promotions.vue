@@ -147,7 +147,6 @@ const limitedPromotions = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
-    console.log(filterSecond)
     return filterSecond
 })
 

@@ -33,13 +33,8 @@ const emit = defineEmits(['update:selected']);
 const localSelectedOption = ref(props.selectOption); 
 
 const computedSelection = computed(() => {
-  console.log('computed', localSelectedOption.value)
   return props.optionsFilters.find((option) => option.value === localSelectedOption.value).label
 })
-
-console.log('Soy el prop', props.selectOption)
-
-console.log(localSelectedOption.value)
 
 watch(localSelectedOption, (newValue) => {
   emit('update:selected', newValue);

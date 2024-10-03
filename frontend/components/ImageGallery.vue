@@ -63,7 +63,6 @@ const images = computed(() =>{
   else return store.value[`${props.storeType}Images`]}
 )
 
-console.log(images.value)
 const coverImage = computed(() => store.value.coverImage)
 
 const onFileChange = async (event) => {
@@ -94,7 +93,6 @@ const onFileChange = async (event) => {
         })
       }
     } catch (error) {
-      console.log(error.message)
       console.error('Error uploading image:', error)
     }
   }

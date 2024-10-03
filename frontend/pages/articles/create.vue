@@ -66,7 +66,6 @@ const createArticle = async () => {
   if (articleData.coverImage === null && articleData.articleImages.length > 0) {
     articleData.coverImage = articleData.articleImages[0].url
   }
-  console.log(articleData)
   try {
     await articleStore.createArticle(articleData)
     router.push('/dashboard/articles')

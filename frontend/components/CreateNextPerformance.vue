@@ -99,7 +99,6 @@ const handleUpdateNextPerformance = async () => {
       toast({
         description: t('updatedPerformance'),
       })
-      console.log('result', result)
     } else {
       toast({
         description: t('errorPerformance'),

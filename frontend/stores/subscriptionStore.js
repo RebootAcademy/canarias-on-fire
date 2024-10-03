@@ -62,7 +62,6 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
     },
 
     async upgradeSubscription(companyId, newPlanId) {
-      console.log('upgradeSubscription called with companyId:', companyId, 'and newPlanId:', newPlanId)
       try {
         const { data } = await useFetch(`${useRuntimeConfig().public.apiBaseUrl}/subscriptions/upgrade/${companyId}`, {
           method: 'PATCH',
@@ -71,10 +70,8 @@ export const useSubscriptionStore = defineStore('subscriptionStore', {
             'Content-Type': 'application/json',
           },
         })
-        console.log('Response from backend:', data.value)
 
         if (data.value && data.value.success) {
-          console.log('Upgrade successful, returning sessionUrl:', data.value.sessionUrl)
           return { 
             success: true, 
             sessionUrl: data.value.sessionUrl 

@@ -29,7 +29,6 @@ const eventStore = useEventStore()
 const time = computed({
   get: () => eventStore[props.modelValue],
   set: (value) =>{ 
-    console.log('Emitiendo el valor', value)
     emit('update:modelValue', value)
     eventStore[props.modelValue] = value
   }

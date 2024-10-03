@@ -286,7 +286,6 @@ const handleDateChange = (date) => {
 
 
 const submitForm = async () => {
-  console.log(formData.value.termsAccepted)
   if (formData.value.termsAccepted) {
     errors.value = {
       bandName: '',
@@ -298,13 +297,10 @@ const submitForm = async () => {
     if (!validateForm()) return false
     try {
       const userId = userStore.userData._id
-      console.log('User ID being sent:', userId)
       if (!userId) {
-        console.error('User ID is undefined or null')
         return
       }
 
-      console.log(formData.value)
       const result = await userStore.updateUserProfileToBand({
         ...formData.value,
         _id: userId,

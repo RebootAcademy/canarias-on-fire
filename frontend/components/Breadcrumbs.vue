@@ -22,7 +22,6 @@ const router = useRouter()
 const { t, locale} = useI18n()
 
 let breadcrumbs = ref([]) 
-console.log(t('dashboardNav.home'))
 const generateBreadcrumbs = () => {
     const pathArray = route.path.split('/').filter(item => item !== '')
 

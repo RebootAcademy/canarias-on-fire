@@ -70,12 +70,9 @@ const continueToNextStep = () => {
   if (selectedRole.value) {
     currentStep.value = 2
   }
-
-  console.log(currentStep.value)
 }
 
 const goToStep = (step) => {
-  console.log('CLICK')
   currentStep.value = step
 }
 

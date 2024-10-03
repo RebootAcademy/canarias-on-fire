@@ -333,15 +333,11 @@ const cancelSubscription = async (plan) => {
 }
 
 const upgradeToPlan = async (plan) => {
-  console.log('upgradeToPlan called with plan:', plan)
   try {
     const userId = getUserId()
-    console.log('Calling subscriptionStore.upgradeSubscription with userId:', userId, 'and planId:', plan.stripe.planId)
     const result = await subscriptionStore.upgradeSubscription(userId, plan.stripe.planId)
-    console.log('Result from upgradeSubscription:', result)
 
     if (result.success && result.sessionUrl) {
-      console.log('Redirecting to Stripe session URL:', result.sessionUrl)
       window.location.href = result.sessionUrl
     } else {
       console.error('Failed to upgrade subscription:', result.error)

@@ -111,10 +111,8 @@ const userSubscription = computed(() => {
 })
 
 const paymentHistory = computed(() => {
-  console.log('Current user invoices:', currentUser.value?.invoices)
   return currentUser.value?.invoices
     ? currentUser.value.invoices.map((invoice) => {
-        console.log('Processing invoice:', invoice)
         return {
           id: invoice.id,
           pdf: invoice.pdf,
@@ -183,14 +181,12 @@ const toggleSubscription = async () => {
         result = await subscriptionStore.cancelSubscription(props.user._id)
         if (result.success) {
           await userStore.updateUserSubscriptionStatus(props.user._id, 'canceling')
-          console.log('Subscription cancellation initiated')
         }
         break
       case 'canceling':
         result = await subscriptionStore.reactivateSubscription(props.user._id)
         if (result.success) {
           await userStore.updateUserSubscriptionStatus(props.user._id, 'active')
-          console.log('Subscription reactivated successfully')
         }
         break
       case 'canceled':

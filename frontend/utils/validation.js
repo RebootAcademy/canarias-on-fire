@@ -9,7 +9,6 @@ const errors = reactive({
   location: '',
   categories: ''
 })
-console.log(eventStore)
 const priceRules = () => {
   return !eventStore.isFree && eventStore.eventType === 'event' ? 'required' : ''
 }

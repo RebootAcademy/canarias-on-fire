@@ -265,13 +265,6 @@ watch(
   }
 )
 
-watch(
-  () => formData.value,
-  (newVal) => {
-    console.log(formData.value)
-  }
-)
-
 const errors = ref({
   companyName: '',
   commercialName: '',
@@ -294,13 +287,11 @@ const submitForm = async () => {
       termsAccepted: '',
     }
     if (!validateForm()) return false
-    console.log('Form data:', formData.value)
     if (!validateCIF(formData.value.cif)) return (errors.value.cif = t('onBoarding.step2InvalidCIF'))
     
     if (formData.value.sector !== 'restoration') delete formData.value.type
     try {
       const userId = userStore.userData._id
-      console.log('User ID being sent:', userId) // Añade este log
       if (!userId) {
         console.error('User ID is undefined or null')
         // Manejar el caso de ID faltante (tal vez redirigir al login)
@@ -327,8 +318,6 @@ const submitForm = async () => {
 function validateForm() {
   Object.keys(errors.value).forEach((key) => {
     if (!formData.value[key] || formData.value[key] === '') {
-        console.log('Error', key)
-
       errors.value[key] = t('onBoarding.requiredField')
     } else {
       errors.value[key] = ''

@@ -121,7 +121,6 @@ const props = defineProps({
     }
 })
 
-console.log(props.payments)
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -132,9 +131,6 @@ const { t } = useI18n()
 const sortedPayments = computed(() => {
   return props.payments.sort((a, b) => a.basePrice - b.basePrice)
 })
-
-console.log(sortedPayments.value)
-
 
 const featureDescriptions = computed(() => ({
   eventPublication: t('featuresDescriptions.eventPublication'),
@@ -192,9 +188,6 @@ const choosePayment = async (plan) => {
     const eventId = eventStore.event._id
     const eventDate = formatDate(eventStore.event.eventDate)
 
-    console.log('Selected plan:', plan)
-    console.log('Event date:', eventDate)
-
     if (plan.name === 'basic') {
       const result = await paymentStore.assignPaymentToEvent(userId, {
         paymentPlanId: plan._id,
@@ -214,8 +207,6 @@ const choosePayment = async (plan) => {
       }
     } else {
       const finalPrice = calculateFinalPrice(plan.basePrice, eventDate)
-      console.log('Calculated final price:', finalPrice)
-
       const result = await paymentStore.createPaymentSession(userId, {
         paymentPlanId: plan._id,
         eventId: eventId,

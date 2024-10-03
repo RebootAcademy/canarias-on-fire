@@ -111,7 +111,6 @@ const publishEvent = async () => {
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
     
     if (isAdmin) {
-      console.log('entro aquí')
       const result = await eventStore.updateEventByAdmin(eventId)
         if (result) {
           await eventStore.fetchEvents()
