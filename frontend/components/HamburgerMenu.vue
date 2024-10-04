@@ -165,7 +165,6 @@ const menuRef = ref(null)
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
-  console.log(isOpen.value)
 }
 const handleClickOutside = (event) => {
   // Solo se ejecuta si el menú está abierto y el clic ocurre fuera del menú
@@ -181,7 +180,6 @@ onBeforeUnmount(() => {
 })
 
 onMounted(() => {
-  console.log(menuRef.value) // Esto debe mostrar el elemento DOM del menú
   document.addEventListener('click', handleClickOutside)
 })
 
