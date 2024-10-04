@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!auth0?.isAuthenticated"
-    class="flex flex-row gap-2 px-2  font-bold text-md cursor-pointer hover:text-primary"
+    class="flex flex-row gap-2 px-2 py-2 font-bold text-lg cursor-pointer hover:text-primary"
     @click="handleLogin"
   >
     <span class="ml-1">{{ $t('login') }}</span>
