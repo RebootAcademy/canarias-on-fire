@@ -10,7 +10,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (isAuthenticated.value && user.value && !userStore.isAuthenticated) {
       try {
         const token = await getAccessTokenSilently()
-        const roles = user.value['https://localhost:3000/roles'] || []
+        const roles = user.value['https://evente.netlify.app/roles'] || []
 
         const userData = {
           email: user.value.email,
