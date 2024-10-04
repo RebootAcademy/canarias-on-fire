@@ -26,7 +26,8 @@
       </NuxtLink>
     </div>
     <div class="flex justify-end xs:w-1/4 sm:w-1/3 md:hidden">
-    <BurgerMenu />
+   <!--  <BurgerMenu /> -->
+     <HamburgerMenu />
     </div>
   </div>
 </template>
