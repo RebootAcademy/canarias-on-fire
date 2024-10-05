@@ -9,6 +9,7 @@
   "subscription": "Subcription",
   "role": "Role",
   "search": "Search",
+  "password": "Password",
   "userProfile": {
     "profile": "Profile",
     "events": "Events",

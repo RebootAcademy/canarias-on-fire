@@ -14,5 +14,8 @@
   "deletePromoSuccess": "La promoción se ha eliminado correctamente",
   "deleteUserSuccess": "El usuario se ha eliminado correctamente",
   "errorDeleteUser": "Error eliminando usuario",
-  "userHasPromotions": "Solo se puede tener una promoción activa por la subscripción"
+  "userHasPromotions": "Solo se puede tener una promoción activa por la subscripción",
+  "createUserToast": "Usuario creado correctamente",
+  "errorCreatedUser": "Error creando usuario"
+
 }
