@@ -8,6 +8,10 @@
   "email": "Correo electrónico",
   "subscription": "Subcripción",
   "role": "Rol",
+  "password": "Contraseña",
+  "confirmPassword": "Confirmar contraseña",
+  "passwordsDontMatch": "Las contraseñas no coinciden",
+  "googleAccount": "If you have a Google account, you cannot change the password because it is your password for Google services.",
   "search": "Buscar",
   "userProfile": {
     "profile": "Perfil",
@@ -38,7 +42,7 @@
       "activities": "Actividades"
     }
   },
-  "paymentsSection":{
+  "paymentsSection": {
     "label": "Pagos",
     "mySubscription": "Mi Suscripción",
     "noSubscription": "No hay subscripción activa",

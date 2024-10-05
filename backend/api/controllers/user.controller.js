@@ -29,18 +29,20 @@ const checkUserExists = async (req, res, next) => {
 const createUser = async (req, res) => {
   try {
     let newUser
-    const { role, auth0Id, ...userData } = req.body
+    console.log(`body: ${JSON.stringify(req.body)}`)
+    const  userData  = req.body
+
 
     // Only include auth0Id in the user data if it's not null
-    const userDataWithAuth0Id = auth0Id ? { ...userData, auth0Id } : userData
 
-    if (role === 'company') {
+    if ( userData.role === 'company') {
       if (!userData.companyName || !userData.phone || !userData.sector) {
         return res.status(400).json({
           success: false,
           message: 'Missing required fields for company user.',
         })
       }
+      userData.email = userData.companyEmail
       // Si no se proporciona companyEmail, usamos el email principal
       if (!userData.companyEmail) {
         userData.companyEmail = userData.email
@@ -56,22 +58,24 @@ const createUser = async (req, res) => {
         })
       }
 
-      const companyData = { ...userDataWithAuth0Id, role }
-      newUser = await Company.create(companyData)
+      newUser = await Company.create(userData)
 
-    } else if (role === 'musician') {
+    } else if (userData.role === 'musician') {
       if (!userData.bandName || !userData.genre || !userData.members) {
         return res.status(400).json({
           success: false,
           message: 'Missing required fields for musician user.',
         })
       }
-      const musicianData = { ...userDataWithAuth0Id, role }
       newUser = await Musician.create(musicianData) 
-    } else {
-      const userData = { ...userDataWithAuth0Id }
+    
+    } else if (userData.role === 'admin') {
       newUser = await User.create(userData)
-    }
+    } else {
+      
+
+      newUser = await User.create(userData)
+    } 
 
     res.status(201).json({
       success: true,
