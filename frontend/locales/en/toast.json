@@ -16,5 +16,7 @@
   "errorDeleteUser": "Error deleting user",
   "userHasPromotions": "You can only have one active promotion subscription",
   "createUserToast": "User created successfully",
-  "errorCreatedUser": "Error creating user"
+  "errorCreatedUser": "Error creating user",
+  "passwordChanged": "Password changed successfully",
+  "errorPasswordChanged": "Error changing password"
 }

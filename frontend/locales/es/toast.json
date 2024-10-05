@@ -16,6 +16,7 @@
   "errorDeleteUser": "Error eliminando usuario",
   "userHasPromotions": "Solo se puede tener una promoción activa por la subscripción",
   "createUserToast": "Usuario creado correctamente",
-  "errorCreatedUser": "Error creando usuario"
-
+  "errorCreatedUser": "Error creando usuario",
+  "passwordChanged": "Contraseña cambiada correctamente",
+  "errorPasswordChanged": "Error cambiando contraseña"
 }

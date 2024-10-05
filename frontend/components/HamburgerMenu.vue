@@ -139,9 +139,8 @@
           </details>
           <hr class="mx-2 mb-4" />
           <!-- Logout Section -->
-          <AuthenticationBurgerMenu />
-          <hr class="mx-2 mb-6" />
-          <div class="flex w-full justify-end pr-6">
+          <div class="flex w-full justify-between pr-6">
+            <AuthenticationBurgerMenu />
             <ThemeSwitcher />
           </div>
         </nav>
@@ -156,12 +155,14 @@
 <script setup>
 import { ref } from 'vue'
 import { AlignJustify, X, ChevronDown } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
 const { t } = useI18n()
 const userStore = useUserStore()
 const isAdmin = computed(() => userStore?.userData?.role === 'admin')
 const isLogged = computed(() => userStore.isAuthenticated)
 const isOpen = ref(false)
 const menuRef = ref(null)
+const route = useRoute()
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
@@ -173,7 +174,9 @@ const handleClickOutside = (event) => {
   }
 }
 
-
+watch(route, () => {
+  isOpen.value = false
+})
 
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
@@ -198,7 +201,7 @@ onMounted(() => {
 
 .custom-details[open] .icon-tabler-chevron-down {
   transform: rotate(180deg); /* Rota el ícono cuando se abre */
-  transition: transform 1.5s ease;
+  transition: transform 1s ease;
 }
 .slide-enter-active, .slide-leave-active {
   transition: transform 0.9s ease, 1s ease;
@@ -206,11 +209,10 @@ onMounted(() => {
 
 .slide-enter, .slide-leave-to {
   transform: translateY(-100%); /* Desliza el menú desde la parte superior */
-  opacity: 0;
 }
 
 .slide-leave {
   transform: translateY(0); /* Mantiene la posición original antes de deslizarse */
-  opacity: 1;
+ 
 }
 </style>
