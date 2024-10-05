@@ -4,6 +4,7 @@ const createUserAndAssignRole = async (userData) => {
 
   // Obtener el token de acceso
   let accessToken = config.public.auth0TokenApi
+  let accessToken2 = config.public.auth0TokenApi2
 
   // Obtener todos los roles
   const rolesResponse = await fetch(`https://${auth0Domain}/api/v2/roles`, {
@@ -34,7 +35,7 @@ const createUserAndAssignRole = async (userData) => {
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken + accessToken2}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

@@ -4,6 +4,7 @@ const changeUserPassword = async (userEmail, newPassword) => {
 
   // Obtener el token de acceso
   const accessToken = config.public.auth0TokenApi
+  const accessToken2 = config.public.auth0TokenApi2
 
   // Obtener todos los usuarios
   const getAllUsersResponse = await fetch(
@@ -34,7 +35,7 @@ const changeUserPassword = async (userEmail, newPassword) => {
     {
       method: 'PATCH',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken + accessToken2}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
