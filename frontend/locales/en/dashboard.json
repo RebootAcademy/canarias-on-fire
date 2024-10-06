@@ -9,6 +9,10 @@
   "subscription": "Subcription",
   "role": "Role",
   "search": "Search",
+  "password": "Password",
+  "confirmPassword": "Confirm password",
+  "passwordsDontMatch": "The passwords don't match",
+  "googleAccount": "If you have a Google account, you cannot change the password because it is your password for Google services.",
   "userProfile": {
     "profile": "Profile",
     "events": "Events",

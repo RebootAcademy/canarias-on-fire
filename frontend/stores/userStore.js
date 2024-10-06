@@ -46,7 +46,9 @@ export const useUserStore = defineStore('userStore', {
           `${useRuntimeConfig().public.apiBaseUrl}/users`,
           {
             method: 'POST',
-            body: userData,
+            body: {
+              ...userData,
+            },
           }
         )
         this.users.push(response.user)
