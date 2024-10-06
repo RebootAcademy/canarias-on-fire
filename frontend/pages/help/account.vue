@@ -24,34 +24,34 @@ const accountManagementQuestions = computed(() => {
       question: t('accountManagement.question2.question'),
       answer: t('accountManagement.question2.answer'),
     },
-    {
+  /*   {
       question: t('accountManagement.question3.question'),
       answer: t('accountManagement.question3.answer'),
-    },
+    }, */
     {
       question: t('accountManagement.question4.question'),
       answer: t('accountManagement.question4.answer'),
     },
-    {
+/*     {
       question: t('accountManagement.question5.question'),
       answer: t('accountManagement.question5.answer'),
-    },
+    }, */
     {
       question: t('accountManagement.question6.question'),
       answer: t('accountManagement.question6.answer'),
     },
-    {
+/*     {
       question: t('accountManagement.question7.question'),
       answer: t('accountManagement.question7.answer'),
-    },
-    {
+    }, */
+/*     {
       question: t('accountManagement.question8.question'),
       answer: t('accountManagement.question8.answer'),
-    },
-    {
+    }, */
+/*     {
       question: t('accountManagement.question9.question'),
       answer: t('accountManagement.question9.answer'),
-    },
+    }, */
   ]
 })
 

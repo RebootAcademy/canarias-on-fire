@@ -15,6 +15,10 @@
 const { t } = useI18n()
 const questions = computed(() => {
   return [
+     {
+      question: t('general.question0.question'),
+      answer: t('general.question0.answer'),
+    },
     {
       question: t('general.question1.question'),
       answer: t('general.question1.answer'),
@@ -34,10 +38,6 @@ const questions = computed(() => {
     {
       question: t('general.question5.question'),
       answer: t('general.question5.answer'),
-    },
-    {
-      question: t('general.question6.question'),
-      answer: t('general.question6.answer'),
     },
     {
       question: t('general.question7.question'),

@@ -31,22 +31,22 @@ const subscriptionQuestions = computed(() => {
       question: t('subscriptions.question4.question'),
       answer: t('subscriptions.question4.answer'),
     },
-    {
+   /*  {
       question: t('subscriptions.question5.question'),
       answer: t('subscriptions.question5.answer'),
-    },
+    }, */
     {
       question: t('subscriptions.question6.question'),
       answer: t('subscriptions.question6.answer'),
     },
-    {
+    /* {
       question: t('subscriptions.question7.question'),
       answer: t('subscriptions.question7.answer'),
-    },
-    {
+    }, */
+   /*  {
       question: t('subscriptions.question8.question'),
       answer: t('subscriptions.question8.answer'),
-    },
+    }, */
     {
       question: t('subscriptions.question9.question'),
       answer: t('subscriptions.question9.answer'),

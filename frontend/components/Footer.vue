@@ -11,7 +11,7 @@
         <Facebook class="w-6 h-6 text-secondary" />
       </a>
     </div>
-    <div class="flex space-x-4 text-base ">
+    <div class="flex flex-wrap place-items-center justify-center gap-4 sm:gap-0 space-x-4 text-sm md:text-base ">
       <a href="/contact" class="hover:underline">
         <span class="text-secondary hover:text-primary">
           {{ $t('footer.contactUs') }}
@@ -28,7 +28,7 @@
         </span>
       </a>
     </div>
-    <div>{{ $t('footer.copyright') }}</div>
+    <div class="text-xs md:text-md">{{ $t('footer.copyright') }}</div>
   </div>
 </template>
 
