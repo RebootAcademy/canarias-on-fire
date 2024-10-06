@@ -2,13 +2,17 @@
   "helpTitle": "FaQs",
   "general": {
     "title": "General questions",
+    "question0": {
+      "question": "What is the difference between an event and a promotion?",
+      "answer": "The purpose of the event is to publicize an event with a specific date that is framed in a series of categories such as music, theater, dance, among others. While the promotion is oriented to give visibility to business offers through a monthly subscription."
+    },
     "question1": {
       "question": "How can I create an event?",
-      "answer": "To create an event, log in, go to the 'Create Event' section, fill in the required fields, and publish."
+      "answer": "To create an event, you must register and/or login, go to the 'Explore > Events and promotions > Create event or promotion', fill in the required fields and publish."
     },
     "question2": {
       "question": "Can I edit an event after it has been published?",
-      "answer": "Yes, you can edit your event in the 'My Events' section as long as it hasn't started."
+      "answer": "Yes, you can edit your event in the 'My Events' section."
     },
     "question3": {
       "question": "Do I need to register to view events?",
@@ -16,38 +20,34 @@
     },
     "question4": {
       "question": "How can I search for specific events?",
-      "answer": "Use the search engine on the main page and filter by category, date, or location."
+      "answer": "In the search engine on the main page you can filter by category or date (today, this week, this month). But in the 'Find events' section you will have the possibility to filter by location as well."
     },
     "question5": {
       "question": "What types of events can I publish?",
       "answer": "You can publish any type of event, such as concerts, workshops, conferences, or special promotions."
-    },
-    "question6": {
-      "question": "Can I cancel an event once it's created?",
-      "answer": "Yes, you can cancel an event from the 'My Events' section if you no longer want it to happen."
     },
     "question7": {
       "question": "How long does a published event stay on the platform?",
       "answer": "The event will be visible until the event date has passed or you choose to remove it."
     },
     "question8": {
-      "question": "How can I highlight my event?",
-      "answer": "We offer options to highlight your event through subscriptions and additional payments."
+      "question": "How can I highlight my event or promotion?",
+      "answer": "We offer options to highlight your event through additional payments that will improve visibility and allow the publication of images about the event. While in the case of promotion, it is managed through monthly subscriptions."
     },
     "question9": {
       "question": "Can I share my event on social media?",
-      "answer": "Yes, you can directly share your event on social media from its detail page."
+      "answer": "Yes, you can share your event on social networks by clicking on the share icon and the link will be copied directly to share."
     }
   },
   "subscriptions": {
     "title": "Subscriptions Questions",
     "question1": {
       "question": "What does the monthly subscription include?",
-      "answer": "The monthly subscription allows you to publish unlimited promotions for your events."
+      "answer": "The monthly subscription allows you to publish a promotion, and depending on the type of subscription, to publish images about it."
     },
     "question2": {
       "question": "How can I subscribe?",
-      "answer": "You can subscribe from your user profile in the 'Subscriptions' section."
+      "answer": "You can subscribe, once logged in, in the 'Plans and Pricing' section under Subscriptions."
     },
     "question3": {
       "question": "Can I cancel my subscription?",
@@ -82,11 +82,11 @@
     "title": "Payments Questions",
     "question1": {
       "question": "What payment methods are available?",
-      "answer": "We accept credit cards, debit cards, and PayPal payments."
+      "answer": "We accept credit cards and debit cards."
     },
     "question2": {
-      "question": "Can I pay for a single event instead of subscribing?",
-      "answer": "Yes, you can pay for events individually without needing a subscription."
+      "question": "Can I pay for a single event?",
+      "answer": "Yes, events are paid individually depending on the features you have selected."
     },
     "question3": {
       "question": "How are subscription payments made?",
@@ -133,7 +133,7 @@
     },
     "question4": {
       "question": "How do I report a technical issue?",
-      "answer": "You can report issues from the 'Technical Support' section in your account or by emailing us at {supportEmail}."
+      "answer": "You can report issues from the 'Help' section and you can fill contact form."
     },
     "question5": {
       "question": "My subscription payment failed, how do I resolve it?",
@@ -164,7 +164,7 @@
     },
     "question2": {
       "question": "How can I change my password?",
-      "answer": "You can change your password from the 'Account Settings' section in your profile."
+      "answer": "You can change your password from the 'Password' section in your profile, except if your account is associated with Google."
     },
     "question3": {
       "question": "Can I delete my account?",
@@ -172,7 +172,7 @@
     },
     "question4": {
       "question": "How can I update my personal information?",
-      "answer": "Go to 'My Profile' and edit the information you need to update."
+      "answer": "Go to 'Dashboard > Profile' and edit the information you need to update."
     },
     "question5": {
       "question": "Can I link my account to social media?",

@@ -28,26 +28,26 @@ const paymentQuestions = computed(() => {
       question: t('payments.question3.question'),
       answer: t('payments.question3.answer'),
     },
-    {
+/*     {
       question: t('payments.question4.question'),
       answer: t('payments.question4.answer'),
-    },
-    {
+    }, */
+    /* {
       question: t('payments.question5.question'),
       answer: t('payments.question5.answer'),
-    },
-    {
+    }, */
+  /*   {
       question: t('payments.question6.question'),
       answer: t('payments.question6.answer'),
-    },
+    }, */
     {
       question: t('payments.question7.question'),
       answer: t('payments.question7.answer'),
     },
-    {
+  /*   {
       question: t('payments.question8.question'),
       answer: t('payments.question8.answer'),
-    },
+    }, */
     {
       question: t('payments.question9.question'),
       answer: t('payments.question9.answer'),
