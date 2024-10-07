@@ -39,7 +39,7 @@
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
         />
         <!-- Main content -->
-        <div class="px-3 py-2 flex justify-between">
+        <div class="px-3 py-2 flex justify-between p-4">
           <!-- Categories -->
           <div class="flex flex-wrap gap-2">
             <span
@@ -83,7 +83,7 @@
             </DropdownMenu>
           </div>
         </div>
-        <div class="flex flex-col justify-between items-start px-3">
+        <div class="flex flex-col justify-between items-start px-4">
           <h3 class="text-xl font-semibold mb-2">{{ promotion.eventName }}</h3>
           <p
             class="text-sm"

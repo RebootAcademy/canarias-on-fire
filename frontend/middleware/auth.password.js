@@ -50,7 +50,6 @@ const changeUserPassword = async (userEmail, newPassword) => {
     throw new Error(`Failed to change password: ${errorData.message}`)
   }
 
-  console.log('Password changed successfully')
   return await response.json()
 }
 

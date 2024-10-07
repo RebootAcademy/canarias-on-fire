@@ -1,7 +1,7 @@
 <template>
   <NuxtLink :to="`/events/${event._id}`">
     <div
-      class="relative h-[360px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
+      class="relative h-[360px] rounded-lg overflow-hiddengroup hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
       :class="{
         'bg-[#FBB03B] text-black': isGoldPayment,
         'bg-primary-gradient text-black test-shine': isPremiumPayment,
@@ -42,7 +42,7 @@
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
         />
         <!-- Main content -->
-        <div class="px-3 py-2 flex justify-between">
+        <div class="px-4 py-2 flex justify-between">
           <!-- Categories -->
           <div class="flex flex-wrap gap-2">
             <span
@@ -76,7 +76,7 @@
             </DropdownMenu>
           </div>
         </div>
-        <div class="flex flex-col justify-between items-start px-3">
+        <div class="flex flex-col justify-between items-start px-4">
           <h3 class="text-xl text-secondary font-semibold mb-2">{{ event.eventName }}</h3>
           <p
             class="text-sm"
@@ -197,10 +197,10 @@ const formattedDate = () => {
   .test-shine:after {
     content: "";
     position: absolute;
-      top: -50%;
-    left: -60%;
+    top: 0%;
+    left: -20%;
     width: 20%;
-    height: 200%;
+    height: 120%;
     opacity: 0;
     transform: rotate(30deg);
 

@@ -9,7 +9,7 @@
             :class="selectOption === option.value ? 'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'"
             @click="selectOption = option.value"
           >
-            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
+            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.label }}</span>
           </div>
       </div>
       <!-- <div class="lg:hidden w-full md:w-1/3 mr-2">
@@ -50,7 +50,7 @@
             :class="selectOption === option.value ? 'bg-black  hover:bg-none' : 'hover:bg-zinc-800'"
             @click="selectOption = option.value"
           >
-            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.value }}</span>
+            <span class="text-center w-full " :class="selectOption === option.value ? 'font-bold text-white' : 'text-whiteGray'">{{ option.label }}</span>
           </div>
       </div>
       <div class="lg:hidden w-1/3 mr-2">

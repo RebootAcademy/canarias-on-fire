@@ -1,9 +1,9 @@
 <template>
-  <div class="flex justify-center flex-wrap items-center gap-2.5">
+  <div class="grid  grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center items-place-center gap-2.5">
     <div
       v-for="(category, index) in optionsFilter"
       :key="index"
-      class="flex flex-col items-center cursor-pointer p-2.5 rounded-lg transition-colors duration-300"
+      class="flex flex-col justify-center items-center text-center cursor-pointer p-1.5 sm:p-2.5 rounded-lg transition-colors duration-300"
       :class="{ 'text-primary': isSelected(category) }"
       @click="toggleCategory(category)"
     >

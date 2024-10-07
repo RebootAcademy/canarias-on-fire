@@ -1,6 +1,6 @@
 <template>
   <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-background border-2 rounded-lg p-6 w-11/12 max-w-2xl">
+    <div class="bg-background border-2 rounded-lg p-4 md:p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
         <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -9,7 +9,7 @@
       </div>
       <div>
         <h3 class="font-semibold">{{ $t('modalFilter.ubication')}}</h3>
-        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.selectIsland')}}</p>
+        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.selectIsland')}}</p>
         <div class="grid grid-cols-2 md:grid-cols-3 md:gap-2 md:mb-4">
           <label v-for="island in islands" :key="island" class="flex items-center">
             <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2 accent-primary">
@@ -17,24 +17,24 @@
           </label>
         </div>
         <h3 class="font-semibold">{{ $t('modalFilter.date')}}</h3>
-        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p>
+        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p>
         <div class="w-full">
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
         </div>
         <h3 class="font-semibold">{{ $t('modalFilter.categories')}}</h3>
-        <p class="text-sm text-gray-500 mb-2">{{ $t('modalFilter.categoriesDescription')}}</p>
+        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.categoriesDescription')}}</p>
         <div class="flex flex-wrap justify-center gap-2 mb-4">
-          <Button
+          <div
             v-for="category in eventStore.categories"
             :key="category.id"
             @click="toggleCategory(category)"
             :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
-            class="text-xs rounded-lg bg-gray border-0 hover:bg-orange-900 hover:text-white "
+            class="text-xs p-2 md:p-4 rounded-lg bg-gray border-0 hover:bg-primary hover:text-white "
             :class="selectedCategories.includes(category.id) ? 'bg-primary text-white' : ''"
           >
             {{ category.name }}
-          </Button>
+          </div>
         </div>
         <div class="flex justify-end gap-4 mt-4">
           <Button @click="resetFilters" variant="ghost" class="bg-gray">{{ $t('buttons.reset')}}</Button>

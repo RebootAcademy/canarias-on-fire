@@ -2,8 +2,6 @@ import { createAuth0 } from '@auth0/auth0-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
-
-  console.log('Auth0 Plugin cargado') // Añade esta línea
   if (process.client) {
     nuxtApp.vueApp.use(
       createAuth0({

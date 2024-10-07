@@ -177,7 +177,6 @@ const handleFileChange = (event) => {
 }
 
 const uploadImage = async () => {
-  console.log()
   if (!selectedFile.value) {
     console.error('No file selected')
     return

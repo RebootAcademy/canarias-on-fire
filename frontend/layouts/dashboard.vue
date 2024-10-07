@@ -8,7 +8,7 @@
     <div class="">
       <breadcrumbs />
     </div>
-    <div class="flex items-center flex-col lg:flex-row lg:items-start ">      
+    <div class="flex items-center flex-col gap-4 md:gap-8 lg:flex-row lg:items-start ">      
       <!-- Sidebar -->
       <CustomSidebar :links="optionsDashboard" :userRole="userRole"/>
   

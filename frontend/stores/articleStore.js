@@ -36,7 +36,9 @@ export const useArticleStore = defineStore('articleStore', {
       this.isLoading = true
       this.error = null
       try {
-        const data = await $fetch(`${config.public.apiBaseUrl}/articles`)
+        const data = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/articles`
+        )
         this.articles = data.result || []
       } catch (error) {
         this.error = error
@@ -48,7 +50,7 @@ export const useArticleStore = defineStore('articleStore', {
     async fetchArticleById(articleId) {
       try {
         const data = await $fetch(
-          `${config.public.apiBaseUrl}/articles/${articleId}`
+          `${useRuntimeConfig().public.apiBaseUrl}/articles/${articleId}`
         )
         if (data && data.result) {
           this.setArticle(data.result)
@@ -61,12 +63,14 @@ export const useArticleStore = defineStore('articleStore', {
     },
 
     async createArticle(articleData) {
-      const config = useRuntimeConfig()
       try {
-        const response = await $fetch(`${config.public.apiBaseUrl}/articles`, {
-          method: 'POST',
-          body: articleData
-        })
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/articles`,
+          {
+            method: 'POST',
+            body: articleData,
+          }
+        )
         if (response && response.result) {
           this.articles.push(response.result)
           this.updateFilteredArticles()
@@ -81,12 +85,14 @@ export const useArticleStore = defineStore('articleStore', {
     },
 
     async updateArticle(articleId, articleData) {
-      const config = useRuntimeConfig()
       try {
-        const response = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
-          method: 'PATCH',
-          body: articleData
-        })
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/articles/${articleId}`,
+          {
+            method: 'PATCH',
+            body: articleData,
+          }
+        )
         if (response && response.result) {
           const index = this.articles.findIndex(article => article._id === articleId)
           if (index !== -1) {
@@ -104,12 +110,14 @@ export const useArticleStore = defineStore('articleStore', {
     },
 
     async deleteArticle(articleId) {
-      const config = useRuntimeConfig()
 
       try {
-        const response = await $fetch(`${config.public.apiBaseUrl}/articles/${articleId}`, {
-          method: 'DELETE',
-        })
+        const response = await $fetch(
+          `${useRuntimeConfig().public.apiBaseUrl}/articles/${articleId}`,
+          {
+            method: 'DELETE',
+          }
+        )
         if (response && response.success) {
           this.articles = this.articles.filter(article => article._id !== articleId)
           this.updateFilteredArticles()

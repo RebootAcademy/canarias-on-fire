@@ -9,7 +9,7 @@
                 <CustomSidebar :links="helpOptions" :userRole="userRole" />
           
               <!-- Main content -->
-                <main class="w-full md:flex-1 p-8">
+                <main class="w-full md:flex-1 sm:p-8">
                     <h1 class="text-4xl text-center font-bold mb-6">{{ $t('helpTitle')}}</h1>
                     <NuxtPage />
                 </main>
