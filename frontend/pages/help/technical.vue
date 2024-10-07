@@ -30,20 +30,20 @@ const technicalIssuesQuestions = computed(() => {
     },
     {
       question: t('technicalIssues.question4.question'),
-      answer:  t('technicalIssues.question4.answer', { supportEmail })
+      answer:  t('technicalIssues.question4.answer')
     },
     {
       question: t('technicalIssues.question5.question'),
       answer: t('technicalIssues.question5.answer'),
     },
-    {
+   /*  {
       question: t('technicalIssues.question6.question'),
       answer: t('technicalIssues.question6.answer'),
-    },
-    {
+    }, */
+  /*   {
       question: t('technicalIssues.question7.question'),
       answer: t('technicalIssues.question7.answer'),
-    },
+    }, */
     {
       question: t('technicalIssues.question8.question'),
       answer: t('technicalIssues.question8.answer'),
