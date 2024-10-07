@@ -5,7 +5,7 @@
       <component :is="icon" class="w-5 h-5 text-gray-400" />
     </div>
     <p class="text-3xl font-bold">{{ value }}</p>
-    <p :class="`text-sm ${change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`">
+    <p v-if="change" :class="`text-sm ${change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`">
       {{ change }} from last month
     </p>
   </div>

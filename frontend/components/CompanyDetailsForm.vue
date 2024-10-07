@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full items-center p-6">
+  <div class="flex flex-col w-full items-center md:p-6">
     <div class="flex flex-col w-full items-start">
       <div class="flex items-center justify-start">
         <ArrowLeft
@@ -17,7 +17,7 @@
     </div>
 
     <div
-      class="flex flex-col justify--center mb-4 border-2 border-gray rounded-md p-4 sm:w-full md:w-2/3 lg:1/2 xl:w-2/5"
+      class="flex flex-col justify-center mb-4 border-2 border-gray rounded-md p-2 md:p-4 w-full md:w-2/3 lg:1/2 xl:w-2/5"
     >
       <ImageUploader @image-uploaded="handleImageUploaded"/>
       <form @submit.prevent="submitForm">

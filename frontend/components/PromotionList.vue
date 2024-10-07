@@ -36,7 +36,6 @@ const { filteredEvents } = storeToRefs(eventStore)
 
 const limitedPromotions = computed(() => {
   let filteredPromotions = filteredEvents.value
-  console.log(props.filteredOption)
   if (props.filteredOption) {
     filteredPromotions = filteredEvents.value.filter((event) =>
       event.categories.some((category) =>
@@ -57,8 +56,6 @@ const limitedPromotions = computed(() => {
     ).sort((a, b) => {
       const priorityA = getPromoPriority(a)
       const priorityB = getPromoPriority(b)
-
-      console.log('priority A', priorityA, 'priority B', priorityB)
 
       if (priorityA !== priorityB) {
         return priorityB - priorityA

@@ -1,8 +1,8 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-20 flex items-center justify-center">
-    <div class="rounded-lg p-6 w-11/12 max-w-md bg-background border">
+  <div v-if="isOpen" class="fixed inset-0 z-20 flex items-center justify-center text-md md:text-lg">
+    <div class="rounded-lg p-4 md:p-6 w-full md:w-11/12 max-w-md bg-background border">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">{{ $t('addUser') }}</h2>
+        <h2 class="text-lg md:text-xl font-semibold">{{ $t('addUser') }}</h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
           <span class="text-2xl">&times;</span>
         </button>
@@ -29,7 +29,7 @@
             </SelectContent>
           </Select>
         </div>
-        <div class="grid gap-4 py-4">
+        <div class="grid gap-2 md:gap-4 md:py-4">
           <div class="gap-4">
             <Label for="username">{{ $t('userName') }}</Label>
             <Input
@@ -160,7 +160,7 @@
             </div>
           </template>
         </div>
-        <div class="flex justify-end gap-4 mt-6 z-10">
+        <div class="flex justify-end gap-4 mt-4 md:mt-6 z-10">
           <Button
             type="button"
             variant="ghost"
@@ -222,16 +222,8 @@ const errorCompany = ref({
   companyEmail: '',
 })
 
-watch(
-  () => formData.value?.role,
-  (newValue) => {
-    console.log(newValue)
-  }
-)
-
 const isFormValid = computed(() => {
   if (users.some((user) => user.email === formData.value.email)) {
-    console.log('Aquí en el primero')
 
     return false
   }
@@ -312,7 +304,6 @@ const handleSubmit = async () => {
       console.error('Usuario no autenticado');
       return; // O maneja la autenticación como consideres
 } */
-  console.log(isFormValid.value)
   if (isFormValid.value) {
     const userData = { ...formData.value }
     await createUserAndAssignRole(userData)

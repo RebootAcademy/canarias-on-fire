@@ -56,5 +56,17 @@
     "paymentInvoice": "Invoice",
     "paymentDownload": "Download",
     "noInvoices": "There are no invoices"
+  },
+  "statisticsSection": {
+    "title": "Statistics",
+    "eventPredition": "Event prediction",
+    "totalPredition": "Total",
+    "predition": "Prediction",
+    "label": "Overview",
+    "totalUsers": "Users",
+    "totalCompanies": "Companies",
+    "totalBands": "Bands",
+    "totalEvents": "Events",
+    "totalSubscriptions": "Subscriptions"
   }
 }

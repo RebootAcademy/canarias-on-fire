@@ -4,7 +4,7 @@
     <Moon v-else class="transform transition duration-300" size="28"/>
   </div> -->
 
-  <div :class="['tdnn', themeClass]" @click="toggleTheme">
+  <div :class="['tdnn', themeClass]" @click="toggleTheme" class="p-5">
        <div class="moon" :class="themeIconClass"></div>
   </div>
 </template>
@@ -42,7 +42,7 @@ function toggleTheme() {
   cursor: pointer;
   position: relative;
   height: 30px;
-  width: 60px;
+  width: 70px;
   border-radius: 16em;
   transition: all 500ms ease-in-out;
 }
@@ -53,8 +53,8 @@ function toggleTheme() {
   border-radius: 50%;
   transition: all 400ms ease-in-out;
   
-  top: 4px;
-  left: 6px;
+  top: 8px;
+  left: 8px;
   transform: rotate(-75deg);
   width: 22px;
   height: 24px;
@@ -70,8 +70,8 @@ function toggleTheme() {
     rgba(255, 255, 255, 0.61) -0.6em 6em 0 -2.7em; /* Ajuste proporcional */
 }
 .sun {
-  top: 6px;
-  left: 35px;
+  top: 10px;
+  left: 43px;
   transform: rotate(0deg);
   width: 18px;
   height: 18px;

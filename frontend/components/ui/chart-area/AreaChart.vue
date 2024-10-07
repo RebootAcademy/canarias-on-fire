@@ -69,11 +69,11 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         <defs>
           <linearGradient v-for="(color, i) in colors" :id="`${chartRef}-color-${i}`" :key="i" x1="0" y1="0" x2="0" y2="1">
             <template v-if="showGradiant">
-              <stop offset="5%" :stop-color="color" stop-opacity="0.4" />
-              <stop offset="95%" :stop-color="color" stop-opacity="0" />
+              <stop offset="5%" :stop-color="color" stop-opacity="0.2" />
+              <stop offset="85%" :stop-color="color" stop-opacity="0" />
             </template>
             <template v-else>
-              <stop offset="0%" :stop-color="color" />
+              <stop offset="82%" :stop-color="color" />
             </template>
           </linearGradient>
         </defs>
@@ -127,7 +127,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :grid-line="showGridLine"
         :attributes="{
           [Axis.selectors.grid]: {
-            class: 'text-muted',
+            class: 'text-gray',
           },
         }"
         tick-text-color="hsl(var(--vis-text-color))"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full items-center p-6">
+  <div class="flex flex-col w-full items-center md:p-6">
     <div class="flex flex-col w-full items-start">
       <div class="flex items-center">
         <ArrowLeft
@@ -221,7 +221,7 @@
       <button
         type="submit"
         @click="submitForm"
-        class="w-full bg-black text-white px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
+        class="w-full bg-background text-secondary px-4 py-2 rounded-full font-semibold transition duration-300 hover:bg-primary-gradient hover:text-white"
       >
         {{ $t('buttons.completeReg') }}
       </button>
