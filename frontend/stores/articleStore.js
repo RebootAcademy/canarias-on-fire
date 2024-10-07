@@ -36,7 +36,7 @@ export const useArticleStore = defineStore('articleStore', {
       this.isLoading = true
       this.error = null
       try {
-        const data = await $fetch('http://localhost:8080/api/articles')
+        const data = await $fetch(`${config.public.apiBaseUrl}/articles`)
         this.articles = data.result || []
       } catch (error) {
         this.error = error
@@ -47,7 +47,9 @@ export const useArticleStore = defineStore('articleStore', {
 
     async fetchArticleById(articleId) {
       try {
-        const data = await $fetch(`http://localhost:8080/api/articles/${articleId}`)
+        const data = await $fetch(
+          `${config.public.apiBaseUrl}/articles/${articleId}`
+        )
         if (data && data.result) {
           this.setArticle(data.result)
           return data.result

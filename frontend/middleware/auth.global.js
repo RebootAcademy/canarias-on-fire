@@ -27,6 +27,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           body: JSON.stringify(userData)
         })
 
+        console.log('userData', userData)
+        console.log('user', user)
+
         await userStore.fetchAndSetUser(user.value.email)
         
         if (!response.ok) {
