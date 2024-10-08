@@ -12,13 +12,13 @@
       <div class="p-6">
         <div class="flex justify-between items-center">
           <NuxtLink to="/" class="flex items-end">
-            <NuxtImg src="logo_color.png" class="w-28" />
+            <NuxtImg src="logo_color.png" alt="Evente Logo" class="w-28" />
           </NuxtLink>
           <X name="x" class="w-6 h-6 cursor-pointer" @click="toggleMenu" />
         </div>
 
         <nav class="mt-4">
-          <div class="flex flex-col text-sm gap-1 py-2 mt-2">
+          <div class="flex flex-col text-md gap-1 py-2 mt-2">
             <DetailsItemMenu
               :title="$t('events&Promotions')"
               :options="[

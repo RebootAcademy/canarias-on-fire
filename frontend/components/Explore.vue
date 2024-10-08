@@ -2,7 +2,7 @@
   <div
     class="flex flex-col sm:flex-row justify-center mt-[50px] py-[50px] bg-gray w-full"
   >
-    <div class="w-full h-full flex flex-col px-4 items-center justify-center md:px-8 xl:px-0 xl:w-1/2 md:flex-row md:gap-4">
+    <div class="w-full h-full flex flex-col items-center justify-center px-8 md:px-16 xl:px-0 xl:w-1/2 md:flex-row md:gap-4">
       <img src="/explore.svg" alt="Email Image" />
       <div class="flex flex-col items-center">
         <div class="mt-4 md:mt-0">

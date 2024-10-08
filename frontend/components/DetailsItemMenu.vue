@@ -6,9 +6,9 @@
         <ChevronDown size="16" class="icon-tabler-chevron-down" />
       </div>
     </summary>
-    <div class="flex flex-col gap-1 ml-2 mt-2 text-sm">
+    <div class="flex flex-col gap-3 mt-4 ml-2 text-md">
         <NuxtLink v-for="option in options" :key="option" :to="option.path">
-          <div v-if="checkRole(option.roles)">{{ option.label }}</div>
+          <div v-show="checkRole(option.roles)">{{ option.label }}</div>
         </NuxtLink>
     </div>
   </details>

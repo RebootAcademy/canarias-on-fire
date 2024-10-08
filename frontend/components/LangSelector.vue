@@ -27,7 +27,7 @@
                     class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray active:bg-primary"
                     :class="locale === lang.code ? 'bg-gray' : ''"
                   >
-                    <NuxtImg :src="lang.flag" width="20" class="mr-2 xs:w-4 sm:w-6" />
+                    <NuxtImg :src="lang.flag" :alt="lang.name" width="20" class="mr-2 xs:w-4 sm:w-6" />
                     {{ lang.name }}
                   </button>
                 </NavigationMenuLink>
@@ -53,10 +53,12 @@ import {
 const { locale, setLocale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const currentLocale = ref(locale.value)
+const {t} = useI18n()
+
 
 const languages = [
-  { code: 'es', name: 'Español', flag: 'espana.png' },
-  { code: 'en', name: 'English', flag: 'estados-unidos.png' },
+  { code: 'es', name: t('languagesOptions.es'), flag: 'espana.png' },
+  { code: 'en', name: t('languagesOptions.en'), flag: 'estados-unidos.png' },
 ]
 
 const getFlagSrc = (code) => {
