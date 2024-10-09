@@ -3,7 +3,7 @@
     <NavBar />
     <main class="flex-grow w-full">
       <NuxtPage class="flex-grow"/>
-      <!--  <CookieBanner /> -->
+      <CookieBanner />
     </main>
     <Footer />
   </div>
