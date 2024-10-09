@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     userData: null,
+    themePreference: 'light',
     isAuthenticated: false,
     users: [],
     selectedUser: null,
@@ -24,6 +25,11 @@ export const useUserStore = defineStore('userStore', {
     },
     setSearchQuery(query) {
       this.searchQuery = query
+    },
+
+    setThemePreference(themePreference) {
+      this.themePreference = themePreference
+      localStorage.setItem('themePreference', themePreference)
     },
 
     async fetchUsers() {
@@ -81,7 +87,7 @@ export const useUserStore = defineStore('userStore', {
             body: profileData,
           }
         )
-        
+
         if (response) {
           if (this.userData.id === profileData._id) {
             this.userData = { ...this.userData, ...response.result }
@@ -98,7 +104,6 @@ export const useUserStore = defineStore('userStore', {
         }
       }
     },
-
 
     async updateUserProfileToCompany(profileData) {
       try {
@@ -318,6 +323,12 @@ export const useUserStore = defineStore('userStore', {
           user.username.toLowerCase().includes(lowercaseQuery) ||
           user.email.toLowerCase().includes(lowercaseQuery)
       )
+    },
+    getInitialThemePreference: (state) => {
+      if (process.client) {
+        return localStorage.getItem('themePreference') || state.themePreference
+      }
+      return state.themePreference // Para el SSR
     },
   },
   persist: {

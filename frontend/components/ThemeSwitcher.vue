@@ -1,18 +1,13 @@
 <template>
-  <!-- <div class="flex justify-center items-center cursor-pointer mx-4" @click="toggleTheme">
-    <Sun v-if="theme === 'light'" class="transform transition duration-300" size="28"/>
-    <Moon v-else class="transform transition duration-300" size="28"/>
-  </div> -->
-
   <div :class="['tdnn', themeClass]" @click="toggleTheme" class="p-5">
        <div class="moon" :class="themeIconClass"></div>
   </div>
 </template>
 
 <script setup>
-/* import { Sun, Moon } from 'lucide-vue-next'
- */
-const theme = ref('light')
+const userStore = useUserStore()
+
+const theme = computed(() => userStore.themePreference)
 const themeIconClass = computed(() => (theme.value === 'light' ? 'sun' : 'moon'))
 const themeClass = computed(() => (theme.value === 'dark' ? 'bg-moon' : 'bg-sun'))
 
@@ -20,12 +15,23 @@ const themeClass = computed(() => (theme.value === 'dark' ? 'bg-moon' : 'bg-sun'
 function toggleTheme() {
   if (theme.value === 'light') {
     document.body.classList.add('dark');
-    theme.value = 'dark';
+    userStore.setThemePreference('dark')
+    //theme.value = 'dark';
   } else {
     document.body.classList.remove('dark');
-    theme.value = 'light';
+    userStore.setThemePreference('light')
+    //theme.value = 'light';
   }
 }
+
+onMounted(() => {
+  if (process.client) {
+    userStore.setThemePreference(localStorage.getItem('themePreference') || 'light')
+    document.body.classList.add(theme.value)
+  }
+
+})
+
 </script>
 
 <style scoped>

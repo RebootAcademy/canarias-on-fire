@@ -22,6 +22,10 @@ import questionsES from './locales/es/questions.json'
 import questionsEN from './locales/en/questions.json'
 import modalsES from './locales/es/modals.json'
 import modalsEN from './locales/en/modals.json'
+import cookiesES from './locales/es/cookies.json'
+import cookiesEN from './locales/en/cookies.json'
+import privacyES from './locales/es/privacy.json'
+import privacyEN from './locales/en/privacy.json'
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -40,6 +44,8 @@ export default defineI18nConfig(() => ({
       ...toastEN,
       ...questionsEN,
       ...modalsEN,
+      ...cookiesEN,
+      ...privacyEN,
     },
     es: {
       ...navbarEs,
@@ -54,6 +60,8 @@ export default defineI18nConfig(() => ({
       ...toastES,
       ...questionsES,
       ...modalsES,
+      ...cookiesES,
+      ...privacyES,
     },
   },
 }))
