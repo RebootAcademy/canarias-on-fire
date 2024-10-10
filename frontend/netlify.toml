@@ -1,0 +1,8 @@
+[build]
+  publish = "dist"  # La carpeta que contenga los archivos estáticos generados por Nuxt
+
+[[redirects]]
+  from = "/.netlify/images/*"
+  to = ":splat"
+  status = 200
+  force = true

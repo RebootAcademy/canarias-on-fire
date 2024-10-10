@@ -15,6 +15,7 @@ const themeClass = computed(() => (theme.value === 'dark' ? 'bg-moon' : 'bg-sun'
 function toggleTheme() {
   if (theme.value === 'light') {
     document.body.classList.add('dark');
+
     userStore.setThemePreference('dark')
     //theme.value = 'dark';
   } else {
@@ -24,13 +25,7 @@ function toggleTheme() {
   }
 }
 
-onMounted(() => {
-  if (process.client) {
-    userStore.setThemePreference(localStorage.getItem('themePreference') || 'light')
-    document.body.classList.add(theme.value)
-  }
 
-})
 
 </script>
 

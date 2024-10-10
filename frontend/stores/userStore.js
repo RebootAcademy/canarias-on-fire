@@ -326,6 +326,7 @@ export const useUserStore = defineStore('userStore', {
     },
     getInitialThemePreference: (state) => {
       if (process.client) {
+        console.log(this.themePreference)
         return localStorage.getItem('themePreference') || state.themePreference
       }
       return state.themePreference // Para el SSR

@@ -215,13 +215,13 @@ const formattedDate = () => {
   }
 
   /* Hover state - trigger effect */
-  .test-shine:hover:after {
+/*   .test-shine:hover:after {
     opacity: 1;
     left: 130%;
     transition-property: left, top, opacity;
     transition-duration: 0.7s, 0.7s, 0.15s;
     transition-timing-function: ease;
-  }
+  } */
 
   /* Active state */
   .test-shine:active:after {
