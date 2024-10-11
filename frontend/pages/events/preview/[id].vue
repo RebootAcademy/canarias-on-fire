@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <NuxtImg
+    <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
       class="w-full h-96 object-cover"
@@ -48,7 +48,7 @@
       </div>
       <details class="w-full lg:w-2/3">
         <summary class="text-primary">{{ $t('previewText.showMap') }}</summary>
-        <NuxtImg
+        <img
           :src="eventStore.eventLocation.mapImageUrl"
           alt="Event Location"
           class="w-full h-60 lg:h-[500px] object-cover mt-4"
@@ -58,7 +58,7 @@
     <!--     <div class="mt-8">
       <h2 class="text-2xl font-semibold">Organizador</h2>
       <div class="flex items-center gap-2 mt-4">
-        <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
+        <img :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
         <span>{{ eventStore.organizerName }}</span>
       </div>
     </div> -->

@@ -11,7 +11,7 @@
           <summary class="text-primary">
             {{ $t('previewText.showMap') }}do
           </summary>
-          <NuxtImg
+          <img
             :src="userStore.userData?.nextPerformance?.location.mapImageUrl"
             alt="Event Location"
             class="rounded-md h-60 lg:h-[300px] object-cover my-4"

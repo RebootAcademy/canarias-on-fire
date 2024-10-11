@@ -7,7 +7,7 @@
           class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm rounded-md hover:text-primary"
           :class="locale === lang.code ? 'font-bold' : 'font-normal'"
         >
-          <NuxtImg :src="lang.flag" :alt="lang.name" width="20" class="mr-2 xs:w-4 sm:w-6 text-secondary" />
+          <img :src="lang.flag" :alt="lang.name" width="20" class="mr-2 xs:w-4 sm:w-6 text-secondary" />
           <span class="text-secondary">{{ lang.name }}</span>
         </div>
       </NavigationMenuLink>

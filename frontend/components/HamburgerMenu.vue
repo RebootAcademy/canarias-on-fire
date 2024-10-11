@@ -12,7 +12,7 @@
       <div class="p-6">
         <div class="flex justify-between items-center">
           <NuxtLink to="/" class="flex items-end">
-            <NuxtImg src="logo_color.png" alt="Evente Logo" class="w-28" />
+            <img src="/logo_color.png" alt="Evente Logo" class="w-28" />
           </NuxtLink>
           <X name="x" class="w-6 h-6 cursor-pointer" @click="toggleMenu" />
         </div>

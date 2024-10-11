@@ -1,7 +1,7 @@
 <template>
   <div v-if="!accepted" class="cookie-banner">
     <div class="flex flex-col items-center justify-evenly h-full">
-      <NuxtImg src="/cookie.png" alt="Cookie banner" class="absolute w-10 md:w-14 top-[-20px] md:top-[-30px]" />
+      <img src="/cookie.png" alt="Cookie banner" class="absolute w-10 md:w-14 top-[-20px] md:top-[-30px]" />
       <div>
         <p>
           {{ $t('banner.description') }}

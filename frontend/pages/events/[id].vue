@@ -78,7 +78,7 @@
             <summary class="text-primary">
               {{ $t('previewText.showMap') }}
             </summary>
-            <NuxtImg
+            <img
               :src="event.eventLocation.mapImageUrl"
               alt="Event Location"
               class="w-full h-60 lg:h-[500px] object-cover mt-4"

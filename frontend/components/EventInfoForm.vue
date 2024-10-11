@@ -164,7 +164,7 @@
           >
             {{ $t('changeLocation') }}
           </span>
-          <NuxtImg
+          <img
             :src="eventStore.eventLocation.mapImageUrl"
             :alt="eventStore.eventLocation.address"
             class="w-full h-60 lg:h-[500px] object-cover mt-4"
