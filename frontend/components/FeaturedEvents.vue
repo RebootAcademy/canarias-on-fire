@@ -9,7 +9,7 @@
         <CarouselContent>
           <CarouselItem v-for="event in premiumEvents" :key="event.id">
             <Card class="border-0 flex items-center justify-center bg-gray-900">
-              <CardContent class="bg-black">
+              <CardContent class="bg-gray rounded-md">
                 <NuxtLink :to="`/events/${event._id}`">
                   <img
                     v-if="event.coverImage"
@@ -52,6 +52,10 @@ watchEffect(() => {
           event.eventDate.year,
           event.eventDate.month - 1,
           event.eventDate.day
+        ) >= today || new Date(
+          event.eventEndDate?.year,
+          event.eventEndDate?.month - 1,
+          event.eventEndDate?.day
         ) >= today
     )
   }

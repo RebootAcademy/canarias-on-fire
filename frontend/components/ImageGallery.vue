@@ -1,22 +1,52 @@
 <template>
   <div class="flex flex-col image-gallery p-4 text-white rounded-lg">
     <div class="cover-image mb-4 relative">
-      <img v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
-      <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
+      <img
+        v-if="coverImage || images[0]"
+        :src="coverImage || images[0].url"
+        alt="Cover Image"
+        class="w-full h-64 object-cover rounded-lg"
+      />
+      <button
+        v-if="coverImage"
+        @click="removeCoverImage"
+        class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2"
+      >
+        x
+      </button>
     </div>
     <div class="flex flex-col lg:flex-row gap-4 items-center">
-      <div 
-        v-if="images?.length < checkMaxImages()"
-        class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40">
-        <label class="flex items-center justify-center h-32 border-2 border-primary rounded-lg cursor-pointer hover:bg-gray-800">
+      <div
+        v-if="storeType === 'article' && images?.length < checkMaxImages()"
+        class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40"
+      >
+        <label
+          class="flex items-center justify-center h-32 border-2 border-primary rounded-lg cursor-pointer hover:bg-gray-800"
+        >
           <span class="text-primary text-4xl">+</span>
           <input type="file" @change="onFileChange" multiple class="hidden" />
         </label>
       </div>
-      <div class="hidden md:flex image-previews gap-4 overflow-x-auto xs:pb-4 md:pb-0">
-        <div v-for="(image, index) in images" :key="index" class="image-preview relative">
-          <img :src="image.url" @click="setCoverImage(image.url)" :class="{ 'border-4 border-orange-500': image.url === coverImage }" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
-          <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
+      <div
+        class="hidden md:flex image-previews gap-4 overflow-x-auto xs:pb-4 md:pb-0"
+      >
+        <div
+          v-for="(image, index) in images"
+          :key="index"
+          class="image-preview relative"
+        >
+          <img
+            :src="image.url"
+            @click="setCoverImage(image.url)"
+            :class="{ 'border-4 border-orange-500': image.url === coverImage }"
+            class="w-32 h-32 object-cover rounded-lg cursor-pointer"
+          />
+          <button
+            @click="removeImage(image.url)"
+            class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1"
+          >
+            x
+          </button>
         </div>
       </div>
     </div>
@@ -30,11 +60,11 @@ const props = defineProps({
   storeType: {
     type: String,
     required: true,
-    validator: (value) => ['event', 'article'].includes(value)
-  }
+    validator: (value) => ['event', 'article'].includes(value),
+  },
 })
 
-const {t} = useI18n()
+const { t } = useI18n()
 const { toast } = useToast()
 const eventStore = useEventStore()
 const articleStore = useArticleStore()
@@ -58,13 +88,21 @@ const checkMaxImages = () => {
   }
 }
 
-const images = computed(() =>{ 
-  if (props.storeType === 'article') return store.value[props.storeType][`${props.storeType}Images`]
-  else return store.value[`${props.storeType}Images`]}
+const images = computed(() => {
+    return store.value[`${props.storeType}Images`]
+})
+
+const coverImage = computed(() => {
+  console.log(store.value.coverImage)
+  return store.value.coverImage
+})
+
+watch(
+  () => coverImage,
+  (newValue) => {
+    console.log(newValue)
+  }
 )
-
-const coverImage = computed(() => store.value.coverImage)
-
 const onFileChange = async (event) => {
   const files = event.target.files
   for (let i = 0; i < files.length; i++) {
@@ -73,23 +111,33 @@ const onFileChange = async (event) => {
     formData.append('upload_preset', uploadPreset)
 
     try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-        method: 'POST',
-        body: formData
-      })
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
       const data = await response.json()
       if (data.secure_url) {
-        store.value[`add${props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)}Image`]({ url: data.secure_url })
+        store.value[
+          `add${
+            props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)
+          }Image`
+        ]({ url: data.secure_url })
       }
 
-      if(!coverImage.value && files.length) {
+      if (!coverImage.value && files.length) {
         eventStore.coverImage = data.secure_url
       }
 
-      if (images.value.length === checkMaxImages()) {
+      if (
+        props.storeType !== 'article' &&
+        images.value.length === checkMaxImages()
+      ) {
         toast({
           description: t('galleryLimit'),
-          variant: 'destructive'
+          variant: 'destructive',
         })
       }
     } catch (error) {
@@ -103,15 +151,19 @@ const setCoverImage = (url) => {
 }
 
 const removeImage = (url) => {
-  store.value[`remove${props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)}Image`](url)
+  store.value[
+    `remove${
+      props.storeType.charAt(0).toUpperCase() + props.storeType.slice(1)
+    }Image`
+  ](url)
   if (store.value.coverImage === url) {
     store.value.setCoverImage(null)
   }
 }
 
- const removeCoverImage = () => {
+const removeCoverImage = () => {
   eventStore.setCoverImage(null)
-} 
+}
 </script>
 
 <style scoped>
@@ -137,7 +189,6 @@ const removeImage = (url) => {
   height: 128px; /* Fixed height */
   object-fit: cover;
   cursor: pointer;
-  
 }
 .image-preview img.cover {
   border: 2px solid red;

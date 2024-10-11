@@ -1,5 +1,5 @@
 <template>
-  <section v-if="premiumEvents.length > 0" class="px-4">
+  <section v-if="optimaEvents.length > 0" class="px-4">
     <div class="px-6">
       <h1 class="text-2xl text-primary font-semibold mt-4">
         {{ $t('titles.featuresEvents') }}
@@ -9,12 +9,12 @@
     <div class="overflow-x-auto w-full mt-4 p-2">
       <div
         :class="{
-          'flex space-x-4 justify-start': premiumEvents.length > 1,
-          'flex justify-center': premiumEvents.length === 1,
+          'flex space-x-4 justify-start': optimaEvents.length > 1,
+          'flex justify-center': optimaEvents.length === 1,
         }"
       >
         <div
-          v-for="event in premiumEvents"
+          v-for="event in optimaEvents"
           :key="event.id"
           class="flex-shrink-0"
         >
@@ -41,20 +41,29 @@ const eventStore = useEventStore()
 const today = new Date()
 
 const premiumEvents = ref([])
-watchEffect(() => {
+
+const optimaEvents = computed(() => {
+  let premiumEvents = []
   if (eventStore.events) {
-    premiumEvents.value = eventStore?.events.filter(
+    premiumEvents = eventStore?.events.filter(
       (event) =>
-        event?.payment?.name === 'optima plus' &&
+        (event?.payment?.name === 'optima plus' &&
+         ( new Date(
+            event.eventDate.year,
+            event.eventDate.month - 1,
+            event.eventDate.day
+          ) >= today) ||
         new Date(
-          event.eventDate.year,
-          event.eventDate.month - 1,
-          event.eventDate.day
-        ) >= today
+          event.eventEndDate?.year,
+          event.eventEndDate?.month - 1,
+          event.eventEndDate?.day
+        ) >= today)
     )
   }
+  console.log(premiumEvents)
   return premiumEvents
 })
+
 </script>
 
 <style scoped>
