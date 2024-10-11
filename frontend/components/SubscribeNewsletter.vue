@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col p-6 items-center justify-center mt-[50px] py-[50px] bg-gray w-full">
-    <NuxtImg class="w-1/2 md:w-1/5" src="/newsletter.png" alt="Email Image">
+    <NuxtImg class="w-1/2 md:w-1/5" src="/newsletter.png" alt="Email Image" />
     <h1 class="text-primary text-4xl my-10 font-bold">
       {{  $t('newsletter.title') }}
     </h1>
