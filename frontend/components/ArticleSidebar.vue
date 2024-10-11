@@ -4,7 +4,7 @@
     <ul>
       <li v-for="article in articles" :key="article._id" class="mb-4">
         <NuxtLink :to="`/articles/${article._id}`" class="flex items-start">
-          <img :src="article.coverImage" alt="Article Image" class="w-16 h-16 object-cover mr-4 rounded-md" />
+          <NuxtImg :src="article.coverImage" alt="Article Image" class="w-16 h-16 object-cover mr-4 rounded-md" />
           <div>
             <h4 class="text-sm font-semibold">{{ article.title }}</h4>
             <p class="text-xs text-gray-600">{{ formattedDate(article.date) }}</p>
