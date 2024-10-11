@@ -92,12 +92,6 @@ export default defineNuxtConfig({
       cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
     },
   },
-  image: {
-    // Configuración específica para nuxt-img
-    cloudinary: {
-      baseURL: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/`, 
-    },
-  },
   build: {
     transpile: ['@fawmi/vue-google-maps'],
   },
