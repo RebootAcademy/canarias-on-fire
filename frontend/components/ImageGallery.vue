@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col image-gallery p-4 text-white rounded-lg">
     <div class="cover-image mb-4 relative">
-      <NuxtImg v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
+      <img v-if="coverImage || images[0]" :src="coverImage || images[0].url " alt="Cover Image" class="w-full h-64 object-cover rounded-lg" />
       <button v-if="coverImage" @click="removeCoverImage" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2">x</button>
     </div>
     <div class="flex flex-col lg:flex-row gap-4 items-center">
@@ -15,7 +15,7 @@
       </div>
       <div class="hidden md:flex image-previews gap-4 overflow-x-auto xs:pb-4 md:pb-0">
         <div v-for="(image, index) in images" :key="index" class="image-preview relative">
-          <NuxtImg :src="image.url" @click="setCoverImage(image.url)" :class="{ 'border-4 border-orange-500': image.url === coverImage }" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
+          <img :src="image.url" @click="setCoverImage(image.url)" :class="{ 'border-4 border-orange-500': image.url === coverImage }" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
           <button @click="removeImage(image.url)" class="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1">x</button>
         </div>
       </div>

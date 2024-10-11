@@ -31,12 +31,12 @@
         </span>
 
         <!-- Event Image -->
-        <NuxtImg
+        <img
           v-if="!isBasicPayment"
           :src="event.coverImage || defaultImage"
           class="w-full h-44 object-cover rounded-t-lg "
         />
-        <NuxtImg
+        <img
           v-else
           :src="defaultImage"
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"

@@ -1,6 +1,6 @@
 <template>
   <div class="relative bg-background text-secondary">
-    <NuxtImg
+    <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
       class="w-full h-96 object-cover"
@@ -78,7 +78,7 @@
             <summary class="text-primary">
               {{ $t('previewText.showMap') }}
             </summary>
-            <NuxtImg
+            <img
               :src="event.eventLocation.mapImageUrl"
               alt="Event Location"
               class="w-full h-60 lg:h-[500px] object-cover mt-4"
