@@ -1,6 +1,6 @@
 <template>
   <div class="relative bg-background text-secondary">
-    <NuxtImg
+    <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
       class="w-full h-96 object-cover"
