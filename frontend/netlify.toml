@@ -1,8 +1,7 @@
 [build]
-  publish = "dist"  # La carpeta que contenga los archivos estáticos generados por Nuxt
+  publish = "dist"
 
 [[redirects]]
-  from = "/images/*"  # Asegúrate de que esta ruta se ajuste a tus necesidades
-  to = "https://res.cloudinary.com/drs1a2bso/image/upload/:splat"
+  from = "/*"
+  to = "/index.html"
   status = 200
-  force = true

@@ -191,6 +191,7 @@ const formattedDate = () => {
     day: 'numeric',
   })
 }
+
 </script>
 
 <style scoped>
