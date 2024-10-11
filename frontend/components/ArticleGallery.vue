@@ -4,7 +4,7 @@ import { NuxtImg } from '../.nuxt/components';
     <h2 class="text-2xl text-secondary font-semibold mb-2">{{ $t('gallery.title')}}</h2>
     <div class="image-previews flex gap-4 overflow-x-auto">
       <div v-for="(article, index) in articleStore.article.articleImages" :key="index" class="image-preview relative">
-        <NuxtImg :src="article.url" @click="openModal(article.url)" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
+        <img :src="article.url" @click="openModal(article.url)" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
       </div>
     </div>
     <ImageModal :isOpen="isModalOpen" :imageUrl="selectedImageUrl" @close="closeModal" />

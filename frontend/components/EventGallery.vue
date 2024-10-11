@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-semibold mb-2">{{ $t('gallery.title')}}</h2>
     <div class="image-previews flex gap-4 overflow-x-auto">
       <div v-for="(image, index) in eventStore.event.eventImages" :key="index" class="image-preview relative">
-        <NuxtImg :src="image.url" @click="openModal(image.url)" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
+        <img :src="image.url" @click="openModal(image.url)" class="w-32 h-32 object-cover rounded-lg cursor-pointer" />
       </div>
     </div>
     <ImageModal :isOpen="isModalOpen" :imageUrl="selectedImageUrl" @close="closeModal" />
