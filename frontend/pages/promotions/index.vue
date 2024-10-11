@@ -10,7 +10,7 @@
             {{ $t('promotionsTitle') }}
           </h2>
         </div>
-        <div class="flex flex-col-reverse md:flex-row gap-4 items-center">
+        <div class="flex flex-col-reverse md:flex-row gap-4 items-center md:w-full justify-end">
           <CustomSelect
             :items="eventDiscounts"
             :placeholder="selectedPromotion"
@@ -52,10 +52,8 @@ const selectedPromotion = ref('all')
 const eventDiscounts = computed(() => {
   return [
     { label: t('onBoarding.step2Genres.all'), value: 'all' },
-    { label: t('eventTypeDiscount.10-30'), value: '10-30' },
-    { label: t('eventTypeDiscount.30-50'), value: '30-50' },
-    { label: t('eventTypeDiscount.50-70'), value: '50-70' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
+    { label: t('eventTypeDiscount.3x1'), value: '3x1' },
     { label: t('eventTypeDiscount.free'), value: 'free' },
     { label: t('eventTypeDiscount.other'), value: 'other' },
   ]

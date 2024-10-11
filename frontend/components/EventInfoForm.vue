@@ -281,10 +281,10 @@ const hasEndDate = ref(false)
 const changeMap = ref(props.isEditing)
 
 const eventDiscounts = computed(() => {
-  return [
-    { label: t('eventTypeDiscount.10-30'), value: '10-30' },
-    { label: t('eventTypeDiscount.30-50'), value: '30-50' },
+   return [
+    { label: t('onBoarding.step2Genres.all'), value: 'all' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
+    { label: t('eventTypeDiscount.3x1'), value: '3x1' },
     { label: t('eventTypeDiscount.free'), value: 'free' },
     { label: t('eventTypeDiscount.other'), value: 'other' },
   ]
