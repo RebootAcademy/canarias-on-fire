@@ -28,12 +28,12 @@
         </span>
 
         <!-- promotion Image -->
-        <img
+        <NuxtImg
           v-if="!isBasicPayment"
           :src="promotion.coverImage || defaultImage"
           class="w-full h-44 object-cover rounded-t-lg"
         />
-        <img
+        <NuxtImg
           v-else
           :src="defaultImage"
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center gap-2 text-gray-500 mb-4">
     <div class="rounded-full border border-primary w-32 h-32 mb-4 flex items-center justify-center text-3xl font-bold text-secondary overflow-hidden">
-      <img 
+      <NuxtImg 
       v-if="imageUrl" 
       :src="imageUrl" 
       width="150" 

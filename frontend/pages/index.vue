@@ -1,6 +1,6 @@
 <template>
   <div class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
-    <img src="/public/logo_color.png" alt="Evente Logo" class="min-w-[100px] max-w-[150px] mt-16 mb-10 md:hidden" />
+    <NuxtImg src="/public/logo_color.png" alt="Evente Logo" class="min-w-[100px] max-w-[150px] mt-16 mb-10 md:hidden" />
     <Hero class="hidden md:flex"/>
     <div class="w-full flex flex-col items-center h-fit">
       <div class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3">

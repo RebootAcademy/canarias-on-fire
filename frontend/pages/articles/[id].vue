@@ -16,7 +16,7 @@
             </p>
           </div>
         </div>
-        <img
+        <NuxtImg
           :src="article.coverImage"
           class="w-full h-64 object-cover mb-6 rounded-lg"
           alt="Article Image"

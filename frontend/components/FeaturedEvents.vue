@@ -11,12 +11,12 @@
             <Card class="border-0 flex items-center justify-center bg-gray-900">
               <CardContent class="bg-black">
                 <NuxtLink :to="`/events/${event._id}`">
-                  <img
+                  <NuxtImg
                     v-if="event.coverImage"
                     :src="event.coverImage"
                     class="object-scale-down h-96 w-80"
                   />
-                  <img
+                  <NuxtImg
                     v-else
                     :src="event?.eventImages[0]?.url"
                     class="object-scale-down h-96 w-80"

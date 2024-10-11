@@ -3,7 +3,7 @@
     
     <div class="flex xs:justify-center md:justify-start xs:2/4 sm:w-1/3 text-3xl ml-1 font-extrabold">
       <NuxtLink to="/" class="flex items-end">
-        <img src="/logo_color.png" alt="Evente Logo" class="w-28 md:w-36" />
+        <NuxtImg src="/logo_color.png" alt="Evente Logo" class="w-28 md:w-36" />
       </NuxtLink>
     </div>
     <div class="hidden md:flex w-1/3 justify-center">
