@@ -17,7 +17,10 @@ export default defineNuxtConfig({
           content:
             'Descubre eventos emocionantes en tu área, desde conciertos hasta conferencias. ¡Únete a nuestra comunidad y no te pierdas ninguna promoción!',
         },
-        { property: 'og:title', content: 'Evente - Tu página para encontrar y publicar eventos' },
+        {
+          property: 'og:title',
+          content: 'Evente - Tu página para encontrar y publicar eventos',
+        },
         {
           property: 'og:description',
           content:
@@ -87,6 +90,12 @@ export default defineNuxtConfig({
       cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
       cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
       cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    },
+  },
+  image: {
+    // Configuración específica para nuxt-img
+    cloudinary: {
+      baseURL: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/`, 
     },
   },
   build: {

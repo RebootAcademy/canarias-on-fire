@@ -2,7 +2,6 @@
   <div class="relative bg-background text-secondary">
     <NuxtImg
       :src="eventStore.event.coverImage || defaultImage"
-      provider="cloudinary"
       alt="Event Image"
       class="w-full h-96 object-cover"
     />
