@@ -19,7 +19,7 @@
           class="flex-shrink-0"
         >
           <NuxtLink :to="`/events/${event._id}`">
-            <NuxtImg
+            <img
               v-if="event.coverImage"
               :src="event.coverImage"
               class="h-80 w-80 object-cover"

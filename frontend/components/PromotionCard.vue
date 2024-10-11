@@ -28,7 +28,7 @@
         </span>
 
         <!-- promotion Image -->
-        <NuxtImg
+        <img
           v-if="!isBasicPayment"
           :src="promotion.coverImage || defaultImage"
           class="w-full h-44 object-cover rounded-t-lg"
