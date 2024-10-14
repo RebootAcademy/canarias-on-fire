@@ -79,6 +79,7 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async updateUserProfile(profileData) {
+      console.log(profileData)
       try {
         const response = await $fetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`,

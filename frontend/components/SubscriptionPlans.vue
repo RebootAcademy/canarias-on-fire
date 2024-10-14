@@ -82,7 +82,7 @@
           </li>
         </ul>
 
-        <div v-if="userStore.isAuthenticated && !isInformation" class="mt-8" >
+        <div v-if="userStore.isAuthenticated && !isAdmin && !isInformation" class="mt-8" >
           <NuxtLink
             v-if="getSubscriptionAction(plan) === 'subscribe'"
             @click="subscribeToPlan(plan)"
@@ -170,6 +170,7 @@ const {t} = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
+const isAdmin = computed(() => userStore?.userData?.role === 'admin')
 
 const isCanceled = computed(() => {
   if (userStore.userData.activeSubscription?.status === 'canceled') {

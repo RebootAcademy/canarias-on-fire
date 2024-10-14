@@ -251,7 +251,7 @@ const formData = ref({
     startTime: '',
   },
   termsAccepted: false,
-  imageUrl: '',
+  profileImg: '',
 })
 
 const errors = ref({
@@ -265,7 +265,7 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const handleImageUpload = (imageUrl) => {
-  formData.value.imageUrl = imageUrl
+  formData.value.profileImg = imageUrl
 }
 
 onMounted(() => {

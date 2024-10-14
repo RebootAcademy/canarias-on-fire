@@ -46,3 +46,35 @@ export function validateCIF(cif) {
     return control == digitoControl || control == letrasControl[digitoControl]
   }
 }
+
+
+export function validateNifNie(nifNie) {
+  const nifRegex = /^[0-9]{8}[A-Z]$/i
+  const nieRegex = /^[XYZ][0-9]{7}[A-Z]$/i
+
+  function calcularLetraNif(numero) {
+    const letras = 'TRWAGMYFPDXBNJZSQVHLCKE'
+    return letras[numero % 23]
+  }
+
+  function nieToNif(nie) {
+    let niePrefix = { X: 0, Y: 1, Z: 2 }
+    let numero = nie.replace(/^([XYZ])/, (letra) => niePrefix[letra])
+    return numero
+  }
+
+  if (nifRegex.test(nifNie)) {
+    const numero = parseInt(nifNie.slice(0, 8), 10)
+    const letra = nifNie.slice(8).toUpperCase()
+    return calcularLetraNif(numero) === letra
+  }
+
+  if (nieRegex.test(nifNie)) {
+    const numeroNie = nieToNif(nifNie)
+    const numero = parseInt(numeroNie.slice(0, 8), 10)
+    const letra = nifNie.slice(8).toUpperCase()
+    return calcularLetraNif(numero) === letra
+  }
+
+  return false
+}

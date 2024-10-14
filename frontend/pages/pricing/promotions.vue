@@ -1,7 +1,7 @@
 <template>
   <div class="px-6 md:px-0 md:p-6 text-sm">
-    <div v-if="userStore.selectedUser" class="text-center mb-6">
-      <h2 class="text-3xl font-bold text-primary">{{$t('promotions.manageSubscription')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
+    <div v-if="userStore.selectedUser" class="text-center mb-6 mt-4">
+      <h2 class="text-2xl font-bold text-primary">{{$t('promotions.manageSubscription')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
       <p class="mt-2 text-lg font-medium text-gray-300">
         {{$t('promotions.currentPlan')}} {{ getCurrentPlanName.toUpperCase() }}
       </p>

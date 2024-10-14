@@ -78,8 +78,8 @@
     "step2Email": "Contact Email",
     "step2Phone": "Phone",
     "step2Address": "Commercial address",
-    "step2CIF": "CIF",
-    "step2InvalidCIF": "Invalid CIF",
+    "step2CIF": "CIF or NIF/NIE",
+    "step2InvalidCIF": "Invalid CIF or NIF/NIE",
     "step2ZIP": "Postal code",
     "requiredField": "This field is required",
     "step2Sector": {
@@ -170,6 +170,7 @@
   },
   "plansSection": {
     "title": "Plans",
+    "title2": "Events prices",
     "PromoSubscription": "Promotion Subscription",
     "eventPayments": "Event Payments"
   }
