@@ -465,14 +465,15 @@ export const useEventStore = defineStore('eventStore', {
   },
 
   getters: {
-    filteredEvents() {
+    /* filteredEvents() {
       if (!this.events) return []
       const today = new Date()
+      console.log(this.events, 'Events')
 
       return this.events.filter((event) => {
         if (event.eventType === 'event'){
 
-          let endDate = new Date(event.eventEndDate?.year, event.eventEndDate?.month - 1, event.eventEndDate?.day)
+          let endDate 
           let eventDate = new Date(
             event.eventDate?.year,
             event.eventDate?.month - 1,
@@ -480,17 +481,16 @@ export const useEventStore = defineStore('eventStore', {
           )
   
           const [hours, minutes] = event.startTime.split(':').map(Number)
-          let eventDateTime 
-          if (endDate){
-            eventDateTime = new Date(
-              endDate.getFullYear(),
-              endDate.getMonth(),
-              endDate.getDate(),
+          if (event.eventEndDate) {
+            endDate = new Date(
+              event.eventEndDate.year.getFullYear(),
+              event.eventEndDate.getMonth(),
+              event.eventEndDate.getDate(),
               hours,
               minutes
             )
           } else {
-            eventDateTime = new Date(
+            endDate = new Date(
               eventDate.getFullYear(),
               eventDate.getMonth(),
               eventDate.getDate(),
@@ -499,18 +499,18 @@ export const useEventStore = defineStore('eventStore', {
             )
           }
   
-          if (event.status !== 'closed' && eventDateTime < today) {
+          if (event.status !== 'closed' && endDate < today) {
             this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
           }
         } else {
-          let endDate = new Date(event.eventDate?.end.year, event.eventDate?.end.month - 1, event.eventDate?.end.day)
-          if (event.status !== 'closed' && endDate < today) {
+          let endDatePromotion = new Date(event.eventDate?.end.year, event.eventDate?.end.month - 1, event.eventDate?.end.day)
+          if (event.status !== 'closed' && endDatePromotion < today) {
             this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
           }
         }
 
         // Filter events by active and validated users
-        if (!event.userId?.isActive) {
+        if (!event.userId || !event.userId?.isActive) {
           return false
         }
 
@@ -526,17 +526,20 @@ export const useEventStore = defineStore('eventStore', {
         }
 
         // Filter by Categories
-        if (this.filters.categories.length > 0) {
+        
+
+        // Filtrar por categorías seleccionadas
+        const allCategories = [
+          ...this.filters.categories,
+          ...this.selectedCategories,
+        ]
+        if (allCategories.length > 0) {
           const eventCategoryIds = event.categories.map((cat) => cat._id)
-          if (
-            !this.filters.categories.some((id) => eventCategoryIds.includes(id))
-          ) {
+          if (!allCategories.some((id) => eventCategoryIds.includes(id))) {
             return false
           }
         }
-
-        // Filtrar por categorías seleccionadas
-        if (this.selectedCategories.length > 0) {
+        /* if (this.selectedCategories.length > 0) {
           const eventCategoryIds = event.categories.map((c) => c._id)
           const hasMatchingCategory = this.selectedCategories.some((sc) =>
             eventCategoryIds.includes(sc.id)
@@ -573,7 +576,109 @@ export const useEventStore = defineStore('eventStore', {
 
         return true
       })
+    }, */
+
+    filteredEvents() {
+      if (!this.events) return []
+
+      const today = new Date()
+      const lowercaseQuery = this.searchQuery?.toLowerCase() || ''
+      const hasCategoriesFilter = this.filters.categories.length > 0
+      const hasIslandsFilter = this.filters.islands.length > 0
+      const allCategories = [
+        ...this.filters.categories,
+        ...this.selectedCategories,
+      ]
+      const hasSelectedCategories = allCategories.length > 0
+
+      return this.events.filter((event) => {
+        // Validar usuario activo
+        if (!event.userId?.isActive) return false
+
+        let endDate, eventDate
+
+        // Procesar fechas dependiendo del tipo de evento
+        if (event.eventType === 'event') {
+          eventDate = new Date(
+            event.eventDate?.year,
+            event.eventDate?.month - 1,
+            event.eventDate?.day
+          )
+
+          const [hours, minutes] = event.startTime.split(':').map(Number)
+
+          endDate = event.eventEndDate
+            ? new Date(
+                event.eventEndDate.year,
+                event.eventEndDate.month - 1,
+                event.eventEndDate.day,
+                hours,
+                minutes
+              )
+            : new Date(
+                eventDate.getFullYear(),
+                eventDate.getMonth(),
+                eventDate.getDate(),
+                hours,
+                minutes
+              )
+        } else {
+          endDate = new Date(
+            event.eventDate?.end.year,
+            event.eventDate?.end.month - 1,
+            event.eventDate?.end.day
+          )
+        }
+
+        // Cerrar eventos vencidos
+        if (event.status !== 'closed' && endDate < today) {
+          this.updateEventStatus(event._id, 'closed')
+        }
+
+        // Búsqueda por nombre o descripción del evento
+        if (
+          lowercaseQuery &&
+          !event.eventName.toLowerCase().includes(lowercaseQuery) &&
+          !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+        ) {
+          return false
+        }
+
+        // Filtrar por categorías seleccionadas
+        if (hasSelectedCategories) {
+          const eventCategoryIds = event.categories.map((cat) => cat._id)
+          if (!allCategories.some((id) => eventCategoryIds.includes(id))) {
+            return false
+          }
+        }
+
+        // Filtrar por islas
+        if (hasIslandsFilter) {
+          const eventIsland = getIslandFromPostalCode(
+            event.eventLocation.postalCode
+          )
+          if (!this.filters.islands.includes(eventIsland)) {
+            return false
+          }
+        }
+
+        // Filtrar por fecha
+        if (this.filters.date) {
+          const filterDate = this.filters.date
+          if (
+            !event.eventDate ||
+            event.eventDate.year !== filterDate.year ||
+            event.eventDate.month !== filterDate.month ||
+            event.eventDate.day !== filterDate.day
+          ) {
+            return false
+          }
+        }
+
+        return true
+      })
     },
+
     eventsCount() {
       return this.events.length
     },

@@ -121,7 +121,7 @@
             >
               <div class="rounded-full bg-gray w-10 h-10"></div>
               <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
-                {{ promotion.userId.companyName }}
+                {{ promotion.userId?.role === 'company' ? promotion.userId?.companyName : promotion.userId?.name }}
               </p>
             </div>
           </div>

@@ -141,7 +141,7 @@ const myEvents = computed(() => {
 
 const adminEvents = computed(() => {
   return eventStore.events
-    .filter((event) => event.eventType === 'event' && event.status === selectOption.value || selectOption.value === 'all')
+    .filter((event) => event.eventType === 'event' &&( event.status === selectOption.value || selectOption.value === 'all'))
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
@@ -153,6 +153,7 @@ const adminEvents = computed(() => {
       return compareDates(a.eventDate, b.eventDate)
     })
 })
+
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment._id : event.payment
   const payment = paymentStore.getPaymentById(paymentId?._id)
