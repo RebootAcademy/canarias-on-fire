@@ -19,7 +19,6 @@ onMounted(async () => {
   const sessionId = route.query.session_id
   if (sessionId) {
     // Aquí puedes hacer una llamada a tu API para verificar el estado de la sesión
-    console.log('Session ID:', sessionId)
     // Implementa la lógica para verificar el estado de la sesión y actualizar la UI
   }
 })

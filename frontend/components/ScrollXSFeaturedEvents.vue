@@ -60,7 +60,6 @@ const optimaEvents = computed(() => {
         ) >= today)
     )
   }
-  console.log(premiumEvents)
   return premiumEvents
 })
 

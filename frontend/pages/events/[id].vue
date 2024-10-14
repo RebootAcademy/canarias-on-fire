@@ -99,7 +99,7 @@
         </div>
         <div class="flex gap-2 mt-6 mb-6">
           <div
-            v-if="event.status === 'draft' && isValidated && isOwner"
+            v-if="event.status === 'draft' && (isValidated || isAdmin) && isOwner"
             class="bg-primary-gradient p-0.5 rounded-md"
             @click="publishEvent"
           >
@@ -120,7 +120,7 @@
     </div>
   </div>
   <div class="px-8">
-    <EventsRelated :type="evenType" />
+    <EventsRelated :type="eventType" />
   </div>
   <CustomModal v-model:open="isOpen">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>

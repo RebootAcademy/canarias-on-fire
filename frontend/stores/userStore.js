@@ -79,7 +79,6 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async updateUserProfile(profileData) {
-      console.log(profileData)
       try {
         const response = await $fetch(
           `${useRuntimeConfig().public.apiBaseUrl}/users/${profileData._id}`,
@@ -327,7 +326,6 @@ export const useUserStore = defineStore('userStore', {
     },
     getInitialThemePreference: (state) => {
       if (process.client) {
-        console.log(this.themePreference)
         return localStorage.getItem('themePreference') || state.themePreference
       }
       return state.themePreference // Para el SSR

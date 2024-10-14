@@ -209,7 +209,6 @@ const formattedDate = () => {
   
   const date = new Date(year, month - 1, day)
   if (!endDate || date === endDate) {
-    console.log(true)
     return date.toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',

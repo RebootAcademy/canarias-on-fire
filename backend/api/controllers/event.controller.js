@@ -116,6 +116,48 @@ const getEventsByUserId = async (req, res) => {
   }
 }
 
+const searchNearbyEvents = async (req, res) => {
+  try {
+    const { lat, lng, eventType='event' } = req.query
+    const maxDistance = 5000
+
+    if (!lat || !lng) {
+      return res.status(400).json({ error: 'Se requieren latitud y longitud' })
+    }
+
+     const query = {
+       eventLocation: {
+         $near: {
+           $geometry: {
+             type: 'Point',
+             coordinates: [parseFloat(lat), parseFloat(lng)],
+           },
+           $maxDistance: maxDistance,
+         },
+       },
+     }
+      if (eventType) {
+        query.eventType = eventType
+        query.status = 'published'
+      }
+      console.log('Query: ', JSON.stringify(query, null, 2))
+
+      const events = await Event.find(query).populate('categories location userId payment subscription')
+
+    res.status(200).json({
+      success: true,
+      message: 'Events successfully fetched.',
+      result: events,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error getting events.',
+      description: error.message,
+    })
+  }
+}
+
 const updateEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
@@ -254,6 +296,7 @@ module.exports = {
   getAllEvents,
   getEventById,
   getEventsByUserId,
+  searchNearbyEvents,
   updateEvent,
   updateEventByAdmin,
   deleteEvent,

@@ -19,7 +19,7 @@ export const useEventStore = defineStore('eventStore', {
     eventEndDate: null,
     eventLocation: {
       address: '',
-      coordinates: { lat: null, lng: null },
+      coordinates: [],
       postalCode: '',
       mapImageUrl: '',
     },
@@ -105,10 +105,10 @@ export const useEventStore = defineStore('eventStore', {
       const { formatted_address, geometry, address_components, website } = place
       this.eventLocation = {
         address: formatted_address,
-        coordinates: {
-          lat: geometry.location.lat(),
-          lng: geometry.location.lng(),
-        },
+        type: 'Point',
+        coordinates: [
+           geometry.location.lat(),
+           geometry.location.lng()],
         postalCode: this.extractPostalCode(address_components),
         mapImageUrl: this.generateMapImageUrl(
           geometry.location.lat(),
