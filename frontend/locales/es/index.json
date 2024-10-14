@@ -77,8 +77,8 @@
     "step2CommercialName": "Nombre comercial",
     "step2Email": "Correo de contacto",
     "step2Phone": "Teléfono",
-    "step2CIF": "CIF",
-    "step2InvalidCIF": "CIF no válido",
+    "step2CIF": "CIF / NIF o NIE",
+    "step2InvalidCIF": "CIF / NIF o NIE no válido",
     "step2ZIP": "Código postal",
     "requiredField": "Este campo es requerido",
     "step2Address": "Domicilio comercial",
@@ -170,6 +170,7 @@
   },
   "plansSection": {
     "title": "Planes",
+    "title2": "Tarifas de eventos",
     "PromoSubscription": "Suscripción para promociones",
     "eventPayments": "Pago para publicar eventos"
   }

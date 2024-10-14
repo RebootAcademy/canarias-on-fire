@@ -18,10 +18,13 @@
         }"
       ></div>
 
-      <div class="relative  w-full h-full rounded-lg">
+      <div class="relative w-full h-full rounded-lg">
         <!-- Event status -->
         <span
-          v-show="userStore.userData && (userStore.userData.role === 'admin' || isOwner)"
+          v-show="
+            userStore.userData &&
+            (userStore.userData.role === 'admin' || isOwner)
+          "
           :class="[
             'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
             { 'text-red-500 italic': event.status === 'draft' },
@@ -34,7 +37,7 @@
         <img
           v-if="!isBasicPayment"
           :src="event.coverImage || defaultImage"
-          class="w-full h-44 object-cover rounded-t-lg "
+          class="w-full h-44 object-cover rounded-t-lg"
         />
         <img
           v-else
@@ -55,7 +58,10 @@
           </div>
           <!-- Options menu -->
           <div
-            v-show="userStore.userData && (userStore.userData.role === 'admin' || isOwner)"
+            v-show="
+              userStore.userData &&
+              (userStore.userData.role === 'admin' || isOwner)
+            "
           >
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -68,7 +74,10 @@
                   <Pencil class="mr-2 h-4 w-4" />
                   <span>{{ $t('buttons.edit') }}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem @select="isOpen = true" class="cursor-pointer">
+                <DropdownMenuItem
+                  @select="isOpen = true"
+                  class="cursor-pointer"
+                >
                   <Trash class="mr-2 h-4 w-4" />
                   <span>{{ $t('buttons.delete') }}</span>
                 </DropdownMenuItem>
@@ -77,7 +86,9 @@
           </div>
         </div>
         <div class="flex flex-col justify-between items-start px-4">
-          <h3 class="text-xl text-secondary font-semibold mb-2">{{ event.eventName }}</h3>
+          <h3 class="text-xl text-secondary font-semibold mb-2">
+            {{ event.eventName }}
+          </h3>
           <p
             class="text-sm"
             :class="{
@@ -102,9 +113,11 @@
       </div>
     </div>
   </NuxtLink>
-   <CustomModal v-model:open="isOpen">
+  <CustomModal v-model:open="isOpen">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
-    <p class="text-lg">{{ event.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}</p>
+    <p class="text-lg">
+      {{ event.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}
+    </p>
     <div class="flex justify-end gap-4 mt-2">
       <!-- <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />  -->
       <button
@@ -131,8 +144,8 @@ const props = defineProps({
   event: Object,
   isRelatedEvent: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const isOpen = ref(false)
@@ -169,11 +182,11 @@ const deleteEvent = async () => {
   const success = await eventStore.deleteEvent(props.event._id)
   if (success) {
     toast({
-    description:
-      props.event.eventType === 'event'
-        ? t('deleteEventSuccess')
-        : t('deletePromoSuccess'),
-  })
+      description:
+        props.event.eventType === 'event'
+          ? t('deleteEventSuccess')
+          : t('deletePromoSuccess'),
+    })
   } else {
     console.error('Failed to delete event')
   }
@@ -184,38 +197,61 @@ const formattedDate = () => {
     return 'Date not available'
   }
   const { year, month, day } = props.event.eventDate
+  const {
+    year: endYear,
+    month: endMonth,
+    day: endDay,
+  } = props.event?.eventEndDate
+  
   const date = new Date(year, month - 1, day)
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const endDate = new Date(endYear, endMonth - 1, endDay)
+  if (date === endDate) {
+    console.log(true)
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  } else {
+    return (
+      date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }) +
+      ' - ' +
+      endDate.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    )
+  }
 }
-
 </script>
 
 <style scoped>
-  .test-shine:after {
-    content: "";
-    position: absolute;
-    top: 0%;
-    left: -20%;
-    width: 20%;
-    height: 120%;
-    opacity: 0;
-    transform: rotate(30deg);
+.test-shine:after {
+  content: '';
+  position: absolute;
+  top: 0%;
+  left: -20%;
+  width: 20%;
+  height: 120%;
+  opacity: 0;
+  transform: rotate(30deg);
 
-    background: rgba(255, 255, 255, 0.13);
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.13) 0%,
-      rgba(255, 255, 255, 0.13) 77%,
-      rgba(255, 255, 255, 0.5) 92%,
-      rgba(255, 255, 255, 0.0) 100%
-    );
-  }
+  background: rgba(255, 255, 255, 0.13);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.13) 77%,
+    rgba(255, 255, 255, 0.5) 92%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
 
-  /* Hover state - trigger effect */
+/* Hover state - trigger effect */
 /*   .test-shine:hover:after {
     opacity: 1;
     left: 130%;
@@ -224,8 +260,8 @@ const formattedDate = () => {
     transition-timing-function: ease;
   } */
 
-  /* Active state */
-  .test-shine:active:after {
-    opacity: 0;
-  }
+/* Active state */
+.test-shine:active:after {
+  opacity: 0;
+}
 </style>

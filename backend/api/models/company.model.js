@@ -13,11 +13,6 @@ const CompanySchema = new mongoose.Schema({
   cif: {
     type: String,
     required: true,
-    validate: {
-      validator: function (value) {
-        return /^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$/.test(value)
-      },
-    },
   },
   companyEmail: {
     type: String,
@@ -47,7 +42,7 @@ const CompanySchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['family', 'mexican', 'asian', 'vegano', 'vegetarian', 'fastfood', 'tapas', 'italian', 'spanish', 'other'],
+    enum: ['family', 'mexican', 'asian', 'vegan', 'vegetarian', 'fastfood', 'tapas', 'italian', 'spanish', 'other'],
   },
   preferredLocations: [
     {

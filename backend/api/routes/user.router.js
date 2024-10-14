@@ -19,20 +19,20 @@ const {
 
 router
   .post('/', createUser)
+  .post('/contact', contactMail)
+  .post('/exist', checkUserExists)
   .get('/', getAllUsers)
   .get('/bands', getAllBands)
   .get('/restaurants', getAllRestaurants)
+  .get('/current/:email', getCurrentUser)
   .get('/:id', isAuth, checkRole('admin'), getUserById)
   .patch('/validate/:id', validateCompany)
   .patch('/:id', /*  isAuth, checkRole('admin'), */ updateUser)
-  .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)
-  .get('/current/:email', getCurrentUser)
   .patch('/:id/profile', updateUserProfile)
   .patch(
     '/:id/subscription',
     /* isAuth, checkRole('admin', 'company'), */ updateUserSubscription
   )
-  .post('/contact', contactMail)
-  .post('/exist', checkUserExists)
+  .delete('/:id', /* isAuth, checkRole('admin'), */ deleteUser)
 
 module.exports = router

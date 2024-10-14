@@ -221,7 +221,7 @@ const formData = ref({
 })
 
 const handleImageUploaded = (url) => {
-  formData.value.profile = url; 
+  formData.value.profileImg = url;
 };
 
 onMounted(() => {
@@ -251,7 +251,7 @@ const restorationSectors = computed(() => {
   ]
 })
 
-watch(
+/* watch(
   () => formData.value.companyName,
   (newVal) => {
     if (isCompanyNameSynced.value) {
@@ -267,7 +267,7 @@ watch(
       isCompanyNameSynced.value = false
     }
   }
-)
+) */
 
 const errors = ref({
   companyName: '',
@@ -291,7 +291,7 @@ const submitForm = async () => {
       termsAccepted: '',
     }
     if (!validateForm()) return false
-    if (!validateCIF(formData.value.cif)) return (errors.value.cif = t('onBoarding.step2InvalidCIF'))
+    if (!validateCIF(formData.value.cif) && !validateNifNie(formData.value.cif) ) return (errors.value.cif = t('onBoarding.step2InvalidCIF'))
     
     if (formData.value.sector !== 'restoration') delete formData.value.type
     try {
@@ -301,6 +301,7 @@ const submitForm = async () => {
         // Manejar el caso de ID faltante (tal vez redirigir al login)
         return
       }
+      console.log('formData', formData.value)
       const result = await userStore.updateUserProfileToCompany({
         ...formData.value,
         _id: userId,
@@ -329,6 +330,8 @@ function validateForm() {
   })
   return Object.values(errors.value).every((error) => error === '')
 }
+
+
 </script>
 
 <style scoped>
