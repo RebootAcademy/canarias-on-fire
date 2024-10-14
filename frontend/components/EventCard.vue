@@ -196,16 +196,19 @@ const formattedDate = () => {
   if (!props.event.eventDate) {
     return 'Date not available'
   }
+  let endDate
   const { year, month, day } = props.event.eventDate
-  const {
-    year: endYear,
-    month: endMonth,
-    day: endDay,
-  } = props.event?.eventEndDate
+  if (props.event?.eventEndDate) {
+    const {
+      year: endYear,
+      month: endMonth,
+      day: endDay,
+    } = props.event?.eventEndDate
+    endDate = new Date(endYear, endMonth - 1, endDay)
+  }
   
   const date = new Date(year, month - 1, day)
-  const endDate = new Date(endYear, endMonth - 1, endDay)
-  if (date === endDate) {
+  if (!endDate || date === endDate) {
     console.log(true)
     return date.toLocaleDateString(undefined, {
       year: 'numeric',

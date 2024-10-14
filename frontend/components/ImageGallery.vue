@@ -17,7 +17,7 @@
     </div>
     <div class="flex flex-col lg:flex-row gap-4 items-center">
       <div
-        v-if="storeType === 'article' && images?.length < checkMaxImages()"
+        v-if=" images?.length < checkMaxImages()"
         class="image-upload mb-4 w-full lg:max-w-40 lg:min-w-40"
       >
         <label
@@ -75,6 +75,8 @@ const uploadPreset = config.public.cloudinaryUploadPreset
 const store = computed(() => {
   return props.storeType === 'event' ? eventStore : articleStore
 })
+
+console.log(store.value)
 const checkMaxImages = () => {
   if (!store?.value?.event?.payment?.name) return 10
   if (store?.value?.event?.eventType === 'promotion') return 10

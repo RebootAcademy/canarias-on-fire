@@ -29,6 +29,7 @@ const {
 } = storeToRefs(eventStore)
 
 const eventsByDate = computed(() => {
+  console.log(filteredEvents?.value, 'FILTER')
   return filteredEventsByDate?.value(filteredEvents?.value)
 }) 
 
@@ -36,6 +37,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
+  console.log(eventsByDate.value)
   
   return eventsByDate.value
     ?.filter(event => 
