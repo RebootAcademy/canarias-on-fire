@@ -1,7 +1,7 @@
 <template>
   <div 
-    class="max-w-7xl mx-auto py-12 px-4 text-secondary text-xs md:text-base sm:px-6 lg:px-8"
-    :class="isStripePayment ? 'py-12' : 'py-6 mb-12'"
+    class="max-w-7xl mx-auto text-secondary text-xs md:text-base sm:px-6 lg:px-8"
+    :class="isStripePayment ? 'py-4 sm:py-12' : 'sm:py-6 mb-12'"
     >
     <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
@@ -17,7 +17,7 @@
           {{ $t('recommended')}}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
-          {{ payment.name }}
+          {{getNameSubscriptionPlan(payment.name) }}
         </h3>
         <div class="mt-4">
           <span 
@@ -222,6 +222,19 @@ const choosePayment = async (plan) => {
     }
   } catch (error) {
     console.error('Error processing payment:', error)
+  }
+}
+
+const getNameSubscriptionPlan = (plan) => {
+  switch (plan) {
+    case 'basic':
+      return t('plansName.basic')
+    case 'optima':
+      return t('plansName.optima')
+    case 'optima plus':
+      return t('plansName.optimaPlus')
+    default:
+      break
   }
 }
 </script>

@@ -61,8 +61,8 @@ const limitedEvents = computed(() => {
       (event) =>
         event.status === 'published' &&
         event.eventType === 'event' &&
-        event.userId?.isActive &&
-        event.userId?.isValidated
+        ((event.userId?.isActive &&
+        event.userId?.isValidated) || userStore.userData?.role === 'admin')
     )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
@@ -75,6 +75,7 @@ const limitedEvents = computed(() => {
       return compareDates(a.eventDate, b.eventDate)
     })
 })
+
 
 function getEventPriority(event) {
   const paymentId =

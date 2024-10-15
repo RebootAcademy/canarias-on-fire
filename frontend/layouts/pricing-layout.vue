@@ -46,10 +46,14 @@ const pricingOptions = computed(() => {
   ]
 })
 
+const headTitle = computed(() => {
+  return t('plansName.plansInfo')
+})
+
 watch(() => route.path, (newPath) => {
 })
 
 useHead({
-  title: 'FAQ',
+  title: headTitle,
 })
 </script>

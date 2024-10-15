@@ -114,7 +114,7 @@
               'text-black': isGoldPayment || isPremiumPayment,
             }"
           >
-            {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
+            {{ event.eventPrice === 0 ? $t('plansName.free') : `${event.eventPrice} €` }}
           </p>
         </div>
       </NuxtLink>
@@ -216,7 +216,6 @@ const formattedDate = () => {
 
   const date = new Date(year, month - 1, day)
   if (!endDate || date === endDate) {
-    console.log(true)
     return date.toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',

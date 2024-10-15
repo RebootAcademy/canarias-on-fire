@@ -1,5 +1,5 @@
 <template>
-  <div class="p-12 text-sm">
+  <div class="p-4 sm:p-12 text-sm">
     <div v-if="userStore.selectedUser" class="text-center mb-4">
       <h2 class="text-3xl font-bold text-primary">{{$t('promotions.manageSubscription')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
       <p class="mt-2 text-lg font-medium text-gray-300">

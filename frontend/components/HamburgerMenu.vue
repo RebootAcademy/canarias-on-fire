@@ -61,7 +61,7 @@
               {
                 label: t('createArticles.label'),
                 path: '/articles/create',
-                roles: ['company'],
+                roles: ['admin'],
               },
               {
                 label: t('manageArticles.label'),

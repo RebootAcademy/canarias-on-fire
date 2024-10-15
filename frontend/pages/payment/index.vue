@@ -1,15 +1,15 @@
 <template>
-  <div class="p-12 text-sm">
+  <div class="p-4 sm:p-12 text-sm">
     <div v-if="userStore.selectedUser" class="text-center mb-4">
-      <h2 class="text-3xl font-bold text-primary">{{ $t('payments.manageSub')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
+      <h2 class="text-3xl font-bold text-primary">{{ $t('paymentsOption.manageSub')}} {{ userStore.selectedUser.companyName || userStore.selectedUser.username }}</h2>
       <p class="mt-2 text-lg font-medium text-gray-300">
-        {{ $t('payments.currentPlan')}} {{ getCurrentPlanName.toUpperCase() }}
+        {{ $t('paymentsOption.currentPlan')}} {{ getCurrentPlanName.toUpperCase() }}
       </p>
     </div>
-    <div v-else class="text-center mb-4">
-      <h2 class="text-2xl font-bold text-primary">{{ $t('payments.choose')}}</h2>
+    <div v-else class="text-center sm:mb-4">
+      <h2 class="text-2xl font-bold text-primary">{{ $t('paymentsOption.choose')}}</h2>
       <p class="mt-2 text-md text-gray-500">
-        {{ $t('payments.findPerfect')}}
+        {{ $t('paymentsOption.findPerfect')}}
       </p>
     </div>
     <PaymentOptions 
