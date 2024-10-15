@@ -301,7 +301,6 @@ const submitForm = async () => {
         // Manejar el caso de ID faltante (tal vez redirigir al login)
         return
       }
-      console.log('formData', formData.value)
       const result = await userStore.updateUserProfileToCompany({
         ...formData.value,
         _id: userId,

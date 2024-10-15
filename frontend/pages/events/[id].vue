@@ -17,6 +17,7 @@
       </div>
       <div class="flex items-center gap-2 my-6 mr-6">
         <Share2
+          v-if="searchPaymentEvent !== 'basic'"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
           @click="copyToClipboard"
         />
@@ -166,6 +167,12 @@ const defaultImage = '/defaultImg.png'
 const eventId = route.params.id
 const isAdmin = userStore.userData?.role === 'admin'
 const isValidated = userStore?.userData?.isValidated
+const searchPaymentEvent = computed(() => {
+  let payment = eventStore.events.find((e) => e._id === eventId)
+  return payment.payment.name
+   
+})
+
 
 const isBasicPayment = computed(() => {
   if (eventType !== 'event') {

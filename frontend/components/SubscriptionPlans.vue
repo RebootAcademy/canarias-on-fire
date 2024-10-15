@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto sm:py-4 px-4 sm:px-6 lg:px-8 ">
+  <div class="max-w-7xl mx-auto sm:py-4  sm:px-6 lg:px-8 ">
     <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:gap-16 xl:gap-20 xl:px-48">
       <div
         v-for="plan in filteredPlans"
@@ -14,7 +14,7 @@
           {{ $t('recommended') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-secondary">
-          {{ plan.name }}
+          {{ getNameSubscriptionPlan(plan.name) }}
         </h3>
         <div class="mt-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
           <span class="text-4xl font-extrabold t"
@@ -171,6 +171,19 @@ const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 const isAdmin = computed(() => userStore?.userData?.role === 'admin')
+
+const getNameSubscriptionPlan = (plan) => {
+  switch (plan) {
+    case 'basic':
+      return t('plansName.basic')
+    case 'optima':
+      return t('plansName.optima')
+    case 'optima plus':
+      return t('plansName.optimaPlus')
+    default:
+      break
+  }
+}
 
 const isCanceled = computed(() => {
   if (userStore.userData.activeSubscription?.status === 'canceled') {

@@ -76,7 +76,6 @@ const store = computed(() => {
   return props.storeType === 'event' ? eventStore : articleStore
 })
 
-console.log(store.value)
 const checkMaxImages = () => {
   if (!store?.value?.event?.payment?.name) return 10
   if (store?.value?.event?.eventType === 'promotion') return 10
@@ -95,16 +94,10 @@ const images = computed(() => {
 })
 
 const coverImage = computed(() => {
-  console.log(store.value.coverImage)
   return store.value.coverImage
 })
 
-watch(
-  () => coverImage,
-  (newValue) => {
-    console.log(newValue)
-  }
-)
+
 const onFileChange = async (event) => {
   const files = event.target.files
   for (let i = 0; i < files.length; i++) {
