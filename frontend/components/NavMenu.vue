@@ -146,7 +146,7 @@
       </NavigationMenuItem>
       
       <!-- HELP SECTION -->
-      <NavigationMenuItem v-if="validateRole(['admin', 'company'], userRole)">
+      <NavigationMenuItem v-if="validateRole(['all'], userRole)">
         <NavigationMenuTrigger class="bg-transparent text-secondary hover:text-secondary hover:bg-gray before:bg-orange-600">
           {{ $t('help') }}
         </NavigationMenuTrigger>

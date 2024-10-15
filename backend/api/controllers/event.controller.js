@@ -118,20 +118,21 @@ const getEventsByUserId = async (req, res) => {
 
 const searchNearbyEvents = async (req, res) => {
   try {
-    const { lat, lng, eventType='event' } = req.query
+    const { lat, lng, eventType='promotion' } = req.query
     const maxDistance = 5000
 
     if (!lat || !lng) {
       return res.status(400).json({ error: 'Se requieren latitud y longitud' })
     }
 
-     const query = {
+     /* const query = {
        eventLocation: {
          $near: {
            $geometry: {
              type: 'Point',
              coordinates: [parseFloat(lat), parseFloat(lng)],
            },
+           distanceField: 'dist.calculated',
            $maxDistance: maxDistance,
          },
        },
@@ -140,14 +141,39 @@ const searchNearbyEvents = async (req, res) => {
         query.eventType = eventType
         query.status = 'published'
       }
-      console.log('Query: ', JSON.stringify(query, null, 2))
+      console.log('Query: ', JSON.stringify(query, null, 2)) */
+       const userCoordinates = [parseFloat(lat), parseFloat(lng)] // Longitud, Latitud
 
-      const events = await Event.find(query).populate('categories location userId payment subscription')
+       // Agregamos la consulta con $geoNear para calcular la distancia
+       const events = await Event.aggregate([
+         {
+           $geoNear: {
+             near: {
+               type: 'Point',
+               coordinates: userCoordinates,
+             },
+             distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
+             maxDistance: maxDistance, // Distancia máxima en metros
+             spherical: true, // Considerar la Tierra como una esfera
+           },
+         },
+         {
+           $match: {
+             eventType: eventType,
+             status: 'published',
+           },
+         },
+       ])
 
+       console.log('events', events)
+
+      const populatedEvents = await Event.populate(events, {
+        path: 'categories location userId payment subscription',
+      })
     res.status(200).json({
       success: true,
       message: 'Events successfully fetched.',
-      result: events,
+      result: populatedEvents,
     })
   } catch (error) {
     res.status(500).json({

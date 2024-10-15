@@ -7,6 +7,8 @@
 <script setup>
 import { ref } from 'vue'
 
+const emit = defineEmits(['update:places'])
+
 const searchCloserPlaces = () => {
    if (navigator.geolocation) {
        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
@@ -27,9 +29,9 @@ const errorCallback = (error) => {
 
 const getNearbyPlaces = async (latitude, longitude) => {
     try {
-        // Asume que la API espera latitud y longitud
         const response = await fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/geolocation?lat=${latitude}&lng=${longitude}`);
-        const data = await response.json();
+        const data = await response.json()
+        emit('update:places', data.result)
     } catch (error) {
         console.error('Error al obtener lugares cercanos:', error);
     }
@@ -57,7 +59,7 @@ button:hover {
 
 .offset {  
   box-shadow: 
-    0.3em 0.3em 0 0 #F7931E,
+    0.3em 0.3em 0 0 #FBB03B,
     inset 0.3em 0.3em 0 0 #F7931E;
 }
 
