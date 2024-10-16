@@ -84,6 +84,10 @@
     "weekend": "This weekend",
     "month": "This month"
   },
+  "promoFilters": {
+    "allPromo": "All Promotions",
+    "nearPromo": "Nearby promotions "
+  },
   "modalFilter": {
     "label": "FILTERS",
     "ubication": "Ubication",
@@ -112,7 +116,9 @@
     "currentPlan": "Current plan: ",
     "manageSubscription": "Manage Subscription for ",
     "chooseSubscriptionPlan": "Choose your subscription plan",
-    "descriptionPlan": "Find the perfect plan that suits your promotion needs."
+    "descriptionPlan": "Find the perfect plan that suits your promotion needs.",
+    "nearbyPromoTitle": "Promotions near you",
+    "nearbyPromoDescription": "Find exclusive offers and unmissable discounts on events near you."
   },
   "notPromotionsFound": "Not promotions found.",
   "galleryLimit": "You have reached your plan's image capacity limit",

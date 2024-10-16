@@ -5,7 +5,7 @@
     <div class="w-full flex flex-col items-center h-fit">
       <div class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3">
         <EventsCounter />
-        <div class="flex w-full justify-center mb-4">
+        <div class="flex w-full justify-center mb-8">
           <PlacesNearby />
         </div>
         <!-- <CategoriesFilter :isEvents="true"/>

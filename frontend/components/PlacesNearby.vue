@@ -1,41 +1,22 @@
 <template>
   <div
-    class="flex flex-col w-full gap-4  rounded p-4"
-    :class="placesToShow.length > 0 ? 'border-dotted border-2 border-gray' : ''"
+    class="flex flex-col w-full gap-4 lg:px-6"
+    
   >
-    <div class="flex justify-center">
-      <ButtonGeolocation @update:places="handlePlaces" />
+    <div class="flex flex-col justify-center items-center gap-2">
+      <ButtonGeolocation @update:places="handlePlaces" v-if="placesToShow.length === 0"/>
     </div>
-    <p v-if="placesToShow.length > 0">Lugares cercanos</p>
-    <!-- Mobile Device -->
-     <div v-if="placesToShow.length > 0" class="md:hidden">
-      <div 
-        class="flex customScrollBar overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 p-2" 
-        :class="placesToShow.length === 1 ? 'justify-center' : ''"
-      >
-        <div
-          v-for="promotion in placesToShow"
-          :key="promotion?._id"
-          class="min-w-[200px] max-w-[300px] p-4 flex-shrink-0 rounded-md"
-        >
-          <PromotionCard
-            :promotion="promotion"
-            :calculatedDist="true"
-            :dist="(promotion?.dist.calculated / 1000).toFixed(2)"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- Tablet & Desktop Device -->
-    <div
+    <div v-if="placesToShow.length > 0" class="py-4">
+      <p class="text-primary text-2xl lg:text-[38px] font-bold">{{ $t('promotions.nearbyPromoTitle')}}</p>
+      <p class="md:text lg:text-2xl my-4">{{ $t('promotions.nearbyPromoDescription')}}</p>
+       <div
       v-if="placesToShow.length > 0"
-      class=" hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+      class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <div
-        v-for="promotion in placesToShow"
+        v-for="promotion in limitedPlaces"
         :key="promotion?._id"
-        class="p-4 rounded-md"
+        class=" rounded-md"
       >
         <PromotionCard
           :promotion="promotion"
@@ -44,15 +25,31 @@
         />
       </div>
     </div>
+    <div  class="mt-6 text-center">
+      <NuxtLink to="/promotions">
+        <Button variant="outline" class="lg:text-lg hover:bg-primary-gradient hover:border-none">
+          {{ $t('buttons.seeMore')}}
+        </Button>
+      </NuxtLink>
+    </div>  
+    </div>
   </div>
 </template>
 
 <script setup>
 const placesToShow = ref([])
 
+const limitedPlaces = computed(() => {
+  if (!placesToShow.value) {
+    return []
+  }
+  return placesToShow.value?.slice(0, 9)
+})
+
 const handlePlaces = (data) => {
   placesToShow.value = data
 }
+
 </script>
 
 <style scoped>

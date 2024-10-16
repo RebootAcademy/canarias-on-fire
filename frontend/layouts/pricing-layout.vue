@@ -15,6 +15,7 @@
       </div>
     </main>
     <Footer />
+    <ScrollButton />
   </div>
 </template>
 
@@ -46,8 +47,10 @@ const pricingOptions = computed(() => {
   ]
 })
 
-watch(() => route.path, (newPath) => {
-})
+watch(
+  () => route.path,
+  (newPath) => {}
+)
 
 useHead({
   title: 'FAQ',

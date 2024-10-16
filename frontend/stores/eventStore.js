@@ -7,6 +7,7 @@ export const useEventStore = defineStore('eventStore', {
       eventImages: [],
       coverImage: null,
     },
+    promotionsNearMe: [],
     categories: [],
     selectedCategories: [],
     selectedCategoriesByServices: [],
@@ -99,6 +100,10 @@ export const useEventStore = defineStore('eventStore', {
     },
     setSearchQuery(query) {
       this.searchQuery = query
+    },
+
+    setPromotionsNearMe(promotions) {
+      this.promotionsNearMe = promotions
     },
 
     setPlaceDetails(place) {

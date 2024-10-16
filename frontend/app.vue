@@ -19,4 +19,5 @@ onMounted(async () => {
   await paymentStore.fetchPayments()
   await subscriptionStore.fetchSubscriptions()
 })
+
 </script>

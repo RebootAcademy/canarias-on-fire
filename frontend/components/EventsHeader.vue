@@ -4,11 +4,16 @@
        <button
         v-for="filter in computedDateFilters" 
         :key="filter.label" 
-        class="text-gray-500 hover:text-primary active:text-primary"
+        class="relative text-gray-500 hover:text-primary active:text-primary"
         @click="activeDateFilter(filter.value)"
-        :class=" eventStore.selectedFilterByDate === filter.value ? 'text-primary' : ''"
+        
       >
-        {{ filter.label }}
+        <span :class="eventStore.selectedFilterByDate === filter.value ? 'text-primary' : ''">{{ filter.label }}</span>
+        <span
+          v-if="eventStore.selectedFilterByDate === filter.value"
+          class="absolute left-0 right-0 h-[1px] bg-primary"
+          style="top: 100%; margin-top: 5px;" 
+        ></span>
       </button>
     </div>
   </div>

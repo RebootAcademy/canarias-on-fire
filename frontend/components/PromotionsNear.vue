@@ -1,12 +1,21 @@
 <template>
-  <CustomBtn :title="$t('promoFilters.nearPromo')" @click="searchCloserPlaces" class="md:text-xl" />
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+  >
+    <PromotionCard
+      v-for="promotion in placesNearbyMe"
+      :key="promotion?._id"
+      :promotion="promotion"
+      :calculatedDist="true"
+      :dist="(promotion?.dist.calculated / 1000).toFixed(2)"
+    />
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const emit = defineEmits(['update:places'])
-
+const placesNearbyMe = ref([])
+const loading = ref(true) // Estado de carga
+const eventStore = useEventStore()
 const searchCloserPlaces = () => {
    if (navigator.geolocation) {
        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
@@ -27,45 +36,26 @@ const errorCallback = (error) => {
 
 const getNearbyPlaces = async (latitude, longitude) => {
     try {
+        loading.value = true
         const response = await fetch(`${useRuntimeConfig().public.apiBaseUrl}/events/geolocation?lat=${latitude}&lng=${longitude}`);
         const data = await response.json()
-        emit('update:places', data.result)
+        eventStore.setPromotionsNearMe(data.result)
+        placesNearbyMe.value = data.result
     } catch (error) {
         console.error('Error al obtener lugares cercanos:', error);
+    } finally {
+        loading.value = false
     }
 }
+
+
+onMounted(() => {
+  if (eventStore.promotionsNearMe.length === 0) {
+    searchCloserPlaces()
+  } else {
+    placesNearbyMe.value = eventStore.promotionsNearMe
+  }
+})
+
+
 </script>
-
-
-<style scoped>
-button {
-  background: none;
-  font: inherit;
-  border-radius: 20px;
-  line-height: 1;
-  margin: 0.5em;
-  padding: 1em 2em;
-}
-
-button {  
-  transition: 0.25s;
-}
-
-button:hover {
-  color: black
-}
-
-.offset {  
-  box-shadow: 
-    0.3em 0.3em 0 0 #FBB03B,
-    inset 0.3em 0.3em 0 0 #F7931E;
-}
-
-.offset:hover, .offset:focus  {
- 
-    box-shadow: 
-      0 0 0 0 #F7931E,
-      inset 6em 3.5em 0 0 #F7931E;
-
-}
-</style>

@@ -6,5 +6,12 @@
       <CookieBanner />
     </main>
     <Footer />
+    <ScrollButton/>
   </div>
 </template>
+
+<script setup>
+definePageMeta({
+  middleware: 'scroll-to-top' // Debe coincidir con el nombre del archivo
+});
+</script>

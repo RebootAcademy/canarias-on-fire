@@ -1,6 +1,6 @@
 <template>
   <div class="lg:px-6 w-full ">
-    <div class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
+    <div class="w-full grid justify-items-stretch items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
       <EventCard 
         v-for="event in limitedEvents" 
         :key="event._id" 
@@ -12,7 +12,7 @@
     <div v-if="limitedEvents?.length > 9" class="mt-6 text-center">
       <NuxtLink to="/events">
         <Button variant="outline">
-          {{ $t('seeMore')}}
+          {{ $t('buttons.seeMore')}}
         </Button>
       </NuxtLink>
     </div>  
