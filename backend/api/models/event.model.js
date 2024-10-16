@@ -1,83 +1,106 @@
 const mongoose = require('mongoose')
 
 const EventSchema = new mongoose.Schema({
-  categories: [{ 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'category',
-    // required: true 
-  }],
-  eventName: { 
-    type: String, 
-    // required: true 
+  categories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'category',
+      // required: true
+    },
+  ],
+  eventName: {
+    type: String,
+    // required: true
   },
   eventType: {
     type: String,
-    enum: ['event', 'promotion']
+    enum: ['event', 'promotion'],
   },
-  eventDate: { 
-    type: Object, 
-    // required: true 
+  eventDate: {
+    type: Object,
+    // required: true
   },
   eventEndDate: {
     type: Object,
-    default: null
+    default: null,
   },
   eventLocation: {
-    type: Object,
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+      default: 'Point',
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    postalCode: {
+      type: Number,
+      //required: true,
+    },
+    mapImageUrl: {
+      type: String,
+      required: true,
+    },
   },
-  eventPrice: { 
-    type: Number 
+  eventPrice: {
+    type: Number,
   },
   isFree: {
-    type: Boolean
+    type: Boolean,
   },
-  eventCapacity: { 
-    type: String 
+  eventCapacity: {
+    type: String,
   },
-  eventDescription: { 
-    type: String
+  eventDescription: {
+    type: String,
   },
-  startTime: { 
-    type: String 
+  startTime: {
+    type: String,
   },
-  endTime: { 
-    type: String 
+  endTime: {
+    type: String,
   },
-  externalUrl: { 
-    type: String 
+  externalUrl: {
+    type: String,
   },
   eventImages: {
-    type: Array
+    type: Array,
   },
   eventDiscount: {
-    type: String
+    type: String,
   },
   coverImage: {
-    type: String
+    type: String,
   },
   selectedFile: {
     type: Object,
-    deprecated: true
+    deprecated: true,
   },
-  location: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'location' 
+  location: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'location',
   },
-  status: { 
-    type: String, 
+  status: {
+    type: String,
     enum: ['draft', 'published', 'closed'],
-    default: 'draft'
+    default: 'draft',
   },
   categoriesOfServices: {
     type: Array || String,
-    default: ''
+    default: '',
   },
-/*   date: {
+  /*   date: {
     type: Date,
     required: true
   }, */
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
   },
   companyId: {
@@ -86,13 +109,14 @@ const EventSchema = new mongoose.Schema({
   },
   payment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'payment'
+    ref: 'payment',
   },
   subscription: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'subscription'
-  }
+    ref: 'subscription',
+  },
 })
+EventSchema.index({ eventLocation: '2dsphere' })
 
 const EventModel = mongoose.model('event', EventSchema)
 

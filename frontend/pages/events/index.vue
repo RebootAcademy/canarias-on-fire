@@ -7,7 +7,7 @@
       >
         <div class="flex w-full items-start">
           <h2
-            class="text-2xl md:text-3xl font-semibold text-primary mb-4 md:mb-0"
+            class="text-2xl lg:text-[38px] font-bold text-primary mb-4 md:mb-0"
           >
             {{ $t('events') }}
           </h2>
@@ -94,7 +94,8 @@ function compareDates(dateA, dateB) {
   return dateA.day - dateB.day
 }
 
-onMounted(() => {
-  userStore.fetchAndSetUser(userStore.userData?.email)
+onMounted(async() => {
+  await userStore.fetchAndSetUser(userStore.userData?.email)
+  await eventStore.fetchEvents()
 })
 </script>

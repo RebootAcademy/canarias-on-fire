@@ -10,7 +10,7 @@
           
               <!-- Main content -->
                 <main class="w-full px-4  md:ml-8 md:flex-1 sm:p-8">
-                    <h1 class="text-4xl text-center font-bold mb-6">{{ $t('helpTitle')}}</h1>
+                    <h1 class="text-primary text-2xl lg:text-[38px] text-center font-bold mb-6">{{ $t('helpTitle')}}</h1>
                     <NuxtPage />
                 </main>
             </div>

@@ -12,16 +12,23 @@
         :promotion="promotion"
       />
     </div>
-    <div 
-        v-if="selectCategoryForFilterCompany !== 'bands' && numOfPromotions > 9"
-        class="mt-6 w-full justify-center items-center"
+    <div
+      v-if="selectCategoryForFilterCompany !== 'bands' && numOfPromotions > 9"
+      class="mt-6 w-full justify-center items-center"
     >
-       <div class="w-1/3">
-        <CustomBtn  :title="t('buttons.seeMore')" :action="() => router.push('/promotions')" />
+      <div class="w-1/3">
+        <CustomBtn
+          :title="t('buttons.seeMore')"
+          :action="() => router.push('/promotions')"
+        />
+      </div>
     </div>
-    </div>
-    <BandList v-if="selectCategoryForFilterCompany && selectCategoryForFilterCompany === 'bands'"/>
-
+    <BandList
+      v-if="
+        selectCategoryForFilterCompany &&
+        selectCategoryForFilterCompany === 'bands'
+      "
+    />
   </div>
 </template>
 
@@ -36,34 +43,39 @@ const { selectCategoryForFilterCompany, filteredEvents, filteredEventsByDate } =
 
 const numOfPromotions = ref('')
 
-const eventsByDate = computed(() => {
+/* const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
-})
+}) */
 
 const limitedEvents = computed(() => {
-  if (!eventsByDate.value) {
+  if (!filteredEvents.value) {
     return []
   }
+  console.log(filteredEvents.value)
 
-  const firstFilteredEvent = eventsByDate.value?.filter(
+  const firstFilteredEvent = filteredEvents.value?.filter(
     (event) =>
       event.status === 'published' &&
-      event.eventType === 'promotion' && 
+      event.eventType === 'promotion' &&
       (event.categories.some((c) => c.name === 'services') ||
-        event.categories.some((c) => c.name === 'restoration'))
+        event.categories.some((c) => c.name === 'food&drinks'))
   )
+
+  console.log(firstFilteredEvent)
 
   let secondFilteredEvent
   if (
     selectCategoryForFilterCompany.value &&
     selectCategoryForFilterCompany.value !== 'all'
   ) {
-    secondFilteredEvent = firstFilteredEvent.filter(
-      (event) => event.categoriesOfServices.includes(selectCategoryForFilterCompany.value)
+    secondFilteredEvent = firstFilteredEvent.filter((event) =>
+      event.categoriesOfServices.includes(selectCategoryForFilterCompany.value)
     )
   } else {
     secondFilteredEvent = firstFilteredEvent
   }
+
+  console.log(secondFilteredEvent)
 
   return secondFilteredEvent
     .sort((a, b) => {

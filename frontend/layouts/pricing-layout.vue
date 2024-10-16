@@ -6,7 +6,7 @@
         <div class="flex w-full flex-col xl:flex-row lg:items-start">
           <CustomSidebar :links="pricingOptions" :userRole="userRole" />
           <main class="w-full md:flex-1 md:p-8">
-            <h1 class="text-4xl text-center font-bold">
+            <h1 class="text-primary text-2xl lg:text-[38px] text-center font-bold">
               {{ title }}
             </h1>
             <NuxtPage />
