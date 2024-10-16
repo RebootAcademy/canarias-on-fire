@@ -12,7 +12,7 @@
           :key="category._id"
           class="bg-gray text-secondary text-xs font-semibold px-4 py-1 rounded-full"
         >
-          {{ category.name }}
+          {{ category?.name }}
         </span>
       </div>
       <div class="flex items-center gap-2 my-6 mr-6">
@@ -169,7 +169,7 @@ const isAdmin = userStore.userData?.role === 'admin'
 const isValidated = userStore?.userData?.isValidated
 const searchPaymentEvent = computed(() => {
   let payment = eventStore.events.find((e) => e._id === eventId)
-  return payment.payment.name
+  return payment?.payment?.name
    
 })
 

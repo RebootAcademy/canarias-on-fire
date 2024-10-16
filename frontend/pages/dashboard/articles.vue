@@ -1,15 +1,19 @@
 <template>
   <div>
-    <div class="flex items-center justify-center md:justify-end gap-3 mb-4 w-full px-4 bg-red-500mb-4">
-        <SearchInput v-model="searchQuery" />
-        <CustomBtn
+    <div
+      class="flex items-center justify-center md:justify-end gap-3 mb-4 w-full px-4 bg-red-500mb-4"
+    >
+      <SearchInput v-model="searchQuery" />
+      <!-- <CustomBtn
             :title="$t('filterBtn')"
             @click="openFilterModal"
           />
-        <FilterModal />
+        <FilterModal /> -->
     </div>
     <hr class="mb-4" />
-    <div class="grid place-items-center grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+    <div
+      class="grid place-items-center grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4"
+    >
       <ArticleCard
         v-for="article in filteredArticles"
         :key="article._id"
@@ -38,11 +42,10 @@ onMounted(async () => {
 
 const searchQuery = computed({
   get: () => articleStore.searchQuery,
-  set: (value) => articleStore.setSearchQuery(value)
+  set: (value) => articleStore.setSearchQuery(value),
 })
 
 const openFilterModal = () => {
   articleStore.setFilterModalOpen(true)
 }
-
 </script>

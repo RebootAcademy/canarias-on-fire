@@ -1,7 +1,9 @@
   <template>
+    <h2 class="text-xl md:text-2xl text-primary font-semibold mb-2">{{ $t('password') }}</h2>
+  <hr class="mb-4" />
     <div class="flex flex-col gap-4 w-full md:w-1/3">
       <div class="flex flex-col gap-2">
-        <Label for="password">Password</Label>
+        <Label for="password">{{ $t('password') }}</Label>
         <div class="relative">
           <Input
           id="password"

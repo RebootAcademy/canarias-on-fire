@@ -1,21 +1,18 @@
 <template>
   <div class="px-8 py-4 sm:px-8 md:px-16 lg:px-40 mt-8">
-    <div class="flex flex-col md:flex-row justify-between items-center">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
       <div class="flex w-full items-start">
-        <h2
-          class="text-2xl md:text-3xl font-semibold text-primary mb-8"
-        >
+        <h2 class="text-2xl lg:text-[38px] font-bold text-primary">
           {{ $t('musicBands') }}
         </h2>
       </div>
-
-      <div class="flex flex-row mb-4 gap-4 md:mb-0 w-full md:w-2/3 lg:w-1/3">
+      <div class="flex flex-row mb-4 gap-4 md:mb-0 w-full md:w-2/3 lg:w-2/5">
         <CustomSelect
           :items="genresItems"
           :placeholder="placeholderSelect"
           v-model:selected="selectedOption"
           :optionDefault="selectedOption"
-          class="w-1/3"
+          class="w-1/3 md:w-1/3"
         />
         <SearchInput v-model="searchQuery" class="w-2/3" />
       </div>

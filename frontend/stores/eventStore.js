@@ -105,10 +105,7 @@ export const useEventStore = defineStore('eventStore', {
       const { formatted_address, geometry, address_components, website } = place
       this.eventLocation = {
         address: formatted_address,
-        coordinates: {
-          lat: geometry.location.lat(),
-          lng: geometry.location.lng(),
-        },
+        coordinates: [geometry.location.lat(), geometry.location.lng()],
         postalCode: this.extractPostalCode(address_components),
         mapImageUrl: this.generateMapImageUrl(
           geometry.location.lat(),
@@ -229,6 +226,7 @@ export const useEventStore = defineStore('eventStore', {
       }
 
       this.events = data.value?.result || []
+      console.log('events', this.events)
       return { data: this.events }
     },
 
@@ -299,7 +297,7 @@ export const useEventStore = defineStore('eventStore', {
       try {
         const eventData = this.getEventData()
 
-        if (this.eventType === 'promotion') {
+        if (this.eventType === 'promotion'  ) {
           delete eventData.payment
         }
 

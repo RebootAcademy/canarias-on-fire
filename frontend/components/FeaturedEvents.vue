@@ -1,9 +1,9 @@
 <template>
   <section v-if="premiumEvents.length > 0">
-    <h1 class="text-2xl text-primary font-semibold mt-4">
+    <h1 class="text-primary text-2xl lg:text-[38px] font-bold mt-4">
       {{ $t('titles.featuresEvents') }}
     </h1>
-    <p class="text-sm font-light opacity-70">{{ $t('eventAdvice') }}</p>
+    <p class="text-lg md:text-xl lg:text-2xl opacity-70 my-4">{{ $t('eventAdvice') }}</p>
     <div class="hidden sm:block relative w-full mt-4">
       <Carousel class="hidden border-none shadow-none sm:block">
         <CarouselContent>
