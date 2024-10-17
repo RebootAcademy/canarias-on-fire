@@ -22,11 +22,11 @@
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
         </div>
-        <h3 class="font-semibold">{{ $t('modalFilter.categories')}}</h3>
+        <h3 class="font-semibold mt-4">{{ $t('modalFilter.categories')}}</h3>
         <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.categoriesDescription')}}</p>
         <div class="flex flex-wrap justify-center gap-2 mb-4">
           <div
-            v-for="category in eventStore.categories"
+            v-for="category in getCategories"
             :key="category.id"
             @click="toggleCategory(category)"
             :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
@@ -50,6 +50,13 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'event'
+  }
+})
 import CustomBtn from './CustomBtn.vue'
 const eventStore = useEventStore()
 const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
@@ -58,6 +65,10 @@ const selectedIslands = ref(filters.value.islands)
 const selectedDate = ref(eventDate.value)
 const selectedCategories = ref(filters.value.categories)
 // const startTime = ref(null)
+
+const getCategories = computed(() => {
+  return eventStore.categories.filter((category) => category.type === props.type)
+})
 
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
 

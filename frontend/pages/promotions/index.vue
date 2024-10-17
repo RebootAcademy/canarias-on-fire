@@ -21,7 +21,7 @@
             <SearchInput v-model="searchQuery" />
             <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
           </div>
-          <FilterModal />
+          <FilterModal type="promotion"/>
         </div>
       </div>
       <div
