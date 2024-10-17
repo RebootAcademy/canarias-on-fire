@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col bg-background">
-    <h1 class="text-3xl font-bold mb-6">{{ $t('createArticle') }}</h1>
+    <h1 class="text-primary text-2xl lg:text-[38px] font-bold mb-6">{{ $t('createArticle') }}</h1>
     <form @submit.prevent="createArticle">
       <div class="flex flex-col gap-1">
         <p class="font-semibold">{{ $t('selectImage') }}</p>
@@ -30,7 +30,7 @@
       <div class="flex justify-end mt-20 gap-4">
         <Button
           @click="cancelCreate"
-          class="text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
+          class="bg-gray text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
           >{{ $t('buttons.cancel') }}</Button
         >
         <Button type="submit" class="px-6 hover:bg-primary-gradient">{{ $t('buttons.create') }}</Button>

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col gap-2 items-center justify-center py-8 px-4 md:px-0">
-    <h1 class="text-4xl font-bold mb-2">{{ $t('contact.title') }}</h1>
+    <h1 class="text-2xl lg:text-[38px] font-bold text-primary mb-2">{{ $t('contact.title') }}</h1>
     <p>
       {{ $t('contact.description') }}
     </p>
@@ -102,7 +102,7 @@
       </div>
     </form>
     <div class="flex w-full md:w-2/3 xl:w-1/3 justify-end">
-      <CustomBtn title="Send" :action="sendMail" extraStyles="w-20" />
+      <CustomBtn :title="t('buttons.send')" :action="sendMail" extraStyles="w-20" />
     </div>
   </div>
 </template>

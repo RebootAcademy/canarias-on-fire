@@ -58,6 +58,7 @@ const onSubmit = async () => {
       
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
+        console.log('Result EventForm',result)
         if (result) {
           router.push(
             `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`

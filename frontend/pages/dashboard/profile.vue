@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-xl font-semibold mb-2">{{ $t('userProfile.profile') }}</h2>
+    <h2 class="text-xl md:text-2xl text-primary font-semibold mb-2">{{ $t('userProfile.profile') }}</h2>
     <hr class="mb-4" />
     <div v-if="userStore.isAuthenticated">
       <div class="flex items-center mb-4">

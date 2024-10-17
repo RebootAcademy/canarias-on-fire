@@ -112,8 +112,8 @@ const publishEvent = async () => {
     
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
+      console.log(result)
         if (result) {
-          await eventStore.fetchEvents()
           return router.push(`/events/${eventId}`)
         } else {
           console.error('Failed to publish promotion')

@@ -16,7 +16,7 @@
         <CategoriesFilter />
         <PromotionList />
       </div> -->
-      <div class="flex flex-col gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-2/3">
+      <div class="flex flex-col gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-2/3 mt-8">
         <FeaturedEvents class="hidden sm:block"/>
         <ScrollXSFeaturedEvents class="xs:hidden " />
         <ArticlesHeader />
