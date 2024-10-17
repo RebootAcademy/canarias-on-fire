@@ -18,8 +18,9 @@
       <div class="w-1/2 md:w-2/5">
         <CustomBtn 
           :title="$t('newsletter.button').toUpperCase()" 
-          :action="subscribe" 
-          extraStyles="w-[110px]"
+          :action="subscribe"
+          :inverse="true"
+          extraStyles="w-[110px] "
         />
       </div>
     </div>
