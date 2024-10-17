@@ -12,7 +12,7 @@
             class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
             :class="
               selectOption === option.value
-                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800'
+                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'
             "
             @click="selectOption = option.value"
           >
