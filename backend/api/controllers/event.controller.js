@@ -45,7 +45,7 @@ const createPromotion = async (req, res) => {
   }
 }
 
-const getAllEvents = async (req, res) => {
+/* const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find().populate('categories location userId payment subscription')
     res.status(200).json({
@@ -61,7 +61,63 @@ const getAllEvents = async (req, res) => {
       description: error.message,
     })
   }
-}
+} */
+
+  const getAllEvents = async (req, res) => {
+    try {
+      const { lat, lng } = req.query 
+
+      if (!lat || !lng) {
+        const events = await Event.find().populate(
+          'categories location userId payment subscription'
+        )
+        return res.status(200).json({
+          success: true,
+          message: 'Events successfully fetched.',
+          result: events,
+        })
+      }
+
+      // Primero, obtenemos los eventos y calculamos la distancia
+      const eventsWithDistance = await Event.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: 'Point',
+              coordinates: [parseFloat(lat), parseFloat(lng)], // [lng, lat]
+            },
+            distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
+            maxDistance: 100000,
+            spherical: true, // Considerar la Tierra como una esfera
+          },
+        },
+      ])
+
+      // Ahora, poblar los eventos obtenidos
+      const populatedEvents = await Promise.all(
+        eventsWithDistance.map(async (event) => {
+          const populatedEvent = await Event.populate(event, {
+            path: 'categories location userId payment subscription',
+          })
+          return populatedEvent
+        })
+      )
+
+      res.status(200).json({
+        success: true,
+        message: 'Eventos obtenidos con éxito.',
+        result: populatedEvents,
+      })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener eventos.',
+        description: error.message,
+      })
+    }
+  }
+
 
 const getEventById = async (req, res) => {
   try {

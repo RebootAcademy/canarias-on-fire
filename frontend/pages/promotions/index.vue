@@ -6,11 +6,15 @@
         class="flex flex-col gap-2 md:flex-row md:gap-0 items-center justify-between w-full px-4 mb-4 md:mt-8"
       >
         <div class="flex w-full items-start">
-          <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold text-primary">
+          <h2
+            class="text-2xl md:text-3xl lg:text-4xl font-semibold text-primary"
+          >
             {{ $t('promotionsTitle') }}
           </h2>
         </div>
-        <div class="flex flex-col-reverse md:flex-row gap-4 items-center md:w-full justify-end">
+        <div
+          class="flex flex-col-reverse md:flex-row gap-4 items-center md:w-full justify-end"
+        >
           <CustomSelect
             :items="eventDiscounts"
             :placeholder="selectedPromotion"
@@ -21,23 +25,32 @@
             <SearchInput v-model="searchQuery" />
             <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
           </div>
-          <FilterModal />
+          <FilterModal type="promotion"/>
         </div>
       </div>
-      <PromotionsTabs @update:selectedFilter="handleTabChange" />
-      <div
-        v-if="limitedPromotions.length > 0"
-      >
-        <div v-if="selectTabOption === 'all'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+      <div class="flex justify-center w-full md:justify-start md:w-1/3 mb-6">
+        <GeolocationMap />
+      </div>
+      <!-- <PromotionsTabs @update:selectedFilter="handleTabChange" /> -->
+      <div v-if="limitedPromotions.length > 0">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-8"
+        >
           <PromotionCard
             v-for="promotion in limitedPromotions"
             :key="promotion._id"
             :promotion="promotion"
           />
         </div>
-
-          <PromotionsNear v-else />
-        
+        <!-- <div v-if="selectTabOption === 'all'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          <PromotionCard
+            v-for="promotion in limitedPromotions"
+            :key="promotion._id"
+            :promotion="promotion"
+          />
+        </div>
+ -->
+        <!-- <PromotionsNear v-else /> -->
       </div>
       <p v-if="limitedPromotions.length === 0" class="text-gray-500 mt-4">
         {{ $t('notPromotionsFound') }}
@@ -78,7 +91,6 @@ const openFilterModal = () => {
 
 const limitedPromotions = computed(() => {
   let filterDiscount
-  console.log('first', filteredEvents.value)
   if (selectedPromotion.value === 'all') {
     filterDiscount = filteredEvents.value
   } else {
@@ -86,10 +98,12 @@ const limitedPromotions = computed(() => {
       (event) => event.eventDiscount === selectedPromotion.value
     )
   }
-  const secondFilter = filterDiscount.filter(
+  const secondFilter = filterDiscount
+    .filter(
       (promotion) =>
         promotion.status === 'published' &&
         promotion.eventType === 'promotion' &&
+        promotion.dist?.calculated < eventStore.radioLocation &&
         ((promotion.userId?.isActive && promotion.userId?.isValidated) ||
           promotion.userId?.role === 'admin')
     )
@@ -103,8 +117,8 @@ const limitedPromotions = computed(() => {
       return compareDates(a.eventDate, b.eventDate)
     })
 
-    console.log(secondFilter)
-    return secondFilter
+  console.log(secondFilter)
+  return secondFilter
 })
 
 function getPromoPriority(promotion) {

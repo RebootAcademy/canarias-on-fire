@@ -18,6 +18,9 @@
           <FilterModal />
         </div>
       </div>
+      <div class="flex justify-center w-full md:justify-start md:w-1/3 mb-6">
+        <GeolocationMap />
+      </div>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
       >
@@ -61,8 +64,9 @@ const limitedEvents = computed(() => {
       (event) =>
         event.status === 'published' &&
         event.eventType === 'event' &&
-        event.userId?.isActive &&
-        event.userId?.isValidated
+         event.dist?.calculated < eventStore.radioLocation &&
+        ((event.userId?.isActive &&
+        event.userId?.isValidated) || event.userId?.role === 'admin')
     )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)

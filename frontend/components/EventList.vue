@@ -1,21 +1,25 @@
 <template>
-  <div class="lg:px-6 w-full ">
-    <div class="w-full grid justify-items-stretch items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
-      <EventCard 
-        v-for="event in limitedEvents" 
-        :key="event._id" 
-        :event="event" 
+  <div class="lg:px-6 w-full">
+    <div
+      class="w-full grid justify-items-stretch items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
+    >
+      <EventCard
+        v-for="event in limitedEvents"
+        :key="event._id"
+        :event="event"
         class="xs:w-[60%] sm:w-full"
       />
     </div>
-    <p v-if="limitedEvents?.length === 0" class="text-gray-500 mt-4">{{ $t('notEventsFound')}}</p>
+    <p v-if="limitedEvents?.length === 0" class="text-gray-500 mt-4">
+      {{ $t('notEventsFound') }}
+    </p>
     <div v-if="limitedEvents?.length > 9" class="mt-6 text-center">
       <NuxtLink to="/events">
         <Button variant="outline">
-          {{ $t('buttons.seeMore')}}
+          {{ $t('buttons.seeMore') }}
         </Button>
       </NuxtLink>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -23,14 +27,10 @@
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-const { 
-  filteredEvents, 
-  filteredEventsByDate 
-} = storeToRefs(eventStore)
-
+const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
 const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
-}) 
+})
 
 const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
@@ -41,6 +41,7 @@ const limitedEvents = computed(() => {
     ?.filter(event => 
       event.status === 'published'
       && event.eventType === 'event'
+      && event.dist?.calculated < eventStore.radioLocation
     )
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
@@ -51,6 +52,7 @@ const limitedEvents = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
+
     .slice(0, 9)
 })
 
@@ -65,7 +67,6 @@ function compareDates(dateA, dateB) {
   if (dateA.month !== dateB.month) return dateA.month - dateB.month
   return dateA.day - dateB.day
 }
-
 </script>
 
 <style scoped>

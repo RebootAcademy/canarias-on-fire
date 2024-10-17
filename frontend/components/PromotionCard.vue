@@ -126,7 +126,7 @@
                    {{ promotion.userId?.role === 'company' ? promotion.userId?.companyName : promotion.userId?.username }}
                  </p>
                </div>
-              <p v-if="calculatedDist" class="text-secondary">{{ dist }} km</p>
+              <p v-if="promotion.dist" class="text-secondary">{{(promotion.dist.calculated / 1000).toFixed(2)  }} km</p>
             </div>
           </div>
         </div>

@@ -40,7 +40,7 @@
               <SearchInput v-model="searchQuery" />
               <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
             </div>
-      <FilterModal />
+      <FilterModal type="promotion"/>
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"

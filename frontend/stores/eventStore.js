@@ -51,6 +51,7 @@ export const useEventStore = defineStore('eventStore', {
     userEvents: [],
     userId: null,
     payment: null,
+    radioLocation: '10000',
   }),
 
   actions: {
@@ -111,9 +112,7 @@ export const useEventStore = defineStore('eventStore', {
       this.eventLocation = {
         address: formatted_address,
         type: 'Point',
-        coordinates: [
-           geometry.location.lat(),
-           geometry.location.lng()],
+        coordinates: [geometry.location.lat(), geometry.location.lng()],
         postalCode: this.extractPostalCode(address_components),
         mapImageUrl: this.generateMapImageUrl(
           geometry.location.lat(),
@@ -190,6 +189,10 @@ export const useEventStore = defineStore('eventStore', {
       this.selectedFilterByDate = date
     },
 
+    setRadioLocation(location) {
+      this.radioLocation = location
+    },
+
     resetFilters() {
       this.selectedCategory = null
       this.searchQuery = ''
@@ -223,18 +226,33 @@ export const useEventStore = defineStore('eventStore', {
         (this.endTime = '')
     },
 
-    async fetchEvents() {
-      const { data, error } = await useFetch('/events', {
-        baseURL: useRuntimeConfig().public.apiBaseUrl,
-      })
+    async fetchEvents(lat, lng) {
+      if (!lat || !lng) {
+        const { data, error } = await useFetch(`/events`, {
+          baseURL: useRuntimeConfig().public.apiBaseUrl,
+        })
+        if (error.value) {
+          console.error('Error fetching events:', error.value)
+          return { error: error.value }
+        }
 
-      if (error.value) {
-        console.error('Error fetching events:', error.value)
-        return { error: error.value }
+        this.events = data.value?.result || []
+        return { data: this.events }
+      } else {
+        const { data, error } = await useFetch(
+          `/events?lat=${lat}&lng=${lng}`,
+          {
+            baseURL: useRuntimeConfig().public.apiBaseUrl,
+          }
+        )
+        if (error.value) {
+          console.error('Error fetching events:', error.value)
+          return { error: error.value }
+        }
+
+        this.events = data.value?.result || []
+        return { data: this.events }
       }
-
-      this.events = data.value?.result || []
-      return { data: this.events }
     },
 
     async fetchEventById(id) {
@@ -589,12 +607,9 @@ export const useEventStore = defineStore('eventStore', {
       const today = new Date()
       const lowercaseQuery = this.searchQuery?.toLowerCase() || ''
       const hasCategoriesFilter = this.filters.categories.length > 0
+      const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
-      const allCategories = [
-        ...this.filters.categories,
-        ...this.selectedCategories,
-      ]
-      const hasSelectedCategories = allCategories.length > 0
+     
 
       return this.events.filter((event) => {
         // Validar usuario activo
@@ -649,20 +664,31 @@ export const useEventStore = defineStore('eventStore', {
           return false
         }
 
-        // Filtrar por categorías seleccionadas
-        if (hasSelectedCategories) {
+        if (hasCategoriesFilter) {
           const eventCategoryIds = event.categories.map((cat) => cat._id)
-          if (!allCategories.some((id) => eventCategoryIds.includes(id))) {
+          if (
+            !this.filters.categories.find((id) => eventCategoryIds.includes(id))
+          ) {
             return false
           }
         }
 
-        // Filtrar por islas
+        if (hasSelectedCategoriesFilter) {
+          const eventCategoryIds = event.categories.map((cat) => cat._id)
+          if (
+            !this.selectedCategories
+              .map((cat) => cat.id)
+              .find((id) => eventCategoryIds.includes(id))
+          ) {
+            return false
+          }
+        }
         if (hasIslandsFilter) {
           const eventIsland = getIslandFromPostalCode(
             event.eventLocation.postalCode
           )
           if (!this.filters.islands.includes(eventIsland)) {
+            console.log('False island', eventIsland)
             return false
           }
         }

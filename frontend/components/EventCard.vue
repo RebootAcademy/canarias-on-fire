@@ -100,15 +100,18 @@
           <p class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
-          <p
-            class="absolute text-md font-semibold mt-2 bottom-2"
-            :class="{
-              'text-primary': isBasicPayment,
-              'text-black': isGoldPayment || isPremiumPayment,
-            }"
-          >
-            {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
-          </p>
+          <div class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2">
+            <p
+              class=""
+              :class="{
+                'text-primary': isBasicPayment,
+                'text-black': isGoldPayment || isPremiumPayment,
+              }"
+            >
+              {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
+            </p>
+            <p>{{ event.dist.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
+          </div>
         </div>
       </div>
     </div>
