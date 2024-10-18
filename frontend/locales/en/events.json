@@ -135,5 +135,19 @@
   },
   "relatedEvent": "Related events",
   "relatedPromotion": "Related promotions",
-  "relatedArticle": "Related articles"
+  "relatedArticle": "Related articles",
+  "geolocation": {
+    "area": "Location area:",
+    "changeArea": "Change location area",
+    "actionArea": "Select location area:",
+    "radius": {
+      "5km": "5 km",
+      "10km": "10 km",
+      "15km": "15 km",
+      "20km": "20 km",
+      "30km": "30 km",
+      "40km": "40 km",
+      "50km": "50 km"
+    }
+  }
 }

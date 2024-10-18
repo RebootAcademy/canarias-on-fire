@@ -135,5 +135,19 @@
   },
   "relatedEvent": "Eventos relacionados",
   "relatedPromotion": "Promociones relacionadas",
-  "relatedArticle": "Artículos relacionados"
+  "relatedArticle": "Artículos relacionados",
+  "geolocation": {
+    "area": "Área de localización:",
+    "changeArea": "Cambiar área de localización",
+    "actionArea": "Seleccionar área de localización:",
+    "radius": {
+      "5km": "5 km",
+      "10km": "10 km",
+      "15km": "15 km",
+      "20km": "20 km",
+      "30km": "30 km",
+      "40km": "40 km",
+      "50km": "50 km"
+    }
+  }
 }

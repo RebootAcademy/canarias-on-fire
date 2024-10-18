@@ -1,12 +1,12 @@
 <template>
   <div class="md:ml-4 text-center md:text-start">
     <p class="mb-2">
-      Area de localización: {{ eventStore.radioLocation / 1000 }} km
+     {{ $t('geolocation.area')}} {{ eventStore.radioLocation / 1000 }} km
     </p>
     <div
       class="flex flex-row items-center gap-4 border-2 border-primary p-2 rounded-lg hover:bg-primary-gradient"
     >
-      <button @click="openMap">Cambiar radio de localización</button>
+      <button @click="openMap">{{ $t('geolocation.changeArea')}}</button>
       <MapPinned />
     </div>
 
@@ -16,19 +16,19 @@
       @click="handleDialogClick"
       class="custom-dialog w-[400px] rounded-lg p-4 shadow-lg"
     >
-      <label for="distance" class="text-lg"> Radio de acción: </label>
+      <label for="distance" class="text-lg">{{ $t('geolocation.actionArea')}}</label>
       <select
         id="distance"
         v-model="eventStore.radioLocation"
         class="text-lg mb-2 p-2 rounded-md ml-2"
       >
-        <option value="5000">5 km</option>
-        <option value="10000">10 km</option>
-        <option value="15000">15 km</option>
-        <option value="20000">20 km</option>
-        <option value="30000">30 km</option>
-        <option value="40000">40 km</option>
-        <option value="50000">50 km</option>
+        <option value="5000">{{ $t('geolocation.radius.5km')}}</option>
+        <option value="10000">{{ $t('geolocation.radius.10km')}}</option>
+        <option value="15000">{{ $t('geolocation.radius.15km')}}</option>
+        <option value="20000">{{ $t('geolocation.radius.20km')}}</option>
+        <option value="30000">{{ $t('geolocation.radius.30km')}}</option>
+        <option value="40000">{{ $t('geolocation.radius.40km')}}</option>
+        <option value="50000">{{ $t('geolocation.radius.50km')}}</option>
       </select>
       <div ref="mapElement" style="width: 100%; height: 400px"></div>
       <div class="flex justify-center">
