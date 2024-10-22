@@ -7,7 +7,8 @@
           <h2 class="text-2xl md:text-3xl font-semibold text-primary mb-4 md:mb-0">{{ $t('articles')}}</h2>
         </div>
         <div class="flex items-center gap-4">
-          <SearchInput v-model="searchQuery" />
+          
+          <SearchInput v-model="searchQuery"/>
           <!-- <div class="bg-primary-gradient p-0.5 rounded-md">
             <Button @click="openFilterModal" class="text-sm px-3 bg-background hover:text-white hover:bg-primary-gradient">
               {{ $t('filterBtn') }}
@@ -16,8 +17,7 @@
           <FilterModal />
         </div>
       </div>
-      <hr class="mb-4" />
-      <div class="grid justify-items-center gap-2 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:gap-4">
+      <div class="grid justify-items-center gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
         <ArticleCard
           v-for="article in filteredArticles"
           :key="article._id"

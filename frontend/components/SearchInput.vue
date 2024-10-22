@@ -2,7 +2,7 @@
   <div class="relative cursor-pointer rounded-md">
     <Input
       v-model="searchQuery"
-      placeholder="Search"
+      :placeholder="$t('buttons.search')"
       class="bg-background border-primary pl-10 pr-4 rounded-md focus:outline-none focus:ring-1 focus:ring-primary w-full text-secondary active:border-primary"
       @input="updateValue"
     />

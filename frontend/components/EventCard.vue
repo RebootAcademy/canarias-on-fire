@@ -53,7 +53,7 @@
               :key="category._id"
               class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
             >
-              {{ category.name }}
+              {{ $t(`values.${category.name}`) }}
             </span>
           </div>
           <!-- Options menu -->

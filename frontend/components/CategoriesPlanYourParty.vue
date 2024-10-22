@@ -62,6 +62,7 @@ const getIcon = (iconName) => {
 }
 
 const isSelected = (category) => {
+    if (!selectCategoryForFilterCompany.value && category.value) return category.value === 'all' 
     return selectCategoryForFilterCompany.value === category?.value
 
 }
