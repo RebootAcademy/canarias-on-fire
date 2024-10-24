@@ -49,7 +49,6 @@ const props = defineProps({
   },
 })
 
-//console.log(props.event)
 const defaultImage = './defaultImg.png'
 
 const currentImageIndex = ref(0)

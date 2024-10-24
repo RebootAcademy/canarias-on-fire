@@ -162,8 +162,6 @@ const props = defineProps({
   }
 })
 
-console.log(props.nearby)
-
 const isOpen = ref(false)
 
 const isOwner = computed(() => {

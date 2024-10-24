@@ -82,8 +82,6 @@ const limitedEvents = computed(() => {
     secondFilteredEvent = firstFilteredEvent
   }
 
-  console.log(secondFilteredEvent)
-
   return secondFilteredEvent
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)

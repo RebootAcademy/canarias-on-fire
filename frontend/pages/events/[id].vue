@@ -1,11 +1,11 @@
 <template>
-  <div class="relative bg-background text-secondary">
+  <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
-      class="w-full h-96 object-cover"
+      class="w-full h-[300px] md:h-[550px] object-cover rounded-md"
     />
-    <div class="flex gap-2 justify-between">
+    <div class="flex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
         <span
           v-for="category in event.categories"
@@ -15,7 +15,7 @@
           {{ category?.name }}
         </span>
       </div>
-      <div class="flex items-center gap-2 my-6 mr-6">
+      <div class="flex sm:w-full md:w-auto justify-end items-center gap-2 mb-4 md:my-6 md:mr-6">
         <Share2
           v-if="searchPaymentEvent !== 'basic'"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
@@ -34,10 +34,10 @@
       </div>
     </div>
     <div
-      class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between px-8 text-secondary"
+      class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between md:px-16 text-secondary "
     >
       <div class="flex flex-col gap-4 sm:w-3/5 md:w-4/5">
-        <h1 class="text-3xl font-bold text-primary">{{ event.eventName }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-primary">{{ event.eventName }}</h1>
         <div class="flex justify-between">
           <div class="flex flex-col gap-1 mt-2">
             <h2 class="text-2xl font-semibold mt-4">
