@@ -117,6 +117,7 @@
           >
             {{ event.eventPrice === 0 ? $t('plansName.free') : `${event.eventPrice} €` }}
           </p>
+          </div>
         </div>
       </NuxtLink>
     </div>
