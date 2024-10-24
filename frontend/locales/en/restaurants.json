@@ -4,5 +4,6 @@
   "notFound": "Couln't found any restaurants",
   "loading": "Loading restaurants...",
   "performanceDate": "Performance Date",
-  "performanceLocation": "Ubication"
+  "performanceLocation": "Ubication",
+  "NotPerformances": "No upcoming performances"
 }

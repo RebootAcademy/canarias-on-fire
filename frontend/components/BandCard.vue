@@ -42,7 +42,7 @@
         </div>
     </div>
     <div v-else>
-        <p class="text-whiteGray mt-4">No hay proxima actuación publicada</p>
+        <p class="text-whiteGray mt-4">{{ $t('NotPerformances') }}</p>
     </div>
 </div>
 </template>

@@ -114,6 +114,7 @@
     "continue": "CONTINUE",
     "completeReg": "COMPLETE REGISTRATION",
     "subscribe": "SUBSCRIBE",
+    "pick": "SELECT",
     "reset": "Reset",
     "apply": "Apply",
     "pay": "Pay",

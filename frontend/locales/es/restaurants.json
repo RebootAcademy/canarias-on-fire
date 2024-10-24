@@ -1,8 +1,9 @@
 {
   "title": "Restaurantes",
-  "bandNextPerformance": "Next performance: ",
+  "bandNextPerformance": "Próxima actuación: ",
   "notFound": "No se han encontrado restaurantes",
   "loading": "Cargando restaurantes...",
-  "performanceDate": "Performance Date",
-  "performanceLocation": "Ubication"
+  "performanceDate": "Día de la actuación",
+  "performanceLocation": "Ubicación",
+  "NotPerformances": "No hay próximas actuaciones publicadas"
 }

@@ -100,7 +100,7 @@
               class="inline-block w-full bg-black text-white font-semibold py-4 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
               :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'optima plus' }"
               >
-              {{ $t('buttons.subscribe')}}
+              {{ $t('buttons.pick')}}
             </NuxtLink>
           </div>
         </div>
