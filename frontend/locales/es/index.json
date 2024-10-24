@@ -2,7 +2,7 @@
   "counter": "Eventos activos esta semana en Canarias:",
   "events": "Eventos",
   "eventsDesc": "A continuación, verás algunos de los eventos más destacados.",
-  "filterBtn": "Filtrar",
+  "filterBtn": "FILTRAR",
   "articles": "Artículos",
   "articlesDesc": "A continuación, verás algunos de los artículos más destacados.",
   "bands": "Bandas Musicales",
@@ -122,6 +122,7 @@
     "cancel": "Cancelar",
     "save": "Guardar",
     "edit": "Editar",
+    "search": "Buscar",
     "delete": "Eliminar",
     "share": "Compartir",
     "validate": "Validar",
@@ -139,6 +140,7 @@
     "send": "Enviar",
     "create": "Crear",
     "manage": "Administrar",
+    "searchLocals": "Buscar cerca de mí",
     "download": "Descargar"
   },
   "successView": {

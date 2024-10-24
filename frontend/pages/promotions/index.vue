@@ -3,14 +3,18 @@
     <Hero class="hidden sm:flex" />
     <div class="w-full px-4 mt-8 md:mt-0 sm:w-2/3">
       <div
-        class="flex flex-col gap-2 md:flex-row md:gap-0 items-center justify-between w-full px-4 mb-4"
+        class="flex flex-col gap-2 md:flex-row md:gap-0 items-center justify-between w-full px-4 mb-4 md:mt-8"
       >
         <div class="flex w-full items-start">
-          <h2 class="text-2xl md:text-3xl font-semibold text-primary">
+          <h2
+            class="text-2xl md:text-3xl lg:text-4xl font-semibold text-primary"
+          >
             {{ $t('promotionsTitle') }}
           </h2>
         </div>
-        <div class="flex flex-col-reverse md:flex-row gap-4 items-center md:w-full justify-end">
+        <div
+          class="flex flex-col-reverse md:flex-row gap-4 items-center md:w-full justify-end"
+        >
           <CustomSelect
             :items="eventDiscounts"
             :placeholder="selectedPromotion"
@@ -24,17 +28,32 @@
           <FilterModal type="promotion"/>
         </div>
       </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
-      >
-        <PromotionCard
-          v-for="promotion in limitedPromotions"
-          :key="promotion._id"
-          :promotion="promotion"
-        />
+      <div class="flex justify-center w-full md:justify-start md:w-1/3 mb-6">
+        <GeolocationMap />
+      </div>
+      <!-- <PromotionsTabs @update:selectedFilter="handleTabChange" /> -->
+      <div v-if="limitedPromotions.length > 0">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-8"
+        >
+          <PromotionCard
+            v-for="promotion in limitedPromotions"
+            :key="promotion._id"
+            :promotion="promotion"
+          />
+        </div>
+        <!-- <div v-if="selectTabOption === 'all'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          <PromotionCard
+            v-for="promotion in limitedPromotions"
+            :key="promotion._id"
+            :promotion="promotion"
+          />
+        </div>
+ -->
+        <!-- <PromotionsNear v-else /> -->
       </div>
       <p v-if="limitedPromotions.length === 0" class="text-gray-500 mt-4">
-        {{ $t('notEventsFound') }}
+        {{ $t('notPromotionsFound') }}
       </p>
     </div>
   </div>
@@ -49,6 +68,8 @@ const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
 
 const selectedPromotion = ref('all')
+const selectTabOption = ref('all')
+
 const eventDiscounts = computed(() => {
   return [
     { label: t('onBoarding.step2Genres.all'), value: 'all' },
@@ -77,14 +98,14 @@ const limitedPromotions = computed(() => {
       (event) => event.eventDiscount === selectedPromotion.value
     )
   }
-
-  return filterDiscount
+  const secondFilter = filterDiscount
     .filter(
       (promotion) =>
         promotion.status === 'published' &&
         promotion.eventType === 'promotion' &&
+        promotion.dist?.calculated < eventStore.radioLocation &&
         ((promotion.userId?.isActive && promotion.userId?.isValidated) ||
-          userStore.userData?.role === 'admin')
+          promotion.userId?.role === 'admin')
     )
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)
@@ -95,6 +116,9 @@ const limitedPromotions = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
+
+  console.log(secondFilter)
+  return secondFilter
 })
 
 function getPromoPriority(promotion) {
@@ -119,5 +143,9 @@ function compareDates(dateA, dateB) {
   if (dateA.year !== dateB.year) return dateA.year - dateB.year
   if (dateA.month !== dateB.month) return dateA.month - dateB.month
   return dateA.day - dateB.day
+}
+
+function handleTabChange(tab) {
+  selectTabOption.value = tab
 }
 </script>

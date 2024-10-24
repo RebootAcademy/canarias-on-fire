@@ -3,7 +3,10 @@
     class="flex flex-col justify-center items-center bg-background p-8 w-full"
   >
     <div
-      v-if="selectCategoryForFilterCompany !== 'bands'"
+      v-if="
+        selectCategoryForFilterCompany !== 'bands' &&
+        selectCategoryForFilterCompany !== 'foodtruck'
+      "
       class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <PromotionCard
@@ -27,6 +30,12 @@
       v-if="
         selectCategoryForFilterCompany &&
         selectCategoryForFilterCompany === 'bands'
+      "
+    />
+    <FoodtruckList
+      v-if="
+        selectCategoryForFilterCompany &&
+        selectCategoryForFilterCompany === 'foodtruck'
       "
     />
   </div>

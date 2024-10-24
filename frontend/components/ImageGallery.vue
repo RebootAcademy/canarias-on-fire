@@ -97,7 +97,6 @@ const coverImage = computed(() => {
   return store.value.coverImage
 })
 
-
 const onFileChange = async (event) => {
   const files = event.target.files
   for (let i = 0; i < files.length; i++) {

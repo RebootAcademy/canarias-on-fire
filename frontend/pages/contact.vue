@@ -102,7 +102,7 @@
       </div>
     </form>
     <div class="flex w-full md:w-2/3 xl:w-1/3 justify-end">
-      <CustomBtn :title="t('buttons.send')" :action="sendMail" extraStyles="w-20" />
+      <CustomBtn :title="$t('buttons.send')" :action="sendMail" extraStyles="w-20" />
     </div>
   </div>
 </template>

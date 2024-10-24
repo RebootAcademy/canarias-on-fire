@@ -109,7 +109,7 @@ const publishEvent = async () => {
     const isAdmin = userStore.userData.role === 'admin'
 
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
-    
+
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
       console.log(result)
@@ -120,7 +120,7 @@ const publishEvent = async () => {
         }
     }
     if (eventStore.event.eventType === 'promotion') {
-      if (isSubscriptionValid  && !hasPublishedPromotions) {
+      if (isSubscriptionValid && !hasPublishedPromotions) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
           await eventStore.fetchEvents()

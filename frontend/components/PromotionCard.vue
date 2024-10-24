@@ -124,18 +124,19 @@
           <p class="text-sm line-clamp-1">
             {{ promotion.eventLocation.address }}
           </p>
-          <div class="absolute bottom-3 text-sm font-semibold text-primary">
+          <div class="absolute bottom-3 text-sm font-semibold text-primary w-[90%]">
             <div
-              class="flex flex-row gap-4 justify-between items-center w-full"
+              class="flex flex-row gap-2 justify-between items-center w-full"
             >
-              <div class="rounded-full bg-gray w-10 h-10"></div>
-              <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
-                {{
-                  promotion.userId?.role === 'company'
-                    ? promotion.userId?.companyName
-                    : promotion.userId?.username
-                }}
-              </p>
+              <!-- <div class="rounded-full bg-gray w-10 h-10"></div> -->
+               <div class="flex  items-center gap-2">
+                 <img v-if="userImage" :src="userImage" class="w-10 h-10 rounded-full object-contain" />
+                 <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
+                   {{ promotion.userId?.role === 'company' ? promotion.userId?.companyName : promotion.userId?.username }}
+                 </p>
+               </div>
+              <p v-if="promotion.dist" class="text-secondary">{{(promotion.dist.calculated / 1000).toFixed(2)  }} km</p>
+
             </div>
           </div>
         </div>
@@ -171,12 +172,28 @@ const props = defineProps({
   promotion: {
     type: Object,
   },
+  dist: {
+    type: Number,
+    default: 0,
+  },
+  calculatedDist: {
+    type: Boolean,
+    default: false,
+  },
   isRelatedPromo: {
     type: Boolean,
     default: false,
   },
 })
 const isOpen = ref(false)
+
+const userImage = computed(() => {
+  if (props.promotion.userId?.profileImg) {
+    return props.promotion.userId?.profileImg
+  } else {
+    return defaultImage
+  }
+})
 
 const defaultImage = './defaultImg.png'
 import { formatEventDate } from '@/utils/dateUtils'

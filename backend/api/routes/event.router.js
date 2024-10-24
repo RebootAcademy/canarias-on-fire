@@ -7,6 +7,7 @@ const {
   getAllEvents,
   getEventById,
   getEventsByUserId,
+  searchNearbyEvents,
   updateEvent,
   deleteEvent,
   updateEventByAdmin
@@ -17,8 +18,12 @@ router
   .post('/', createEvent)
   .post('/promotion', createPromotion)
   .get('/', getAllEvents)
-  .get('/:id', /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById)
+  .get('/geolocation', searchNearbyEvents)
   .get('/user/:userId', getEventsByUserId)
+  .get(
+    '/:id',
+    /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById
+  )
   .patch('/admin/:id', /* isAuth, checkRole('admin'), */ updateEventByAdmin)
   .patch('/:id', /* isAuth, checkRole('admin', 'company'), */ updateEvent)
   .delete('/:id', /* isAuth, checkRole('admin', 'company'), */ deleteEvent)

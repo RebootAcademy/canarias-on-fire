@@ -174,7 +174,9 @@ const getAllBands = async (req, res) => {
 
 const getAllRestaurants = async (req, res) => {
   try {
-    const bands = await Company.find({ sector: 'restoration' }).lean()
+   const bands = await Company.find({
+     sector: { $in: ['restoration', 'foodtruck'] },
+   }).lean()
 
     res.status(200).json({
       success: true,

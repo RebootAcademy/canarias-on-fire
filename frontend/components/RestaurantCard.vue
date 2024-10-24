@@ -1,9 +1,9 @@
 <template>
 <div class="flex flex-col gap-2 border text-secondary border-whiteGray rounded p-4 xs:h-[170px] sm:h-[170px] xl:h-[170px]" >
-    <div class="flex justify-between">
+    <div class="flex justify-between gap-2">
         <p class="text-whiteGray text-2xl font-bold"> {{restaurant.commercialName }}</p>
         <p v-if="restaurant.sector === 'restoration'" class="text-secondary italic text-sm">{{ $t(`onBoarding.foodType.${restaurant.type}`)}}</p>
-
+        <Truck v-else size="20"  class=""/>
     </div>
     <div class="flex flex-col gap-3">
         <div class="flex flex-row gap-2 items-center text-secondary italic">
@@ -66,13 +66,20 @@ import {
     MapPin, 
     Calendar,
     Phone,
-    ChefHat
+    ChefHat,
+    Truck
 } from 'lucide-vue-next'
 
 
 const props = defineProps({
-  restaurant: Object,
-  required: true
+  restaurant: {
+    type: Object,
+    required: true
+  },
+  foodtruck: {
+    type: Boolean,
+    default: false
+  }
 })
 
 // const isValidNextPerformance = (nextPerformance) => {

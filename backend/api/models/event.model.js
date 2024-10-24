@@ -30,6 +30,7 @@ const EventSchema = new mongoose.Schema({
       enum: ['Point'],
       required: true,
       default: 'Point',
+
     },
     coordinates: {
       type: [Number],
@@ -46,7 +47,7 @@ const EventSchema = new mongoose.Schema({
     mapImageUrl: {
       type: String,
       required: true,
-    },
+    }
   },
   eventPrice: {
     type: Number,

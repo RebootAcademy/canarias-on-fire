@@ -15,6 +15,7 @@
       </div>
     </main>
     <Footer />
+    <ScrollButton />
   </div>
 </template>
 
@@ -45,6 +46,7 @@ const pricingOptions = computed(() => {
     },
   ]
 })
+
 
 const headTitle = computed(() => {
   return t('plansName.plansInfo')

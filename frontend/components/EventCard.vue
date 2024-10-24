@@ -58,7 +58,7 @@
               :key="category._id"
               class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
             >
-              {{ category.name }}
+              {{ $t(`values.${category.name}`) }}
             </span>
           </div>
           <!-- Options menu -->
@@ -107,6 +107,7 @@
           <p class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
+          <div class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2">
           <p
             class="absolute text-md font-semibold mt-2 bottom-2"
             :class="{

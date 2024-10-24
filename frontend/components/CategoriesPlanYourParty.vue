@@ -44,6 +44,7 @@ const optionsFilter = computed(() => {
     return [
         { label: t('values.all'), value: 'all', icon: 'Warehouse' },
         { label: t('values.bands'), value: 'bands', icon: 'Music' },
+        { label: t('values.foodtruck'), value: 'foodtruck', icon: 'Truck' },
         { label: t('values.catering'), value: 'catering', icon: 'UtensilsCrossed' },
         { label: t('values.lighting'), value: 'lighting', icon: 'Lightbulb' },
         { label: t('values.photography'), value: 'photography', icon: 'Camera' },
@@ -62,6 +63,7 @@ const getIcon = (iconName) => {
 }
 
 const isSelected = (category) => {
+    if (!selectCategoryForFilterCompany.value && category.value) return category.value === 'all' 
     return selectCategoryForFilterCompany.value === category?.value
 
 }

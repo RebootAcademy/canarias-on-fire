@@ -60,6 +60,7 @@ const limitedPromotions = computed(() => {
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
+      a.dist.calculated - b.dist.calculated
       numOfPromotions.value = filteredPromotions.length
        return compareDates(a.eventDate, b.eventDate) 
      

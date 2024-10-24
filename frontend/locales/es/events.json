@@ -84,6 +84,10 @@
     "weekend": "Esta semana",
     "month": "Este mes"
   },
+  "promoFilters": {
+    "allPromo": "Todas las promociones",
+    "nearPromo": "Promociones cercanas"
+  },
   "modalFilter": {
     "label": "FILTROS",
     "ubication": "Ubicación",
@@ -112,7 +116,9 @@
     "currentPlan": "Plan actual: ",
     "manageSubscription": "Gestionar Suscripción para ",
     "chooseSubscriptionPlan": "Elija su plan de suscripción",
-    "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de su promoción."
+    "descriptionPlan": "Encuentre el plan perfecto que se ajuste a sus necesidades de su promoción.",
+    "nearbyPromoTitle": "Promociones cercanas a ti",
+    "nearbyPromoDescription": "Encuentra ofertas exclusivas y descuentos imperdibles en los eventos más cercanos."
   },
   "galleryLimit": "Has alcanzado el límite de cantidad de imágenes de tu plan",
   "notPromotionsFound": "No se encontraron promociones.",
@@ -129,5 +135,19 @@
   },
   "relatedEvent": "Eventos relacionados",
   "relatedPromotion": "Promociones relacionadas",
-  "relatedArticle": "Artículos relacionados"
+  "relatedArticle": "Artículos relacionados",
+  "geolocation": {
+    "area": "Área de localización:",
+    "changeArea": "Cambiar área de localización",
+    "actionArea": "Seleccionar área de localización:",
+    "radius": {
+      "5km": "5 km",
+      "10km": "10 km",
+      "15km": "15 km",
+      "20km": "20 km",
+      "30km": "30 km",
+      "40km": "40 km",
+      "50km": "50 km"
+    }
+  }
 }

@@ -6,6 +6,7 @@
         <div class="flex w-full items-start">
           <h2 class="text-2xl lg:text-[38px] font-bold text-primary mb-4 md:mb-0">{{ $t('articles')}}</h2>
         </div>
+
         <div class="flex flex-row items-center  gap-4">
           <SearchInput v-model="searchQuery" />
           <!-- <div class="bg-primary-gradient p-0.5 rounded-md">

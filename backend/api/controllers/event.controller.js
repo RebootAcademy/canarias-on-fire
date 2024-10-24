@@ -45,7 +45,7 @@ const createPromotion = async (req, res) => {
   }
 }
 
-const getAllEvents = async (req, res) => {
+/* const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find().populate('categories location userId payment subscription')
     res.status(200).json({
@@ -61,7 +61,63 @@ const getAllEvents = async (req, res) => {
       description: error.message,
     })
   }
-}
+} */
+
+  const getAllEvents = async (req, res) => {
+    try {
+      const { lat, lng } = req.query 
+
+      if (!lat || !lng) {
+        const events = await Event.find().populate(
+          'categories location userId payment subscription'
+        )
+        return res.status(200).json({
+          success: true,
+          message: 'Events successfully fetched.',
+          result: events,
+        })
+      }
+
+      // Primero, obtenemos los eventos y calculamos la distancia
+      const eventsWithDistance = await Event.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: 'Point',
+              coordinates: [parseFloat(lat), parseFloat(lng)], // [lng, lat]
+            },
+            distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
+            maxDistance: 100000,
+            spherical: true, // Considerar la Tierra como una esfera
+          },
+        },
+      ])
+
+      // Ahora, poblar los eventos obtenidos
+      const populatedEvents = await Promise.all(
+        eventsWithDistance.map(async (event) => {
+          const populatedEvent = await Event.populate(event, {
+            path: 'categories location userId payment subscription',
+          })
+          return populatedEvent
+        })
+      )
+
+      res.status(200).json({
+        success: true,
+        message: 'Eventos obtenidos con éxito.',
+        result: populatedEvents,
+      })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener eventos.',
+        description: error.message,
+      })
+    }
+  }
+
 
 const getEventById = async (req, res) => {
   try {
@@ -111,6 +167,74 @@ const getEventsByUserId = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error getting events for the user.',
+      description: error.message,
+    })
+  }
+}
+
+const searchNearbyEvents = async (req, res) => {
+  try {
+    const { lat, lng, eventType='promotion' } = req.query
+    const maxDistance = 5000
+
+    if (!lat || !lng) {
+      return res.status(400).json({ error: 'Se requieren latitud y longitud' })
+    }
+
+     /* const query = {
+       eventLocation: {
+         $near: {
+           $geometry: {
+             type: 'Point',
+             coordinates: [parseFloat(lat), parseFloat(lng)],
+           },
+           distanceField: 'dist.calculated',
+           $maxDistance: maxDistance,
+         },
+       },
+     }
+      if (eventType) {
+        query.eventType = eventType
+        query.status = 'published'
+      }
+      console.log('Query: ', JSON.stringify(query, null, 2)) */
+       const userCoordinates = [parseFloat(lat), parseFloat(lng)] // Longitud, Latitud
+
+       // Agregamos la consulta con $geoNear para calcular la distancia
+       const events = await Event.aggregate([
+         {
+           $geoNear: {
+             near: {
+               type: 'Point',
+               coordinates: userCoordinates,
+             },
+             distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
+             maxDistance: maxDistance, // Distancia máxima en metros
+             spherical: true, // Considerar la Tierra como una esfera
+           },
+         },
+         {
+           $match: {
+             eventType: eventType,
+             status: 'published',
+           },
+         },
+       ])
+
+       console.log('events', events)
+
+      const populatedEvents = await Event.populate(events, {
+        path: 'categories location userId payment subscription',
+      })
+    res.status(200).json({
+      success: true,
+      message: 'Events successfully fetched.',
+      result: populatedEvents,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error getting events.',
       description: error.message,
     })
   }
@@ -254,6 +378,7 @@ module.exports = {
   getAllEvents,
   getEventById,
   getEventsByUserId,
+  searchNearbyEvents,
   updateEvent,
   updateEventByAdmin,
   deleteEvent,
