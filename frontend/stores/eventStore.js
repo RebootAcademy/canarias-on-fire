@@ -51,7 +51,8 @@ export const useEventStore = defineStore('eventStore', {
     userEvents: [],
     userId: null,
     payment: null,
-    radioLocation: '10000',
+    radioLocation: '20000',
+    selectedEventFilter: 'all',
   }),
 
   actions: {

@@ -30,12 +30,10 @@ if (error.value) {
 }
 
 if (data.value) {
-  console.log(data.value)
   foodtrucks.value =
     data.value.result.filter(
       (foodstruck) => foodstruck.sector === 'foodtruck'
     ) || []
-  console.log(foodtrucks.value)
 }
 
 const filteredFoodtrucks = computed(() => {

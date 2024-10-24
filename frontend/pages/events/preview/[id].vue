@@ -112,7 +112,6 @@ const publishEvent = async () => {
 
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
-      console.log(result)
         if (result) {
           return router.push(`/events/${eventId}`)
         } else {

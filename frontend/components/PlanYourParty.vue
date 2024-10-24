@@ -60,7 +60,6 @@ const limitedEvents = computed(() => {
   if (!filteredEvents.value) {
     return []
   }
-  console.log(filteredEvents.value)
 
   const firstFilteredEvent = filteredEvents.value?.filter(
     (event) =>
@@ -70,7 +69,6 @@ const limitedEvents = computed(() => {
         event.categories.some((c) => c.name === 'food&drinks'))
   )
 
-  console.log(firstFilteredEvent)
 
   let secondFilteredEvent
   if (

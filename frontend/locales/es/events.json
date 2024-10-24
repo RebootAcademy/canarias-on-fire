@@ -82,7 +82,8 @@
     "all": "Todos",
     "today": "Hoy",
     "weekend": "Esta semana",
-    "month": "Este mes"
+    "month": "Este mes",
+    "nearby": "Cercanos a mi"
   },
   "promoFilters": {
     "allPromo": "Todas las promociones",

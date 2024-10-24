@@ -18,22 +18,27 @@
           <FilterModal />
         </div>
       </div>
-      <div class="flex justify-center w-full md:justify-start md:w-1/3 mb-6">
-        <GeolocationMap />
+      <div>
+        <div class="flex flex-col justify-center w-full md:justify-start md:w-1/3 mb-6">
+          <EventFilter />
+          <GeolocationMap  v-if="eventStore.selectedEventFilter === 'nearby'"/>
+        </div>
+        <div
+         
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+        >
+          <EventCard
+            v-for="event in limitedEvents"
+            :key="event._id"
+            :event="event"
+            :nearby="eventStore.selectedEventFilter === 'all'"
+          />
+        </div>
+        <p v-if="limitedEvents.length === 0" class="text-secondary mt-4">
+          {{ $t('notEventsFound') }}
+        </p>
       </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
-      >
-        <EventCard
-          v-for="event in limitedEvents"
-          :key="event._id"
-          :event="event"
-        />
       </div>
-      <p v-if="limitedEvents.length === 0" class="text-secondary mt-4">
-        {{ $t('notEventsFound') }}
-      </p>
-    </div>
   </div>
 </template>
 
@@ -42,6 +47,7 @@ import { storeToRefs } from 'pinia'
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
+
 
 const { filteredEvents } = storeToRefs(eventStore)
 
@@ -59,15 +65,30 @@ const openFilterModal = () => {
 }
 
 const limitedEvents = computed(() => {
-  return filteredEvents.value
-    .filter(
-      (event) =>
-        event.status === 'published' &&
+  let firstFilter 
+
+  if (eventStore.selectedEventFilter === 'nearby') {
+    firstFilter = filteredEvents.value
+      .filter(
+        (event) =>
+          event.status === 'published' &&
         event.eventType === 'event' &&
          event.dist?.calculated < eventStore.radioLocation &&
         ((event.userId?.isActive &&
         event.userId?.isValidated) || event.userId?.role === 'admin')
+      )
+  } else  {
+    firstFilter = filteredEvents.value.filter(
+      (event) =>
+        event.status === 'published' &&
+        event.eventType === 'event' &&
+        ((event.userId?.isActive &&
+        event.userId?.isValidated) || event.userId?.role === 'admin')
     )
+  }
+
+
+  return firstFilter
     .sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
@@ -100,6 +121,5 @@ function compareDates(dateA, dateB) {
 
 onMounted(async() => {
   await userStore.fetchAndSetUser(userStore.userData?.email)
-  await eventStore.fetchEvents()
 })
 </script>

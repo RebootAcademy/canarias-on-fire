@@ -82,7 +82,8 @@
     "all": "All",
     "today": "Today",
     "weekend": "This weekend",
-    "month": "This month"
+    "month": "This month",
+    "nearby": "Nearby"
   },
   "promoFilters": {
     "allPromo": "All Promotions",
