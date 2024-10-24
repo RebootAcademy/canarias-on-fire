@@ -76,7 +76,7 @@ const placeholderSelect = computed(() => {
 })
 
 if (data.value) {
-  restaurants.value = data.value.result || []
+  restaurants.value = data.value.result.filter((restaurant) => restaurant.sector === 'restoration') || []
 }
 if (error.value) {
   console.error('Error fetching restaurants:', error.value)

@@ -3,7 +3,10 @@
     class="flex flex-col justify-center items-center bg-background p-8 w-full"
   >
     <div
-      v-if="selectCategoryForFilterCompany !== 'bands'"
+      v-if="
+        selectCategoryForFilterCompany !== 'bands' &&
+        selectCategoryForFilterCompany !== 'foodtruck'
+      "
       class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <PromotionCard
@@ -12,16 +15,29 @@
         :promotion="promotion"
       />
     </div>
-    <div 
-        v-if="selectCategoryForFilterCompany !== 'bands' && numOfPromotions > 9"
-        class="mt-6 w-full justify-center items-center"
+    <div
+      v-if="selectCategoryForFilterCompany !== 'bands' && numOfPromotions > 9"
+      class="mt-6 w-full justify-center items-center"
     >
-       <div class="w-1/3">
-        <CustomBtn  :title="t('buttons.seeMore')" :action="() => router.push('/promotions')" />
+      <div class="w-1/3">
+        <CustomBtn
+          :title="t('buttons.seeMore')"
+          :action="() => router.push('/promotions')"
+        />
+      </div>
     </div>
-    </div>
-    <BandList v-if="selectCategoryForFilterCompany && selectCategoryForFilterCompany === 'bands'"/>
-
+    <BandList
+      v-if="
+        selectCategoryForFilterCompany &&
+        selectCategoryForFilterCompany === 'bands'
+      "
+    />
+    <FoodtruckList
+      v-if="
+        selectCategoryForFilterCompany &&
+        selectCategoryForFilterCompany === 'foodtruck'
+      "
+    />
   </div>
 </template>
 
@@ -48,7 +64,7 @@ const limitedEvents = computed(() => {
   const firstFilteredEvent = eventsByDate.value?.filter(
     (event) =>
       event.status === 'published' &&
-      event.eventType === 'promotion' && 
+      event.eventType === 'promotion' &&
       (event.categories.some((c) => c.name === 'services') ||
         event.categories.some((c) => c.name === 'restoration'))
   )
@@ -58,8 +74,8 @@ const limitedEvents = computed(() => {
     selectCategoryForFilterCompany.value &&
     selectCategoryForFilterCompany.value !== 'all'
   ) {
-    secondFilteredEvent = firstFilteredEvent.filter(
-      (event) => event.categoriesOfServices.includes(selectCategoryForFilterCompany.value)
+    secondFilteredEvent = firstFilteredEvent.filter((event) =>
+      event.categoriesOfServices.includes(selectCategoryForFilterCompany.value)
     )
   } else {
     secondFilteredEvent = firstFilteredEvent

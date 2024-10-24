@@ -68,5 +68,8 @@
     "totalBands": "Bandas",
     "totalEvents": "Eventos",
     "totalSubscriptions": "Suscripciones"
+  },
+  "foodtruckSection":{
+    "noFoodtruck": "No hay Foodstrucks que mostrar aún"
   }
 }

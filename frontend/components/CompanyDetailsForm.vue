@@ -122,6 +122,9 @@
               />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
+              <SelectItem value="foodtruck">
+                Foodtruck
+              </SelectItem>
               <SelectItem value="restoration">{{
                 $t('onBoarding.step2Sector.restoration')
               }}</SelectItem>
