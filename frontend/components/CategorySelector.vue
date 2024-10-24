@@ -2,7 +2,7 @@
   <div class="flex flex-col text-secondary gap-2">
     <p class="font-semibold">{{ $t('tags') }}</p>
     <p class="text-sm text-secondary mb-2">{{ type === 'event' ? $t('chooseTags') : $t('chooseTagsPromo') }}</p>
-    <div class="flex flex-wrap gap-2 p-2 mb-4">
+    <div class="flex flex-wrap justify-center gap-2 p-2 mb-4">
       <Badge
         v-for="category in filteredCategories"
         :key="category.id"
@@ -18,8 +18,8 @@
       </Badge>
     </div>
     <div v-if="isThereService" class="flex flex-col gap-2">
-      <p>Selecciona los tipos de servicios que ofreces</p>
-      <div class="flex flex-wrap gap-2 p-2">
+      <p>{{ $t('chooseServicesTags')}}</p>
+      <div class="flex flex-wrap justify-center gap-2 p-2 mb-4">
         <Badge
           v-for="(category, idx) in typeOfServices"
           :key="idx"

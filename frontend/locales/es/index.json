@@ -175,5 +175,12 @@
     "title2": "Tarifas de eventos",
     "PromoSubscription": "Suscripción para promociones",
     "eventPayments": "Pago para publicar eventos"
+  },
+  "plansName": {
+    "optima": "Óptima",
+    "optimaPlus": "Óptima Plus",
+    "basic": "Basic",
+    "free": "GRATIS",
+    "plansInfo": "Información de planes"
   }
 }

@@ -175,5 +175,12 @@
     "title2": "Events prices",
     "PromoSubscription": "Promotion Subscription",
     "eventPayments": "Event Payments"
+  },
+  "plansName": {
+    "optima": "Optima",
+    "optimaPlus": "Optima Plus",
+    "basic": "Basic",
+    "free": "FREE",
+    "plansInfo": "Plans Info"
   }
 }

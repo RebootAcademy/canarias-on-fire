@@ -1,43 +1,50 @@
 <template>
-  <NuxtLink :to="`/events/${promotion._id}`">
+  <div
+    class="relative h-[380px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
+    :class="{
+      'bg-secondary-gradient text-black': isGoldPayment,
+      'max-w-[300px]': isRelatedPromo,
+    }"
+  >
     <div
-      class="relative h-[380px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
+      class="absolute inset-0 rounded-lg border-primary border-[1px] shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
       :class="{
-        'bg-secondary-gradient text-black test-shine': isGoldPayment,
-        'max-w-[300px]': isRelatedPromo,
+        'border-[rgba(234,88,12,0.5)] ': isBasicPayment,
+        'border-primary': isGoldPayment,
       }"
-    >
-      <div
-        class="absolute inset-0 rounded-lg border-primary border-[1px] shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
-        :class="{
-          'border-[rgba(234,88,12,0.5)] ': isBasicPayment,
-          'border-primary': isGoldPayment,
-        }"
-      ></div>
+    ></div>
 
-      <div class="relative w-full h-full rounded-lg">
-        <!-- Event status -->
-        <span
-          v-show="userStore.userData && userStore.userData.role === 'admin'"
-          :class="[
-            'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
-            { 'text-red-500 italic': promotion.status === 'draft' },
-          ]"
-        >
-          {{ promotion.status }}
-        </span>
+    <div class="relative w-full h-full rounded-lg">
+      <!-- Event status -->
+      <span
+        v-show="userStore.userData && userStore.userData.role === 'admin'"
+        :class="[
+          'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
+          { 'text-red-500 italic': promotion.status === 'draft' },
+        ]"
+      >
+        {{ promotion.status }}
+      </span>
 
-        <!-- promotion Image -->
-        <img
+      <!-- promotion Image -->
+      <div v-if="!isBasicPayment">
+        <CarouselCard
+          :event="promotion"
+          type="promotion"
+          :payment="isGoldPayment && 'optima'"
+        />
+      </div>
+      <!-- <img
           v-if="!isBasicPayment"
           :src="promotion.coverImage || defaultImage"
           class="w-full h-44 object-cover rounded-t-lg"
-        />
-        <NuxtImg
-          v-else
-          :src="defaultImage"
-          class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
-        />
+        /> -->
+      <NuxtImg
+        v-else
+        :src="defaultImage"
+        class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
+      />
+      <NuxtLink :to="`/events/${promotion._id}`">
         <!-- Main content -->
         <div class="px-3 py-2 flex justify-between p-4">
           <!-- Categories -->
@@ -83,6 +90,8 @@
             </DropdownMenu>
           </div>
         </div>
+      </NuxtLink>
+      <NuxtLink :to="`/events/${promotion._id}`">
         <div class="flex flex-col justify-between items-start px-4">
           <h3 class="text-xl font-semibold mb-2">{{ promotion.eventName }}</h3>
           <p
@@ -127,12 +136,13 @@
                  </p>
                </div>
               <p v-if="promotion.dist" class="text-secondary">{{(promotion.dist.calculated / 1000).toFixed(2)  }} km</p>
+
             </div>
           </div>
         </div>
-      </div>
+      </NuxtLink>
     </div>
-  </NuxtLink>
+  </div>
   <CustomModal v-model:open="isOpen">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
     <p class="text-lg">

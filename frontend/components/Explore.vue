@@ -1,3 +1,4 @@
+import { inject } from 'vue';
 <template>
   <div
     class="flex flex-col sm:flex-row justify-center mt-[50px] py-[50px] bg-gray w-full"
@@ -17,6 +18,7 @@
         <CustomBtn
           :title="t('exploreSection.button').toUpperCase()"
           :action="redirect"
+          :inverse="true"
           class="w-1/2 mt-4 bg-background"
         />
       </div>

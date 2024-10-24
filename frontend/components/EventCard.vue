@@ -1,50 +1,55 @@
 <template>
-  <NuxtLink :to="`/events/${event._id}`">
+  <div
+    class="relative h-[360px] rounded-lg overflow-hiddengroup hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
+    :class="{
+      'bg-[#FBB03B] text-black': isGoldPayment,
+      'bg-primary-gradient text-black': isPremiumPayment,
+      'bg-background': !isGoldPayment && !isPremiumPayment,
+      'max-w-[300px]': isRelatedEvent,
+    }"
+  >
     <div
-      class="relative h-[360px] rounded-lg overflow-hiddengroup hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
+      class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
       :class="{
-        'bg-[#FBB03B] text-black': isGoldPayment,
-        'bg-primary-gradient text-black test-shine': isPremiumPayment,
-        'bg-background': !isGoldPayment && !isPremiumPayment,
-        'max-w-[300px]': isRelatedEvent,
+        'border-[rgba(234,88,12,0.5)] ': !isGoldPayment && !isPremiumPayment,
+        'border-[#FBB03B]  ': isGoldPayment,
+        'border-primary ': isPremiumPayment,
       }"
-    >
-      <div
-        class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
-        :class="{
-          'border-[rgba(234,88,12,0.5)] ': !isGoldPayment && !isPremiumPayment,
-          'border-[#FBB03B]  ': isGoldPayment,
-          'border-primary ': isPremiumPayment,
-        }"
-      ></div>
+    ></div>
 
-      <div class="relative w-full h-full rounded-lg">
-        <!-- Event status -->
-        <span
-          v-show="
-            userStore.userData &&
-            (userStore.userData.role === 'admin' || isOwner)
-          "
-          :class="[
-            'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
-            { 'text-red-500 italic': event.status === 'draft' },
-          ]"
-        >
-          {{ event.status }}
-        </span>
+    <div class="relative w-full h-full rounded-lg">
+      <!-- Event status -->
+      <span
+        v-show="
+          userStore.userData && (userStore.userData.role === 'admin' || isOwner)
+        "
+        :class="[
+          'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
+          { 'text-red-500 italic': event.status === 'draft' },
+        ]"
+      >
+        {{ event.status }}
+      </span>
 
-        <!-- Event Image -->
-        <img
+      <!-- Event Image -->
+      <div v-if="!isBasicPayment">
+        <CarouselCard
+          :event="event"
+          :payment="isGoldPayment ? 'optima' : 'optima plus'"
+        />
+      </div>
+      <!--    <img
           v-if="!isBasicPayment"
           :src="event.coverImage || defaultImage"
           class="w-full h-44 object-cover rounded-t-lg"
-        />
-        <img
-          v-else
-          :src="defaultImage"
-          class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
-        />
-        <!-- Main content -->
+        /> -->
+      <img
+        v-else
+        :src="defaultImage"
+        class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
+      />
+      <!-- Main content -->
+      <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
         <div class="px-4 py-2 flex justify-between">
           <!-- Categories -->
           <div class="flex flex-wrap gap-2">
@@ -85,6 +90,8 @@
             </DropdownMenu>
           </div>
         </div>
+      </NuxtLink>
+      <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
         <div class="flex flex-col justify-between items-start px-4">
           <h3 class="text-xl text-secondary font-semibold mb-2">
             {{ event.eventName }}
@@ -101,21 +108,19 @@
             {{ event.eventLocation.address }}
           </p>
           <div class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2">
-            <p
-              class=""
-              :class="{
-                'text-primary': isBasicPayment,
-                'text-black': isGoldPayment || isPremiumPayment,
-              }"
-            >
-              {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
-            </p>
-            <p>{{ event.dist.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
-          </div>
+          <p
+            class="absolute text-md font-semibold mt-2 bottom-2"
+            :class="{
+              'text-primary': isBasicPayment,
+              'text-black': isGoldPayment || isPremiumPayment,
+            }"
+          >
+            {{ event.eventPrice === 0 ? $t('plansName.free') : `${event.eventPrice} €` }}
+          </p>
         </div>
-      </div>
+      </NuxtLink>
     </div>
-  </NuxtLink>
+  </div>
   <CustomModal v-model:open="isOpen">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
     <p class="text-lg">
@@ -209,7 +214,7 @@ const formattedDate = () => {
     } = props.event?.eventEndDate
     endDate = new Date(endYear, endMonth - 1, endDay)
   }
-  
+
   const date = new Date(year, month - 1, day)
   if (!endDate || date === endDate) {
     return date.toLocaleDateString(undefined, {

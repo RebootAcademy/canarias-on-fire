@@ -322,7 +322,7 @@ export const useEventStore = defineStore('eventStore', {
       try {
         const eventData = this.getEventData()
 
-        if (this.eventType === 'promotion') {
+        if (this.eventType === 'promotion'  ) {
           delete eventData.payment
         }
 
@@ -339,6 +339,7 @@ export const useEventStore = defineStore('eventStore', {
           this.event = data.value.result
 
           this.fetchEvents()
+          this.selectedCategories = []
           return true
         }
         return false

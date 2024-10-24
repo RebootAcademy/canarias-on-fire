@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col items-center mt-4">
-    <h2 class="text-xl mb-6">{{ $t('subscriptions.title') }}</h2>
+    <h2 class="text-lg md:text-xl lg:text-2xl opacity-70  mb-6">{{ $t('subscriptions.title') }}</h2>
     <div class="flex flex-col items-start w-full">
       <DetailsQuestion
         v-for="question in subscriptionQuestions"

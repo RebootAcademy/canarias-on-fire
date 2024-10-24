@@ -112,12 +112,12 @@ const publishEvent = async () => {
 
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
-      if (result) {
-        await eventStore.fetchEvents()
-        return router.push(`/events/${eventId}`)
-      } else {
-        console.error('Failed to publish promotion')
-      }
+      console.log(result)
+        if (result) {
+          return router.push(`/events/${eventId}`)
+        } else {
+          console.error('Failed to publish promotion')
+        }
     }
     if (eventStore.event.eventType === 'promotion') {
       if (isSubscriptionValid && !hasPublishedPromotions) {

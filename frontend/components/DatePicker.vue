@@ -31,7 +31,7 @@
 <script setup>
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-vue-next'
-const {t} = useI18n
+const {t} = useI18n()
 const today = new Date()
 const eventStore = useEventStore()
 const dateError = ref('')

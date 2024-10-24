@@ -1,6 +1,8 @@
 {
   "tags": "Etiquetas",
   "chooseTags": "Elige hasta cinco etiquetas que mejor describan tu evento. Estas categorías ayudarán a los usuarios a comprender rápidamente el tipo y el enfoque de tu evento.",
+  "chooseTagsPromo": "Elige hasta una etiqueta que mejor describa tu promoción. Esta categoría ayudará a los usuarios a comprender más claramente el tipo y el enfoque de tu promoción.",
+  "chooseServicesTags": "Selecciona los tipos de servicios que ofreces",
   "mustSelectTag": "Debe seleccionar al menos 1 etiqueta.",
   "cantSelectMoreTags": "No se pueden seleccionar más de 5 etiquetas.",
   "values": {

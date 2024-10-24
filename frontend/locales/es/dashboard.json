@@ -11,7 +11,7 @@
   "password": "Contraseña",
   "confirmPassword": "Confirmar contraseña",
   "passwordsDontMatch": "Las contraseñas no coinciden",
-  "googleAccount": "If you have a Google account, you cannot change the password because it is your password for Google services.",
+  "googleAccount": "Si tienes una cuenta de Google, no puedes cambiar la contraseña porque es tu contraseña para los servicios de Google.",
   "search": "Buscar",
   "userProfile": {
     "profile": "Perfil",

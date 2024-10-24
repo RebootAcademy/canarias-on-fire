@@ -1,5 +1,5 @@
 <template>
-  <div class="flex !flex-col min-h-screen w-screen xs:p-6 sm:p-14 lg:p-8 lg:px-24">
+  <div class="flex !flex-col min-h-screen w-screen xs:p-4 sm:p-14 lg:p-8 lg:px-24">
     <div v-if="currentStep === 1" class="flex !flex-col">
       <h1 class="text-primary text-2xl font-bold mb-6">{{ $t('onBoarding.step1')}}</h1>
       <p class="mb-8 text-gray-400">

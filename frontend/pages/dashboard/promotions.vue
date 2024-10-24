@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4 items-center bg-background">
     <div
-      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
+      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 "
     >
       <div
         class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2 "
@@ -12,7 +12,7 @@
             class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
             :class="
               selectOption === option.value
-                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800'
+                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'
             "
             @click="selectOption = option.value"
           >
@@ -42,6 +42,7 @@
             </div>
       <FilterModal type="promotion"/>
     </div>
+    <hr class="mb-4 border-1 border-black w-full" />
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
     >

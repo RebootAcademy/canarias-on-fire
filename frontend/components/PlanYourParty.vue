@@ -52,22 +52,25 @@ const { selectCategoryForFilterCompany, filteredEvents, filteredEventsByDate } =
 
 const numOfPromotions = ref('')
 
-const eventsByDate = computed(() => {
+/* const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
-})
+}) */
 
 const limitedEvents = computed(() => {
-  if (!eventsByDate.value) {
+  if (!filteredEvents.value) {
     return []
   }
+  console.log(filteredEvents.value)
 
-  const firstFilteredEvent = eventsByDate.value?.filter(
+  const firstFilteredEvent = filteredEvents.value?.filter(
     (event) =>
       event.status === 'published' &&
       event.eventType === 'promotion' &&
       (event.categories.some((c) => c.name === 'services') ||
-        event.categories.some((c) => c.name === 'restoration'))
+        event.categories.some((c) => c.name === 'food&drinks'))
   )
+
+  console.log(firstFilteredEvent)
 
   let secondFilteredEvent
   if (
@@ -80,6 +83,8 @@ const limitedEvents = computed(() => {
   } else {
     secondFilteredEvent = firstFilteredEvent
   }
+
+  console.log(secondFilteredEvent)
 
   return secondFilteredEvent
     .sort((a, b) => {

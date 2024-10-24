@@ -1,12 +1,10 @@
 <template>
-  <div class="lg:px-6 w-full">
-    <div
-      class="w-full grid justify-items-stretch items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
-    >
-      <EventCard
-        v-for="event in limitedEvents"
-        :key="event._id"
-        :event="event"
+  <div class="lg:px-6 w-full ">
+    <div class="w-full grid justify-items-strecth items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
+      <EventCard 
+        v-for="event in limitedEvents" 
+        :key="event._id" 
+        :event="event" 
         class="xs:w-[60%] sm:w-full"
       />
     </div>
@@ -36,7 +34,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
-  
+
   return eventsByDate.value
     ?.filter(event => 
       event.status === 'published'
