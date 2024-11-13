@@ -92,9 +92,9 @@
         <h2 class="text-xl font-semibold">Organizador</h2>
         <p>{{ event.userId?.companyName }}</p>
       </div> -->
-        <div v-if="evenType === 'event'" class="my-6">
+        <!-- <div v-if="evenType === 'event'" class="my-6">
           <TicketButton />
-        </div>
+        </div> -->
         <div v-show="!isBasicPayment">
           <EventGallery />
         </div>
@@ -112,10 +112,10 @@
           </div>
         </div>
       </div>
-      <div v-if="eventType === 'event'">
+      <!-- <div v-if="eventType === 'event'">
         <TicketButton hasBorder="hasBorder" />
-      </div>
-      <div v-else>
+      </div> -->
+      <div  v-if="eventType === 'promotion'">
         <DiscountSquare :event="event" />
       </div>
     </div>

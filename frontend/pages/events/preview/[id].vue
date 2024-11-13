@@ -1,11 +1,11 @@
 <template>
-  <div class="relative">
+  <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
-      class="w-full h-96 object-cover"
+      class="w-full h-[300px] md:h-[550px] object-cover rounded-md"
     />
-    <div class="flex gap-2 justify-between">
+    <div class="lex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
         <span
           v-for="category in eventStore.selectedCategories"
@@ -62,9 +62,9 @@
         <span>{{ eventStore.organizerName }}</span>
       </div>
     </div> -->
-    <div>
+    <!-- <div>
       <TicketButton />
-    </div>
+    </div> -->
     <div>
       <EventGallery />
       <p class="text-xs text-primary">
