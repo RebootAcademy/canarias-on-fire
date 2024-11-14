@@ -10,6 +10,7 @@
   "updatedPerformance": "Next performance updated successfully",
   "errorPerformance": "Error updating next performance",
   "copyLink": "Link copied successfully to clipboard",
+  "copyCode": "Discount code copied successfully to clipboard",
   "deleteEventSuccess": "Event deleted successfully",
   "deletePromoSuccess": "Promotion deleted successfully",
   "deleteUserSuccess": "User deleted successfully",

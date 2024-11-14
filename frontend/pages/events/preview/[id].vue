@@ -65,6 +65,17 @@
     <!-- <div>
       <TicketButton />
     </div> -->
+    <div v-if="eventStore.eventCodePromo" class="flex flex-col gap-2">
+      <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
+      <div
+        class="border-2 rounded-md w-fit cursor-pointer hover:bg-primary-gradient hover:text-white hover:border-primary"
+        @click="copyCodePromo(eventStore.eventCodePromo)"
+      >
+        <p class="font-semibold p-2">
+          {{ eventStore.eventCodePromo.toUpperCase() }}
+        </p>
+      </div>
+    </div>
     <div>
       <EventGallery />
       <p class="text-xs text-primary">
@@ -112,11 +123,11 @@ const publishEvent = async () => {
 
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
-        if (result) {
-          return router.push(`/events/${eventId}`)
-        } else {
-          console.error('Failed to publish promotion')
-        }
+      if (result) {
+        return router.push(`/events/${eventId}`)
+      } else {
+        console.error('Failed to publish promotion')
+      }
     }
     if (eventStore.event.eventType === 'promotion') {
       if (isSubscriptionValid && !hasPublishedPromotions) {
@@ -154,5 +165,16 @@ const checkIfUserHasPromotions = (event) => {
       event.userId?._id === userStore.userData?._id
   )
   return hasPromotions.length > 0
+}
+
+const copyCodePromo = async (code) => {
+  try {
+    await navigator.clipboard.writeText(code)
+    toast({
+      description: t('copyCode'),
+    })
+  } catch (err) {
+    console.error('Error al copiar el enlace: ', err)
+  }
 }
 </script>

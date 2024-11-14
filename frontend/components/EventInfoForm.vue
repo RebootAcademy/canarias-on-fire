@@ -132,6 +132,7 @@
         <client-only>
           <QuillEditor
             v-model:content="eventStore.eventDescription"
+            toolbar="essential"
             contentType="html"
             theme="snow"
             class="min-h-[200px] border rounded-sm"
@@ -258,6 +259,29 @@
           :placeholder="$t('eventTypeDiscount.notSpecificied')"
         />
       </div>
+
+      <hr />
+      <div class="w-full md:w-1/3">
+        <p class="font-semibold mb-4">{{ $t('eventCodePromo') }}</p>
+        <div class="flex gap-4">
+          <input type="checkbox" @click="checkCodePromo = !checkCodePromo"/>
+          <p class="text-base">{{ $t('addEventCodePromo') }}</p>
+        </div>
+        <div v-if="checkCodePromo">
+          <Input
+            v-model="eventStore.eventCodePromo"
+            :placeholder="$t('eventCodePromoPlaceholder')"
+            id="eventCodePromo"
+            type="text"
+            class="p-2 border rounded-md w-full mt-4"
+          />
+          <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-sm">
+            {{ errors.eventCodePromo }}
+          </span>
+        </div>
+
+        
+      </div>
     </div>
   </div>
   <hr class="mb-4" />
@@ -278,6 +302,7 @@ const props = defineProps({
 })
 
 const hasEndDate = ref(false)
+const checkCodePromo = ref(false)
 const changeMap = ref(props.isEditing)
 
 const eventDiscounts = computed(() => {

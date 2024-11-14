@@ -33,6 +33,7 @@ export const useEventStore = defineStore('eventStore', {
     externalUrl: '',
     eventImages: [],
     eventDiscount: '',
+    eventCodePromo: '',
     coverImage: null,
     selectedFile: null,
     mapCenter: { lat: 51.09, lng: 6.84 },
@@ -209,22 +210,23 @@ export const useEventStore = defineStore('eventStore', {
     resetCreateEventForm() {
       this.eventImages = []
       this.coverImage = null
-      this.eventDate = null
-      ;(this.selectedCategories = []),
-        (this.selectedCategoriesByServices = []),
-        (this.eventName = ''),
-        (this.eventType = 'event'),
-        (this.eventDescription = ''),
-        (this.externalUrl = ''),
-        (this.hasTriedSubmit = false)
-      ;(this.eventDiscount = ''),
-        (this.eventPrice = 0),
-        (this.eventCapacity = 0),
-        (this.isFree = false),
-        (this.payment = null),
-        (this.status = null),
-        (this.startTime = ''),
-        (this.endTime = '')
+      this.eventDate = null,
+      this.selectedCategories = [],
+      this.selectedCategoriesByServices = [],
+      this.eventName = '',
+      this.eventType = 'event',
+      this.eventDescription = '',
+      this.externalUrl = '',
+      this.hasTriedSubmit = false,
+      this.eventDiscount = '',
+      this.eventCodePromo = '',
+      this.eventPrice = 0,
+      this.eventCapacity = 0,
+      this.isFree = false,
+      this.payment = null,
+      this.status = null,
+      this.startTime = '',
+      this.endTime = ''
     },
 
     async fetchEvents(lat, lng) {
@@ -323,7 +325,7 @@ export const useEventStore = defineStore('eventStore', {
       try {
         const eventData = this.getEventData()
 
-        if (this.eventType === 'promotion'  ) {
+        if (this.eventType === 'promotion') {
           delete eventData.payment
         }
 
@@ -456,6 +458,7 @@ export const useEventStore = defineStore('eventStore', {
         eventDescription: this.eventDescription,
         eventLocation: this.eventLocation,
         eventDiscount: this.eventDiscount,
+        eventCodePromo: this.eventCodePromo,
         eventPrice: this.isFree ? 0 : this.eventPrice,
         isFree: this.isFree,
         eventCapacity: this.eventCapacity,
@@ -611,7 +614,6 @@ export const useEventStore = defineStore('eventStore', {
       const hasCategoriesFilter = this.filters.categories.length > 0
       const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
-     
 
       return this.events.filter((event) => {
         // Validar usuario activo

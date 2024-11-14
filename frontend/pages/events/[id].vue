@@ -95,6 +95,16 @@
         <!-- <div v-if="evenType === 'event'" class="my-6">
           <TicketButton />
         </div> -->
+        <div v-if="event.eventCodePromo" class="flex flex-col gap-2">
+          <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
+          <div 
+            class="border-2 border-whiteGray rounded-md w-fit cursor-pointer hover:bg-primary-gradient hover:text-white hover:border-primary"
+            @click="copyCodePromo(event.eventCodePromo)"
+          >
+
+            <p class="text-whiteGrayfont-semibold p-2">{{ event.eventCodePromo.toUpperCase() }}</p>
+          </div>
+        </div>
         <div v-show="!isBasicPayment">
           <EventGallery />
         </div>
@@ -301,6 +311,17 @@ const copyToClipboard = async () => {
     await navigator.clipboard.writeText(window.location.href)
     toast({
       description: t('copyLink'),
+    })
+  } catch (err) {
+    console.error('Error al copiar el enlace: ', err)
+  }
+}
+
+const copyCodePromo = async (code) => {
+  try {
+    await navigator.clipboard.writeText(code)
+    toast({
+      description: t('copyCode'),
     })
   } catch (err) {
     console.error('Error al copiar el enlace: ', err)
