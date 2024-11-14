@@ -30,7 +30,6 @@ const EventSchema = new mongoose.Schema({
       enum: ['Point'],
       required: true,
       default: 'Point',
-
     },
     coordinates: {
       type: [Number],
@@ -47,7 +46,7 @@ const EventSchema = new mongoose.Schema({
     mapImageUrl: {
       type: String,
       required: true,
-    }
+    },
   },
   eventPrice: {
     type: Number,
@@ -74,6 +73,9 @@ const EventSchema = new mongoose.Schema({
     type: Array,
   },
   eventDiscount: {
+    type: String,
+  },
+  eventCodePromo: {
     type: String,
   },
   coverImage: {

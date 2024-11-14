@@ -10,6 +10,7 @@
   "updatedPerformance": "Próxima actuación actualizado correctamente",
   "errorPerformance": "Error actualizando la próxima actuación",
   "copyLink": "Enlace copiado correctamente al portapapeles",
+  "copyCode": "Código de descuento copiado correctamente",
   "deleteEventSuccess": "El evento se ha eliminado correctamente",
   "deletePromoSuccess": "La promoción se ha eliminado correctamente",
   "deleteUserSuccess": "El usuario se ha eliminado correctamente",

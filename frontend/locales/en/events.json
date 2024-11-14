@@ -31,6 +31,9 @@
   "eventLocationDescription": "Specify the exact location where your event will be held. This information will help attendees plan their visit in advance.",
   "eventPrice": "Price",
   "eventDiscount": "Type of discount",
+  "eventCodePromo": "Promo code",
+  "addEventCodePromo": "Do you want to add a promo code?",
+  "eventCodePromoPlaceholder": "Enter your promotional code",
   "eventServices": "Services",
   "eventTypeDiscount": {
     "free": "Free",
