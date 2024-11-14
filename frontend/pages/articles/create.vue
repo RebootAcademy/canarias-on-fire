@@ -41,6 +41,7 @@
 
 <script setup>
 const articleStore = useArticleStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 /* const article = ref({
@@ -61,7 +62,9 @@ const createArticle = async () => {
     content: articleStore.content,
     articleImages: articleStore.articleImages,
     coverImage: articleStore.coverImage,
+    userId: userStore.userData._id
   }
+
 
   if (articleData.coverImage === null && articleData.articleImages.length > 0) {
     articleData.coverImage = articleData.articleImages[0].url

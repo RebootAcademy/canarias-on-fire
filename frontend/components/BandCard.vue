@@ -1,20 +1,21 @@
 <template>
-<div class="flex flex-col gap-2 border border-whiteGray w-full rounded p-4 h-auto xs:min-h-[250px] sm:min-h-[270px] xl:min-h-[270px]" >
+<div class="flex flex-col gap-2 border border-whiteGray w-full rounded p-4 h-auto xs:min-h-[250px] sm:min-h-[322px] xl:min-h-[322px]" >
     <div class="flex justify-between">
         <p class="text-whiteGray text-2xl font-bold"> {{band.bandName }}</p>
         <p class="text-secondary italic text-sm">{{ band.genre }}</p>
     </div>
     <div class="flex flex-col gap-3">
-        <div class="flex flex-row gap-2 items-center text-secondary italic">
+        <div class="flex gap-2 items-center text-secondary italic w-full">
             <AtSign size="20"/>
-            <p>{{ band.email }}</p>
+            <p class="text-sm break-words w-full sm:w-[86%] md:w-[80%] lg:w-[90%] md:text-base ">{{ band.email }}</p>
         </div>
         <div v-if="props.band.socialMedia.instagram" class="flex flex-row gap-2 items-center text-secondary">
             <Instagram size="20"/>
-            <a :href="`https://www.instagram.com/${band.socialMedia.instagram}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
+            <a :href="`https://www.instagram.com/${band.socialMedia.instagram}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary break-words">
                 @{{ band?.socialMedia.instagram }}
             </a>    
         </div>
+
        <!--  <div v-if="props.band.socialMedia.facebook" class="flex flex-row gap-2 items-center text-white">
             <Facebook size="20"/>
             <a :href="`https://www.facebook.com/${band.socialMedia.facebook}`" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
@@ -29,8 +30,8 @@
         </div> -->
     </div>
     <div v-if="band.nextPerformance && isValidNextPerformance(band.nextPerformance)">
-        <p class="text-whiteGray mt-4">{{ $t('bandNextPerformance')}}</p>
-        <div class="flex flex-col gap-3 mt-2">
+        <p class="hidden md:block text-whiteGray mt-4">{{ $t('bandNextPerformance')}}</p>
+        <div class="hidden md:flex flex-col gap-3 mt-2">
             <div class="flex flex-row gap-2 items-center">
                 <Calendar size="20"/>
                 <p>{{ formattedDate(band.nextPerformance.date) }} - {{ band.nextPerformance.startTime }}</p>

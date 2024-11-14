@@ -5,12 +5,12 @@
         <h1 class="text-3xl font-bold mb-4">{{ article.title }}</h1>
         <div class="flex items-center mb-4">
           <Avatar
-            :src="article.userId?.avatar"
+            :src="article.userId?.profileImg ? article.userId?.profileImg : '/v_logo.png.png'"
             alt="Author Image"
             class="w-10 h-10 rounded-full mr-4"
           />
           <div>
-            <p class="font-semibold">{{ article.userId?.name }}</p>
+            <p class="font-semibold">{{ article.userId?.username }}</p>
             <p class="text-sm text-gray-600">
               {{ formattedDate(article.date) }}
             </p>
@@ -21,7 +21,7 @@
           class="w-full h-64 object-cover mb-6 rounded-lg"
           alt="Article Image"
         />
-        <div class="flex w-full justify-end">
+        <div class="flex w-full justify-end mb-4 ">
            <Share2
            class="mr-2 w-8 cursor-pointer hover:text-primary"
             @click="copyToClipboard"
@@ -43,7 +43,7 @@
       <div v-else class="text-center py-8">Loading article...</div>
      
     </div>
-    <ArticleSidebar :articles="otherArticles" />
+    <ArticleSidebar :articles="otherArticles" class="hidden md:block"/>
   </div>
   <CustomModal v-model:open="isOpen">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
@@ -78,9 +78,11 @@ const { article } = storeToRefs(articleStore)
 
 const articleId = route.params.id
 
+
 onMounted(
   async () => (article.value = await articleStore.fetchArticleById(articleId))
 )
+
 
 const otherArticles = computed(() => {
   return articleStore.articles.filter((a) => a._id !== articleId)

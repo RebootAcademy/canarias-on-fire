@@ -38,7 +38,7 @@ const getAllArticles = async (req, res) => {
 
 const getArticleById = async (req, res) => {
   try {
-    const article = await Article.findById(req.params.id)/* .populate('categories') */
+    const article = await Article.findById(req.params.id).populate('userId')
 
     if (!article) {
       return res.status(404).json({
