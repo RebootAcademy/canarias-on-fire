@@ -210,23 +210,23 @@ export const useEventStore = defineStore('eventStore', {
     resetCreateEventForm() {
       this.eventImages = []
       this.coverImage = null
-      this.eventDate = null,
-      this.selectedCategories = [],
-      this.selectedCategoriesByServices = [],
-      this.eventName = '',
-      this.eventType = 'event',
-      this.eventDescription = '',
-      this.externalUrl = '',
-      this.hasTriedSubmit = false,
-      this.eventDiscount = '',
-      this.eventCodePromo = '',
-      this.eventPrice = 0,
-      this.eventCapacity = 0,
-      this.isFree = false,
-      this.payment = null,
-      this.status = null,
-      this.startTime = '',
-      this.endTime = ''
+      ;(this.eventDate = null),
+        (this.selectedCategories = []),
+        (this.selectedCategoriesByServices = []),
+        (this.eventName = ''),
+        (this.eventType = 'event'),
+        (this.eventDescription = ''),
+        (this.externalUrl = ''),
+        (this.hasTriedSubmit = false),
+        (this.eventDiscount = ''),
+        (this.eventCodePromo = ''),
+        (this.eventPrice = 0),
+        (this.eventCapacity = 0),
+        (this.isFree = false),
+        (this.payment = null),
+        (this.status = null),
+        (this.startTime = ''),
+        (this.endTime = '')
     },
 
     async fetchEvents(lat, lng) {
@@ -238,8 +238,8 @@ export const useEventStore = defineStore('eventStore', {
           console.error('Error fetching events:', error.value)
           return { error: error.value }
         }
-
         this.events = data.value?.result || []
+
         return { data: this.events }
       } else {
         const { data, error } = await useFetch(
@@ -252,8 +252,8 @@ export const useEventStore = defineStore('eventStore', {
           console.error('Error fetching events:', error.value)
           return { error: error.value }
         }
-
         this.events = data.value?.result || []
+
         return { data: this.events }
       }
     },
@@ -447,6 +447,22 @@ export const useEventStore = defineStore('eventStore', {
       return { success: true }
     },
 
+    async deleteAllMyClosedEvents(id, type) {
+      const { data, error } = await useFetch(`/events/user/${id}/${type}`, {
+        method: 'DELETE',
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
+      })
+      if (error.value) {
+        console.error('Error deleting events:', error.value)
+        return { success: false, error: error.value }
+      }
+
+      if (data.value?.success) {
+        this.fetchEvents()
+        return { success: true }
+      }
+    },
+
     getEventData() {
       return {
         eventName: this.eventName,
@@ -615,9 +631,11 @@ export const useEventStore = defineStore('eventStore', {
       const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
 
-      return this.events.filter((event) => {
+      let result = this.events.filter((event, i) => {
         // Validar usuario activo
-        if (!event.userId?.isActive) return false
+        if (event.userId && !event.userId?.isActive) {
+          return false
+        }
 
         let endDate, eventDate
 
@@ -673,7 +691,7 @@ export const useEventStore = defineStore('eventStore', {
           if (
             !this.filters.categories.find((id) => eventCategoryIds.includes(id))
           ) {
-            return false
+            return falsefilterDiscount
           }
         }
 
@@ -692,7 +710,6 @@ export const useEventStore = defineStore('eventStore', {
             event.eventLocation.postalCode
           )
           if (!this.filters.islands.includes(eventIsland)) {
-            console.log('False island', eventIsland)
             return false
           }
         }
@@ -709,9 +726,9 @@ export const useEventStore = defineStore('eventStore', {
             return false
           }
         }
-
         return true
       })
+      return result
     },
 
     eventsCount() {

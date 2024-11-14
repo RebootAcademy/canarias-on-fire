@@ -6,6 +6,7 @@
       'max-w-[300px]': isRelatedPromo,
     }"
   >
+    <div v-if="promotion.status === 'closed'" class="bg-whiteGray/40 absolute inset-0 z-40"></div>
     <div
       class="absolute inset-0 rounded-lg border-primary border-[1px] shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
       :class="{
@@ -19,7 +20,7 @@
       <span
         v-show="userStore.userData && userStore.userData.role === 'admin'"
         :class="[
-          'absolute top-2 left-2 text-xs font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
+          'absolute top-2 left-2 text-xs z-50 font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
           { 'text-red-500 italic': promotion.status === 'draft' },
         ]"
       >
@@ -186,6 +187,7 @@ const props = defineProps({
   },
 })
 const isOpen = ref(false)
+const defaultImage = '/defaultImg.png'
 
 const userImage = computed(() => {
   if (props.promotion.userId?.profileImg) {
@@ -195,7 +197,6 @@ const userImage = computed(() => {
   }
 })
 
-const defaultImage = './defaultImg.png'
 import { formatEventDate } from '@/utils/dateUtils'
 
 const userStore = useUserStore()

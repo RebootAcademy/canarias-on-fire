@@ -16,10 +16,12 @@ useHead({
 })
 
 const userStore = useUserStore()
+const eventStore = useEventStore()
 const userRole = computed(() => userStore.userData?.role)
 
 onMounted(() => {
   userStore.fetchUsers()
+
 })
 
 </script>

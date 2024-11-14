@@ -73,10 +73,12 @@ const createPromotion = async (req, res) => {
         )
         return res.status(200).json({
           success: true,
-          message: 'Events successfully fetched.',
+          length: events.length,
+          message: 'Events successfully fetched without geoNear.',
           result: events,
         })
       }
+
 
       // Primero, obtenemos los eventos y calculamos la distancia
       const eventsWithDistance = await Event.aggregate([
@@ -87,7 +89,7 @@ const createPromotion = async (req, res) => {
               coordinates: [parseFloat(lat), parseFloat(lng)], // [lng, lat]
             },
             distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
-            maxDistance: 100000,
+            maxDistance: 100000000,
             spherical: true, // Considerar la Tierra como una esfera
           },
         },
@@ -105,6 +107,7 @@ const createPromotion = async (req, res) => {
 
       res.status(200).json({
         success: true,
+        length: populatedEvents.length,
         message: 'Eventos obtenidos con éxito.',
         result: populatedEvents,
       })
@@ -372,6 +375,24 @@ const deleteEvent = async (req, res) => {
   }
 }
 
+const deleteAllMyClosedEvents = async (req, res) => {
+  try {
+    const events = await Event.deleteMany({ userId: req.params.id, status: 'closed', eventType: req.params.type})
+    res.status(200).json({
+      success: true,
+      message: 'Events successfully deleted.',
+      result: events,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Error deleting events.',
+      description: error.message,
+    })
+  }
+}
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -382,4 +403,5 @@ module.exports = {
   updateEvent,
   updateEventByAdmin,
   deleteEvent,
+  deleteAllMyClosedEvents,
 }

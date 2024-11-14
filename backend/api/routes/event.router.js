@@ -10,7 +10,8 @@ const {
   searchNearbyEvents,
   updateEvent,
   deleteEvent,
-  updateEventByAdmin
+  updateEventByAdmin,
+  deleteAllMyClosedEvents
 } = require('../controllers/event.controller')
 
 router
@@ -26,6 +27,7 @@ router
   )
   .patch('/admin/:id', /* isAuth, checkRole('admin'), */ updateEventByAdmin)
   .patch('/:id', /* isAuth, checkRole('admin', 'company'), */ updateEvent)
+  .delete('/user/:id/:type', deleteAllMyClosedEvents)
   .delete('/:id', /* isAuth, checkRole('admin', 'company'), */ deleteEvent)
 
 module.exports = router

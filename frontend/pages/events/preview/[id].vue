@@ -23,11 +23,11 @@
   <div class="px-8">
     <h1 class="text-4xl font-bold">{{ eventStore.eventName }}</h1>
     <div class="flex items-center gap-4 mt-4 text-gray-600">
-      <div class="flex items-center gap-1">
+      <div v-if="eventStore.eventDate" class="flex items-center gap-1">
         <i class="far fa-calendar-alt"></i>
         <span>{{ new Date(eventStore.eventDate).toLocaleDateString() }}</span>
       </div>
-      <div class="flex items-center gap-1">
+      <div v-if="eventStore.startTime" class="flex items-center gap-1">
         <i class="far fa-clock"></i>
         <span>{{ eventStore.startTime }} - {{ eventStore.endTime }}</span>
       </div>

@@ -93,12 +93,23 @@
       </div>
     </div>
     <hr class="mb-8 border-1 border-black w-full" />
+    <div v-if="myEvents.filter((event) => event.status === 'closed').length > 0" class="w-full flex justify-end mb-4">
+      <Button
+        class="bg-red-500 hover:bg-red-700 text-white"
+        @click="tryToDelete = true"
+        >
+        {{ $t('buttons.deleteAll') }}
+      </Button>
+    </div>
 
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
     >
       <EventCard v-for="event in myEvents" :key="event._id" :event="event" />
     </div>
+    <CustomModal v-model:open="tryToDelete">
+      <ConfirmModalClosedEvent @close="tryToDelete = false" type="event" @update:open="tryToDelete = $event" />
+    </CustomModal>
     <p v-if="myEvents.length === 0" class="text-gray-500 mt-4">
       {{ $t('notEventsFound') }}
     </p>
@@ -106,13 +117,13 @@
 </template>
 
 <script setup>
-import CustomSelect from '../../components/CustomSelect.vue'
 const { t } = useI18n()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userData?.role)
 const selectOption = ref('all')
+const tryToDelete = ref(false)
 
 definePageMeta({
   layout: 'dashboard',

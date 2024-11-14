@@ -8,5 +8,7 @@
   "changeMyProfile": "Please confirm that you want to make changes in your profile. Make sure you really want to proceed with this action.",
   "deleteEvent": "Please confirm that you want to delete this event? Make sure you really want to proceed with this action.",
   "deletePromo": "Please confirm that you want to delete this promotion? Make sure you really want to proceed with this action.",
-  "deleteArticle": "Please confirm that you want to delete this article? Make sure you really want to proceed with this action."
+  "deleteArticle": "Please confirm that you want to delete this article? Make sure you really want to proceed with this action.",
+  "deleteAllEventClosed": "Please confirm that you want to delete all events closed? Make sure you really want to proceed with this action.",
+  "deleteAllPromotionClosed": "Please confirm that you want to delete all promotion closed? Make sure you really want to proceed with this action."
 }  

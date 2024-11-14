@@ -1,32 +1,33 @@
 <template>
   <div class="flex flex-col gap-4 items-center bg-background">
     <div
-      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 "
+      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4"
     >
       <div
-        class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2 "
+        class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2"
       >
-          <div
-            v-for="option in optionsFilters"
-            :key="option.label"
-            class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
+        <div
+          v-for="option in optionsFilters"
+          :key="option.label"
+          class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
+          :class="
+            selectOption === option.value
+              ? 'bg-black p-2  hover:bg-none'
+              : 'hover:bg-zinc-800 p-2'
+          "
+          @click="selectOption = option.value"
+        >
+          <span
+            class="text-center w-full"
             :class="
               selectOption === option.value
-                ?  'bg-black p-2  hover:bg-none' : 'hover:bg-zinc-800 p-2'
+                ? 'font-bold text-white'
+                : 'text-whiteGray'
             "
-            @click="selectOption = option.value"
+            >{{ option.value }}</span
           >
-            <span
-              class="text-center w-full"
-              :class="
-                selectOption === option.value
-                  ? 'font-bold text-white'
-                  : 'text-whiteGray'
-              "
-              >{{ option.value }}</span
-            >
-          </div>
-       <!--  <div class="flex gap-2 items-center">
+        </div>
+        <!--  <div class="flex gap-2 items-center">
           <CustomSelect
             :items="eventDiscounts"
             :placeholder="selectedPromotion"
@@ -35,14 +36,21 @@
           />
         </div> -->
       </div>
-            <div class="flex items-center justify-end gap-4 sm:w-1/2  lg:w-auto">
-
-              <SearchInput v-model="searchQuery" />
-              <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-            </div>
-      <FilterModal type="promotion"/>
+      <div class="flex items-center justify-end gap-4 sm:w-1/2 lg:w-auto">
+        <SearchInput v-model="searchQuery" />
+        <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
+      </div>
+      <FilterModal type="promotion" />
     </div>
     <hr class="mb-4 border-1 border-black w-full" />
+    <div v-if="limitedPromotions.filter((promotion) => promotion.status === 'closed').length > 0 && userRole !== 'admin'" class="w-full flex justify-end mb-4 md:mb-0">
+      <Button
+        class="bg-red-500 hover:bg-red-700 text-white"
+        @click="tryToDelete = true"
+        >
+        {{ $t('buttons.deleteAll') }}
+      </Button>
+    </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
     >
@@ -51,6 +59,9 @@
         :key="promotion._id"
         :promotion="promotion"
       />
+      <CustomModal v-model:open="tryToDelete">
+      <ConfirmModalClosedEvent @close="tryToDelete = false" type="promotion" @update:open="tryToDelete = $event" />
+    </CustomModal>
       <p v-if="limitedPromotions.length === 0" class="text-gray-500 mt-4">
         {{ $t('notEventsFound') }}
       </p>
@@ -76,6 +87,8 @@ const eventStore = useEventStore()
 const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
 const userData = computed(() => userStore.userData)
+const tryToDelete = ref(false)
+
 
 const userRole = computed(() => userStore.userData?.role)
 
@@ -113,10 +126,9 @@ const openFilterModal = () => {
 
 const limitedPromotions = computed(() => {
   let filterDiscount
-   
+
   if (selectedPromotion.value === 'all') {
     filterDiscount = filteredEvents.value
-
   } else {
     filterDiscount = filteredEvents.value.filter(
       (event) => event.eventDiscount === selectedPromotion.value
@@ -135,11 +147,7 @@ const limitedPromotions = computed(() => {
   }
 
   const filterSecond = filterDiscount
-    .filter(
-      (promotion) =>
-        promotion.eventType === 'promotion' &&
-        promotion.userId?.isActive 
-    )
+    .filter((promotion) => promotion.eventType === 'promotion')
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)
       const priorityB = getPromoPriority(b)
@@ -149,7 +157,7 @@ const limitedPromotions = computed(() => {
       }
       return compareDates(a.eventDate, b.eventDate)
     })
-    return filterSecond
+  return filterSecond
 })
 
 function getPromoPriority(promotion) {

@@ -141,7 +141,8 @@
     "create": "Crear",
     "manage": "Administrar",
     "searchLocals": "Buscar cerca de mí",
-    "download": "Descargar"
+    "download": "Descargar",
+    "deleteAll": "Borrar los finalizados"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",

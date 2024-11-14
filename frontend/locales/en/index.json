@@ -141,7 +141,8 @@
     "confirm": "Confirm",
     "manage": "Manage",
     "searchLocals": "Search near me",
-    "download": "Donwload"
+    "download": "Donwload",
+    "deleteAll": "Delete all finished"
   },
   "successView": {
     "paymentTitle": "Your payment has been successful completed",

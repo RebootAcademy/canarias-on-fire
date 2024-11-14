@@ -43,7 +43,7 @@
             <h2 class="text-2xl font-semibold mt-4">
               {{ $t('previewText.dateAndTime') }}
             </h2>
-            <div class="flex items-center gap-1">
+            <div v-if="event.startTime" class="flex items-center gap-1">
               <Clock size="16" />
               <span>{{ event.startTime }} - {{ event.endTime }}</span>
             </div>

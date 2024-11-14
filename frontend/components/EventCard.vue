@@ -8,6 +8,8 @@
       'max-w-[300px]': isRelatedEvent,
     }"
   >
+      <div v-if="event.status === 'closed'" class="bg-whiteGray/40 absolute inset-0 z-40"></div>
+
     <div
       class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
       :class="{
@@ -117,7 +119,7 @@
             >
               {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
             </p>
-            <p v-if="!nearby">{{ event.dist.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
+            <p v-if="!nearby">{{ event?.dist?.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
           </div>
         </div>
       </NuxtLink>
