@@ -19,20 +19,24 @@
     class="flex flex-col gap-2"
   >
     <h1 class="text-xl font-bold">Price</h1>
-    <div class="flex items-center gap-1">
+    <div class="flex items-center gap-1 font-bold">
       <Tag size="14" class="transform -scale-x-100" />
-      <p>{{ eventStore.event.eventPrice }} € per person</p>
+      <p>{{ eventStore.event.eventPrice }} € {{ $t('price.person')}}</p>
+    </div>
+    <div class="flex items-center gap-1">
+      <Info size="14" class="transform -scale-x-100" />
+      <p class="italic">{{ $t('price.manageCost')}}</p>
     </div>
     
-    <NuxtLink :to="eventStore.event.externalUrl" target="_blank">
+ <!--    <NuxtLink :to="eventStore.event.externalUrl" target="_blank">
       <Button class="bg-primary-gradient">Buy now</Button>
-    </NuxtLink>
+    </NuxtLink> -->
   </div>
 
 </template>
 
 <script setup>
-import { Tag } from 'lucide-vue-next'
+import { Tag, Info } from 'lucide-vue-next'
 const eventStore = useEventStore()
 
 const props = defineProps({

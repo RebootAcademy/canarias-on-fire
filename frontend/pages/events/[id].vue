@@ -92,9 +92,9 @@
         <h2 class="text-xl font-semibold">Organizador</h2>
         <p>{{ event.userId?.companyName }}</p>
       </div> -->
-        <!-- <div v-if="evenType === 'event'" class="my-6">
+        <div v-if="event.eventPrice" class="my-6">
           <TicketButton />
-        </div> -->
+        </div> 
         <div v-if="event.eventCodePromo" class="flex flex-col gap-2">
           <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
           <div 

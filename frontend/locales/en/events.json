@@ -153,5 +153,9 @@
       "40km": "40 km",
       "50km": "50 km"
     }
+  },
+  "price": {
+    "person": "per person",
+    "manageCost": "Management fees, if any, are not included."
   }
 }
