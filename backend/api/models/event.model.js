@@ -33,7 +33,7 @@ const EventSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      required: true,
+      // required: true,
     },
     address: {
       type: String,
@@ -45,7 +45,7 @@ const EventSchema = new mongoose.Schema({
     },
     mapImageUrl: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   eventPrice: {

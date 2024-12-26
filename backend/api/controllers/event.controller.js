@@ -393,6 +393,77 @@ const deleteAllMyClosedEvents = async (req, res) => {
   }
 }
 
+const checkExistence = async (event) => {
+  try {
+    const exists = await Event.findOne({
+      eventName: { $regex: event.title, $options: 'i' }, //Check if title in DB includes incoming title
+    })
+  
+    return exists
+  } catch (error) {
+    console.log('Error checking event existence')
+    console.error(error)
+  }
+}
+
+const saveScrapedEvent = async (event) => {
+  try {
+    console.log(event)
+    const exists = await checkExistence(event)
+
+    if (exists) {
+      console.log('Duplicate event found:', event)
+      return
+    }
+
+    await Event.create({
+      categories: [ event.category ], //METER RELACIÓN
+      eventName: event.title,
+      eventType: 'event',
+      eventDate: {
+        calendar: {
+          type: 'gregory'
+        },
+        era: 'AD',
+        year: event.year,
+        month: event.month,
+        day: event.startDay
+      },
+      eventEndDate: event.lastDay ? 
+      {
+        calendar: {
+          type: 'gregory'
+        },
+        era: 'AD',
+        year: event.year,
+        month: event.month,
+        day: event.lastDay
+      } :
+      null,
+      eventLocation: {
+        address: event.location,
+      },
+      startTime: event.time,
+      eventDescription: event.description,
+      externalUrl: event.link,
+      coverImage: event.imgUrl
+    })
+    console.log('Event added:', event)
+    return {
+      success: true,
+      message: 'Event added successfully',
+      event
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: 'Error creating scrapped event.',
+      description: error.message
+    }
+  }
+}
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -404,4 +475,5 @@ module.exports = {
   updateEventByAdmin,
   deleteEvent,
   deleteAllMyClosedEvents,
+  saveScrapedEvent
 }
