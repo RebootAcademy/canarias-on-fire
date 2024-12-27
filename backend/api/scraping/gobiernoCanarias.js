@@ -1,12 +1,14 @@
 require('dotenv').config()
 
+const connectDB = require('../config/db')
+
 const Scraper = require('./scraper')
 
 const { 
   saveScrapedEvent 
 } = require('../controllers/event.controller')
 
-const getPostalCode = require('../services/geolocation')
+const getLocationData= require('../services/geolocation')
 
 const gobCanScraper = new Scraper()
 let page = 1
@@ -34,7 +36,6 @@ const handleDate = (date) => {
     startDay = days[0]
   }
   time = time.slice(0, time[2] === ':' ? 5 : 4)
-  console.log(time)
   return {
     startDay,
     lastDay,
@@ -66,50 +67,55 @@ const checkCategory = (cat) => {
   }
 }
 
+
 gobCanScraper.addParser(
   gobCanUrl,
-  (page) => {
+  async (page) => {
     try {
-      const events = []
-      page('.collection-item-2').each(async (index, element) => {
-        const eventType = page(element).find('[fs-cmsfilter-field="categoria"]').text().trim()
-        const title = page(element).find('.titulo-espectaculo').text().trim()
-        const description = page(element).find('.texto').text().trim()
-        const date = page(element).find('[fs-cmsfilter-type="date"]')
-        const imgUrl = page(element).find('img._00-imagen-agenda').attr('src')
-        const location = page(element).find('[fs-cmsfilter-field="lugar"]').text().trim()
-        const island = page(element).find('[fs-cmsfilter-field="isla"]').text().trim()
-        const link = page(element).find('.info.w-inline-block').attr('href')
+      const events = await Promise.all(
+        page('.collection-item-2').map(async (index, element) => {
+          const eventType = page(element).find('[fs-cmsfilter-field="categoria"]').text().trim()
+          const title = page(element).find('.titulo-espectaculo').text().trim()
+          const description = page(element).find('.texto').text().trim()
+          const date = page(element).find('[fs-cmsfilter-type="date"]')
+          const imgUrl = page(element).find('img._00-imagen-agenda').attr('src')
+          const location = page(element).find('[fs-cmsfilter-field="lugar"]').text().trim()
+          const island = page(element).find('[fs-cmsfilter-field="isla"]').text().trim()
+          const link = page(element).find('.info.w-inline-block').attr('href')
 
-        const {
-          startDay,
-          month,
-          year,
-          time,
-          lastDay
-        } = handleDate(date)
+          const {
+            startDay,
+            month,
+            year,
+            time,
+            lastDay,
+          } = handleDate(date)
 
-        const category = checkCategory(eventType)
+          const category = checkCategory(eventType)
+          const {
+            postalCode,
+            coordinates
+          } = await getLocationData(location)
 
-        const postalCode = await getPostalCode(location)
-        console.log(postalCode)
+          return {
+            title,
+            category,
+            year,
+            month,
+            startDay,
+            lastDay,
+            time,
+            description,
+            location,
+            postalCode,
+            coordinates,
+            imgUrl,
+            link,
+            island,
+          }
+        }).get() // Cheerio's .map needs .get() to convert the iterator to an array
+      )
 
-        events.push({ 
-          title, 
-          category,
-          year,
-          month,
-          startDay,
-          lastDay,
-          time,
-          description, 
-          location,
-          postalCode,
-          imgUrl, 
-          link, 
-          island 
-        })
-      })
       return events
     } catch (error) {
       console.log(`Error scraping web: ${gobCanUrl}`)
@@ -121,6 +127,7 @@ gobCanScraper.addParser(
 const scrapePage = async () => {
   console.log(`page: ${page}`)
   try {
+    await connectDB()
     const result = await gobCanScraper.scrape(
       gobCanUrl,
       `?0b477641_page=${page}`

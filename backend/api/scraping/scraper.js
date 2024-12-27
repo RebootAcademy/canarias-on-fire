@@ -25,10 +25,9 @@ class Scraper {
       throw new Error(`No parser found for domain: ${url}`)
     }
 
-    const page = await this.fetchHTML(query ? 
-      `${url}${query}` 
-      : url
-    )
+    const fullUrl = query ? `${url}${query}` : url
+    const page = await this.fetchHTML(fullUrl)
+    console.log(this.parsers)
     return this.parsers[url](page)
   }
 }

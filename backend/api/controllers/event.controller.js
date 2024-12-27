@@ -442,6 +442,7 @@ const saveScrapedEvent = async (event) => {
       null,
       eventLocation: {
         address: event.location,
+        coordinates: event.coordinates
       },
       startTime: event.time,
       eventDescription: event.description,

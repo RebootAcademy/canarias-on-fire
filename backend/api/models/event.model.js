@@ -28,8 +28,7 @@ const EventSchema = new mongoose.Schema({
     type: {
       type: String,
       enum: ['Point'],
-      required: true,
-      default: 'Point',
+      default: 'Point'
     },
     coordinates: {
       type: [Number],
