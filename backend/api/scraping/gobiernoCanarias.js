@@ -2,14 +2,18 @@ require('dotenv').config()
 
 const Scraper = require('./scraper')
 
-const { saveScrapedEvent } = require('../controllers/event.controller')
+const { 
+  saveScrapedEvent 
+} = require('../controllers/event.controller')
+
+const getPostalCode = require('../services/geolocation')
 
 const gobCanScraper = new Scraper()
+let page = 1
 
 const gobCanUrl = process.env.GOB_CAN_URL
 
 const handleDate = (date) => {
-  console.log(date.toArray())
   let [datePart, time] = date.text().trim().split(' ')
   let [startDay, month, year] = datePart.split('/')
   let lastDay
@@ -29,6 +33,8 @@ const handleDate = (date) => {
     lastDay = startDay
     startDay = days[0]
   }
+  time = time.slice(0, time[2] === ':' ? 5 : 4)
+  console.log(time)
   return {
     startDay,
     lastDay,
@@ -65,11 +71,11 @@ gobCanScraper.addParser(
   (page) => {
     try {
       const events = []
-      page('.collection-item-2').each((index, element) => {
+      page('.collection-item-2').each(async (index, element) => {
         const eventType = page(element).find('[fs-cmsfilter-field="categoria"]').text().trim()
         const title = page(element).find('.titulo-espectaculo').text().trim()
         const description = page(element).find('.texto').text().trim()
-        const date = page(element).find('[fs-cmssort-type="date"]')
+        const date = page(element).find('[fs-cmsfilter-type="date"]')
         const imgUrl = page(element).find('img._00-imagen-agenda').attr('src')
         const location = page(element).find('[fs-cmsfilter-field="lugar"]').text().trim()
         const island = page(element).find('[fs-cmsfilter-field="isla"]').text().trim()
@@ -85,6 +91,9 @@ gobCanScraper.addParser(
 
         const category = checkCategory(eventType)
 
+        const postalCode = await getPostalCode(location)
+        console.log(postalCode)
+
         events.push({ 
           title, 
           category,
@@ -94,7 +103,8 @@ gobCanScraper.addParser(
           lastDay,
           time,
           description, 
-          location, 
+          location,
+          postalCode,
           imgUrl, 
           link, 
           island 
@@ -102,28 +112,45 @@ gobCanScraper.addParser(
       })
       return events
     } catch (error) {
-      console.log(`Error scraping web: ${process.env.GOB_CAN_URL}`)
+      console.log(`Error scraping web: ${gobCanUrl}`)
       console.error(error)
     }
   }
 )
 
-const doTheThing = async () => {
-  const result = await gobCanScraper.scrape(gobCanUrl)
-  if (!result) {
-    console.log('No events found')
-  } else {
-    console.log('creting events')
-    await Promise.all(result.map(async (event) => {
+const scrapePage = async () => {
+  console.log(`page: ${page}`)
+  try {
+    const result = await gobCanScraper.scrape(
+      gobCanUrl,
+      `?0b477641_page=${page}`
+    )
+
+    if (!result || result.length === 0) {
+      console.log('No events found')
+      return
+    }
+
+    console.log('creating events')
+    for (const event of result) {
       try {
-        await saveScrapedEvent(event)
+        const result = await saveScrapedEvent(event)
+        if (result === 'duplicated') {
+          console.log('No more new events. Stopping...')
+          break // Exit the loop
+        }
         console.log(`Event saved: ${event.title}`)
       } catch (error) {
         console.error(`Failed to save event: ${event.title}`, error)
       }
-    }))
+    }
     console.log('All events saved')
+    page++
+
+    setTimeout(scrapePage, 5000)
+  } catch (error) {
+    console.error(`Error while scraping page ${page}:`, error)
   }
 }
 
-doTheThing()
+scrapePage()

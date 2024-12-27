@@ -402,7 +402,7 @@ const checkExistence = async (event) => {
     return exists
   } catch (error) {
     console.log('Error checking event existence')
-    console.error(error)
+    throw Error (error)
   }
 }
 
@@ -413,11 +413,11 @@ const saveScrapedEvent = async (event) => {
 
     if (exists) {
       console.log('Duplicate event found:', event)
-      return
+      return 'duplicated'
     }
 
     await Event.create({
-      categories: [ event.category ], //METER RELACIÓN
+      categories: [ event.category ],
       eventName: event.title,
       eventType: 'event',
       eventDate: {

@@ -20,12 +20,15 @@ class Scraper {
     }
   }
 
-  async scrape(url) {
+  async scrape(url, query) {
     if (!this.parsers[url]) {
       throw new Error(`No parser found for domain: ${url}`)
     }
 
-    const page = await this.fetchHTML(url)
+    const page = await this.fetchHTML(query ? 
+      `${url}${query}` 
+      : url
+    )
     return this.parsers[url](page)
   }
 }
