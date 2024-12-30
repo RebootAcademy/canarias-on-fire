@@ -94,7 +94,8 @@ gobCanScraper.addParser(
           const category = checkCategory(eventType)
           const {
             postalCode,
-            coordinates
+            coordinates,
+            mapImageUrl
           } = await getLocationData(location)
 
           return {
@@ -109,9 +110,11 @@ gobCanScraper.addParser(
             location,
             postalCode,
             coordinates,
+            mapImageUrl,
             imgUrl,
             link,
             island,
+            userId: process.env.ADMIN_ID
           }
         }).get() // Cheerio's .map needs .get() to convert the iterator to an array
       )
@@ -143,8 +146,9 @@ const scrapePage = async () => {
       try {
         const result = await saveScrapedEvent(event)
         if (result === 'duplicated') {
-          console.log('No more new events. Stopping...')
-          break // Exit the loop
+          // console.log('No more new events. Stopping...')
+          // break // Exit the loop
+          console.log(`Duplicated event: ${event.title}`)
         }
         console.log(`Event saved: ${event.title}`)
       } catch (error) {

@@ -18,17 +18,19 @@ async function getLocationData(address) {
 
       // Extract coordinates
       const { lat, lng } = results[0].geometry.location
-
+      const mapImageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red|${lat},${lng}&key=${apiKey}`
       return {
         postalCode: postalCode
           ? postalCode.long_name
           : 'Código postal no encontrado',
-        coordinates: [lng, lat], // Format as [longitude, latitude]
+        coordinates: [lat, lng],
+        mapImageUrl
       }
     } else {
       return {
         postalCode: 'Sin resultados',
         coordinates: null,
+        mapImageUrl: null
       }
     }
   } catch (error) {

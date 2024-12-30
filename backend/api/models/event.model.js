@@ -117,6 +117,10 @@ const EventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'subscription',
   },
+  externalSource: {
+    type: Boolean,
+    default: false
+  }
 })
 EventSchema.index({ eventLocation: '2dsphere' })
 

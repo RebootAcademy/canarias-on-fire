@@ -34,7 +34,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
-
+  console.log(eventStore.radioLocation)
   return eventsByDate.value
     ?.filter(event => 
       event.status === 'published'
@@ -55,7 +55,7 @@ const limitedEvents = computed(() => {
 })
 
 function getEventPriority(event) {
-  const paymentId = event.type === 'event' ? event.payment._id : event.payment
+  const paymentId = event.type === 'event' ? event.payment?._id : event.payment
   const payment = paymentStore.getPaymentById(paymentId?._id)
   return payment?.features?.readPriority
 }

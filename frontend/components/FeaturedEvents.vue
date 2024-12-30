@@ -43,12 +43,14 @@ const today = new Date()
 
 const premiumEvents = ref([])
 /* const somePremium = eventStore?.events.filter((event) => event?.payment?.name === 'optima plus' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today ) */
+
 watchEffect(() => {
   if (eventStore.events) {
     premiumEvents.value = eventStore?.events.filter(
       (event) =>
+        !event.externalSource && 
         event?.payment?.name === 'optima plus' &&
-        new Date(
+        (new Date(
           event.eventDate.year,
           event.eventDate.month - 1,
           event.eventDate.day
@@ -56,10 +58,11 @@ watchEffect(() => {
           event.eventEndDate?.year,
           event.eventEndDate?.month - 1,
           event.eventEndDate?.day
-        ) >= today
+        ) >= today)
     )
   }
   return premiumEvents
 })
+
 </script>
 

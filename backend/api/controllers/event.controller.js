@@ -417,37 +417,41 @@ const saveScrapedEvent = async (event) => {
     }
 
     await Event.create({
-      categories: [ event.category ],
+      categories: [event.category],
       eventName: event.title,
       eventType: 'event',
       eventDate: {
         calendar: {
-          type: 'gregory'
+          type: 'gregory',
         },
         era: 'AD',
         year: event.year,
         month: event.month,
-        day: event.startDay
+        day: event.startDay,
       },
-      eventEndDate: event.lastDay ? 
-      {
-        calendar: {
-          type: 'gregory'
-        },
-        era: 'AD',
-        year: event.year,
-        month: event.month,
-        day: event.lastDay
-      } :
-      null,
+      eventEndDate: event.lastDay
+        ? {
+            calendar: {
+              type: 'gregory',
+            },
+            era: 'AD',
+            year: event.year,
+            month: event.month,
+            day: event.lastDay,
+          }
+        : null,
       eventLocation: {
         address: event.location,
-        coordinates: event.coordinates
+        coordinates: event.coordinates,
+        mapImageUrl: event.mapImageUrl,
       },
       startTime: event.time,
       eventDescription: event.description,
       externalUrl: event.link,
-      coverImage: event.imgUrl
+      coverImage: event.imgUrl,
+      externalSource: true,
+      status: 'published',
+      userId: event.userId,
     })
     console.log('Event added:', event)
     return {
@@ -465,6 +469,20 @@ const saveScrapedEvent = async (event) => {
   }
 }
 
+const cleanDB = async (month) => {
+  try {
+    await Event.deleteMany({ 'eventDate.month': month })
+    console.log('cleaned')
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: 'Error deleting events.',
+      description: error.message,
+    }
+  }
+}
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -476,5 +494,6 @@ module.exports = {
   updateEventByAdmin,
   deleteEvent,
   deleteAllMyClosedEvents,
-  saveScrapedEvent
+  saveScrapedEvent,
+  cleanDB
 }
