@@ -441,6 +441,7 @@ const saveScrapedEvent = async (event) => {
           }
         : null,
       eventLocation: event.location ? {
+        postalCode: event.postalCode,
         address: event.location,
         coordinates: event.coordinates,
         mapImageUrl: event.mapImageUrl,
