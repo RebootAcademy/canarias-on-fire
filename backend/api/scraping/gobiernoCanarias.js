@@ -132,7 +132,7 @@ gobCanScraper.addParser(
 const scrapeGobCanarias = async () => {
   console.log(`page: ${page}`)
   try {
-    await connectDB()
+    // await connectDB()
     const result = await gobCanScraper.scrape(
       gobCanUrl,
       `?0b477641_page=${page}`

@@ -152,7 +152,7 @@ aytoLpScraper.addParser(aytoLpUrl, async (page) => {
 
 const scrapeAytoLasPalmas = async () => {
   try {
-    await connectDB()
+    // await connectDB()
     const result = await aytoLpScraper.scrape(
       aytoLpUrl,
       ``

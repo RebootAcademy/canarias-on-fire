@@ -130,7 +130,7 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
 
 const scrapeAytoTenerife = async () => {
   try {
-    await connectDB()
+    // await connectDB()
     const result = await aytoTfScraper.scrape(
       aytoTfUrl,
       ``
