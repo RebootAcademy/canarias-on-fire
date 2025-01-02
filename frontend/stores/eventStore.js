@@ -691,7 +691,7 @@ export const useEventStore = defineStore('eventStore', {
           if (
             !this.filters.categories.find((id) => eventCategoryIds.includes(id))
           ) {
-            return falsefilterDiscount
+            return false
           }
         }
 
