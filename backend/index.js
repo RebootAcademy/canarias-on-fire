@@ -5,13 +5,18 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const cron = require('node-cron')
+
 const dbConnect = require('./api/config/db')
 const stripeWebhookRouter = require('./api/routes/stripeWebhook.router.js')
 
-const cron = require('node-cron')
 const {
   updateExpiredSubscriptions,
 } = require('./api/services/subscriptionService')
+
+const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
+const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
+const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 
 mongoose.set('strictPopulate', false)
 
@@ -59,6 +64,21 @@ app.listen(process.env.PORT, async (error) => {
 cron.schedule('0 0 * * *', () => {
   console.log('Running subscription expiration check')
   updateExpiredSubscriptions()
+})
+
+cron.schedule('0 9 * * 1', () => {
+  console.log('Checking Gobierno de Canarias Events')
+  scrapeGobCanarias()
+})
+
+cron.schedule('0 11 * * 1', () => {
+  console.log('Checking Ayuntamiento de Las Palmas Events')
+  scrapeAytoLasPalmas()
+})
+
+cron.schedule('0 13 * * 1', () => {
+  console.log('Checking Ayuntamiento de Tenerife Events')
+  scrapeAytoTenerife()
 })
 
 module.exports = app

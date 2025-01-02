@@ -182,4 +182,5 @@ const scrapeAytoLasPalmas = async () => {
     console.error(`Error while scraping:`, error)
   }
 }
-scrapeAytoLasPalmas()
+
+module.exports = scrapeAytoLasPalmas

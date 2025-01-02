@@ -160,4 +160,5 @@ const scrapeAytoTenerife = async () => {
     console.error(`Error while scraping:`, error)
   }
 }
-scrapeAytoTenerife()
+
+module.exports = scrapeAytoTenerife

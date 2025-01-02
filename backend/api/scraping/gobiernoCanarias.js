@@ -129,7 +129,7 @@ gobCanScraper.addParser(
   }
 )
 
-const scrapePage = async () => {
+const scrapeGobCanarias = async () => {
   console.log(`page: ${page}`)
   try {
     await connectDB()
@@ -166,4 +166,4 @@ const scrapePage = async () => {
   }
 }
 
-scrapePage()
+module.exports = scrapeGobCanarias
