@@ -35,8 +35,7 @@ const EventSchema = new mongoose.Schema({
       // required: true,
     },
     address: {
-      type: String,
-      required: true,
+      type: String
     },
     postalCode: {
       type: Number,

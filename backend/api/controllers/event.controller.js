@@ -440,11 +440,11 @@ const saveScrapedEvent = async (event) => {
             day: event.lastDay,
           }
         : null,
-      eventLocation: {
+      eventLocation: event.location ? {
         address: event.location,
         coordinates: event.coordinates,
         mapImageUrl: event.mapImageUrl,
-      },
+      } : null,
       startTime: event.time,
       eventDescription: event.description,
       externalUrl: event.link,
