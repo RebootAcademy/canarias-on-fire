@@ -96,13 +96,15 @@ gobCanScraper.addParser(
             postalCode,
             coordinates,
             mapImageUrl
-          } = await getLocationData(location)
+          } = await getLocationData(location, island)
 
           return {
             title,
-            category,
-            year,
-            month,
+            category: [category],
+            startYear: year,
+            lastYear: year,
+            startMonth: month,
+            lastMonth: month,
             startDay,
             lastDay,
             time,

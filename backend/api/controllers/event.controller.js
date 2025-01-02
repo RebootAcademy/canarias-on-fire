@@ -417,7 +417,7 @@ const saveScrapedEvent = async (event) => {
     }
 
     await Event.create({
-      categories: [event.category],
+      categories: event.category,
       eventName: event.title,
       eventType: 'event',
       eventDate: {
@@ -425,8 +425,8 @@ const saveScrapedEvent = async (event) => {
           type: 'gregory',
         },
         era: 'AD',
-        year: event.year,
-        month: event.month,
+        year: event.startYear,
+        month: event.startMonth,
         day: event.startDay,
       },
       eventEndDate: event.lastDay
@@ -435,8 +435,8 @@ const saveScrapedEvent = async (event) => {
               type: 'gregory',
             },
             era: 'AD',
-            year: event.year,
-            month: event.month,
+            year: event.lastYear,
+            month: event.lastMonth,
             day: event.lastDay,
           }
         : null,
