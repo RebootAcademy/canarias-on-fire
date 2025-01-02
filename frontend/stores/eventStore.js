@@ -647,7 +647,7 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate?.day
           )
 
-          const [hours, minutes] = event.startTime.split(':').map(Number)
+          const [hours, minutes] = event.startTime ? event.startTime.split(':').map(Number) : [ null, null ]
 
           endDate = event.eventEndDate
             ? new Date(

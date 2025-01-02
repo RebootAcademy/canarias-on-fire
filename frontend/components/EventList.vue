@@ -34,7 +34,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
-  console.log(eventStore.radioLocation)
+
   return eventsByDate.value
     ?.filter(event => 
       event.status === 'published'
