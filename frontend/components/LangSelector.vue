@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="localeReady">
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
@@ -54,6 +54,7 @@ const languages = computed(() => [
 ])
 
 const getFlagSrc = (code) => {
+  console.log(code)
   return languages.value.find((lang) => lang.code === code)?.flag || 'espana.png'
 }
 
