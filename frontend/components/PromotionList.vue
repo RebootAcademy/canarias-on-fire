@@ -60,7 +60,9 @@ const limitedPromotions = computed(() => {
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
-      a.dist.calculated - b.dist.calculated
+      if (userStore.acceptedGeolocation) {
+        a.dist?.calculated - b.dist?.calculated
+      }
       numOfPromotions.value = filteredPromotions.length
        return compareDates(a.eventDate, b.eventDate) 
      
@@ -70,7 +72,7 @@ const limitedPromotions = computed(() => {
 })
 
 function getPromoPriority(promotion) {
-  const subscriptionName = promotion.subscription.name
+  const subscriptionName = promotion.subscription?.name || null
 
   let priority
   if (subscriptionName === 'optima') {

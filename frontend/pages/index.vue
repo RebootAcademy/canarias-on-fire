@@ -65,7 +65,7 @@ async function fetchUsers() {
   }
 }
 
-onMounted(() => {
+onMounted( () => {
   fetchUsers()
   eventStore.resetFilters()
 })

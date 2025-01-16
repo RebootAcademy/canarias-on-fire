@@ -421,7 +421,41 @@ export const useEventStore = defineStore('eventStore', {
 
       if (data.value?.success) {
         this.event = data.value.result
+        this.events = this.events.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, status }
+          }
+          return event
+        })
+        return { data: this.event }
+      } else {
+        const customError = new Error(
+          data.value?.error || 'Failed to update event status'
+        )
+        console.error('Error updating event status:', customError)
+        return { error: customError }
+      }
+    },
 
+    async cancelPromotion(eventId, status) {
+      const { data, error } = await useFetch(`/events/cancel/${eventId}`, {
+        method: 'PATCH',
+        body: { status },
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
+      })
+      if (error.value) {
+        console.error('Error updating event status:', error.value)
+        return { error: error.value }
+      }
+
+      if (data.value?.success) {
+        this.event = data.value.result
+        this.events = this.events.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, status }
+          }
+          return event
+        })
         return { data: this.event }
       } else {
         const customError = new Error(
@@ -647,7 +681,7 @@ export const useEventStore = defineStore('eventStore', {
           )
           let [hours, minutes] = [0, 0]
           if (event.startTime) {
-            [hours, minutes] = event?.startTime?.split(':').map(Number)
+            ;[hours, minutes] = event?.startTime?.split(':').map(Number)
           }
 
           endDate = event.eventEndDate

@@ -1,7 +1,7 @@
 <template>
     <button
       @click="scrollToTop"
-      class="fixed md:w-[65px] md:h-[65px] bottom-10 right-5 md:bottom-10 md:right-10 bg-primary text-background p-3 rounded-full shadow-lg"
+      class="fixed z-50 md:w-[65px] md:h-[65px] bottom-10 right-5 md:bottom-10 md:right-10 bg-primary text-background p-3 rounded-full shadow-lg"
       v-if="showScrollButton"
     >
       <ChevronUp class="mx-auto text-2xl" />

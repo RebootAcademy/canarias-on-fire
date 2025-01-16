@@ -24,5 +24,7 @@
   "createUserToast": "Usuario creado correctamente",
   "errorCreatedUser": "Error creando usuario",
   "passwordChanged": "Contraseña cambiada correctamente",
-  "errorPasswordChanged": "Error cambiando contraseña"
+  "errorPasswordChanged": "Error cambiando contraseña",
+  "cancelPromotionToast": "Promoción cancelada correctamente",
+  "errorCancelPromotion": "Error cancelando promoción"
 }
