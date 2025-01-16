@@ -23,7 +23,7 @@
               <li v-for="lang in languages" :key="lang.code">
                 <NavigationMenuLink as-child>
                   <button
-                    @click="handleLanguage(lang.code)"
+                    @click="setLocale(lang.code)"
                     class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray active:bg-primary"
                     :class="locale === lang.code ? 'bg-gray' : ''"
                   >
@@ -52,25 +52,9 @@ const languages = computed(() => [
   { code: 'en', name: t('languagesOptions.en'), flag: 'estados-unidos.png' },
 ])
 
-
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Returns the src for the flag image of the given locale code.
- *
- * If the code is not found in the languages list, returns the default flag 'espana.png'
- *
- * @param {string} code - Locale code
- * @returns {string} - Flag image src
- */
-/******  8e5a55be-1c71-4003-885d-e1218e348700  *******/const getFlagSrc = (code) => {
+const getFlagSrc = (code) => {
   return languages.value.find((lang) => lang.code === code)?.flag || 'espana.png'
 }
-
-const handleLanguage = (lang) => {
-  setLocale(lang)
-  currentLocale.value = lang
-}
-
 
 </script>
 
