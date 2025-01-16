@@ -84,7 +84,7 @@
   "dateFilters": {
     "all": "All",
     "today": "Today",
-    "weekend": "This weekend",
+    "weekend": "This week",
     "month": "This month",
     "nearby": "Nearby"
   },

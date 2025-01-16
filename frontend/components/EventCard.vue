@@ -125,7 +125,7 @@
             >
               {{ 
                 event.eventPrice === 0 ? 
-                  'FREE' : 
+                  $t('price.free') : 
                   `${event.eventPrice} €` 
               }}
             </p>

@@ -26,33 +26,54 @@ onMounted(async () => {
   await articleStore.fetchArticles()
   await subscriptionStore.fetchSubscriptions()
   await paymentStore.fetchPayments()
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords
+  async function monitorGeolocation() {
+    if (!navigator.permissions) {
+      console.warn('La API de permisos no está disponible en este navegador.')
+      await eventStore.fetchEvents() 
+      return
+    }
 
-        await eventStore.fetchEvents(latitude, longitude)
-        await userStore.setAcceptedGeolocation(true)
-      },
-      async (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          console.error('Acceso a la ubicación denegado por el usuario.');
-          await eventStore.fetchEvents();
+    try {
+      const permissionStatus = await navigator.permissions.query({
+        name: 'geolocation',
+      })
+
+      const handlePermissionChange = async () => {
+        console.log(
+          'Estado del permiso de geolocalización:',
+          permissionStatus.state
+        )
+
+        if (permissionStatus.state === 'granted') {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const { latitude, longitude } = position.coords
+              await eventStore.fetchEvents(latitude, longitude)
+              await userStore.setAcceptedGeolocation(true)
+            },
+            (error) => {
+              console.error('Error obteniendo la ubicación:', error.message)
+            }
+          )
+        } else if (
+          permissionStatus.state === 'prompt' ||
+          permissionStatus.state === 'denied'
+        ) {
+          
+          await eventStore.fetchEvents()
           await userStore.setAcceptedGeolocation(false)
-        } else {
-          console.error(
-            'Error obteniendo la ubicación del usuario:',
-            error.message
-          );
         }
-
-        // Llama a fetchEvents sin coordenadas si el acceso fue denegado
-        await eventStore.fetchEvents();
       }
-    )
-  } else {
-    console.error('Geolocalización no es soportada por este navegador.')
-    await eventStore.fetchEvents()
+
+      permissionStatus.addEventListener('change', handlePermissionChange)
+
+      await handlePermissionChange()
+    } catch (error) {
+      console.error('Error al manejar permisos de geolocalización:', error)
+      await eventStore.fetchEvents()
+    }
   }
+
+  monitorGeolocation()
 })
 </script>

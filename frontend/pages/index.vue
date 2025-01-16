@@ -8,14 +8,10 @@
       >
         <EventsCounter />
         <div class="w-full flex justify-center md:justify-start mb-6">
+          <InfoLocation />
           <GeolocationMap />
         </div>
-        <!-- <div class="flex w-full justify-center mb-8">
-          <PlacesNearby />
-        </div> -->
-        <!-- <CategoriesFilter :isEvents="true"/>
-        <EventsHeader /> 
-        <EventList />-->
+
         <div class="hidden md:flex flex-col" >
           <FilteredEventsHome />
         </div>
@@ -24,11 +20,6 @@
         </div>
       </div>
       <Explore />
-      <!-- <div class="w-full flex flex-col gap-4 sm:w-3/4 md:w-3/4 lg:w-2/3">
-        <h2 class="text-3xl font-semibold text-primary my-6">{{ $t('promotionsTitle') }}</h2>
-        <CategoriesFilter />
-        <PromotionList />
-      </div> -->
       <div class="flex flex-col gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-2/3 mt-8">
         <FeaturedEvents class="hidden sm:block"/>
         <ScrollXSFeaturedEvents class="xs:hidden " />
@@ -44,6 +35,8 @@
 useHead({
   title: 'Evente - Home',
 })
+import * as LucideIcons from 'lucide-vue-next'
+
 
 const eventStore = useEventStore()
 const userStore = useUserStore()

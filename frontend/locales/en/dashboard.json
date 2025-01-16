@@ -8,6 +8,7 @@
   "email": "Email",
   "subscription": "Subcription",
   "role": "Role",
+  "geoLocationPermission": "For a better experience, please enable browser location permission",
   "search": "Search",
   "password": "Password",
   "confirmPassword": "Confirm password",

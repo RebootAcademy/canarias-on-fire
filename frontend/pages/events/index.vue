@@ -19,8 +19,9 @@
         </div>
       </div>
       <div>
+        <InfoLocation v-if="!userStore.acceptedGeolocation" class="my-4 mt-6"/>
         <div class="flex flex-col justify-center w-full md:justify-start md:w-1/3 mb-6">
-          <EventFilter />
+          <EventFilter v-if="userStore.acceptedGeolocation"/>
           <GeolocationMap  v-if="eventStore.selectedEventFilter === 'nearby'"/>
         </div>
         <div
