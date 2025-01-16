@@ -95,7 +95,7 @@
       </NuxtLink>
       <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
         <div class="flex flex-col justify-between items-start px-4">
-          <h3 class="text-xl text-secondary font-semibold mb-2">
+          <h3 class="text-xl text-secondary font-semibold mb-2 line-clamp-2">
             {{ event.eventName }}
           </h3>
           <p
@@ -189,7 +189,7 @@ const isOwner = computed(() => {
   return eventStore?.event?.userId._id === userStore.userData?._id
 })
 
-const defaultImage = './defaultImg.png'
+const defaultImage = '/defaultImg.png'
 
 const getPaymentType = computed(() => {
   switch (props.event.payment?.name) {
@@ -299,5 +299,13 @@ const formattedDate = () => {
 /* Active state */
 .test-shine:active:after {
   opacity: 0;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

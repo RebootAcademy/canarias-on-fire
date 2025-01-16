@@ -41,15 +41,16 @@
         <div class="flex justify-between">
           <div class="flex flex-col gap-1 mt-2">
             <h2 class="text-2xl font-semibold mt-4">
-              {{ $t('previewText.dateAndTime') }}
+              {{ event.eventType === 'event' ? $t('previewText.dateAndTime') : $t('previewText.author') }}
             </h2>
-            <div v-if="event.startTime" class="flex items-center gap-1">
+            <div v-if="event.eventType === 'event' && event.startTime" class="flex items-center gap-1">
               <Clock size="16" />
               <span>{{ event.startTime }} - {{ event.endTime }}</span>
             </div>
             <div class="flex items-center gap-1">
-              <Calendar size="16" />
-              <span>{{ formattedDate }}</span>
+              <Calendar v-if="event.eventType === 'event'" size="16" />
+              <User v-else size="16" />
+              <span>{{ event.eventType === 'event' ? formattedDate : (event.userId?.companyName || event.userId?.username) }}</span>
             </div>
           </div>
         </div>
@@ -64,7 +65,7 @@
           <div class="prose max-w-none" v-html="event.eventDescription"></div>
         </div>
         <div
-          class="flex flex-col gap-2 my-8"
+          class="flex flex-col gap-2 my-"
           v-if="event.eventLocation && event.eventLocation.address"
         >
           <h2 class="text-2xl font-semibold">{{ $t('eventLocation') }}</h2>
@@ -94,6 +95,15 @@
       </div> -->
         <div v-if="event.eventPrice" class="my-6">
           <TicketButton />
+        </div>
+        <div v-if="event.eventCapacity" class="my-6">
+          <h2 class="text-2xl font-semibold mt-4">
+            {{ $t('previewText.capacity') }}
+          </h2>
+          <div class="flex items-center gap-1">
+              <Users size="16" />
+              <span>{{ event.eventCapacity }}</span>
+            </div>
         </div>
         <div 
           v-if="event.externalSource"
@@ -170,7 +180,7 @@
 </template>
 
 <script setup>
-import { Share2, Pencil, Trash, Clock, Calendar, MapPin } from 'lucide-vue-next'
+import { Share2, Pencil, Trash, Clock, Calendar, MapPin, User, Users } from 'lucide-vue-next'
 const { t } = useI18n()
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()

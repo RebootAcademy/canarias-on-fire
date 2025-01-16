@@ -36,6 +36,7 @@
   "eventCodePromoPlaceholder": "Introduce tu código promocional",
   "eventServices": "Servicios:",
   "eventTypeDiscount": {
+    "others": "Otros",
     "free": "Gratis",
     "10-30": "10% - 30%",
     "30-50": "30% - 50%",
@@ -108,10 +109,12 @@
     "closed": "Cerrados"
   },
   "previewText": {
+    "author": "Autor",
     "aboutEvent": "Sobre el evento",
     "aboutPromo": "Sobre la promoción",
     "showMap": "Mostrar mapa",
     "dateAndTime": "Fecha y hora",
+    "capacity": "Aforo",
     "organizer": "Organizador",
     "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
   },

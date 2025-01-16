@@ -101,7 +101,7 @@
               'text-gray-300': isBasicPayment,
             }"
           >
-            {{ formattedDate() }}
+            {{ promotion.userId?.companyName }}
           </p>
           <!--  <div v-if="promotion.startTime" class="flex flex-row gap-2">
             <p
