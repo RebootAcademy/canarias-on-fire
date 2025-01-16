@@ -23,7 +23,7 @@
               <li v-for="lang in languages" :key="lang.code">
                 <NavigationMenuLink as-child>
                   <button
-                    @click="setLocale(lang.code)"
+                    @click="handleLanguage(lang.code)"
                     class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray active:bg-primary"
                     :class="locale === lang.code ? 'bg-gray' : ''"
                   >
@@ -41,33 +41,37 @@
 </template>
 
 <script setup>
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
-
 const { locale, setLocale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
-const currentLocale = ref(locale.value)
+const currentLocale = computed(() => locale.value)
 const {t} = useI18n()
 
 
-const languages = [
+const languages = computed(() => [
   { code: 'es', name: t('languagesOptions.es'), flag: 'espana.png' },
   { code: 'en', name: t('languagesOptions.en'), flag: 'estados-unidos.png' },
-]
+])
 
-const getFlagSrc = (code) => {
-  return languages.find((lang) => lang.code === code)?.flag || 'espana.png'
+
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Returns the src for the flag image of the given locale code.
+ *
+ * If the code is not found in the languages list, returns the default flag 'espana.png'
+ *
+ * @param {string} code - Locale code
+ * @returns {string} - Flag image src
+ */
+/******  8e5a55be-1c71-4003-885d-e1218e348700  *******/const getFlagSrc = (code) => {
+  return languages.value.find((lang) => lang.code === code)?.flag || 'espana.png'
 }
 
-watchEffect(() => {
-  currentLocale.value = locale.value
-})
+const handleLanguage = (lang) => {
+  setLocale(lang)
+  currentLocale.value = lang
+}
+
+
 </script>
 
 <style scoped>
