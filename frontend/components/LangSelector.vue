@@ -44,6 +44,7 @@
 const { locale, setLocale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const currentLocale = computed(() => locale.value)
+const localeReady = ref(false)
 const {t} = useI18n()
 
 
@@ -56,6 +57,11 @@ const getFlagSrc = (code) => {
   return languages.value.find((lang) => lang.code === code)?.flag || 'espana.png'
 }
 
+onMounted(() => {
+  if (locale.value) {
+    localeReady.value = true
+  }
+})
 </script>
 
 <style scoped>
