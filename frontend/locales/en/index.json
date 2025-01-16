@@ -88,7 +88,8 @@
       "services": "Services",
       "restoration": "Restoration",
       "nigthlife": "Nigthlife",
-      "activities": "Activities"
+      "activities": "Activities",
+      "promoter": "Events promoter"
     },
     "foodType": {
       "label": "Food type",
@@ -103,6 +104,17 @@
       "italian": "Italian",
       "spanish": "Spanish",
       "other": "Other"
+    },
+    "serviceType": {
+      "label": "Type of Service",
+      "placeholder": "Select type of Service",
+      "foodtruck": "Foodtruck",
+      "catering": "Catering",
+      "sound": "Sound & Ilumination",
+      "photo": "Photography",
+      "furniture": "Furniture",
+      "renting": "Property Renting",
+      "other": "Others"
     },
     "step2CodRef": "Vendor Code",
     "step2TermsPart1": "I accept the ",

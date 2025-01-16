@@ -85,10 +85,12 @@ function filterUsers(category) {
         if (category === 'all' || !category) {
           return user.isActive && user.role !== 'admin'
         }
+        console.log(user.bandName)
+        console.log(user.role)
         if (category === 'bands') {
           return user.role === 'musician'
         }
-        return user.sector === category
+        return user.serviceType === category
     })
     .sort((a, b) => getPriority(b) - getPriority(a))
 }

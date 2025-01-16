@@ -32,10 +32,10 @@
     "bands": "Djs & Bands",
     "catering": "Catering",
     "lighting": "Sound & Lighting",
-    "sound": "Sound",
-    "photography": "Photography",
+    "sound": "Sound & Lighting",
+    "photo": "Photography",
     "furniture": "Furniture",
-    "places": "Places",
+    "renting": "Places",
     "workshops": "Workshops"
   }
 }

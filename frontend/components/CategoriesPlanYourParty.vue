@@ -47,9 +47,9 @@ const optionsFilter = computed(() => {
         { label: t('values.foodtruck'), value: 'foodtruck', icon: 'Truck' },
         { label: t('values.catering'), value: 'catering', icon: 'UtensilsCrossed' },
         { label: t('values.lighting'), value: 'lighting', icon: 'Lightbulb' },
-        { label: t('values.photography'), value: 'photography', icon: 'Camera' },
+        { label: t('values.photo'), value: 'photo', icon: 'Camera' },
         { label: t('values.furniture'), value: 'furniture', icon: 'Armchair' },
-        { label: t('values.places'), value: 'places', icon: 'MapPin' },
+        { label: t('values.renting'), value: 'renting', icon: 'MapPin' },
         { label: t('values.other'), value: 'other', icon: 'Ellipsis' },
     ]
 })

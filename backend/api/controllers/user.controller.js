@@ -230,8 +230,6 @@ const updateUser = async (req, res) => {
       })
     }
 
-    console.log(req.body)
-
     const oldRole = user.role
     const newRole = req.body.role
 
@@ -246,7 +244,7 @@ const updateUser = async (req, res) => {
 
     if (newRole === 'company') {
       // Agregar campos de compañía si el nuevo rol es 'company'
-      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'refCode', 'postalCode', 'isValidated'].forEach((field) => {
+      ;['companyName', 'companyEmail', 'phone', 'sector', 'type', 'serviceType', 'refCode', 'postalCode', 'isValidated'].forEach((field) => {
         if (req.body[field]) updateData[field] = req.body[field]
       })
     }
@@ -299,12 +297,10 @@ const updateUserProfile = async (req, res) => {
     const oldRole = user.role
     const newRole = req.body.role
 
-    console.log(req.body)
-
     // Filtrar campos válidos para actualización
     let validFields = ['username', 'email', 'role', 'phone', 'isActive', 'savedEvents', 'auth0Id', 'profileImg', 'preferences']
     if (newRole === 'company') {
-      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'postalCode', 'preferredLocations', 'refCode')
+      validFields.push( 'companyName', 'commercialName', 'postalCode', 'cif', 'companyEmail', 'sector', 'type', 'serviceType', 'postalCode', 'preferredLocations', 'refCode')
     }  
     
     if (newRole === 'musician') {
