@@ -8,7 +8,10 @@
       'max-w-[300px]': isRelatedEvent,
     }"
   >
-      <div v-if="event.status === 'closed'" class="bg-whiteGray/40 absolute inset-0 z-40"></div>
+    <div
+      v-if="event.status === 'closed'"
+      class="bg-whiteGray/40 absolute inset-0 z-40"
+    ></div>
 
     <div
       class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
@@ -106,10 +109,12 @@
           >
             {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
           </p>
-          <p class="text-sm line-clamp-1">
+          <p v-if="event?.eventLocation?.address" class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
-          <div class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2">
+          <div
+            class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2"
+          >
             <p
               v-if="!event.externalSource"
               class=""
@@ -120,7 +125,7 @@
             >
               {{ 
                 event.eventPrice === 0 ? 
-                  'FREE' : 
+                  $t('price.free') : 
                   `${event.eventPrice} €` 
               }}
             </p>
@@ -179,7 +184,7 @@ const props = defineProps({
   nearby: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 
 const isOpen = ref(false)

@@ -148,6 +148,7 @@
     "changeArea": "Cambiar área de localización",
     "actionArea": "Seleccionar área de localización:",
     "radius": {
+      "1km": "1 km",
       "5km": "5 km",
       "10km": "10 km",
       "15km": "15 km",
@@ -159,6 +160,8 @@
   },
   "price": {
     "person": "por persona",
-    "manageCost": "Gastos de gestión no incluidos si los hubiere"
+    "manageCost": "Gastos de gestión no incluidos si los hubiere",
+    "free": "GRATIS",
+    "notSpecific": "NO ESPECIFICADO"
   }
 }

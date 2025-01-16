@@ -8,6 +8,7 @@
   "email": "Correo electrónico",
   "subscription": "Subcripción",
   "role": "Rol",
+  "geoLocationPermission": "Para una mejor experiencia, activa el permiso de ubicación del navegador",
   "password": "Contraseña",
   "confirmPassword": "Confirmar contraseña",
   "passwordsDontMatch": "Las contraseñas no coinciden",
@@ -69,7 +70,7 @@
     "totalEvents": "Eventos",
     "totalSubscriptions": "Suscripciones"
   },
-  "foodtruckSection":{
+  "foodtruckSection": {
     "noFoodtruck": "No hay Foodstrucks que mostrar aún"
   }
 }

@@ -421,7 +421,41 @@ export const useEventStore = defineStore('eventStore', {
 
       if (data.value?.success) {
         this.event = data.value.result
+        this.events = this.events.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, status }
+          }
+          return event
+        })
+        return { data: this.event }
+      } else {
+        const customError = new Error(
+          data.value?.error || 'Failed to update event status'
+        )
+        console.error('Error updating event status:', customError)
+        return { error: customError }
+      }
+    },
 
+    async cancelPromotion(eventId, status) {
+      const { data, error } = await useFetch(`/events/cancel/${eventId}`, {
+        method: 'PATCH',
+        body: { status },
+        baseURL: useRuntimeConfig().public.apiBaseUrl,
+      })
+      if (error.value) {
+        console.error('Error updating event status:', error.value)
+        return { error: error.value }
+      }
+
+      if (data.value?.success) {
+        this.event = data.value.result
+        this.events = this.events.map((event) => {
+          if (event._id === eventId) {
+            return { ...event, status }
+          }
+          return event
+        })
         return { data: this.event }
       } else {
         const customError = new Error(
@@ -624,14 +658,13 @@ export const useEventStore = defineStore('eventStore', {
 
     filteredEvents() {
       if (!this.events) return []
-
       const today = new Date()
       const lowercaseQuery = this.searchQuery?.toLowerCase() || ''
       const hasCategoriesFilter = this.filters.categories.length > 0
       const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
 
-      let result = this.events.filter((event, i) => {
+      let result = this.events?.filter((event, i) => {
         // Validar usuario activo
         if (event.userId && !event.userId?.isActive) {
           return false
@@ -646,8 +679,10 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate?.month - 1,
             event.eventDate?.day
           )
-
-          const [hours, minutes] = event.startTime ? event.startTime.split(':').map(Number) : [ null, null ]
+          let [hours, minutes] = [0, 0]
+          if (event.startTime) {
+            ;[hours, minutes] = event?.startTime?.split(':').map(Number)
+          }
 
           endDate = event.eventEndDate
             ? new Date(

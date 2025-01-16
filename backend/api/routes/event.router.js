@@ -11,7 +11,8 @@ const {
   updateEvent,
   deleteEvent,
   updateEventByAdmin,
-  deleteAllMyClosedEvents
+  deleteAllMyClosedEvents,
+  updateStatusPromotion
 } = require('../controllers/event.controller')
 
 router
@@ -24,6 +25,10 @@ router
   .get(
     '/:id',
     /* isAuth, checkRole('admin', 'company', 'basic'), */ getEventById
+  )
+  .patch(
+    '/cancel/:id',
+    /* isAuth, checkRole('admin', 'company'), */ updateStatusPromotion
   )
   .patch('/admin/:id', /* isAuth, checkRole('admin'), */ updateEventByAdmin)
   .patch('/:id', /* isAuth, checkRole('admin', 'company'), */ updateEvent)

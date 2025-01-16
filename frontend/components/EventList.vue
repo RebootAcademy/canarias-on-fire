@@ -1,10 +1,12 @@
 <template>
-  <div class="lg:px-6 w-full ">
-    <div class="w-full grid justify-items-strecth items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4">
-      <EventCard 
-        v-for="event in limitedEvents" 
-        :key="event._id" 
-        :event="event" 
+  <div class="lg:px-6 w-full">
+    <div
+      class="w-full grid justify-items-strecth items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
+    >
+      <EventCard
+        v-for="event in limitedEvents"
+        :key="event._id"
+        :event="event"
         class="xs:w-[60%] sm:w-full"
       />
     </div>
@@ -24,6 +26,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
+const userStore = useUserStore()
 const paymentStore = usePaymentStore()
 const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
 const eventsByDate = computed(() => {
@@ -34,24 +37,32 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
-
-  return eventsByDate.value
-    ?.filter(event => 
+  let filterEvents = eventsByDate.value
+    ?.filter(event =>
       event.status === 'published'
-      && event.eventType === 'event'
-      && event.dist?.calculated < eventStore.radioLocation
-    )
+      && event.eventType === 'event')
+
+  if (userStore.acceptedGeolocation){
+    filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
+  }
+    
+  return filterEvents
     .sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
+      // Primero compara las prioridades
+      const priorityA = getEventPriority(a) || null;
+      const priorityB = getEventPriority(b) || null;
 
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB
+      if (!priorityA && priorityB) {
+        return 1; // Coloca los eventos sin "paymentId" al final
       }
-      return compareDates(a.eventDate, b.eventDate)
-    })
+      if (priorityA && !priorityB) {
+        return -1; // Coloca los eventos con "paymentId" al principio
+      }
 
-    .slice(0, 9)
+      // Si las prioridades son iguales, compara las fechas
+      return compareDates(a.eventDate, b.eventDate);
+    })
+    .slice(0, 9);
 })
 
 function getEventPriority(event) {

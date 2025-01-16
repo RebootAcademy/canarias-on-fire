@@ -10,5 +10,6 @@
   "deletePromo": "Por favor, confirma que quieres borrar esta promoción. Asegúrate de que realmente quieres hacerlo.",
   "deleteArticle": "Por favor, confirma que quieres borrar este artículo. Asegúrate de que realmente quieres hacerlo.",
   "deleteAllEventClosed": "Por favor, confirma que quieres borrar todos los eventos cerrados. Asegúrate de que realmente quieres hacerlo.",
-  "deleteAllPromotionClosed": "Por favor, confirma que quieres borrar todas las promociones cerradas. Asegúrate de que realmente quieres hacerlo."
+  "deleteAllPromotionClosed": "Por favor, confirma que quieres borrar todas las promociones cerradas. Asegúrate de que realmente quieres hacerlo.",
+  "cancelPromotion": "Por favor, confirma que quieres cancelar esta promoción. Asegúrate de que realmente quieres hacerlo. Este paso no se puede deshacer."
 }

@@ -33,7 +33,7 @@
             class="text-xs p-2 md:p-4 rounded-lg bg-gray border-0 hover:bg-primary hover:text-white "
             :class="selectedCategories.includes(category.id) ? 'bg-primary text-white' : ''"
           >
-            {{ category.name }}
+            {{ $t(`values.${category.name}`) }}
           </div>
         </div>
         <div class="flex justify-end gap-4 mt-4">

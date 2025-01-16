@@ -12,10 +12,20 @@
           :key="category._id"
           class="bg-gray text-secondary text-xs font-semibold px-4 py-1 rounded-full"
         >
-          {{ category?.name }}
+          {{ $t(`values.${category.name}`) }}
         </span>
       </div>
-      <div class="flex sm:w-full md:w-auto justify-end items-center gap-2 mb-4 md:my-6 md:mr-6">
+      <div
+        class="flex sm:w-full md:w-auto justify-end items-center gap-2 mb-4 md:my-6 md:mr-6"
+      >
+        <div
+          v-if="isOwner && event.status === 'published'"
+          class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-red-500 bg-red-500 rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-red-500"
+          @click="isOpen = { status: true, type: 'cancel' }"
+        >
+          <p>CANCELAR PROMOCIÓN</p>
+        </div>
+
         <Share2
           v-if="searchPaymentEvent !== 'basic'"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
@@ -29,15 +39,17 @@
         <Trash
           v-if="isAdmin || isOwner"
           class="mr-2 w-8 cursor-pointer hover:text-red-500"
-          @click="isOpen = true"
+          @click="isOpen = { status: true, type: 'delete' }"
         />
       </div>
     </div>
     <div
-      class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between md:px-16 text-secondary "
+      class="flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-between md:px-16 text-secondary"
     >
       <div class="flex flex-col gap-4 sm:w-3/5 md:w-4/5">
-        <h1 class="text-3xl md:text-4xl font-bold text-primary">{{ event.eventName }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-primary">
+          {{ event.eventName }}
+        </h1>
         <div class="flex justify-between">
           <div class="flex flex-col gap-1 mt-2">
             <h2 class="text-2xl font-semibold mt-4">
@@ -119,19 +131,18 @@
               'text-black': isGoldPayment || isPremiumPayment,
             }"
           >
-            <h1>
-              + INFO
-            </h1>
+            <h1>+ INFO</h1>
           </a>
         </div>
         <div v-if="event.eventCodePromo" class="flex flex-col gap-2">
           <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
-          <div 
+          <div
             class="border-2 border-whiteGray rounded-md w-fit cursor-pointer hover:bg-primary-gradient hover:text-white hover:border-primary"
             @click="copyCodePromo(event.eventCodePromo)"
           >
-
-            <p class="text-whiteGrayfont-semibold p-2">{{ event.eventCodePromo.toUpperCase() }}</p>
+            <p class="text-whiteGrayfont-semibold p-2">
+              {{ event.eventCodePromo.toUpperCase() }}
+            </p>
           </div>
         </div>
         <div v-show="!isBasicPayment">
@@ -139,7 +150,9 @@
         </div>
         <div class="flex gap-2 mt-6 mb-6">
           <div
-            v-if="event.status === 'draft' && (isValidated || isAdmin) && isOwner"
+            v-if="
+              event.status === 'draft' && (isValidated || isAdmin) && isOwner
+            "
             class="bg-primary-gradient p-0.5 rounded-md"
             @click="publishEvent"
           >
@@ -154,7 +167,7 @@
       <!-- <div v-if="eventType === 'event'">
         <TicketButton hasBorder="hasBorder" />
       </div> -->
-      <div  v-if="eventType === 'promotion'">
+      <div v-if="eventType === 'promotion'">
         <DiscountSquare :event="event" />
       </div>
     </div>
@@ -162,19 +175,25 @@
   <div class="px-8">
     <EventsRelated :type="eventType" />
   </div>
-  <CustomModal v-model:open="isOpen">
+  <CustomModal v-model:open="isOpen.status">
     <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
-    <p class="text-lg">
+    <p v-if="isOpen.type === 'delete'" class="text-lg">
       {{ eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}
     </p>
+    <p v-else class="text-lg">{{ $t('cancelPromotion') }}</p>
     <div class="flex justify-end gap-4 mt-2">
       <button
-        @click="isOpen = false"
+        @click="isOpen = { status: false, type: null }"
         class="font-bold p-2 px-6 rounded-md bg-gray hover:bg-red-500"
       >
         {{ $t('buttons.cancel') }}
       </button>
-      <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
+      <CustomBtn
+        v-if="isOpen.type === 'delete'"
+        :title="$t('buttons.confirm')"
+        @click="deleteEvent"
+      />
+      <CustomBtn v-else :title="$t('buttons.confirm')" @click="cancelPromo" />
     </div>
   </CustomModal>
 </template>
@@ -195,7 +214,10 @@ const subscriptionStore = useSubscriptionStore()
 const route = useRoute()
 const router = useRouter()
 
-const isOpen = ref(false)
+const isOpen = ref({
+  status: false,
+  type: null,
+})
 
 const eventType = computed(() => {
   return eventStore.event.eventType
@@ -209,9 +231,7 @@ const isValidated = userStore?.userData?.isValidated
 const searchPaymentEvent = computed(() => {
   let payment = eventStore.events.find((e) => e._id === eventId)
   return payment?.payment?.name
-   
 })
-
 
 const isBasicPayment = computed(() => {
   if (eventType !== 'event') {
@@ -224,7 +244,6 @@ const isBasicPayment = computed(() => {
     return payment?.name === 'basic'
   }
 })
-
 
 const categoryServices = computed(() => {
   return eventStore.event?.categoriesOfServices
@@ -255,10 +274,27 @@ const deleteEvent = async () => {
   router.push('/')
 }
 
+const cancelPromo = async () => {
+  try {
+    await eventStore.cancelPromotion(event.value._id, 'closed')
+    toast({
+      description: t('cancelPromotionToast'),
+    })
+    router.push('/')
+  } catch (error) {
+    toast({
+      description: t('errorCancelPromotion'),
+    })
+  }
+}
+
 const formattedDate = computed(() => {
   if (eventStore.event.eventType === 'event') {
-
-    return event.value?.eventEndDate ? formatEventDate(event.value?.eventDate) + ' - ' + formatEventDate(event.value?.eventEndDate) : formatEventDate(event.value?.eventDate)
+    return event.value?.eventEndDate
+      ? formatEventDate(event.value?.eventDate) +
+          ' - ' +
+          formatEventDate(event.value?.eventEndDate)
+      : formatEventDate(event.value?.eventDate)
   } else {
     return `${formatEventDate(
       event.value?.eventDate.start
@@ -285,14 +321,14 @@ const publishEvent = async () => {
     const isAdmin = userStore.userData.role === 'admin'
 
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
-      
+
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
-        if (result) {
-          router.push(`/events/${eventId}`)
-        } else {
-          console.error('Failed to publish promotion')
-        }
+      if (result) {
+        router.push(`/events/${eventId}`)
+      } else {
+        console.error('Failed to publish promotion')
+      }
     }
 
     if (eventStore.event.eventType === 'promotion') {
@@ -313,7 +349,8 @@ const publishEvent = async () => {
           `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
         )
       }
-    } else if (eventStore.event.eventType === 'event') {copyToClipboard
+    } else if (eventStore.event.eventType === 'event') {
+      copyToClipboard
       router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
   } catch (error) {

@@ -85,7 +85,7 @@
   "dateFilters": {
     "all": "All",
     "today": "Today",
-    "weekend": "This weekend",
+    "weekend": "This week",
     "month": "This month",
     "nearby": "Nearby"
   },
@@ -148,6 +148,7 @@
     "changeArea": "Change location area",
     "actionArea": "Select location area:",
     "radius": {
+      "1km": "1 km",
       "5km": "5 km",
       "10km": "10 km",
       "15km": "15 km",
@@ -159,6 +160,8 @@
   },
   "price": {
     "person": "per person",
-    "manageCost": "Management fees, if any, are not included."
+    "manageCost": "Management fees, if any, are not included.",
+    "free": "FREE",
+    "notSpecific": "NOT SPECIFIC"
   }
 }

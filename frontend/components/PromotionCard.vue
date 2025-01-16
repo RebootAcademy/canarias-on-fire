@@ -59,7 +59,7 @@
                 'text-secondary': isGoldPayment,
               }"
             >
-              {{ category.name }}
+              {{ $t(`values.${category.name}`) }}
             </span>
           </div>
           <!-- Options menu -->

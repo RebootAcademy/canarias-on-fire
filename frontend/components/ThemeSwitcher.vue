@@ -17,15 +17,11 @@ function toggleTheme() {
     document.body.classList.add('dark');
 
     userStore.setThemePreference('dark')
-    //theme.value = 'dark';
   } else {
     document.body.classList.remove('dark');
     userStore.setThemePreference('light')
-    //theme.value = 'light';
   }
 }
-
-
 
 </script>
 

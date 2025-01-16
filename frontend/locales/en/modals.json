@@ -10,5 +10,6 @@
   "deletePromo": "Please confirm that you want to delete this promotion? Make sure you really want to proceed with this action.",
   "deleteArticle": "Please confirm that you want to delete this article? Make sure you really want to proceed with this action.",
   "deleteAllEventClosed": "Please confirm that you want to delete all events closed? Make sure you really want to proceed with this action.",
-  "deleteAllPromotionClosed": "Please confirm that you want to delete all promotion closed? Make sure you really want to proceed with this action."
+  "deleteAllPromotionClosed": "Please confirm that you want to delete all promotion closed? Make sure you really want to proceed with this action.",
+  "cancelPromotion": "Please confirm that you want to cancel this promotion? Make sure you really want to proceed with this action. This action cannot be undone."
 }  

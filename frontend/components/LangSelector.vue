@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="localeReady">
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
@@ -25,7 +25,7 @@
                   <button
                     @click="setLocale(lang.code)"
                     class="flex items-center xs:w-20 xs:px-1 sm:w-32 px-3 py-2 text-sm font-normal rounded-md hover:bg-gray active:bg-primary"
-                    :class="locale === lang.code ? 'bg-gray' : ''"
+                    :class="currentLocale === lang.code ? 'bg-gray' : ''"
                   >
                     <NuxtImg :src="lang.flag" :alt="lang.name" width="20" class="mr-2 xs:w-4 sm:w-6" />
                     {{ lang.name }}
@@ -41,32 +41,27 @@
 </template>
 
 <script setup>
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
-
 const { locale, setLocale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
-const currentLocale = ref(locale.value)
+const currentLocale = computed(() => locale.value)
+const localeReady = ref(false)
 const {t} = useI18n()
 
 
-const languages = [
+const languages = computed(() => [
   { code: 'es', name: t('languagesOptions.es'), flag: 'espana.png' },
   { code: 'en', name: t('languagesOptions.en'), flag: 'estados-unidos.png' },
-]
+])
 
 const getFlagSrc = (code) => {
-  return languages.find((lang) => lang.code === code)?.flag || 'espana.png'
+  console.log(code)
+  return languages.value.find((lang) => lang.code === code)?.flag || 'espana.png'
 }
 
-watchEffect(() => {
-  currentLocale.value = locale.value
+onMounted(() => {
+  if (locale.value) {
+    localeReady.value = true
+  }
 })
 </script>
 
