@@ -624,14 +624,13 @@ export const useEventStore = defineStore('eventStore', {
 
     filteredEvents() {
       if (!this.events) return []
-
       const today = new Date()
       const lowercaseQuery = this.searchQuery?.toLowerCase() || ''
       const hasCategoriesFilter = this.filters.categories.length > 0
       const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
 
-      let result = this.events.filter((event, i) => {
+      let result = this.events?.filter((event, i) => {
         // Validar usuario activo
         if (event.userId && !event.userId?.isActive) {
           return false
@@ -646,8 +645,10 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate?.month - 1,
             event.eventDate?.day
           )
-
-          const [hours, minutes] = event.startTime.split(':').map(Number)
+          let [hours, minutes] = [0, 0]
+          if (event.startTime) {
+            [hours, minutes] = event?.startTime?.split(':').map(Number)
+          }
 
           endDate = event.eventEndDate
             ? new Date(

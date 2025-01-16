@@ -9,6 +9,7 @@
 const eventStore = useEventStore()
 const articleStore = useArticleStore()
 const paymentStore = usePaymentStore()
+const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 import Toaster from '@/components/ui/toast/Toaster.vue'
 
@@ -31,11 +32,13 @@ onMounted(async () => {
         const { latitude, longitude } = position.coords
 
         await eventStore.fetchEvents(latitude, longitude)
+        await userStore.setAcceptedGeolocation(true)
       },
       async (error) => {
         if (error.code === error.PERMISSION_DENIED) {
           console.error('Acceso a la ubicación denegado por el usuario.');
           await eventStore.fetchEvents();
+          await userStore.setAcceptedGeolocation(false)
         } else {
           console.error(
             'Error obteniendo la ubicación del usuario:',

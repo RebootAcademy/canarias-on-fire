@@ -1,5 +1,5 @@
 <template>
-  <div class="md:ml-4 text-center md:text-start">
+  <div v-show="userStore.acceptedGeolocation" class="md:ml-4 text-center md:text-start">
     <p class="mb-2">
      {{ $t('geolocation.area')}} {{ eventStore.radioLocation / 1000 }} km
     </p>
@@ -22,6 +22,7 @@
         v-model="eventStore.radioLocation"
         class="text-lg mb-2 p-2 rounded-md ml-2"
       >
+        <option value="5000">{{ $t('geolocation.radius.1km')}}</option>
         <option value="5000">{{ $t('geolocation.radius.5km')}}</option>
         <option value="10000">{{ $t('geolocation.radius.10km')}}</option>
         <option value="15000">{{ $t('geolocation.radius.15km')}}</option>
@@ -47,6 +48,7 @@
 import { ref, watch, nextTick } from 'vue'
 import { MapPinned } from 'lucide-vue-next'
 const eventStore = useEventStore()
+const userStore = useUserStore()
 const dialog = ref(null)
 const mapElement = ref(null) // Asegúrate de que este ref esté definido aquí
 const selectedDistance = ref(10000) // Valor inicial (5 km)

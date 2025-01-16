@@ -8,7 +8,10 @@
       'max-w-[300px]': isRelatedEvent,
     }"
   >
-      <div v-if="event.status === 'closed'" class="bg-whiteGray/40 absolute inset-0 z-40"></div>
+    <div
+      v-if="event.status === 'closed'"
+      class="bg-whiteGray/40 absolute inset-0 z-40"
+    ></div>
 
     <div
       class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
@@ -106,10 +109,12 @@
           >
             {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
           </p>
-          <p class="text-sm line-clamp-1">
+          <p v-if="event?.eventLocation?.address" class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}
           </p>
-          <div class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2">
+          <div
+            class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2"
+          >
             <p
               class=""
               :class="{
@@ -117,9 +122,21 @@
                 'text-black': isGoldPayment || isPremiumPayment,
               }"
             >
-              {{ event.eventPrice === 0 ? 'FREE' : `${event.eventPrice} €` }}
+              {{
+                event.eventPrice === 0
+                  ? $t('price.free')
+                  : !event.eventPrice
+                  ? $t('price.notSpecific')
+                  : `${event.eventPrice} €`
+              }}
             </p>
-            <p v-if="!nearby">{{ event?.dist?.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
+            <p v-if="!nearby">
+              {{
+                event?.dist?.calculated
+                  ? `${(event.dist.calculated / 1000).toFixed(2)} km`
+                  : ''
+              }}
+            </p>
           </div>
         </div>
       </NuxtLink>
@@ -161,7 +178,7 @@ const props = defineProps({
   nearby: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 
 const isOpen = ref(false)

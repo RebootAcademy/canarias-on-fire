@@ -5,6 +5,7 @@ export const useUserStore = defineStore('userStore', {
     userData: null,
     themePreference: 'light',
     isAuthenticated: false,
+    acceptedGeolocation: false,
     users: [],
     selectedUser: null,
     searchQuery: '',
@@ -30,6 +31,10 @@ export const useUserStore = defineStore('userStore', {
     setThemePreference(themePreference) {
       this.themePreference = themePreference
       localStorage.setItem('themePreference', themePreference)
+    },
+
+    setAcceptedGeolocation(accepted) {
+      this.acceptedGeolocation = accepted
     },
 
     async fetchUsers() {
