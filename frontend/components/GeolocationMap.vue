@@ -22,7 +22,7 @@
         v-model="eventStore.radioLocation"
         class="text-lg mb-2 p-2 rounded-md ml-2"
       >
-        <option value="5000">{{ $t('geolocation.radius.1km')}}</option>
+        <option value="1000">{{ $t('geolocation.radius.1km')}}</option>
         <option value="5000">{{ $t('geolocation.radius.5km')}}</option>
         <option value="10000">{{ $t('geolocation.radius.10km')}}</option>
         <option value="15000">{{ $t('geolocation.radius.15km')}}</option>
