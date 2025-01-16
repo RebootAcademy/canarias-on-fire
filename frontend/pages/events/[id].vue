@@ -94,7 +94,26 @@
       </div> -->
         <div v-if="event.eventPrice" class="my-6">
           <TicketButton />
-        </div> 
+        </div>
+        <div 
+          v-if="event.externalSource"
+          class="border border-primary w-fit p-2 rounded-md bg-primary"
+        >
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            :href="event.externalUrl"
+            class="text-xl font-bold"
+            :class="{
+              'text-primary': isBasicPayment,
+              'text-black': isGoldPayment || isPremiumPayment,
+            }"
+          >
+            <h1>
+              + INFO
+            </h1>
+          </a>
+        </div>
         <div v-if="event.eventCodePromo" class="flex flex-col gap-2">
           <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
           <div 

@@ -116,27 +116,33 @@
             class="flex flex-row w-[85%] justify-between absolute text-md font-semibold mt-2 bottom-2"
           >
             <p
+              v-if="!event.externalSource"
               class=""
               :class="{
                 'text-primary': isBasicPayment,
                 'text-black': isGoldPayment || isPremiumPayment,
               }"
             >
-              {{
-                event.eventPrice === 0
-                  ? $t('price.free')
-                  : !event.eventPrice
-                  ? $t('price.notSpecific')
-                  : `${event.eventPrice} €`
+              {{ 
+                event.eventPrice === 0 ? 
+                  'FREE' : 
+                  `${event.eventPrice} €` 
               }}
             </p>
-            <p v-if="!nearby">
-              {{
-                event?.dist?.calculated
-                  ? `${(event.dist.calculated / 1000).toFixed(2)} km`
-                  : ''
-              }}
-            </p>
+            <a
+              v-else
+              target="_blank"
+              rel="noopener noreferrer"
+              :href="event.externalUrl"
+              class=""
+              :class="{
+                'text-primary': isBasicPayment,
+                'text-black': isGoldPayment || isPremiumPayment,
+              }"
+            >
+              + INFO
+            </a>
+            <p v-if="!nearby">{{ event?.dist?.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
           </div>
         </div>
       </NuxtLink>

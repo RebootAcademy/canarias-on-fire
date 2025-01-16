@@ -47,7 +47,8 @@ const optimaEvents = computed(() => {
   if (eventStore.events) {
     premiumEvents = eventStore?.events.filter(
       (event) =>
-        (event?.payment?.name === 'optima plus' &&
+        (!event.externalSource && 
+        event?.payment?.name === 'optima plus' &&
          ( new Date(
             event.eventDate.year,
             event.eventDate.month - 1,

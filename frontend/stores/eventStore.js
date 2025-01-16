@@ -692,7 +692,7 @@ export const useEventStore = defineStore('eventStore', {
           if (
             !this.filters.categories.find((id) => eventCategoryIds.includes(id))
           ) {
-            return falsefilterDiscount
+            return false
           }
         }
 
@@ -708,7 +708,7 @@ export const useEventStore = defineStore('eventStore', {
         }
         if (hasIslandsFilter) {
           const eventIsland = getIslandFromPostalCode(
-            event.eventLocation.postalCode
+            event.eventLocation?.postalCode
           )
           if (!this.filters.islands.includes(eventIsland)) {
             return false

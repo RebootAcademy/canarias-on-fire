@@ -393,6 +393,97 @@ const deleteAllMyClosedEvents = async (req, res) => {
   }
 }
 
+const checkExistence = async (event) => {
+  try {
+    const exists = await Event.findOne({
+      eventName: { $regex: event.title, $options: 'i' }, //Check if title in DB includes incoming title
+    })
+  
+    return exists
+  } catch (error) {
+    console.log('Error checking event existence')
+    throw Error (error)
+  }
+}
+
+const saveScrapedEvent = async (event) => {
+  try {
+    console.log(event)
+    const exists = await checkExistence(event)
+
+    if (exists) {
+      console.log('Duplicate event found:', event)
+      return 'duplicated'
+    }
+
+    await Event.create({
+      categories: event.category,
+      eventName: event.title,
+      eventType: 'event',
+      eventDate: {
+        calendar: {
+          type: 'gregory',
+        },
+        era: 'AD',
+        year: event.startYear,
+        month: event.startMonth,
+        day: event.startDay,
+      },
+      eventEndDate: event.lastDay
+        ? {
+            calendar: {
+              type: 'gregory',
+            },
+            era: 'AD',
+            year: event.lastYear,
+            month: event.lastMonth,
+            day: event.lastDay,
+          }
+        : null,
+      eventLocation: event.location ? {
+        postalCode: event.postalCode,
+        address: event.location,
+        coordinates: event.coordinates,
+        mapImageUrl: event.mapImageUrl,
+      } : null,
+      startTime: event.time,
+      eventDescription: event.description,
+      externalUrl: event.link,
+      coverImage: event.imgUrl,
+      externalSource: true,
+      status: 'published',
+      userId: event.userId,
+    })
+    console.log('Event added:', event)
+    return {
+      success: true,
+      message: 'Event added successfully',
+      event
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: 'Error creating scrapped event.',
+      description: error.message
+    }
+  }
+}
+
+const cleanDB = async (month) => {
+  try {
+    await Event.deleteMany({ 'eventDate.month': month })
+    console.log('cleaned')
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: 'Error deleting events.',
+      description: error.message,
+    }
+  }
+}
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -404,4 +495,6 @@ module.exports = {
   updateEventByAdmin,
   deleteEvent,
   deleteAllMyClosedEvents,
+  saveScrapedEvent,
+  cleanDB
 }

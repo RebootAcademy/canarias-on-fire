@@ -28,16 +28,14 @@ const EventSchema = new mongoose.Schema({
     type: {
       type: String,
       enum: ['Point'],
-      required: true,
-      default: 'Point',
+      default: 'Point'
     },
     coordinates: {
       type: [Number],
-      required: true,
+      // required: true,
     },
     address: {
-      type: String,
-      required: true,
+      type: String
     },
     postalCode: {
       type: Number,
@@ -45,7 +43,7 @@ const EventSchema = new mongoose.Schema({
     },
     mapImageUrl: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   eventPrice: {
@@ -118,6 +116,10 @@ const EventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'subscription',
   },
+  externalSource: {
+    type: Boolean,
+    default: false
+  }
 })
 EventSchema.index({ eventLocation: '2dsphere' })
 
