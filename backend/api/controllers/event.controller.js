@@ -440,12 +440,14 @@ const saveScrapedEvent = async (event) => {
             day: event.lastDay,
           }
         : null,
-      eventLocation: event.location ? {
-        postalCode: event.postalCode,
-        address: event.location,
-        coordinates: event.coordinates,
-        mapImageUrl: event.mapImageUrl,
-      } : null,
+      eventLocation: event.location
+        ? {
+            postalCode: event.postalCode,
+            address: event.location,
+            coordinates: event.coordinates,
+            mapImageUrl: event.mapImageUrl,
+          }
+        : null,
       startTime: event.time,
       eventDescription: event.description,
       externalUrl: event.link,
@@ -453,6 +455,7 @@ const saveScrapedEvent = async (event) => {
       externalSource: true,
       status: 'published',
       userId: event.userId,
+      payment: '6702b0ef009a63bba556a209',
     })
     console.log('Event added:', event)
     return {

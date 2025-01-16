@@ -98,26 +98,30 @@ const limitedPromotions = computed(() => {
       (event) => event.eventDiscount === selectedPromotion.value
     )
   }
-  const secondFilter = filterDiscount
+  let secondFilter = filterDiscount
     .filter(
       (promotion) =>
         promotion.status === 'published' &&
         promotion.eventType === 'promotion' &&
-        promotion.dist?.calculated < eventStore.radioLocation &&
         ((promotion.userId?.isActive && promotion.userId?.isValidated) ||
           promotion.userId?.role === 'admin')
     )
-    .sort((a, b) => {
+
+    if (userStore.acceptedGeolocation){
+      secondFilter =  secondFilter.filter((promotion) => promotion?.dist?.calculated < eventStore.radioLocation)
+    }
+    secondFilter = secondFilter.sort(() => Math.random() - 0.5)
+    return secondFilter.sort((a, b) => {
       const priorityA = getPromoPriority(a)
       const priorityB = getPromoPriority(b)
 
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
-      return compareDates(a.eventDate, b.eventDate)
+      // return compareDates(a.eventDate, b.eventDate)
+      // Random organization
     })
 
-  return secondFilter
 })
 
 function getPromoPriority(promotion) {

@@ -26,6 +26,15 @@ onMounted(async () => {
   await articleStore.fetchArticles()
   await subscriptionStore.fetchSubscriptions()
   await paymentStore.fetchPayments()
+  
+  await nextTick()
+  if (localStorage.getItem('themePreference') === 'light') {
+    document.body.classList.remove('dark');
+  } else {
+    document.body.classList.add('dark');
+    userStore.setThemePreference('dark')
+  }  
+
   async function monitorGeolocation() {
     if (!navigator.permissions) {
       console.warn('La API de permisos no está disponible en este navegador.')
@@ -75,5 +84,7 @@ onMounted(async () => {
   }
 
   monitorGeolocation()
+
+  
 })
 </script>

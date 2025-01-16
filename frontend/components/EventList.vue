@@ -46,17 +46,23 @@ const limitedEvents = computed(() => {
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
   }
     
-  return filterEvents.sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
+  return filterEvents
+    .sort((a, b) => {
+      // Primero compara las prioridades
+      const priorityA = getEventPriority(a) || null;
+      const priorityB = getEventPriority(b) || null;
 
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB
+      if (!priorityA && priorityB) {
+        return 1; // Coloca los eventos sin "paymentId" al final
       }
-      return compareDates(a.eventDate, b.eventDate)
-    })
+      if (priorityA && !priorityB) {
+        return -1; // Coloca los eventos con "paymentId" al principio
+      }
 
-    .slice(0, 9)
+      // Si las prioridades son iguales, compara las fechas
+      return compareDates(a.eventDate, b.eventDate);
+    })
+    .slice(0, 9);
 })
 
 function getEventPriority(event) {
