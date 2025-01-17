@@ -31,6 +31,8 @@
   "eventLocationDescription": "Especifica la ubicación exacta donde se llevará a cabo tu evento. Esta información ayudará a los asistentes a planificar su visita con antelación.",
   "eventPrice": "Precio",
   "eventDiscount": "Tipo de descuento",
+  "adminPlan": "Plan de publicación",
+  "chooseAdminPlan": "Elige el plan de publicación",
   "eventCodePromo": "Código de promoción",
   "addEventCodePromo": "¿Quiere añadir un código de promoción?",
   "eventCodePromoPlaceholder": "Introduce tu código promocional",
@@ -160,5 +162,6 @@
     "manageCost": "Gastos de gestión no incluidos si los hubiere",
     "free": "GRATIS",
     "notSpecific": "NO ESPECIFICADO"
-  }
+  },
+  "cancelPromotionBTN": "CANCELAR PROMOCIÓN"
 }

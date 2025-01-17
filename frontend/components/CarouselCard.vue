@@ -49,7 +49,7 @@ const props = defineProps({
   },
 })
 
-const defaultImage = './defaultImg.png'
+const defaultImage = '/defaultImg.png'
 
 const currentImageIndex = ref(0)
 

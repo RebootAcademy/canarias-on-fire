@@ -338,14 +338,17 @@ const updateEvent = async (req, res) => {
 
 const updateEventByAdmin = async (req, res) => {
   try {
-    const subscription = await Subscription.findOne({ name: 'optima' })
+    console.log('body', req.body)
+    const subscription = await Subscription.findOne({
+      name: req.body.adminPayment,
+    })
     if (!subscription) {
       return res.status(500).json({
         success: false,
         message: 'Optima subscription not found',
       })
     }
-    const paymentPlan = await Payment.findOne({ name: 'optima plus' })
+    const paymentPlan = await Payment.findOne({ name: req.body.adminPayment })
     const event = await Event.findById(req.params.id)
     if (!event) {
       return res.status(404).json({

@@ -5,12 +5,20 @@
     <div class="flex w-full justify-end italic text-primary">
       <p v-if="!isValidated && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>
+    <div v-if="isAdmin" class="w-full md:w-1/3">
+      <p class="font-semibold mb-4">{{ $t('adminPlan') }}</p>
+      <CustomSelect
+        v-model:selected="eventStore.adminPayment"
+        :items="eventStore.eventType === 'event' ? tariffItems : tariffItems.slice(0, 2)"
+        :placeholder="$t('chooseAdminPlan')"
+      />
+    </div>
     <div class="flex w-full justify-end items-center gap-4">
       <Button
-          @click="router.push('/events')"
-          class="bg-gray text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
-          >{{ $t('buttons.cancel') }}</Button
-        >
+        @click="router.push('/events')"
+        class="bg-gray text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
+        >{{ $t('buttons.cancel') }}</Button
+      >
       <CustomBtn
         v-if="isValidated || isAdmin"
         :title="isEditing ? $t('buttons.update') : $t('buttons.preview')"
@@ -37,6 +45,21 @@ const props = defineProps({
   },
 })
 
+const tariffItems = computed(() => [
+  {
+    label: t('plansName.basic'),
+    value: 'basic',
+  },
+  {
+    label: t('plansName.optima'),
+    value: 'optima',
+  },
+  {
+    label: t('plansName.optimaPlus'),
+    value: 'optima plus',
+  },
+])
+
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const router = useRouter()
@@ -55,7 +78,7 @@ const onSubmit = async () => {
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)
-      
+
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
         if (result) {
@@ -100,6 +123,4 @@ const checkIfUserHasPromotions = (event) => {
   )
   return hasPromotions.length > 0
 }
-
-
 </script>

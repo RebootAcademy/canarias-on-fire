@@ -279,8 +279,6 @@
             {{ errors.eventCodePromo }}
           </span>
         </div>
-
-        
       </div>
     </div>
   </div>

@@ -52,6 +52,7 @@ export const useEventStore = defineStore('eventStore', {
     userEvents: [],
     userId: null,
     payment: null,
+    adminPayment: null,
     radioLocation: '20000',
     selectedEventFilter: 'all',
   }),
@@ -387,6 +388,7 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(`/events/admin/${eventId}`, {
         method: 'PATCH',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        body: JSON.stringify({adminPayment: this.adminPayment}),
       })
 
       if (error.value) {
@@ -522,6 +524,7 @@ export const useEventStore = defineStore('eventStore', {
         status: this.status,
         userId: this.userId,
         payment: this.payment,
+        adminPayment: this.adminPayment,
       }
     },
 

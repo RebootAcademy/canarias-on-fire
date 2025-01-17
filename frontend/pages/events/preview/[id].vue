@@ -99,7 +99,7 @@ const route = useRoute()
 const router = useRouter()
 
 const eventId = route.params.id
-const defaultImage = './defaultImg.png'
+const defaultImage = '/defaultImg.png'
 
 onMounted(async () => {
   await eventStore.fetchEventById(eventId)

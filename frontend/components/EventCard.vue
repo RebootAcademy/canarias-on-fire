@@ -194,7 +194,7 @@ const isOwner = computed(() => {
   return eventStore?.event?.userId._id === userStore.userData?._id
 })
 
-const defaultImage = './defaultImg.png'
+const defaultImage = '/defaultImg.png'
 
 const getPaymentType = computed(() => {
   switch (props.event.payment?.name) {

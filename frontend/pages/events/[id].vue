@@ -19,11 +19,11 @@
         class="flex sm:w-full md:w-auto justify-end items-center gap-2 mb-4 md:my-6 md:mr-6"
       >
         <div
-          v-if="isOwner && event.status === 'published'"
+          v-if="isOwner && event.status === 'published' && event.eventType === 'promotion'"
           class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-red-500 bg-red-500 rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-red-500"
           @click="isOpen = { status: true, type: 'cancel' }"
         >
-          <p>CANCELAR PROMOCIÓN</p>
+          <p>{{ $t('cancelPromotionBTN')}}</p>
         </div>
 
         <Share2

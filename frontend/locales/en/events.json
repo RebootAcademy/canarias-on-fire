@@ -32,6 +32,8 @@
   "eventPrice": "Price",
   "eventDiscount": "Type of discount",
   "eventCodePromo": "Promo code",
+  "adminPlan": "Plan of publication (Admin only)",
+  "chooseAdminPlan": "Choose your plan",
   "addEventCodePromo": "Do you want to add a promo code?",
   "eventCodePromoPlaceholder": "Enter your promotional code",
   "eventServices": "Services",
@@ -160,5 +162,6 @@
     "manageCost": "Management fees, if any, are not included.",
     "free": "FREE",
     "notSpecific": "NOT SPECIFIC"
-  }
+  },
+  "cancelPromotionBTN": "CANCEL PROMOTION"
 }
