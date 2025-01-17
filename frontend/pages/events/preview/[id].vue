@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <div class="px-8">
+  <div class="px-12">
     <h1 class="text-4xl font-bold">{{ eventStore.eventName }}</h1>
     <div class="flex items-center gap-4 mt-4 text-gray-600">
       <div v-if="eventStore.eventDate" class="flex items-center gap-1">
@@ -54,6 +54,26 @@
           class="w-full h-60 lg:h-[500px] object-cover mt-4"
         />
       </details>
+    </div>
+    <div 
+      v-if="eventStore.eventDiscount"
+      class="w-fit"
+    >
+      <DiscountSquare :event="{ 
+        eventDiscount: eventStore.eventDiscount,
+        categoriesOfServices: eventStore.categoriesOfServices
+      }" />
+    </div>
+    <div 
+      v-if="eventStore.eventType === 'event' && eventStore.musicType"
+      class="w-fit"
+    >
+      <h2 class="text-2xl font-semibold">
+        {{$t(`musicType`)}}
+      </h2>
+      <p>
+        {{$t(`values.${eventStore.musicType}`)}}
+      </p>
     </div>
     <!--     <div class="mt-8">
       <h2 class="text-2xl font-semibold">Organizador</h2>

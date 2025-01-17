@@ -55,6 +55,7 @@ export const useEventStore = defineStore('eventStore', {
     payment: null,
     radioLocation: '20000',
     selectedEventFilter: 'all',
+    musicFilter: 'all'
   }),
 
   actions: {
@@ -523,6 +524,7 @@ export const useEventStore = defineStore('eventStore', {
         status: this.status,
         userId: this.userId,
         payment: this.payment,
+        musicType: this.musicType
       }
     },
 

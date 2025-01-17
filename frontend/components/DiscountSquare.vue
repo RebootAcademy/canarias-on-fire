@@ -22,6 +22,8 @@ const props = defineProps({
   },
 })
 
+console.log(props.event)
+
 const showTypeOfDiscount = () => {
   switch (props.event.eventDiscount) {
     case 'other':
@@ -36,6 +38,8 @@ const showTypeOfDiscount = () => {
       return t('eventTypeDiscount.50-70')
     case '2x1':
       return t('eventTypeDiscount.2x1')
+    case '3x1':
+      return t('eventTypeDiscount.3x1')
     default:
       return ''
   }

@@ -46,6 +46,7 @@
     "other": "Other",
     "notSpecificied": "Not specified"
   },
+  "musicType": "Type of music",
   "free": "My tickets are free",
   "capacity": "Capacity",
   "eventPriceDescription": "Specify whether your event will be free or paid. If it is paid, please indicate the cost of admission.",

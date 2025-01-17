@@ -21,9 +21,19 @@
       }}</span>
     </div>
   </div>
+  <div v-if="isMusicSelected()" class="mt-4 w-full flex justify-center">
+    <CustomSelect
+      :items="genresItems"
+      :placeholder="placeholderSelect"
+      v-model:selected="selectedOption"
+      :optionDefault="selectedOption"
+      class="w-4/5 md:w-1/3"
+    />
+  </div>
 </template>
 
 <script setup>
+const { t } = useI18n()
 import { storeToRefs } from 'pinia'
 import * as LucideIcons from 'lucide-vue-next'
 
@@ -46,6 +56,10 @@ const {
   selectedCategoriesForPromotion,
   selectCategoryForFilterCompany,
 } = storeToRefs(eventStore)
+
+const selectedOption = ref('all')
+
+watch(selectedOption, (value) => eventStore.musicFilter = value)
 
 const filterCategories = computed(() => {
   if (props.type === 'event') {
@@ -79,6 +93,9 @@ const isSelected = (category) => {
 }
 
 const toggleCategory = (category) => {
+  if (isMusicSelected()){
+    selectedOption.value = 'all'
+  }
   if (props.type === 'event') {
     eventStore.toggleCategory(category)
   } else if (props.isCompany === true) {
@@ -86,5 +103,28 @@ const toggleCategory = (category) => {
   } else {
     eventStore.toogleCategoryForPromotions(category)
   }
+}
+
+const genresItems = computed(() => {
+  return [
+    { value: 'all', label: t('onBoarding.step2Genres.all') },
+    { value: 'djs', label: t('onBoarding.step2Genres.djs') },
+    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
+    { value: 'electronic', label: t('onBoarding.step2Genres.electronic') },
+    { value: 'rock', label: t('onBoarding.step2Genres.rock') },
+    { value: 'jazz', label: t('onBoarding.step2Genres.jazz') },
+    { value: 'classic', label: t('onBoarding.step2Genres.classic') },
+    { value: 'other', label: t('onBoarding.step2Genres.other') },
+  ]
+})
+
+const placeholderSelect = computed(() => {
+  return t('onBoarding.step2SelectGenres')
+})
+
+const isMusicSelected = () => {
+  return selectedCategories.value.some(
+      (c) => c.name === 'music'
+    )
 }
 </script>

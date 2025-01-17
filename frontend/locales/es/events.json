@@ -46,6 +46,7 @@
     "other": "Otro",
     "notSpecificied": "No especificado"
   },
+  "musicType": "Tipo de música",
   "free": "Evento gratuito",
   "capacity": "Aforo",
   "eventPriceDescription": "Especifica si tu evento será gratuito o de pago. Si es de pago, por favor indica el costo de la entrada.",
