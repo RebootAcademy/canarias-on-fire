@@ -37,6 +37,7 @@ const props = defineProps({
   },
 })
 
+
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const router = useRouter()

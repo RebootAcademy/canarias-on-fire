@@ -8,6 +8,9 @@ const EventSchema = new mongoose.Schema({
       // required: true
     },
   ],
+  musicType: {
+    type: String
+  },
   eventName: {
     type: String,
     // required: true

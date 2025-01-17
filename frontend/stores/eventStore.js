@@ -13,6 +13,7 @@ export const useEventStore = defineStore('eventStore', {
     selectedCategoriesByServices: [],
     selectCategoryForFilterCompany: 'all',
     selectedFilterByDate: 'all',
+    musicType: null,
     searchQuery: '',
     eventName: '',
     eventType: '',
