@@ -116,7 +116,6 @@ const sendEmail = async (type, company) => {
     const html = await loadTemplate(templatePath, replacements)
 
     const destination = (type) => {
-      console.log(type, 'type')
       switch (type) {
         case 'registeredCompany':
         case 'contact':
