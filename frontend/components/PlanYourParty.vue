@@ -47,7 +47,8 @@ function filterUsers(category) {
   userList.value = userStore.users
     .filter(user => {
         if (category === 'all' || !category) {
-          return user.isActive && user.role !== 'admin'
+          return user.isActive && 
+          (user.role === 'company' || user.role === 'musician')
         }
         if (category === 'bands') {
           return user.role === 'musician'
@@ -56,6 +57,8 @@ function filterUsers(category) {
     })
     .sort((a, b) => getPriority(b) - getPriority(a))
 }
+
+console.log(userList.value)
 
 onMounted(() => {
   userStore.fetchUsers()

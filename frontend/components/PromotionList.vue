@@ -68,7 +68,6 @@ const limitedPromotions = computed(() => {
      
     })
     .slice(0, 9) 
-  
 })
 
 function getPromoPriority(promotion) {
