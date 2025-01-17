@@ -276,7 +276,7 @@ const deleteEvent = async () => {
 
 const cancelPromo = async () => {
   try {
-    await eventStore.cancelPromotion(event.value._id, 'closed')
+    await eventStore.updatePromotion(event.value._id, 'closed')
     toast({
       description: t('cancelPromotionToast'),
     })

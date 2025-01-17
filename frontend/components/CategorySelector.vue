@@ -39,6 +39,24 @@
         </Badge>
       </div>
     </div>
+    <div v-if="isMusic" class="flex flex-col gap-2">
+      <p>{{ $t('chooseMusicTags')}}</p>
+      <div class="flex flex-wrap justify-center gap-2 p-2 mb-4">
+        <Badge
+          v-for="(category, idx) in musicTypes"
+          :key="idx"
+          :class="isMusicTypeSelected(category.value) ?
+          'bg-transparent border-primary text-primary' :
+          'bg-gray text-secondary'
+          "
+          @click="toggleMusicCategory(category.value)"
+          variant="secondary"
+          class="p-2 px-4 cursor-pointer hover:bg-secondary hover:text-primary"
+          >
+          {{ $t(`values.${category.value}`) }}
+          </Badge>
+        </div>
+    </div>
     <span v-if="eventStore.hasTriedSubmit" class="text-red-500 text-xs">{{
       errors.categories
     }}</span>
@@ -61,8 +79,25 @@ const typeOfServices = computed(() => [
   { label: t('values.other'), value: 'other', icon: 'Ellipsis' },
 ])
 
+const musicTypes = computed(() => {
+  return [
+    { value: 'djs', label: t('onBoarding.step2Genres.djs') },
+    { value: 'electronic', label: t('onBoarding.step2Genres.electronic') },
+    { value: 'rock', label: t('onBoarding.step2Genres.rock') },
+    { value: 'jazz', label: t('onBoarding.step2Genres.jazz') },
+    { value: 'metal', label: t('onBoarding.step2Genres.metal') },
+    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
+    { value: 'classic', label: t('onBoarding.step2Genres.classic') },
+    { value: 'other', label: t('onBoarding.step2Genres.other') }
+  ]
+})
+
 const isThereService = computed(() => {
   return selectedCategories.value.some((c) => c?.name === 'services')
+})
+
+const isMusic = computed(() => {
+  return selectedCategories.value.some((c) => c?.name === 'music')
 })
 
 const props = defineProps({
@@ -176,4 +211,13 @@ const toogleServicesCategory = (category) => {
 
   eventStore.setSelectedCategoriesOfServices(updatedCategories)
 }
+
+const toggleMusicCategory = (value) => {
+  eventStore.musicType = value
+}
+
+const isMusicTypeSelected = (value) => {
+  return value === eventStore.musicType
+}
+
 </script>

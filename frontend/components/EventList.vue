@@ -45,6 +45,10 @@ const limitedEvents = computed(() => {
   if (userStore.acceptedGeolocation){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
   }
+
+  if (eventStore.musicFilter !== 'all') {
+    filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
+  }
     
   return filterEvents
     .sort((a, b) => {

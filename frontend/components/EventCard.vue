@@ -80,6 +80,20 @@
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <DropdownMenuItem
+                  @select="handleStatus"
+                  class="cursor-pointer"
+                >
+                  <BookCheck 
+                    v-if="event.status === 'draft'" 
+                    class="mr-2 h-4 w-4" 
+                  />
+                  <BookDashed 
+                    v-if="event.status === 'published'" 
+                    class="mr-2 h-4 w-4" 
+                  />
+                  <span>{{event.status === 'draft' ? $t('buttons.publish') : $t('buttons.draft')}}</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                   <Pencil class="mr-2 h-4 w-4" />
                   <span>{{ $t('buttons.edit') }}</span>
@@ -169,7 +183,7 @@
 <script setup>
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
-import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
+import { MoreVertical, Pencil, Trash, BookCheck, BookDashed} from 'lucide-vue-next'
 const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -267,6 +281,14 @@ const formattedDate = () => {
         day: 'numeric',
       })
     )
+  }
+}
+
+const handleStatus = async () => {
+  if (props.event.status === 'draft') {
+    await eventStore.updateEventStatus(props.event._id, 'published')
+  } else {
+    await eventStore.updateEventStatus(props.event._id, 'draft')
   }
 }
 </script>

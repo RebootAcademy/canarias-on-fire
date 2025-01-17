@@ -280,8 +280,6 @@ const updateEvent = async (req, res) => {
       runValidators: true,
     })
 
-    console.log(event)
-
     if (!event) {
       return res.status(404).json({
         success: false,

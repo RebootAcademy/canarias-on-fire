@@ -18,11 +18,12 @@ const validateEventDate = (t) => {
     if (!eventStore.eventDate || typeof(eventStore.eventDate) !== 'object' ) {
       return t('eventDateRequired')
     }
-  } else if (eventStore.eventType === 'promotion') {
-    if (!eventStore.eventDate || !eventStore.eventDate.start || !eventStore.eventDate.end) {
-      return t('eventDateRequired')
-    }
-  }
+  } 
+  // else if (eventStore.eventType === 'promotion') {
+  //   if (!eventStore.eventDate || !eventStore.eventDate.start || !eventStore.eventDate.end) {
+  //     return t('eventDateRequired')
+  //   }
+  // }
   return ''
 } 
 

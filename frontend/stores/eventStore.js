@@ -13,6 +13,7 @@ export const useEventStore = defineStore('eventStore', {
     selectedCategoriesByServices: [],
     selectCategoryForFilterCompany: 'all',
     selectedFilterByDate: 'all',
+    musicType: null,
     searchQuery: '',
     eventName: '',
     eventType: '',
@@ -55,6 +56,7 @@ export const useEventStore = defineStore('eventStore', {
     adminPayment: null,
     radioLocation: '20000',
     selectedEventFilter: 'all',
+    musicFilter: 'all'
   }),
 
   actions: {
@@ -439,7 +441,7 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async cancelPromotion(eventId, status) {
+    async updatePromotion(eventId, status) {
       const { data, error } = await useFetch(`/events/cancel/${eventId}`, {
         method: 'PATCH',
         body: { status },
@@ -524,7 +526,8 @@ export const useEventStore = defineStore('eventStore', {
         status: this.status,
         userId: this.userId,
         payment: this.payment,
-        adminPayment: this.adminPayment,
+        musicType: this.musicType,
+        adminPayment: this.adminPayment
       }
     },
 
