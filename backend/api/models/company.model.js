@@ -37,12 +37,15 @@ const CompanySchema = new mongoose.Schema({
   },
   sector: {
     type: String,
-    enum: ['restoration', 'services', 'nightlife', 'activities', 'foodtruck'],
+    enum: ['restoration', 'services', 'nightlife', 'activities', 'promoter'],
     required: true,
   },
   type: {
     type: String,
     enum: ['family', 'mexican', 'asian', 'vegan', 'vegetarian', 'fastfood', 'tapas', 'italian', 'spanish', 'other'],
+  },
+  serviceType: {
+    type: String
   },
   preferredLocations: [
     {

@@ -123,7 +123,7 @@
             </SelectTrigger>
             <SelectContent class="text-gray-500">
               <SelectItem value="foodtruck">
-                Foodtruck
+                {{$t('onBoarding.step2Sector.promoter')}}
               </SelectItem>
               <SelectItem value="restoration">{{
                 $t('onBoarding.step2Sector.restoration')
@@ -155,6 +155,21 @@
               v-model:selected="formData.type"
               :items="restorationSectors"
               :optionDefault="foodSelected"
+            />
+          </div>
+          <div
+            v-if="formData.sector === 'services'"
+            class="flex flex-col gap-1 mt-4"
+          >
+            <Label class="text-gray-300">
+              {{ $t('onBoarding.serviceType.label') }}
+              <span class="text-primary">*</span>
+            </Label>
+            <CustomSelect
+              :placeholder="placeholderSelect"
+              v-model:selected="formData.serviceType"
+              :items="serviceSectors"
+              :optionDefault="serviceSelected"
             />
           </div>
         </div>
@@ -208,6 +223,7 @@ const { t } = useI18n()
 const isCompanyNameSynced = ref(true)
 
 const foodSelected = ref('spanish')
+const serviceSelected = ref('foodtruck')
 
 const formData = ref({
   companyName: '',
@@ -218,6 +234,7 @@ const formData = ref({
   preferredLocations: '',
   sector: '',
   type: foodSelected.value,
+  serviceType: '',
   termsAccepted: false,
   profileImg: '',
   refCode: '',
@@ -251,6 +268,18 @@ const restorationSectors = computed(() => {
     { value: 'fastfood', label: t('onBoarding.foodType.fastfood') },
     { value: 'tapas', label: t('onBoarding.foodType.tapas') },
     { value: 'other', label: t('onBoarding.foodType.other') },
+  ]
+})
+
+const serviceSectors = computed(() => {
+  return [
+    { value: 'foodtruck', label: t('onBoarding.serviceType.foodtruck') },
+    { value: 'catering', label: t('onBoarding.serviceType.catering') },
+    { value: 'sound', label: t('onBoarding.serviceType.sound') },
+    { value: 'photo', label: t('onBoarding.serviceType.photo') },
+    { value: 'furniture', label: t('onBoarding.serviceType.furniture') },
+    { value: 'renting', label: t('onBoarding.serviceType.renting') },
+    { value: 'other', label: t('onBoarding.serviceType.other') }
   ]
 })
 

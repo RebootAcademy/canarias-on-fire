@@ -31,10 +31,10 @@
     "bands": "Djs y grupos",
     "catering": "Catering",
     "lighting": "Sonido e Iluminación",
-    "sound": "Sonido",
-    "photography": "Fotografía",
+    "sound": "Sonido e Iluminación",
+    "photo": "Fotografía",
     "furniture": "Mobiliario",
-    "places": "Lugares",
+    "renting": "Locales",
     "workshops": "Talleres"
   }
 }

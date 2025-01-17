@@ -85,6 +85,7 @@
     "step2Sector": {
       "label": "Sector",
       "placeholder": "Selecciona el sector",
+      "promoter": "Promotor de Eventos",
       "services": "Servicios",
       "restoration": "Restauración",
       "nigthlife": "Ocio nocturno",
@@ -103,6 +104,17 @@
       "italian": "Italiana",
       "spanish": "Española",
       "other": "Otra"
+    },
+    "serviceType": {
+      "label": "Tipo de Servicio",
+      "placeholder": "Selecciona el tipo de Servicio",
+      "foodtruck": "Foodtruck",
+      "catering": "Catering",
+      "sound": "Sonido e Iluminación",
+      "photo": "Fotografía",
+      "furniture": "Mobiliario",
+      "renting": "Alquiler de Locales",
+      "other": "Otros"
     },
     "step2CodRef": "Código de vendedor",
     "step2TermsPart1": "Acepto los  ",

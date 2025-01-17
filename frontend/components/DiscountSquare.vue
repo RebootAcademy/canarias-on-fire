@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-primary-gradient p-0.5 rounded-md">
+    <div class="bg-primary-gradient p-0.5 rounded-md text-center">
         <div class="flex flex-col gap-2 bg-background  p-6 rounded-md min-w-[200px]">
           <p v-if="showTypeOfDiscount() !== ''">{{ $t('eventDiscount') }}:</p>
           <p class="font-bold">{{ showTypeOfDiscount() }}</p>

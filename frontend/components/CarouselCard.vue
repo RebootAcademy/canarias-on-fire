@@ -64,7 +64,7 @@ const imagesToShow = computed(() => {
      filteredEventImages = props.event.eventImages.filter(image => image.url !== props.event.coverImage)
      images.push(...filteredEventImages);
   } else if (props.type === 'promotion') {
-    filteredEventImages = props.event.eventImages.filter(image => image.url !== props.event.coverImage)
+    filteredEventImages = props?.event?.eventImages?.filter(image => image.url !== props.event.coverImage) || []
      images.push(...filteredEventImages);
   } else {
     filteredEventImages = props.event.articleImages.filter(image => image.url !== props.event.coverImage)

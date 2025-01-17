@@ -116,10 +116,10 @@ const sendEmail = async (type, company) => {
     const html = await loadTemplate(templatePath, replacements)
 
     result = await transporter.sendMail({
-      from: process.env.EMAIL,
+      from: type === 'contact' ? company.email : process.env.EMAIL,
       to: type === 'registeredCompany' || 'contact' ? process.env.EMAIL : company.email,
       subject: subject,
-        html,
+      html,
     })
 
     return result
