@@ -31,9 +31,9 @@
         <i class="far fa-clock"></i>
         <span>{{ eventStore.startTime }} - {{ eventStore.endTime }}</span>
       </div>
-      <div class="flex items-center gap-1">
+      <div v-if="eventStore.eventType === 'event'" class="flex items-center gap-1">
         <i class="fas fa-euro-sign"></i>
-        <span>{{ eventStore.eventPrice }}€</span>
+        <span>{{ eventStore.eventPrice === 0 ? $t('price.free') : `${eventStore.eventPrice}€` }}</span>
       </div>
     </div>
     <div class="mt-8">
