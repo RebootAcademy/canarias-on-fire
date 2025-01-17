@@ -5,11 +5,11 @@
     <div class="flex w-full justify-end italic text-primary">
       <p v-if="!isValidated && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>
-    <div v-if="isAdmin" class="w-full md:w-1/3">
+    <div v-if="isAdmin && eventStore.eventType === 'event'" class="w-full md:w-1/3">
       <p class="font-semibold mb-4">{{ $t('adminPlan') }}</p>
       <CustomSelect
         v-model:selected="eventStore.adminPayment"
-        :items="eventStore.eventType === 'event' ? tariffItems : tariffItems.slice(0, 2)"
+        :items="tariffItems"
         :placeholder="$t('chooseAdminPlan')"
       />
     </div>

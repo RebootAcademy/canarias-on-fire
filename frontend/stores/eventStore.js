@@ -148,7 +148,7 @@ export const useEventStore = defineStore('eventStore', {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
     setSelectedCategories(categories) {
-      this.selectedCategories = categories
+      this.selectedCategories = categories || []
     },
     setSelectedCategoriesOfServices(categories) {
       if (categories === 'delete')
