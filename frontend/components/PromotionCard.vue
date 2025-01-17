@@ -76,6 +76,20 @@
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <DropdownMenuItem
+                  @select="handleStatus"
+                  class="cursor-pointer"
+                >
+                  <BookCheck 
+                    v-if="promotion.status === 'draft'" 
+                    class="mr-2 h-4 w-4" 
+                  />
+                  <BookDashed 
+                    v-if="promotion.status === 'published'" 
+                    class="mr-2 h-4 w-4" 
+                  />
+                  <span>{{promotion.status === 'draft' ? $t('buttons.publish') : $t('buttons.draft')}}</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                   <Pencil class="mr-2 h-4 w-4" />
                   <span>{{ $t('buttons.edit') }}</span>
@@ -167,7 +181,7 @@
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
 const { t } = useI18n()
-import { MoreVertical, Pencil, Trash } from 'lucide-vue-next'
+import { MoreVertical, Pencil, Trash, BookCheck, BookDashed } from 'lucide-vue-next'
 
 const props = defineProps({
   promotion: {
@@ -248,6 +262,14 @@ const getPaymentType = computed(() => {
 })
 const isBasicPayment = computed(() => getPaymentType.value === 'basic')
 const isGoldPayment = computed(() => getPaymentType.value === 'optima')
+
+const handleStatus = async () => {
+  if (props.promotion.status === 'draft') {
+    await eventStore.updatePromotion(props.promotion._id, 'published')
+  } else {
+    await eventStore.updatePromotion(props.promotion._id, 'draft')
+  }
+}
 </script>
 
 <style scoped>

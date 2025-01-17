@@ -437,7 +437,7 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async cancelPromotion(eventId, status) {
+    async updatePromotion(eventId, status) {
       const { data, error } = await useFetch(`/events/cancel/${eventId}`, {
         method: 'PATCH',
         body: { status },
