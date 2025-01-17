@@ -527,7 +527,7 @@ export const useEventStore = defineStore('eventStore', {
         userId: this.userId,
         payment: this.payment,
         musicType: this.musicType,
-        adminPayment: this.adminPayment,
+        adminPayment: this.adminPayment
       }
     },
 
