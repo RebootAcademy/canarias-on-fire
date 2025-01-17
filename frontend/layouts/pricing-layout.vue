@@ -55,6 +55,10 @@ const headTitle = computed(() => {
 watch(() => route.path, (newPath) => {
 })
 
+onMounted(async() => {
+  await userStore.fetchAndSetUser(userStore.userData.email)
+})
+
 useHead({
   title: headTitle,
 })

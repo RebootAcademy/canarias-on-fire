@@ -157,7 +157,7 @@
             @click="publishEvent"
           >
             <Button
-              class="px-4 bg-background rounded-md hover:text-white hover:bg-primary-gradient"
+              class="px-4 bg-background rounded-md text-secondary hover:text-white hover:bg-primary-gradient"
             >
               {{ $t('buttons.publish') }}
             </Button>

@@ -82,7 +82,7 @@
         {{ $t('previewText.featurePayedEvents') }}
       </p>
     </div>
-    <Button @click="publishEvent" class="mt-8 bg-primary-gradient">{{
+    <Button @click="publishEvent" class="mt-8 bg-primary-gradient text-secondary hover:text-white">{{
       $t('buttons.publish')
     }}</Button>
   </div>

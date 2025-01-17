@@ -76,6 +76,10 @@ const optionsDashboard = computed(() => {
   ]
 })
 
+onMounted(() => {
+  userStore.fetchAndSetUser(userStore.userData.email)
+})
+
 useHead({
   title: 'Dashboard',
 })

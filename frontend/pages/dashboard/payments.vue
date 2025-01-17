@@ -1,7 +1,7 @@
 <template>
-  <div v-if="userData.role === 'company'" class="flex flex-col gap-4">
+  <div v-if="userData?.role === 'company'" class="flex flex-col gap-4">
     <div
-      v-if="userData.activeSubscription.status !== 'inactive'"
+      v-if="userData?.activeSubscription?.status !== 'inactive'"
       class="flex flex-col gap-4 w-full lg:w-1/isAuthenticated2"
     >
       <h1 class="text-xl font-semibold">{{ $t('paymentsSection.mySubscription')}}</h1>
@@ -22,7 +22,7 @@
             </p>
             <p
               v-if="
-                userStore.userData?.activeSubscription?.status === 'canceled'
+                userData?.activeSubscription?.status === 'canceled'
               "
             >
               ( {{ $t('paymentsSection.cancelAt') }}
@@ -49,7 +49,7 @@
         >
       </div>
     </div>
-    <div v-if="userData.activeSubscription.status === 'inactive' && userData.role === 'company'" class=" flex flex-col w-full gap-2 lg:w-1/2">
+    <div v-if="userData.activeSubscription?.status === 'inactive' && userData.role === 'company'" class=" flex flex-col w-full gap-2 lg:w-1/2">
       <h1 class="text-xl font-semibold">{{ $t('paymentsSection.mySubscription') }}</h1>
       <p class="text-grayForeground">{{ $t('paymentsSection.noSubscription')}}</p>
         <Button
@@ -64,44 +64,7 @@
         >
     </div>
   </div>
-  <div class="mt-8">
-    <p class="text-xl font-semibold">{{ $t('paymentsSection.paymentHistory') }}</p>
-    <p class="text-grayForeground mt-4">{{ $t('paymentsSection.paymentDetails') }}</p>
-    <div v-idivf="formattedInvoices?.length" class="container mx-auto p-4">
-      <table class="table-auto w-full">
-        <thead>
-          <tr class="text-grayForeground border-b-2 border-gray">
-            <th class="text-start p-2">{{ $t('paymentsSection.paymentDate') }}</th>
-            <th class="text-start p-2">{{ $t('paymentsSection.paymentAmount') }}</th>
-            <th class="text-start p-2">{{ $t('paymentsSection.paymentInvoice') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(invoice, index) in formattedInvoices"
-            :key="index"
-            class="p-2 border-b border-gray"
-          >
-            <td class="p-2">
-              {{ invoice.formattedDate }}
-            </td>
-            <td class="p-2">
-              {{ invoice.formattedAmount }} €
-            </td>
-            <td class="p-2">
-              <a
-                :href="invoice?.pdf"
-                class="text-blue-600 underline"
-                target="_blank"
-                >{{ $t('buttons.download') }} {{ $t('paymentsSection.paymentInvoice') }}</a
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p v-if="!formattedInvoices">{{ $t('paymentsSection.noInvoices') }}</p>
-  </div>
+  <PaymentList :formattedInvoices="formattedInvoices" />
 </template>
 
 <script setup>
@@ -113,34 +76,25 @@ const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 const userData = computed(() => userStore.userData)
 const subscriptionInformation = computed(() => {
-  return subscriptionStore.subscriptions.find(
+  return subscriptionStore.subscriptions?.find(
     (sub) => sub._id === userStore.userData?.activeSubscription?.plan
-  )
+  ) 
 })
 
 const nextPaymentDate = computed(() => {
-  if (!userStore.userData?.activeSubscription) {
-    return null
-  }
+  if (!userStore.userData?.activeSubscription) return null
   return new Date(
-    userStore.userData?.activeSubscription?.currentPeriodEnd
+    userStore.userData.activeSubscription.currentPeriodEnd
   ).toLocaleDateString()
 })
 
 const formattedInvoices = computed(() => {
-  if (!userStore.userData?.invoices.length) {
-    return null
-  }
-
-  return userStore.userData?.invoices.map((invoice) => {
-    const formattedDate = new Date(invoice.date).toLocaleDateString()
-    const formattedAmount = (invoice.amount / 100).toFixed(2) // Convertir 1999 a 19.99€
-    return {
-      ...invoice,
-      formattedDate,
-      formattedAmount,
-    }
-  })
+  if (!userStore.userData?.invoices?.length) return []
+  return userStore.userData.invoices.map((invoice) => ({
+    ...invoice,
+    formattedDate: new Date(invoice.date).toLocaleDateString(),
+    formattedAmount: (invoice.amount / 100).toFixed(2), // Convertir 1999 a 19.99€
+  }))
 })
 
 definePageMeta({

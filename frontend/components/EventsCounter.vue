@@ -29,7 +29,7 @@ const endOfWeek = getEndOfWeek(today)
 const activeEventsCount = computed(() => {
   return eventStore.events.filter(event => {
     
-    const eventDate = new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day)
+    const eventDate = new Date(event.eventDate?.year, event.eventDate?.month - 1, event.eventDate?.day)
     return (
       event.status === 'published' &&
       event.eventType === 'event' &&

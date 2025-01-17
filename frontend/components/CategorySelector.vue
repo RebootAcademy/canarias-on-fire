@@ -87,7 +87,7 @@ const filteredCategories = computed(() => {
     eventStore.selectedCategories.some(
     (c) => c && c.type === 'event'
     ) && eventStore.setSelectedCategories([])
-    return eventStore.categories.filter((cat) => cat.type !== 'event')
+    return eventStore.categories.filter((cat) => cat.type === 'promotion')
   }
 })
 
@@ -129,6 +129,9 @@ const toggleCategory = (category) => {
   let updatedCategories
 
   if (isPromotion) {
+    if(!eventStore.selectedCategories.some((c) => c.name === 'services')) {
+      eventStore.setSelectedCategoriesOfServices('delete')
+    }
     if (
       eventStore.selectedCategories.length === 1 &&
       eventStore.selectedCategories[0].id === category.id

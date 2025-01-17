@@ -65,8 +65,8 @@ const eventStore = useEventStore()
 const router = useRouter()
 const { t } = useI18n()
 
-const isValidated = userStore.userData.isValidated
-const isAdmin = userStore.userData.role
+const isValidated = computed(() => userStore.userData.isValidated)
+const isAdmin = computed(() => userStore.userData.role === 'admin')
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
