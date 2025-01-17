@@ -1,9 +1,9 @@
 <template>
   <div
-    class="relative h-[380px] rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
+    class="relative h-[380px] w-full rounded-lg overflow-hidden group hover:border-2 hover:border-primary focus:border-4 focus:border-white"
     :class="{
       'bg-secondary-gradient text-black': isGoldPayment,
-      'max-w-[300px]': isRelatedPromo,
+      'min-w-[350px] max-w-[350px]': isRelatedPromo,
     }"
   >
     <div v-if="promotion.status === 'closed'" class="bg-whiteGray/40 absolute inset-0 z-40"></div>

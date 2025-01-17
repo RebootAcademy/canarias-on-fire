@@ -65,8 +65,9 @@ async function fetchUsers() {
   }
 }
 
-onMounted( () => {
+onMounted(async() => {
   fetchUsers()
   eventStore.resetFilters()
+   userStore.fetchAndSetUser(userStore.userData.email)
 })
 </script>

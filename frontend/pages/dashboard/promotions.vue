@@ -24,7 +24,7 @@
                 ? 'font-bold text-white'
                 : 'text-whiteGray'
             "
-            >{{ option.value }}</span
+            >{{ option.label }}</span
           >
         </div>
         <!--  <div class="flex gap-2 items-center">

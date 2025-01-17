@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col text-secondary gap-2">
     <p class="font-semibold">{{ $t('tags') }}</p>
-    <p class="text-sm text-secondary mb-2">{{ type === 'event' ? $t('chooseTags') : $t('chooseTagsPromo') }}</p>
+    <p class="text-sm text-secondary mb-2">
+      {{ type === 'event' ? $t('chooseTags') : $t('chooseTagsPromo') }}
+    </p>
     <div class="flex flex-wrap justify-center gap-2 p-2 mb-4">
       <Badge
         v-for="category in filteredCategories"
@@ -18,7 +20,7 @@
       </Badge>
     </div>
     <div v-if="isThereService" class="flex flex-col gap-2">
-      <p>{{ $t('chooseServicesTags')}}</p>
+      <p>{{ $t('chooseServicesTags') }}</p>
       <div class="flex flex-wrap justify-center gap-2 p-2 mb-4">
         <Badge
           v-for="(category, idx) in typeOfServices"
@@ -32,10 +34,10 @@
           @click="toogleServicesCategory(category.value)"
           variant="secondary"
           class="p-2 px-4 cursor-pointer hover:bg-secondary hover:text-primary"
-          >
+        >
           {{ $t(`values.${category.value}`) }}
-          </Badge>
-        </div>
+        </Badge>
+      </div>
     </div>
     <div v-if="isMusic" class="flex flex-col gap-2">
       <p>{{ $t('chooseMusicTags')}}</p>
@@ -98,7 +100,6 @@ const isMusic = computed(() => {
   return selectedCategories.value.some((c) => c?.name === 'music')
 })
 
-
 const props = defineProps({
   isEditing: {
     type: Boolean,
@@ -113,9 +114,15 @@ const props = defineProps({
 
 const filteredCategories = computed(() => {
   if (props.type === 'event') {
+    eventStore.selectedCategories.some(
+    (c) => c && c.type === 'promotion'
+    ) && eventStore.setSelectedCategories([]); eventStore.setSelectedCategoriesOfServices([])
     return eventStore.categories.filter((cat) => cat.type === 'event')
   } else {
-    return eventStore.categories.filter((cat) => cat.type !== 'event')
+    eventStore.selectedCategories.some(
+    (c) => c && c.type === 'event'
+    ) && eventStore.setSelectedCategories([])
+    return eventStore.categories.filter((cat) => cat.type === 'promotion')
   }
 })
 
@@ -126,7 +133,10 @@ onMounted(async () => {
 })
 
 const isSelected = (category) => {
-  return eventStore.selectedCategories.some((c) => c && c.id === category.id)
+  return (
+    Array.isArray(eventStore.selectedCategories) &&
+    eventStore.selectedCategories.some((c) => c && c.id === category.id)
+  )
 }
 
 const isServiceSelected = (category) => {
@@ -141,32 +151,47 @@ const toggleCategory = (category) => {
     return
   }
 
-  if (!Array.isArray(eventStore.selectedCategories)) {
-    console.error(
-      'selectedCategories is not an array:',
-      eventStore.selectedCategories
-    )
-    eventStore.setSelectedCategories([])
+  if (eventStore.selectedCategories.lenght > 0 ) {
+
   }
 
-  const index = eventStore.selectedCategories.findIndex(
-    (c) => c && c.id === category.id
-  )
+  if (!Array.isArray(eventStore.selectedCategories)) {
+    console.warn('selectedCategories was not an array, resetting...')
+    eventStore.setSelectedCategories([]) // Reinicia como un array vacío
+  }
 
+  const isPromotion = eventStore.eventType === 'promotion'
   let updatedCategories
-  if (index === -1) {
-    updatedCategories = [...eventStore.selectedCategories, category]
-  } else {
-    if (category.name === 'services') {
+
+  if (isPromotion) {
+    if(!eventStore.selectedCategories.some((c) => c.name === 'services')) {
       eventStore.setSelectedCategoriesOfServices('delete')
     }
-    updatedCategories = eventStore.selectedCategories.filter(
-      (c) => c && c.id !== category.id
+    if (
+      eventStore.selectedCategories.length === 1 &&
+      eventStore.selectedCategories[0].id === category.id
+    ) {
+      eventStore.setSelectedCategories([])
+    } else {
+      eventStore.setSelectedCategories([category])
+    }
+  } else {
+    const index = eventStore.selectedCategories.findIndex(
+      (c) => c && c.id === category.id
     )
-  }
 
-  eventStore.setSelectedCategories(updatedCategories)
-  //validateFields()
+    if (index === -1) {
+      updatedCategories = [...eventStore.selectedCategories, category]
+    } else {
+      if (category.name === 'services') {
+        eventStore.setSelectedCategoriesOfServices('delete')
+      }
+      updatedCategories = eventStore.selectedCategories.filter(
+        (c) => c && c.id !== category.id
+      )
+    }
+    eventStore.setSelectedCategories(updatedCategories)
+  }
 }
 
 const toogleServicesCategory = (category) => {
@@ -176,7 +201,8 @@ const toogleServicesCategory = (category) => {
 
   let updatedCategories
   if (index === -1) {
-    updatedCategories = [...eventStore.selectedCategoriesByServices, category]
+    // updatedCategories = [...eventStore.selectedCategoriesByServices, category]
+    updatedCategories = [ category ]
   } else {
     updatedCategories = eventStore.selectedCategoriesByServices.filter(
       (c) => c && c !== category

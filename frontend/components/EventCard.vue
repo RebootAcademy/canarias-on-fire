@@ -5,7 +5,7 @@
       'bg-[#FBB03B] text-black': isGoldPayment,
       'bg-primary-gradient text-black': isPremiumPayment,
       'bg-background': !isGoldPayment && !isPremiumPayment,
-      'max-w-[300px]': isRelatedEvent,
+      'min-w-[350px] max-w-[350px]': isRelatedEvent,
     }"
   >
     <div

@@ -6,7 +6,7 @@
         v-for="event in relatedEvents"
         :key="event._id"
         :event="event"
-        :isRelatedPromo="true"
+        :isRelatedEvent="true"
         class="flex-shrink-0 w-64"
       />
     </div>

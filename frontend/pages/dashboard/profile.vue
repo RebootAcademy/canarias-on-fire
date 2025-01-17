@@ -153,7 +153,12 @@ useHead({
   title: 'User Profile',
 })
 
-const { user, isAuthenticated } = useAuth0()
+let user, isAuthenticated
+if (process.client) {
+  const auth0 = useAuth0()
+  user = auth0.user
+  isAuthenticated = auth0.isAuthenticated
+}
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userData?.role)
 

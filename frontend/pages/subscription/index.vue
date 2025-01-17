@@ -17,6 +17,7 @@
       :currentPlan="getCurrentPlanName"
       :selectedPlan="userStore.selectedUser ? userStore.selectedUser.subscription : null"
       :isHired="true"
+      :isToPublishPromo="true"
       @planSelected="handlePlanSelection"
     />
   </div>

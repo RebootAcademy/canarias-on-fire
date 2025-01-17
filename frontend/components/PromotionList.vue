@@ -6,6 +6,7 @@
       v-for="promotion in limitedPromotions"
       :key="promotion._id"
       :promotion="promotion"
+      
     />
   </div>
   <div v-if="limitedPromotions?.length === 0" class="inline-block text-gray-500 mt-4">

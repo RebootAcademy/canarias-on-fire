@@ -53,6 +53,7 @@ export const useEventStore = defineStore('eventStore', {
     userEvents: [],
     userId: null,
     payment: null,
+    adminPayment: null,
     radioLocation: '20000',
     selectedEventFilter: 'all',
     musicFilter: 'all'
@@ -149,7 +150,7 @@ export const useEventStore = defineStore('eventStore', {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${lat},${lng}&key=${this.googleMapsApiKey}`
     },
     setSelectedCategories(categories) {
-      this.selectedCategories = categories
+      this.selectedCategories = categories || []
     },
     setSelectedCategoriesOfServices(categories) {
       if (categories === 'delete')
@@ -389,6 +390,7 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(`/events/admin/${eventId}`, {
         method: 'PATCH',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        body: JSON.stringify({adminPayment: this.adminPayment}),
       })
 
       if (error.value) {
@@ -524,7 +526,8 @@ export const useEventStore = defineStore('eventStore', {
         status: this.status,
         userId: this.userId,
         payment: this.payment,
-        musicType: this.musicType
+        musicType: this.musicType,
+        adminPayment: this.adminPayment,
       }
     },
 

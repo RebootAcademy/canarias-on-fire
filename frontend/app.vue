@@ -48,10 +48,6 @@ onMounted(async () => {
       })
 
       const handlePermissionChange = async () => {
-        console.log(
-          'Estado del permiso de geolocalización:',
-          permissionStatus.state
-        )
 
         if (permissionStatus.state === 'granted') {
           navigator.geolocation.getCurrentPosition(
