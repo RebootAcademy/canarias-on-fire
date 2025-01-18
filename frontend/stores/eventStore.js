@@ -56,7 +56,7 @@ export const useEventStore = defineStore('eventStore', {
     adminPayment: null,
     radioLocation: '20000',
     selectedEventFilter: 'all',
-    musicFilter: 'all'
+    musicFilter: 'all',
   }),
 
   actions: {
@@ -270,7 +270,7 @@ export const useEventStore = defineStore('eventStore', {
         console.error('Error fetching event:', error.value)
         return { error: error.value }
       }
-
+      console.log('data', data.value?.result)
       this.event = data.value?.result
       return { data: this.event }
     },
@@ -390,7 +390,7 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(`/events/admin/${eventId}`, {
         method: 'PATCH',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
-        body: JSON.stringify({adminPayment: this.adminPayment}),
+        body: JSON.stringify({ adminPayment: this.adminPayment }),
       })
 
       if (error.value) {
@@ -527,7 +527,7 @@ export const useEventStore = defineStore('eventStore', {
         userId: this.userId,
         payment: this.payment,
         musicType: this.musicType,
-        adminPayment: this.adminPayment
+        adminPayment: this.adminPayment,
       }
     },
 

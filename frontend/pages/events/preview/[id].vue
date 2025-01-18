@@ -1,5 +1,12 @@
 <template>
   <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
+    <div
+      @click="() => router.push(`/events/edit/${eventId}`)"
+      class="flex items-center max-w-[160px] rounded-md gap-2 my-4 left-4 cursor-pointer border-2 border-primary bg-background p-2 hover:bg-primary "
+    >
+      <ArrowLeft />
+      <p>{{ $t('goEdit') }}</p>
+    </div>
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
@@ -31,9 +38,16 @@
         <i class="far fa-clock"></i>
         <span>{{ eventStore.startTime }} - {{ eventStore.endTime }}</span>
       </div>
-      <div v-if="eventStore.eventType === 'event'" class="flex items-center gap-1">
+      <div
+        v-if="eventStore.eventType === 'event'"
+        class="flex items-center gap-1"
+      >
         <i class="fas fa-euro-sign"></i>
-        <span>{{ eventStore.eventPrice === 0 ? $t('price.free') : `${eventStore.eventPrice}€` }}</span>
+        <span>{{
+          eventStore.eventPrice === 0
+            ? $t('price.free')
+            : `${eventStore.eventPrice}€`
+        }}</span>
       </div>
     </div>
     <div class="mt-8">
@@ -55,24 +69,23 @@
         />
       </details>
     </div>
-    <div 
-      v-if="eventStore.eventDiscount"
-      class="w-fit"
-    >
-      <DiscountSquare :event="{ 
-        eventDiscount: eventStore.eventDiscount,
-        categoriesOfServices: eventStore.categoriesOfServices
-      }" />
+    <div v-if="eventStore.eventDiscount" class="w-fit">
+      <DiscountSquare
+        :event="{
+          eventDiscount: eventStore.eventDiscount,
+          categoriesOfServices: eventStore.categoriesOfServices,
+        }"
+      />
     </div>
-    <div 
+    <div
       v-if="eventStore.eventType === 'event' && eventStore.musicType"
       class="w-fit"
     >
       <h2 class="text-2xl font-semibold">
-        {{$t(`musicType`)}}
+        {{ $t(`musicType`) }}
       </h2>
       <p>
-        {{$t(`values.${eventStore.musicType}`)}}
+        {{ $t(`values.${eventStore.musicType}`) }}
       </p>
     </div>
     <!--     <div class="mt-8">
@@ -102,14 +115,21 @@
         {{ $t('previewText.featurePayedEvents') }}
       </p>
     </div>
-    <Button @click="publishEvent" class="mt-8 bg-primary-gradient text-secondary hover:text-white">{{
-      $t('buttons.publish')
-    }}</Button>
+    <Button
+      @click="publishEvent"
+      class="mt-8 bg-primary-gradient text-secondary hover:text-white"
+      >{{ $t('buttons.publish') }}</Button
+    >
+    <Button
+      @click="() => router.push(`/events/edit/${eventId}`)"
+      class="mt-8 ml-4 bg-background text-secondary border-2 border-primary hover:bg-primary hover:text-black"
+      >{{ $t('goEdit') }}</Button
+    >
   </div>
 </template>
 
 <script setup>
-import { MapPin } from 'lucide-vue-next'
+import { MapPin, ArrowLeft } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
 const { t } = useI18n()
@@ -122,7 +142,7 @@ const eventId = route.params.id
 const defaultImage = '/defaultImg.png'
 
 onMounted(async () => {
-  await eventStore.fetchEventById(eventId)
+  const result = await eventStore.fetchEventById(eventId)
   eventStore.normalizeCategories()
 })
 
