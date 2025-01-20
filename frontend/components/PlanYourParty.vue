@@ -9,6 +9,7 @@
         v-for="user in userList"
         :key="user._id"
         :user="user"
+        :category="selectCategoryForFilterCompany"
       />
    </div>
   </div>
@@ -38,6 +39,17 @@ watch(
   }
 )
 
+watch(
+  () => eventStore.filters.islands,
+  () => {
+    filterUsers(selectCategoryForFilterCompany.value)
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
 function filterUsers(category) {
   if (!userStore.users || !Array.isArray(userStore.users)) {
     userList.value = []
@@ -56,9 +68,17 @@ function filterUsers(category) {
         return user.serviceType === category
     })
     .sort((a, b) => getPriority(b) - getPriority(a))
+    .filter(user => {
+      const eventIsland = getIslandFromPostalCode(
+        user.postalCode
+      )
+      if (eventStore.filters.islands.length) {
+        return eventStore.filters.islands.includes(eventIsland)
+      } else {
+        return true
+      }
+    })
 }
-
-console.log(userList.value)
 
 onMounted(() => {
   userStore.fetchUsers()

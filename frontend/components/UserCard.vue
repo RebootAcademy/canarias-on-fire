@@ -2,7 +2,7 @@
 <div class="flex flex-col gap-2 border text-secondary border-whiteGray rounded p-4 xs:h-[170px] sm:h-[170px] xl:h-[170px] w-full" >
     <div class="flex justify-between gap-2">
         <p class="text-whiteGray text-2xl font-bold"> {{user.commercialName || user.bandName }}</p>
-        <p class="text-secondary italic text-sm">{{ user.serviceType}}</p>
+        <p v-if="category === 'all'" class="text-secondary italic text-sm">{{ user.serviceType}}</p>
     </div>
     <div class="flex flex-col gap-3">
         <div v-if="user.role !== 'musician' && user.preferredLocations" class="flex flex-row gap-2 items-center text-secondary italic">
@@ -74,18 +74,13 @@ import {
     Music
 } from 'lucide-vue-next'
 
-
 const props = defineProps({
   user: {
     type: Object,
     required: true
   },
+  category: {
+    type: String
+  }
 })
-
-// const isValidNextPerformance = (nextPerformance) => {
-//   return (
-//     typeof nextPerformance.date === 'object' && nextPerformance.date !== null ||
-//     typeof nextPerformance.location === 'object' && nextPerformance.location !== null
-//   )
-// }
 </script>
