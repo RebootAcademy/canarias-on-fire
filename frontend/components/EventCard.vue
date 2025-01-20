@@ -37,7 +37,7 @@
       </span>
 
       <!-- Event Image -->
-      <div v-if="!isBasicPayment">
+      <div v-if="!isBasicPayment || event.externalSource">
         <CarouselCard
           :event="event"
           :payment="isGoldPayment ? 'optima' : 'optima plus'"
@@ -150,7 +150,7 @@
               :href="event.externalUrl"
               class=""
               :class="{
-                'text-primary': isBasicPayment,
+                'text-primary': isBasicPayment || event.externalSource,
                 'text-black': isGoldPayment || isPremiumPayment,
               }"
             >
