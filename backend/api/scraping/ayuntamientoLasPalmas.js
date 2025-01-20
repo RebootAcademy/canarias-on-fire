@@ -96,12 +96,12 @@ aytoLpScraper.addParser(aytoLpUrl, async (page) => {
           const date = page(element).find('div.mt-2 .pl-2.text-sm.montserrat-400 p')
           const imgUrl = page(element)
           .find('img.absolute.inset-0.w-full.h-full')
-          .attr('src')
+          .attr('src').trim()
           const location = page(element)
           .find('div.mt-1 .pl-2.text-sm.montserrat-400 p')
           .text()
           .trim()
-          const link = page(element).find('a.relative').attr('href')
+          const link = page(element).find('a.relative').attr('href').trim()
 
           const description = await getDescription(link)
 

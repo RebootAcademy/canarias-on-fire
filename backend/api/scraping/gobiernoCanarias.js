@@ -78,7 +78,7 @@ gobCanScraper.addParser(
           const title = page(element).find('.titulo-espectaculo').text().trim()
           const description = page(element).find('.texto').text().trim()
           const date = page(element).find('[fs-cmsfilter-type="date"]')
-          const imgUrl = page(element).find('img._00-imagen-agenda').attr('src')
+          const imgUrl = page(element).find('img._00-imagen-agenda').attr('src').trim()
           const location = page(element).find('[fs-cmsfilter-field="lugar"]').text().trim()
           const island = page(element).find('[fs-cmsfilter-field="isla"]').text().trim()
           const link = page(element).find('.info.w-inline-block').attr('href')
