@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center bg-background p-8 w-full">
-    <NuxtImg src="/hero.jpeg" alt="Hero image" class="w-2/3 object-cover object-center h-96"/>
+    <NuxtImg src="/banner.png" alt="Hero image" class="w-2/3 object-cover object-center h-96"/>
   </div>
 </template>
 
