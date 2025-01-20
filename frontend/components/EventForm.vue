@@ -114,7 +114,7 @@ const onSaveAndRedirect = async () => {
 }
 
 const checkIfUserHasPromotions = (event) => {
-  if (event.eventType === 'event') return false
+  if (event?.eventType === 'event') return false
   const hasPromotions = eventStore.events.filter(
     (event) =>
       event.eventType === 'promotion' &&

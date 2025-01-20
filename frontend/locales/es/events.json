@@ -3,6 +3,7 @@
   "createEvent": "Crear un nuevo evento",
   "editEvent": "Editar el evento",
   "preview": "Vista previa",
+  "goEdit": "Volver a editar",
   "eventType": "Tipo de evento",
   "event": "Evento de fecha determinada",
   "promotion": "Evento recurrente o promoción",

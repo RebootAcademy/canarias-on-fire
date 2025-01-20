@@ -115,9 +115,22 @@ const sendEmail = async (type, company) => {
 
     const html = await loadTemplate(templatePath, replacements)
 
+    const destination = (type) => {
+      switch (type) {
+        case 'registeredCompany':
+        case 'contact':
+          return process.env.EMAIL
+        case 'messageToCompany':
+        case 'alidatedCompany':
+        case 'sendInvoice':
+        case 'canceledSubscription':
+          return company.email
+      }
+    }
+
     result = await transporter.sendMail({
       from: type === 'contact' ? company.email : process.env.EMAIL,
-      to: type === 'registeredCompany' || 'contact' ? process.env.EMAIL : company.email,
+      to: destination(type),
       subject: subject,
       html,
     })
