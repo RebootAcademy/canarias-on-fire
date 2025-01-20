@@ -116,7 +116,7 @@
             {{ event.eventName }}
           </h3>
           <p
-            class="text-sm"
+            class="text-sm line-clamp-1"
             :class="{
               ' text-secondary': isBasicPayment,
             }"

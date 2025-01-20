@@ -57,7 +57,7 @@
             </h2>
             <div v-if="event.eventType === 'event' && event.startTime" class="flex items-center gap-1">
               <Clock size="16" />
-              <span>{{ event.startTime }} - {{ event.endTime }}</span>
+              <span>{{ event.startTime }} {{event.endTime ? '-' : ''}} {{ event.endTime }}</span>
             </div>
             <div class="flex items-center gap-1">
               <Calendar v-if="event.eventType === 'event'" size="16" />
