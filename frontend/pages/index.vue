@@ -7,11 +7,15 @@
         class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3"
       >
         <EventsCounter />
-        <div class="w-full flex justify-center md:justify-start mb-6">
+        <div class="w-full flex flex-col lg:flex-row justify-center md:justify-start mb-6">
           <InfoLocation />
           <GeolocationMap />
+          <div class="w-full lg:w-1/2 flex gap-4 items-center justify-end">
+            <SearchInput v-model="searchQuery" />
+            <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
+            <FilterModal />
+          </div>
         </div>
-
         <div class="hidden md:flex flex-col" >
           <FilteredEventsHome />
         </div>
@@ -70,4 +74,13 @@ onMounted(async() => {
   eventStore.resetFilters()
    userStore.fetchAndSetUser(userStore.userData.email)
 })
+
+const searchQuery = computed({
+  get: () => eventStore.searchQuery,
+  set: (value) => eventStore.setSearchQuery(value),
+})
+
+const openFilterModal = () => {
+  eventStore.setFilterModalOpen(true)
+}
 </script>
