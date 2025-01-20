@@ -1,5 +1,6 @@
 <template>
-  <div class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
+  <Spinner v-if="isLoading" />
+  <div v-else class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
     <NuxtImg src="/logo_color.png" alt="Evente Logo" class="min-w-[100px] max-w-[150px] mt-16 mb-10 md:hidden" />
     <Hero class="hidden md:flex"/>
     <div class="w-full flex flex-col items-center h-fit">
@@ -48,9 +49,11 @@ const articleStore = useArticleStore()
 import { useRuntimeConfig } from '#app'
 
 const users = ref([])
+const isLoading = ref(true)
 
 async function fetchUsers() {
   try {
+    if (!isLoading.value) isLoading.value = true
     const config = useRuntimeConfig()
     const response = await fetch(`${config.public.apiBaseUrl}/users`)
 
@@ -64,6 +67,7 @@ async function fetchUsers() {
       users.value = data.result
       userStore.users = data.result
     }
+    isLoading.value = false
   } catch (error) {
     console.error('Error fetching users:', error)
   }

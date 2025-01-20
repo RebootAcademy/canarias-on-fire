@@ -13,5 +13,5 @@
 <script setup>
 definePageMeta({
   middleware: 'scroll-to-top' // Debe coincidir con el nombre del archivo
-});
+})
 </script>

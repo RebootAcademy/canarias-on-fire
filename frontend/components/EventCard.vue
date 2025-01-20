@@ -59,11 +59,14 @@
           <!-- Categories -->
           <div class="flex flex-wrap gap-2">
             <span
-              v-for="category in event.categories"
+              v-for="(category, idx) in event.categories"
               :key="category._id"
-              class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
             >
-              {{ $t(`values.${category.name}`) }}
+              <p 
+                v-if="idx < 3" 
+                class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center">
+                {{ $t(`values.${category.name}`) }}
+              </p>
             </span>
           </div>
           <!-- Options menu -->
@@ -121,7 +124,11 @@
               ' text-secondary': isBasicPayment,
             }"
           >
-            {{ formattedDate() }} at {{ event.startTime }} - {{ event.endTime }}
+            {{ formattedDate() }} 
+            {{ event.startTime ? '-' : ''}} 
+            {{ event.startTime }} 
+            {{event.endTime ? '-' : ''}} 
+            {{ event.endTime }}
           </p>
           <p v-if="event?.eventLocation?.address" class="text-sm line-clamp-1">
             {{ event.eventLocation.address }}

@@ -26,6 +26,7 @@ onMounted(async () => {
   await articleStore.fetchArticles()
   await subscriptionStore.fetchSubscriptions()
   await paymentStore.fetchPayments()
+  const isLoading = ref(true)
   
   await nextTick()
   if (localStorage.getItem('themePreference') === 'light') {
@@ -43,6 +44,7 @@ onMounted(async () => {
     }
 
     try {
+      if (!isLoading.value) isLoading.value = true
       const permissionStatus = await navigator.permissions.query({
         name: 'geolocation',
       })
@@ -60,6 +62,7 @@ onMounted(async () => {
               console.error('Error obteniendo la ubicación:', error.message)
             }
           )
+          isLoading.value = false
         } else if (
           permissionStatus.state === 'prompt' ||
           permissionStatus.state === 'denied'
@@ -67,6 +70,7 @@ onMounted(async () => {
           
           await eventStore.fetchEvents()
           await userStore.setAcceptedGeolocation(false)
+          isLoading.value = false
         }
       }
 
@@ -80,7 +84,5 @@ onMounted(async () => {
   }
 
   monitorGeolocation()
-
-  
 })
 </script>
