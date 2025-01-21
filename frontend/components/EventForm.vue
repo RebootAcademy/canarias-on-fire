@@ -86,12 +86,15 @@ const onSubmit = async () => {
             `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
           )
         } else {
-          console.error('Failed to create event')
+          toast({
+          description: t('errorCreatingEvent'),
+          variant: 'destructive'
+        })
         }
       } else {
         toast({
           description: t('userHasPromotions'),
-          variant: 'destructive',
+          variant: 'destructive'
         })
       }
     }

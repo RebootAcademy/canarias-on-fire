@@ -26,5 +26,6 @@
   "passwordChanged": "Contraseña cambiada correctamente",
   "errorPasswordChanged": "Error cambiando contraseña",
   "cancelPromotionToast": "Promoción cancelada correctamente",
-  "errorCancelPromotion": "Error cancelando promoción"
+  "errorCancelPromotion": "Error cancelando promoción",
+  "errorCreatingEvent": "Error de creación de Evento"
 }

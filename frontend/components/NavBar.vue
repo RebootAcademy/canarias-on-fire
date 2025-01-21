@@ -13,14 +13,14 @@
      <!--  <Notifications /> -->
       <ThemeSwitcher />
       <Button 
-        v-if="!auth0?.isAuthenticated"
+        v-if="!userStore?.isAuthenticated"
         @click="login"
         class="hover:underline text-secondary hover:text-primary hover:bg-transparent"
         variant="ghost"
       >
         {{ $t('login') }}
       </Button>
-      <NuxtLink to="/dashboard" v-if="auth0?.isAuthenticated">
+      <NuxtLink to="/dashboard" v-if="userStore?.isAuthenticated">
         <MenuDropdown />
       </NuxtLink>
     </div>
@@ -33,9 +33,11 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
+const userStore = useUserStore()
 
 const auth0 = ref(null)
 const theme = ref('dark')
+
 function toggleTheme() {
   if (theme.value === 'dark') {
     document.body.classList.add('light');
@@ -45,6 +47,7 @@ function toggleTheme() {
     theme.value = 'dark';
   }
 }
+
 onMounted(() => {
   auth0.value = useAuth0()
 })
@@ -54,7 +57,5 @@ const login = () => {
     auth0.value.loginWithRedirect()
   }
 }
-
-
 
 </script>

@@ -39,7 +39,9 @@ onMounted(async () => {
   async function monitorGeolocation() {
     if (!navigator.permissions) {
       console.warn('La API de permisos no está disponible en este navegador.')
-      await eventStore.fetchEvents() 
+      if (!isLoading.value) isLoading.value = true
+      await eventStore.fetchEvents()
+      isLoading.value = false
       return
     }
 
@@ -79,7 +81,9 @@ onMounted(async () => {
       await handlePermissionChange()
     } catch (error) {
       console.error('Error al manejar permisos de geolocalización:', error)
+      if (!isLoading.value) isLoading.value = true
       await eventStore.fetchEvents()
+      isLoading.value = false
     }
   }
 

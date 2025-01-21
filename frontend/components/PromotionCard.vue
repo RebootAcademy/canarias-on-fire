@@ -18,7 +18,7 @@
     <div class="relative w-full h-full rounded-lg">
       <!-- Event status -->
       <span
-        v-show="userStore.userData && userStore.userData.role === 'admin'"
+        v-show="userStore.userData && (userStore.userData.role === 'admin' || isOwner)"
         :class="[
           'absolute top-2 left-2 text-xs z-50 font-semibold bg-secondary rounded-xl px-2 py-1 text-background',
           { 'text-red-500 italic': promotion.status === 'draft' },
@@ -77,6 +77,8 @@
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  v-if="promotion.userId.activeSubscription.status === 'active' ||
+                  promotion.userId.activeSubscription.status === 'canceling'"
                   @select="handleStatus"
                   class="cursor-pointer"
                 >
@@ -89,6 +91,16 @@
                     class="mr-2 h-4 w-4" 
                   />
                   <span>{{promotion.status === 'draft' ? $t('buttons.publish') : $t('buttons.draft')}}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  v-else
+                  class="cursor-pointer"
+                  @select="handleSubscription"
+                >
+                <BookDashed 
+                  class="mr-2 h-4 w-4" 
+                />
+                <span>{{$t('buttons.publish')}}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                   <Pencil class="mr-2 h-4 w-4" />
@@ -200,6 +212,7 @@ const props = defineProps({
     default: false,
   },
 })
+
 const isOpen = ref(false)
 const defaultImage = '/defaultImg.png'
 
@@ -269,6 +282,10 @@ const handleStatus = async () => {
   } else {
     await eventStore.updatePromotion(props.promotion._id, 'draft')
   }
+}
+
+const handleSubscription = () => {
+  router.push(`/pricing/promotions`)
 }
 </script>
 

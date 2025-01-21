@@ -168,5 +168,6 @@
     "free": "FREE",
     "notSpecific": "NOT SPECIFIC"
   },
-  "cancelPromotionBTN": "CANCEL PROMOTION"
+  "cancelPromotionBTN": "CANCEL PROMOTION",
+  "subscribePromotionBTN": "PUBLISH PROMOTION"
 }

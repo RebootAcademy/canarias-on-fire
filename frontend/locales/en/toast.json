@@ -25,5 +25,6 @@
   "passwordChanged": "Password changed successfully",
   "errorPasswordChanged": "Error changing password",
   "cancelPromotionToast": "Promotion canceled successfully",
-  "errorCancelPromotion": "Error canceling promotion"
+  "errorCancelPromotion": "Error canceling promotion",
+  "errorCreatingEvent": "Error creating Event"
 }

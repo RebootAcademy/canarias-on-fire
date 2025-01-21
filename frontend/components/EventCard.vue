@@ -29,13 +29,12 @@
           userStore.userData && (userStore.userData.role === 'admin' || isOwner)
         "
         :class="[
-          'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1',
+          'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1 z-[1]',
           { 'text-red-500 italic': event.status === 'draft' },
         ]"
       >
         {{ event.status }}
       </span>
-
       <!-- Event Image -->
       <div v-if="!isBasicPayment || event.externalSource">
         <CarouselCard
@@ -211,8 +210,10 @@ const props = defineProps({
 const isOpen = ref(false)
 
 const isOwner = computed(() => {
-  if (!userStore.userData || !eventStore.event.userId) return false
-  return eventStore?.event?.userId._id === userStore.userData?._id
+  if (!userStore.userData || (!eventStore.event.userId && !props.event.userId)) return false
+  return eventStore.event.userId ? 
+  eventStore?.event?.userId._id === userStore.userData?._id :
+  userStore?.userData?._id === props?.event?.userId?._id
 })
 
 const defaultImage = '/defaultImg.png'

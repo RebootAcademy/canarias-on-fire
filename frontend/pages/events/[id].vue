@@ -25,6 +25,13 @@
         >
           <p>{{ $t('cancelPromotionBTN')}}</p>
         </div>
+        <div
+          v-if="isOwner && event.status === 'draft' && event.eventType === 'promotion' && event.userId.activeSubscription.status === 'inactive'"
+          class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-primary bg-primary rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-primary"
+          @click="() => handleSubscription(event.eventType)"
+        >
+          <p>{{ $t('subscribePromotionBTN')}}</p>
+        </div>
 
         <Share2
           v-if="searchPaymentEvent !== 'basic'"
@@ -392,5 +399,9 @@ const copyCodePromo = async (code) => {
   } catch (err) {
     console.error('Error al copiar el enlace: ', err)
   }
+}
+
+const handleSubscription = (type) => {
+  router.push(`/pricing/${type === 'promotion' ? 'promotions' : 'events'}`)
 }
 </script>

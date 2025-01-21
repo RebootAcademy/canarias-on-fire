@@ -76,7 +76,7 @@ async function fetchUsers() {
 onMounted(async() => {
   fetchUsers()
   eventStore.resetFilters()
-   userStore.fetchAndSetUser(userStore.userData.email)
+   userStore.fetchAndSetUser(userStore.userData?.email)
 })
 
 const searchQuery = computed({
