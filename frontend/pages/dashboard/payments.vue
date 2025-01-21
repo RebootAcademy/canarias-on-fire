@@ -8,10 +8,19 @@
       <p class="text-grayForeground">{{ $t('paymentsSection.SubDescription')}}</p>
       <div class="bg-primary-gradient p-0.5 rounded-md">
         <div class="bg-background p-4 px-6 rounded-md">
+          <div class="w-full justify-between flex items-center">
             <div class="flex gap-4 bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] text-transparent bg-clip-text">
                 <Gem class="text-primary"/>
                 <p class="font-bold ">{{ subscriptionInformation?.name }}</p>
             </div>
+            <Button
+              v-if="userData?.activeSubscription?.status === 'active'"
+              class="cursor-pointer inline-block w-1/5 bg-grey border-2 border-red-400 text-red-400 font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-500 hover:border-none hover:text-white transition-colors"
+              @click="cancelSubscription(userData?.activeSubscription?.plan)"
+            >
+              {{ $t('buttons.cancel') }}
+            </Button>
+          </div>
           <div class="flex flex-row gap-4 mt-4">
             <p class="font-bold">{{ subscriptionInformation?.pricing }} €</p>
             <p
@@ -70,7 +79,8 @@
 <script setup>
 const { t } = useI18n()
 import { Gem } from 'lucide-vue-next'
-
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
@@ -104,4 +114,41 @@ definePageMeta({
 useHead({
   title: 'Payments',
 })
+
+const isCanceled = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    return true
+  } else {
+    return false
+  }
+})
+
+const getUserId = () => {
+  if (userStore.userData.role === 'admin' && userStore.selectedUser) {
+    return userStore.selectedUser._id
+  } else {
+    return userStore.userData._id
+  }
+}
+
+const cancelSubscription = async (plan) => {
+  try {
+    const userId = getUserId()
+    const result = await subscriptionStore.cancelSubscription(userId, plan._id)
+    if (result.success) {
+      await userStore.updateUserSubscription(userId, plan._id, 'canceled')
+      toast({
+        description: t('canceledPlan')
+      })
+    } else {
+      console.error(result?.error || 'Failed to cancel subscription')
+      toast({
+        description: t('canceledPlanError'),
+        variant: 'destructive'
+      })
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error)
+  }
+}
 </script>

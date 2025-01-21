@@ -167,6 +167,10 @@ const publishEvent = async () => {
         return router.push(`/events/${eventId}`)
       } else {
         console.error('Failed to publish promotion')
+        toast({
+          description: t('errorCreatingEvent'),
+          variant: 'destructive'
+        })
       }
     }
     if (eventStore.event.eventType === 'promotion') {

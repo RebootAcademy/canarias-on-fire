@@ -4,6 +4,7 @@
   "contactMailSent": "Contact mail sent successfully. If its necessary, we will contact you.",
   "errorContactMailSent": "Something went wrong sending contact mail. Try again later",
   "canceledPlan": "Subscription has been successfully canceled",
+  "canceledPlanError": "Error while trying to cancel subscription",
   "subscribedPlan": "Subscription has been successfully completed",
   "updatedProfile": "Profile updated successfully",
   "errorUpdatedProfile": "Error updating profile",
