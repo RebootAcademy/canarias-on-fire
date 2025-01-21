@@ -36,7 +36,7 @@
       </div>
       <div v-if="eventStore.startTime" class="flex items-center gap-1">
         <i class="far fa-clock"></i>
-        <span>{{ eventStore.startTime }} - {{ eventStore.endTime }}</span>
+        <span>{{ eventStore.startTime }} {{eventStore.endTime ? '-' : ''}} {{ eventStore.endTime }}</span>
       </div>
       <div
         v-if="eventStore.eventType === 'event'"
@@ -69,7 +69,7 @@
         />
       </details>
     </div>
-    <div v-if="eventStore.eventDiscount" class="w-fit">
+    <div v-if="eventStore.eventType === 'promotion' && eventStore.eventDiscount" class="w-fit">
       <DiscountSquare
         :event="{
           eventDiscount: eventStore.eventDiscount,

@@ -184,12 +184,28 @@ const createPaymentSession = async (req, res) => {
     event.status = 'draft'
     await event.save()
 
+    await stripe.invoiceItems.create({
+      customer: customer.id,
+      amount: amountInCents,
+      currency: 'eur',
+      description: 'One-time payment',
+    })
+
+    const invoice = await stripe.invoices.create({
+      customer: customer.id,
+      auto_advance: true
+    })
+
+    const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
+    console.log('Finalized Invoice:', finalizedInvoice.invoice_pdf)
+
     // Crear y añadir la factura al usuario
     await addInvoiceToCompany(companyId, {
       id: session.id,
       amount: amountInCents, 
-      status: 'pending',
+      status: 'paid',
       date: new Date(),
+      pdf: invoice.invoice_pdf
     })
 
     res.status(200).json({
@@ -221,7 +237,7 @@ const addInvoiceToCompany = async (companyId, invoiceData) => {
       status: invoiceData.status,
       pdf: invoiceData.pdf,
       date: invoiceData.date,
-    };
+    }
 
     if (!company.invoices) {
       company.invoices = []

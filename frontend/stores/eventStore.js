@@ -709,9 +709,9 @@ export const useEventStore = defineStore('eventStore', {
               )
         } else {
           endDate = new Date(
-            event.eventDate?.end.year,
-            event.eventDate?.end.month - 1,
-            event.eventDate?.end.day
+            event.eventDate?.end?.year,
+            event.eventDate?.end?.month - 1,
+            event.eventDate?.end?.day
           )
         }
 

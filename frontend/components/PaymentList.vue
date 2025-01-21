@@ -17,6 +17,7 @@
             :key="index"
             class="p-2 border-b border-gray"
           >
+          {{invoice}}
             <td class="p-2">
               {{ invoice?.formattedDate }}
             </td>

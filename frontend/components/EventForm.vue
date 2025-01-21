@@ -15,7 +15,7 @@
     </div>
     <div class="flex w-full justify-end items-center gap-4">
       <Button
-        @click="router.push('/events')"
+        @click="router.push('/')"
         class="bg-gray text-secondary px-6 p-5 hover:bg-red-300 hover:text-black"
         >{{ $t('buttons.cancel') }}</Button
       >
@@ -74,7 +74,7 @@ const onSubmit = async () => {
   if (Object.values(errors).every((error) => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
-      router.push(`/events/${eventStore.event._id}`)
+      router.push(`/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`)
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)

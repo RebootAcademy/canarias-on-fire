@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 text-secondary text-lg">
     <!-- EVENT TYPE -->
-    <hr v-if="!isEditing" />
-    <div v-if="!isEditing" class="flex flex-col">
+    <hr />
+    <div class="flex flex-col">
       <p class="font-semibold">{{ $t('eventType') }}</p>
       <p class="text-sm mb-3">{{ $t('selectDateTime') }}</p>
       <EventTypeRadioGroup />
@@ -148,7 +148,7 @@
     <hr />
     <div class="flex flex-col w-full gap-1">
       <p class="font-semibold">{{ $t('eventLocation') }}</p>
-      <p v-if="!isEditing" class="text-sm text-gray-500 mb-2">
+      <p class="text-sm text-gray-500 mb-2">
         {{ $t('eventLocationDescription') }}
       </p>
       <div class="w-full lg:w-2/3">
@@ -183,7 +183,7 @@
       <Label for="externalUrl" class="text-lg font-bold mb-1">{{
         $t('externalUrl')
       }}</Label>
-      <p v-if="!isEditing" class="text-sm text-gray-500 mb-2">
+      <p class="text-sm text-gray-500 mb-2">
         {{ $t('externalUrlDescription') }}
       </p>
       <Input

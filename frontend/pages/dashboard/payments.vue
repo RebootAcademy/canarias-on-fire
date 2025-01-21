@@ -99,12 +99,14 @@ const nextPaymentDate = computed(() => {
 })
 
 const formattedInvoices = computed(() => {
+  console.log(userStore.userData?.invoices)
   if (!userStore.userData?.invoices?.length) return []
   return userStore.userData.invoices.map((invoice) => ({
     ...invoice,
     formattedDate: new Date(invoice.date).toLocaleDateString(),
     formattedAmount: (invoice.amount / 100).toFixed(2), // Convertir 1999 a 19.99€
   }))
+  .filter(i => i.amount > 0)
 })
 
 definePageMeta({

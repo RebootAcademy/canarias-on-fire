@@ -21,7 +21,6 @@ const userRole = computed(() => userStore.userData?.role)
 
 onMounted(() => {
   userStore.fetchUsers()
-
 })
 
 </script>
