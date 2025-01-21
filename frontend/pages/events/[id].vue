@@ -26,7 +26,7 @@
           <p>{{ $t('cancelPromotionBTN')}}</p>
         </div>
         <div
-          v-if="isOwner && event.status === 'draft' && event.eventType === 'promotion' && event.userId.activeSubscription.status === 'inactive'"
+          v-if="!isAdmin && isOwner && event.status === 'draft' && event.eventType === 'promotion' && event.userId.activeSubscription.status === 'inactive'"
           class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-primary bg-primary rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-primary"
           @click="() => handleSubscription(event.eventType)"
         >
@@ -335,6 +335,10 @@ const publishEvent = async () => {
         router.push(`/events/${eventId}`)
       } else {
         console.error('Failed to publish promotion')
+        toast({
+          description: t('errorCreatingEvent'),
+          variant: 'destructive'
+        })
       }
     }
 

@@ -77,8 +77,7 @@
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  v-if="promotion.userId.activeSubscription.status === 'active' ||
-                  promotion.userId.activeSubscription.status === 'canceling'"
+                  v-if="isAdmin || !isCanceledAndOutOfDate"
                   @select="handleStatus"
                   class="cursor-pointer"
                 >
@@ -234,6 +233,8 @@ const isOwner = computed(() => {
   return userStore.userData?._id === props.promotion.userId?._id
 })
 
+const isAdmin = computed(() => userStore.userData.role === 'admin')
+
 const formattedDate = () => {
   if (!props.promotion.eventDate) {
     return 'Date not available'
@@ -276,13 +277,45 @@ const getPaymentType = computed(() => {
 const isBasicPayment = computed(() => getPaymentType.value === 'basic')
 const isGoldPayment = computed(() => getPaymentType.value === 'optima')
 
+const checkIfUserHasPromotions = () => {
+  const hasPromotions = eventStore.events.filter(
+    (event) =>
+      event.eventType === 'promotion' &&
+      event.status === 'published' &&
+      event.userId?._id === userStore.userData?._id
+  )
+  if (hasPromotions.length === 0) return false
+
+  return true
+}
+
 const handleStatus = async () => {
   if (props.promotion.status === 'draft') {
-    await eventStore.updatePromotion(props.promotion._id, 'published')
+    console.log(checkIfUserHasPromotions())
+    if (!isAdmin.value && !checkIfUserHasPromotions()) {
+      await eventStore.updatePromotion(props.promotion._id, 'published')
+    } else {
+      toast({
+        description: t('userHasPromotions'),
+        variant: 'destructive',
+      })
+    }
   } else {
     await eventStore.updatePromotion(props.promotion._id, 'draft')
   }
 }
+
+const isCanceledAndOutOfDate = computed(() => {
+  if (userStore.userData.activeSubscription?.status === 'canceled') {
+    if (
+      new Date() > new Date(userStore.userData.activeSubscription?.canceledAt)
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+})
 
 const handleSubscription = () => {
   router.push(`/pricing/promotions`)

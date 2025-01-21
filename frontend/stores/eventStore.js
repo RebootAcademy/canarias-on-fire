@@ -390,7 +390,9 @@ export const useEventStore = defineStore('eventStore', {
       const { data, error } = await useFetch(`/events/admin/${eventId}`, {
         method: 'PATCH',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
-        body: JSON.stringify({ adminPayment: this.adminPayment }),
+        body: JSON.stringify({
+          adminPayment: this.adminPayment,
+        }),
       })
 
       if (error.value) {
