@@ -22,8 +22,6 @@ const props = defineProps({
   },
 })
 
-console.log(props.event)
-
 const showTypeOfDiscount = () => {
   switch (props.event.eventDiscount) {
     case 'other':

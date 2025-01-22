@@ -169,5 +169,7 @@
     "notSpecific": "NOT SPECIFIC"
   },
   "cancelPromotionBTN": "CANCEL PROMOTION",
-  "subscribePromotionBTN": "PUBLISH PROMOTION"
+  "subscribePromotionBTN": "PUBLISH PROMOTION",
+  "loadingEditEvent": "Loading event information... ",
+  "errorLoadingEvent": "Error loading event information"
 }

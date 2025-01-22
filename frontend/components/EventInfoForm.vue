@@ -158,7 +158,7 @@
           :isEditing="isEditing"
         />
         <div v-else>
-          <span>{{ eventStore.eventLocation.address }}.</span>
+          <span>{{ eventStore.eventLocation?.address }}.</span>
           <span
             class="text-sm text-blue-400 cursor-pointer ml-2 hover:text-primary"
             @click="changeMap = false"
@@ -166,8 +166,8 @@
             {{ $t('changeLocation') }}
           </span>
           <NuxtImg
-            :src="eventStore.eventLocation.mapImageUrl"
-            :alt="eventStore.eventLocation.address"
+            :src="eventStore.eventLocation?.mapImageUrl"
+            :alt="eventStore.eventLocation?.address"
             class="w-full h-60 lg:h-[500px] object-cover mt-4"
           />
         </div>

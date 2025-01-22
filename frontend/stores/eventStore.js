@@ -57,6 +57,8 @@ export const useEventStore = defineStore('eventStore', {
     radioLocation: '20000',
     selectedEventFilter: 'all',
     musicFilter: 'all',
+    loading: false,
+    error: false,
   }),
 
   actions: {
@@ -199,7 +201,8 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     resetFilters() {
-      this.selectedCategory = null
+      this.selectedCategories = []
+      this.selectedCategoriesByServices = []
       this.searchQuery = ''
       this.filters = {
         islands: [],
@@ -262,17 +265,28 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     async fetchEventById(id) {
-      const { data, error } = await useFetch(`/events/${id}`, {
-        baseURL: useRuntimeConfig().public.apiBaseUrl,
-      })
+      this.loading = true
+      this.error = null
 
-      if (error.value) {
-        console.error('Error fetching event:', error.value)
-        return { error: error.value }
+      try {
+        const { data, error } = await useFetch(`/events/${id}`, {
+          baseURL: useRuntimeConfig().public.apiBaseUrl,
+        })
+
+        if (error.value) {
+          console.error('Error fetching event:', error.value)
+          return { error: error.value }
+        }
+        console.log('data', data.value?.result)
+        this.event = data.value?.result
+        return { data: this.event }
+      } catch (error) {
+        this.error = err.message
+        console.error('Error fetching event:', this.error)
+        return { error: this.error }
+      } finally {
+        this.loading = false
       }
-      console.log('data', data.value?.result)
-      this.event = data.value?.result
-      return { data: this.event }
     },
 
     async fetchUserEvents(userId) {
