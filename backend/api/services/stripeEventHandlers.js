@@ -121,21 +121,15 @@ const handleCheckoutSessionCompleted = async (session) => {
         invoice: invoice.id
       })
 
-      // const pendingItems = await stripe.invoiceItems.list({
-      //   customer: session.customer,
-      //   pending: true,
-      // })
-
+      //Añadir pequeño tiempo de espera para asegurar la creación de la factura
       await new Promise((resolve) => setTimeout(resolve, 500))
 
-      // const invoice = await stripe.invoices.create({
-      //   customer: session.customer,
-      //   auto_advance: false,
-      //   collection_method: 'charge_automatically',
-      //   metadata: { eventId: eventId }
-      // })
-
+      //Marcar factura como 'pagada'
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
+      await stripe.invoices.update(finalizedInvoice.id, {
+        status: 'paid',
+      })
+      const updatedInvoice = await stripe.invoices.retrieve(finalizedInvoice.id)
 
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({
@@ -144,11 +138,11 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       if (company) {
         const newInvoice = {
-          id: finalizedInvoice?.id,
+          id: updatedInvoice?.id,
           amount: session.amount_total,
-          pdf: finalizedInvoice?.invoice_pdf,
+          pdf: updatedInvoice?.invoice_pdf,
           date: new Date(finalizedInvoice?.created * 1000),
-          status: finalizedInvoice?.status,
+          status: updatedInvoice?.status,
         }
         if (!company.invoices) {
           company.invoices = []
