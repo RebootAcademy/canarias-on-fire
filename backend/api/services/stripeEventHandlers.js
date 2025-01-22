@@ -118,7 +118,8 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       //Marcar factura como 'pagada'
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
-      console.log(finalizedInvoice)
+
+      await stripe.invoices.voidInvoice(finalizedInvoice.id)
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({
         'stripe.customerId': session.customer,
