@@ -103,13 +103,14 @@ const handleCheckoutSessionCompleted = async (session) => {
         customer: session.customer,
         amount: session.amount_total,
         currency: session.currency,
-        description: `Payment for event: ${event.name}`
+        description: `Payment for event: ${event.name}`,
+        price: 'price_1PrxFZDdNVFxhHPzltadmIsH',
       })
       
-      const pendingItems = await stripe.invoiceItems.list({
-        customer: session.customer,
-        pending: true,
-      })
+      // const pendingItems = await stripe.invoiceItems.list({
+      //   customer: session.customer,
+      //   pending: true,
+      // })
       console.log('Pending Invoice Items:', pendingItems.data)
 
       await new Promise((resolve) => setTimeout(resolve, 500))
@@ -123,7 +124,7 @@ const handleCheckoutSessionCompleted = async (session) => {
         console.log(invoice)
 
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)  
-      // const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
+
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({ 'stripe.customerId': session.customer })
 
