@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isFilterModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div v-if="isFilterModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-background border-2 rounded-lg p-4 md:p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
         <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>
@@ -67,7 +67,7 @@ const selectedCategories = ref(filters.value.categories)
 // const startTime = ref(null)
 
 const getCategories = computed(() => {
-  return eventStore.categories.filter((category) => category.type === props.type)
+  return eventStore.categories.filter((category) => category.type === props.type && category.name !== 'services')
 })
 
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']

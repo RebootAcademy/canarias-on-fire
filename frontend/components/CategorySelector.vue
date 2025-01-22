@@ -122,7 +122,7 @@ const filteredCategories = computed(() => {
     eventStore.selectedCategories.some(
     (c) => c && c.type === 'event'
     ) && eventStore.setSelectedCategories([])
-    return eventStore.categories.filter((cat) => cat.type === 'promotion')
+    return eventStore.categories.filter((cat) => cat.type === 'promotion' && cat.name !== 'services')
   }
 })
 

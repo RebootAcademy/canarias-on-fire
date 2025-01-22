@@ -8,13 +8,13 @@
         class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3"
       >
         <EventsCounter />
-        <div class="w-full flex flex-col lg:flex-row justify-center md:justify-start mb-6">
+        <div class="w-full flex flex-col lg:flex-row justify-center md:justify-between mb-6 ">
           <InfoLocation />
           <GeolocationMap />
           <div class="w-full lg:w-1/2 flex gap-4 items-center justify-end">
             <SearchInput v-model="searchQuery" />
-            <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-            <FilterModal />
+            <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" /> 
+            <FilterModal class="self-end"/>
           </div>
         </div>
         <div class="hidden md:flex flex-col" >
