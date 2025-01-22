@@ -106,6 +106,14 @@ const handleCheckoutSessionCompleted = async (session) => {
         description: `Payment for event: ${event.name}`
       })
       
+      const pendingItems = await stripe.invoiceItems.list({
+        customer: session.customer,
+        pending: true,
+      })
+      console.log('Pending Invoice Items:', pendingItems.data)
+
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
       const invoice = await stripe.invoices.create({
         customer: session.customer,
         auto_advance: false,
