@@ -140,12 +140,9 @@ const handleCheckoutSessionCompleted = async (session) => {
           company.invoices.push(newInvoice)
         } else {
           const paymentObj = company.invoices[company.invoices.length - 1]
-          company.invoices[company.invoices.length - 1] = {
-            ...paymentObj,
-            pdf: newInvoice.pdf,
-            status: newInvoice.status,
-            invoiceId: newInvoice.id
-          }
+          paymentObj.pdf = newInvoice.pdf
+          paymentObj.status = newInvoice.status
+          paymentObj.invoiceId = newInvoice.id
         }
 
         await company.save()
