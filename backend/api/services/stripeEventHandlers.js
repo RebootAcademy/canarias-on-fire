@@ -112,18 +112,18 @@ const handleCheckoutSessionCompleted = async (session) => {
         collection_method: 'charge_automatically',
         metadata: { eventId: eventId }
       })
-console.log('invoice created')
-console.log(invoice)
+
+      const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({ 'stripe.customerId': session.customer })
 
       if (company) {
         const newInvoice = {
-          id: invoice.id,
+          id: finalizedInvoice?.id,
           amount: session.amount_total,
-          pdf: invoice.invoice_pdf,
-          date: new Date(),
-          status: 'paid'
+          pdf: finalizedInvoice?.invoice_pdf,
+          date: new Date(finalizedInvoice?.created * 1000),
+          status: finalizedInvoice?.status,
         }
         if (!company.invoices) {
           company.invoices = []
