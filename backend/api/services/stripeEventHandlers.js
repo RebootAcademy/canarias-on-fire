@@ -103,8 +103,7 @@ const handleCheckoutSessionCompleted = async (session) => {
         customer: session.customer,
         amount: session.amount_total,
         currency: session.currency,
-        description: `Payment for event: ${event.name}`,
-        price: 'price_1PrxFZDdNVFxhHPzltadmIsH',
+        description: `Payment for event: ${event.name}`
       })
       
       // const pendingItems = await stripe.invoiceItems.list({
