@@ -127,10 +127,10 @@ const handleCheckoutSessionCompleted = async (session) => {
       if (company) {
         const newInvoice = {
           id: finalizedInvoice.id,
-          amount: finalizedInvoice.amount_paid,
-          pdf: finalizedInvoice.invoice_pdf,
+          amount: session.amount_total,
+          pdf: invoice.invoice_pdf,
           date: new Date(),
-          status: 'paid'
+          status: 'paid',
         }
 
         if (!company.invoices) {
