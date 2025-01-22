@@ -22,7 +22,7 @@ const eventStore = useEventStore();
 const monthlyEventCounts = computed(() => {
   const counts = {};
   eventStore.events.forEach(event => {
-    const month = new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day).toLocaleString('default', { month: 'short' });
+    const month = new Date(event.eventDate?.year, event.eventDate?.month - 1, event.eventDate?.day).toLocaleString('default', { month: 'short' });
     counts[month] = counts[month] ? counts[month] + 1 : 1;
   });
   return counts;

@@ -102,13 +102,6 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       // Crear la factura
       console.log('[handleCheckoutSessionCompleted] Creating invoice');
-      const invoice = await stripe.invoices.create({
-        customer: session.customer,
-        auto_advance: true,
-        collection_method: 'charge_automatically',
-        metadata: { eventId: eventId },
-      });
-      console.log('[handleCheckoutSessionCompleted] Invoice created:', invoice.id);
 
       // Agregar el item a la factura
       console.log('[handleCheckoutSessionCompleted] Adding item to invoice');
@@ -121,8 +114,13 @@ const handleCheckoutSessionCompleted = async (session) => {
       });
       console.log('[handleCheckoutSessionCompleted] Item added to invoice');
 
-      // Finalizar la factura para generar el PDF
-      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
+      const invoice = await stripe.invoices.create({
+        customer: session.customer,
+        auto_advance: true,
+        collection_method: 'charge_automatically',
+        metadata: { eventId: eventId },
+      });
+      console.log('[handleCheckoutSessionCompleted] Invoice created:', invoice.id);
 
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({ 'stripe.customerId': session.customer })
