@@ -108,12 +108,13 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       const invoice = await stripe.invoices.create({
         customer: session.customer,
-        auto_advance: true,
+        auto_advance: false,
         collection_method: 'charge_automatically',
         metadata: { eventId: eventId }
       })
 
-      const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
+      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)  
+      // const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({ 'stripe.customerId': session.customer })
 
