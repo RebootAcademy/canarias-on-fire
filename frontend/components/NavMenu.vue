@@ -7,7 +7,7 @@
           {{ $t('explore') }}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul class="grid gap-3 p-6 bg-background border-whiteGray text-secondary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
+          <ul class="grid z-50 gap-3 p-6 bg-background border-whiteGray text-secondary md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
             <li>
               <div class="mb-2 text-lg font-medium text-primary">
                  {{ $t('events') }}
