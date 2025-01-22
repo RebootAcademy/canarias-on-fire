@@ -98,6 +98,8 @@ const handleCheckoutSessionCompleted = async (session) => {
       event.paymentStatus = 'paid'
       await event.save()
 
+      console.log(session)
+      console.log(session.amount_total)
       // Agregar el item a la factura
       await stripe.invoiceItems.create({
         customer: session.customer,
@@ -133,9 +135,7 @@ const handleCheckoutSessionCompleted = async (session) => {
           const paymentObj = company.invoices[company.invoices.length - 1]
           paymentObj.pdf = newInvoice.pdf
           paymentObj.status = newInvoice.status
-          paymentObj.invoiceId = newInvoice.id,
-          paymentObj.objectInfo = finalizedInvoice,
-          paymentObj.invoice = invoice
+          paymentObj.invoiceId = newInvoice.id
         }
 
         await company.save()
