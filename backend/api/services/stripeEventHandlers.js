@@ -133,7 +133,8 @@ const handleCheckoutSessionCompleted = async (session) => {
           paymentObj.pdf = newInvoice.pdf
           paymentObj.status = newInvoice.status
           paymentObj.invoiceId = newInvoice.id,
-          paymentObj.objectInfo = finalizedInvoice
+          paymentObj.objectInfo = finalizedInvoice,
+          paymentObj.invoice = invoice
         }
 
         await company.save()

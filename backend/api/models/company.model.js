@@ -96,6 +96,8 @@ const CompanySchema = new mongoose.Schema({
       pdf: String,
       date: Date,
       status: String,
+      objectInfo: Object,
+      invoice: Object
     },
   ],
   companyLogoUrl: {
