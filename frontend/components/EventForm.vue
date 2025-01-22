@@ -9,6 +9,7 @@
       <p class="font-semibold mb-4">{{ $t('adminPlan') }}</p>
       <CustomSelect
         v-model:selected="eventStore.adminPayment"
+        :isEditing="isEditing"
         :items="tariffItems"
         :placeholder="$t('chooseAdminPlan')"
       />

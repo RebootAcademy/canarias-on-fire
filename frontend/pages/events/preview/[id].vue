@@ -88,16 +88,6 @@
         {{ $t(`values.${eventStore.musicType}`) }}
       </p>
     </div>
-    <!--     <div class="mt-8">
-      <h2 class="text-2xl font-semibold">Organizador</h2>
-      <div class="flex items-center gap-2 mt-4">
-        <NuxtImg :src="eventStore.organizerImg" alt="Organizer Image" class="w-10 h-10 rounded-full" />
-        <span>{{ eventStore.organizerName }}</span>
-      </div>
-    </div> -->
-    <!-- <div>
-      <TicketButton />
-    </div> -->
     <div v-if="eventStore.eventCodePromo" class="flex flex-col gap-2">
       <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
       <div
