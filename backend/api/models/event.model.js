@@ -122,6 +122,9 @@ const EventSchema = new mongoose.Schema({
   externalSource: {
     type: Boolean,
     default: false
+  },
+  stripe: {
+    type: Object
   }
 })
 EventSchema.index({ eventLocation: '2dsphere' })

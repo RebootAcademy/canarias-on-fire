@@ -188,9 +188,8 @@ const createPaymentSession = async (req, res) => {
     await addInvoiceToCompany(companyId, {
       id: session.id,
       amount: amountInCents, 
-      status: 'paid',
+      status: 'pending',
       date: new Date(),
-      pdf: invoice.invoice_pdf
     })
 
     res.status(200).json({
@@ -222,7 +221,7 @@ const addInvoiceToCompany = async (companyId, invoiceData) => {
       status: invoiceData.status,
       pdf: invoiceData.pdf,
       date: invoiceData.date,
-    }
+    };
 
     if (!company.invoices) {
       company.invoices = []
@@ -288,5 +287,5 @@ module.exports = {
   createPaymentSession,
   addInvoiceToCompany,
   getPayments,
-  getPaymentById,
+  getPaymentById
 }

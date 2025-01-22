@@ -137,8 +137,17 @@ const handleCheckoutSessionCompleted = async (session) => {
 
         if (!company.invoices) {
           company.invoices = []
+          company.invoices.push(newInvoice)
+        } else {
+          const paymentObj = company.invoices[company.invoices.length - 1]
+          company.invoices[company.invoices.length - 1] = {
+            ...paymentObj,
+            pdf: newInvoice.pdf,
+            status: newInvoice.status,
+            invoiceId: newInvoice.id
+          }
         }
-        company.invoices.push(newInvoice)
+
         await company.save()
         
       } else {

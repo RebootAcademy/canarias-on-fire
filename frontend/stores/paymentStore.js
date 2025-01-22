@@ -4,6 +4,7 @@ export const usePaymentStore = defineStore('paymentStore', {
   state: () => ({
     payments: [],
     selectedPayment: null,
+    stripePayments: []
   }),
   actions: {
     setSelectedPayment(payment) {

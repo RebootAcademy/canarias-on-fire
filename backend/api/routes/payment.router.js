@@ -5,7 +5,7 @@ const {
   assignPaymentToEvent,
   createPaymentSession,
   getPayments, 
-  getPaymentById 
+  getPaymentById
 } = require('../controllers/payment.controller')
 
 router.post('/assign/:companyId', assignPaymentToEvent)

@@ -84,6 +84,7 @@ const { toast } = useToast()
 const router = useRouter()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
+const paymentStore = usePaymentStore()
 const userData = computed(() => userStore.userData)
 const subscriptionInformation = computed(() => {
   return subscriptionStore.subscriptions?.find(
@@ -98,15 +99,14 @@ const nextPaymentDate = computed(() => {
   ).toLocaleDateString()
 })
 
+
 const formattedInvoices = computed(() => {
-  console.log(userStore.userData?.invoices)
   if (!userStore.userData?.invoices?.length) return []
   return userStore.userData.invoices.map((invoice) => ({
     ...invoice,
     formattedDate: new Date(invoice.date).toLocaleDateString(),
     formattedAmount: (invoice.amount / 100).toFixed(2), // Convertir 1999 a 19.99€
   }))
-  .filter(i => i.amount > 0)
 })
 
 definePageMeta({
