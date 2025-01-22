@@ -22,17 +22,28 @@
 
 <script setup>
 const emits = defineEmits(['update:selected'])
+const eventStore = useEventStore()
 const props = defineProps({
   items: Array,
   placeholder: String,
   optionDefault: {
     type: String,
     default: ''
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
   }
 })
-const selected = ref(props.optionDefault)
+const selected = ref(props.isEditing ? eventStore.event?.payment?.name : props.optionDefault)
 
 const emitSelected = (value) => {
   emits('update:selected', value)
 }
+
+onMounted(() => {
+  if (props.isEditing) {
+    eventStore.adminPayment = eventStore.event?.payment?.name
+  }
+})
 </script>

@@ -129,13 +129,14 @@ const filteredCategories = computed(() => {
 onMounted(async () => {
   if (props.isEditing && eventStore.event && eventStore.event.categories) {
     eventStore.selectedCategories = eventStore.event.categories
+    eventStore.selectedCategoriesByServices = eventStore.event.categoriesOfServices
   }
 })
 
 const isSelected = (category) => {
   return (
     Array.isArray(eventStore.selectedCategories) &&
-    eventStore.selectedCategories.some((c) => c && c.id === category.id)
+    eventStore.selectedCategories.some((c) => c && c.id === category.id || c._id === category.id)
   )
 }
 
