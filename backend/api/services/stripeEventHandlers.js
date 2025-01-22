@@ -68,7 +68,7 @@ const handleCheckoutSessionCompleted = async (session) => {
         currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
         currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
         cancelAtPeriodEnd: false,
-        canceledAt: null,
+        canceledAt: null
       }
 
       // Actualizar la información de Stripe en la compañía
@@ -98,41 +98,33 @@ const handleCheckoutSessionCompleted = async (session) => {
       event.paymentStatus = 'paid'
       await event.save()
 
-      console.log('Event published after successful payment:', eventId)
-
-      // Crear la factura
-      console.log('[handleCheckoutSessionCompleted] Creating invoice');
-
       // Agregar el item a la factura
-      console.log('[handleCheckoutSessionCompleted] Adding item to invoice');
       await stripe.invoiceItems.create({
         customer: session.customer,
-        invoice: invoice.id,
-        amount: session.amount_total, // Usar el monto total directamente
+        amount: session.amount_total,
         currency: session.currency,
-        description: `Payment for event: ${event.name}`, // Puedes personalizar esta descripción
-      });
-      console.log('[handleCheckoutSessionCompleted] Item added to invoice');
+        description: `Payment for event: ${event.name}`
+      })
 
       const invoice = await stripe.invoices.create({
         customer: session.customer,
         auto_advance: true,
         collection_method: 'charge_automatically',
-        metadata: { eventId: eventId },
-      });
-      console.log('[handleCheckoutSessionCompleted] Invoice created:', invoice.id);
-
+        metadata: { eventId: eventId }
+      })
+console.log('invoice created')
+console.log(invoice)
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({ 'stripe.customerId': session.customer })
+
       if (company) {
         const newInvoice = {
-          id: finalizedInvoice.id,
+          id: invoice.id,
           amount: session.amount_total,
           pdf: invoice.invoice_pdf,
           date: new Date(),
-          status: 'paid',
+          status: 'paid'
         }
-
         if (!company.invoices) {
           company.invoices = []
           company.invoices.push(newInvoice)
@@ -144,7 +136,6 @@ const handleCheckoutSessionCompleted = async (session) => {
         }
 
         await company.save()
-        
       } else {
         console.error('[handleCheckoutSessionCompleted] Company not found for customer:', session.customer);
       }
