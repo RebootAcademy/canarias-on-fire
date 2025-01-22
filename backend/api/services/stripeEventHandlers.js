@@ -98,8 +98,6 @@ const handleCheckoutSessionCompleted = async (session) => {
       event.paymentStatus = 'paid'
       await event.save()
 
-      console.log(session)
-      console.log(session.amount_total)
       // Agregar el item a la factura
       await stripe.invoiceItems.create({
         customer: session.customer,
@@ -107,13 +105,14 @@ const handleCheckoutSessionCompleted = async (session) => {
         currency: session.currency,
         description: `Payment for event: ${event.name}`
       })
-
+      
       const invoice = await stripe.invoices.create({
         customer: session.customer,
         auto_advance: false,
         collection_method: 'charge_automatically',
         metadata: { eventId: eventId }
       })
+        console.log(invoice)
 
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)  
       // const finalizedInvoice = await stripe.invoices.retrieve(invoice.id)
