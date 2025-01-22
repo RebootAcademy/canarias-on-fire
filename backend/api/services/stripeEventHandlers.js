@@ -6,12 +6,6 @@ const Subscription = require('../models/subscription.model')
 const { addSubscriptionToCompany } = require('../controllers/subscription.controller')
 const sendEmail = require('../services/nodemailer/nodemailer.service')
 
-
-/* const handleChargeSucceeded = async (charge) => {
-  console.log('Charge succeeded:', charge.id)
-  // Implementa la lógica para manejar el evento de cargo exitoso
-} */
-
 const handleCheckoutSessionCompleted = async (session) => {
   console.log(`session`)
   if (session.metadata && session.mode === 'subscription' && session.metadata.firstHire === 'true') {
@@ -116,10 +110,12 @@ const handleCheckoutSessionCompleted = async (session) => {
       //Añadir pequeño tiempo de espera para asegurar la creación de la factura
       await new Promise((resolve) => setTimeout(resolve, 500))
 
-      //Marcar factura como 'pagada'
+      //Finalizamos factura para poder generar el pdf.
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
 
+      //Cancelar pago para evitar pago duplicado del cliente.
       await stripe.invoices.voidInvoice(finalizedInvoice.id)
+
       // Actualizar la compañía con la nueva factura
       const company = await User.findOne({
         'stripe.customerId': session.customer,
@@ -155,98 +151,6 @@ const handleCheckoutSessionCompleted = async (session) => {
     }
   }
 }
-
-/* const handlePaymentMethodAttached = async (paymentMethod) => {
-  console.log('Payment method attached:', paymentMethod.id)
-  // Implementa la lógica para manejar el método de pago adjunto
-} */
-
-/* const handleCustomerCreated = async (customer) => {
-  console.log('Customer created:', customer.id)
-  // Implementa la lógica para manejar la creación del cliente
-} */
-
-/* const handleCustomerUpdated = async (customer) => {
-  console.log('Customer updated:', customer.id)
-  // Implementa la lógica para manejar la actualización del cliente
-} */
-
-/* const handleCustomerSubscriptionCreated = async (subscription) => {
-  console.log('Subscription created:', subscription.id)
-  
-  try {
-    const customer = await stripe.customers.retrieve(subscription.customer)
-    const userId = customer.metadata.userId
-
-    if (!userId) {
-      console.error('User ID not found in customer metadata:', subscription.customer)
-      return
-    }
-
-    const company = await Company.findById(userId)
-    if (!company) {
-      console.error('Company not found for user ID:', userId)
-      return
-    }
-
-    const subscriptionPlan = await Subscription.findOne({ 'stripe.planId': subscription.plan.id })
-    if (!subscriptionPlan) {
-      console.error('Subscription plan not found:', subscription.plan.id)
-      return
-    }
-
-    company.activeSubscription = {
-      status: 'active',
-      plan: subscriptionPlan._id,
-      currentPeriodStart: new Date(subscription.current_period_start * 1000),
-      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-    }
-    company.stripe.subscriptionId = subscription.id
-    company.stripe.subscriptionItemId = subscription.items.data[0].id
-    company.role = 'company'
-
-    await company.save()
-
-    console.log('Company subscription created:', company._id)
-  } catch (error) {
-    console.error('Error processing subscription creation:', error)
-  }
-} */
-
-/* const handleCustomerSubscriptionUpdated = async (subscription) => {
-  console.log('Subscription updated:', subscription.id)
-  // Implementa la lógica para manejar la actualización de la suscripción
-} */
-
-/* const handlePaymentIntentSucceeded = async (paymentIntent) => {
-  console.log('Payment intent succeeded:', paymentIntent.id)
-  // Implementa la lógica para manejar el intento de pago exitoso
-} */
-
-/* const handlePaymentIntentCreated = async (paymentIntent) => {
-  console.log('Payment intent created:', paymentIntent.id)
-  // Implementa la lógica para manejar la creación del intento de pago
-} */
-
-/* const handleInvoiceCreated = async (invoice) => {
-  console.log('Invoice created:', invoice.id)
-  // Implementa la lógica para manejar la creación de la factura
-} */
-
-/* const handleInvoiceFinalized = async (invoice) => {
-  console.log('Invoice finalized:', invoice.id)
-  // Implementa la lógica para manejar la finalización de la factura
-} */
-
-/* const handleInvoiceUpdated = async (invoice) => {
-  console.log('Invoice updated:', invoice.id)
-  // Implementa la lógica para manejar la actualización de la factura
-} */
-
-/* const handleInvoicePaid = async (invoice) => {
-  console.log('Invoice payment succeeded:', invoice.id)
-  // Implementa la lógica para manejar el pago de la factura
-} */
 
 const handleInvoicePaymentSucceeded = async (invoice) => {  
   const { invoice_pdf, amount_paid } = invoice
