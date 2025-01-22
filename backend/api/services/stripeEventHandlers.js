@@ -110,7 +110,6 @@ const handleCheckoutSessionCompleted = async (session) => {
       //   customer: session.customer,
       //   pending: true,
       // })
-      console.log('Pending Invoice Items:', pendingItems.data)
 
       await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -120,7 +119,6 @@ const handleCheckoutSessionCompleted = async (session) => {
         collection_method: 'charge_automatically',
         metadata: { eventId: eventId }
       })
-        console.log(invoice)
 
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)  
 
