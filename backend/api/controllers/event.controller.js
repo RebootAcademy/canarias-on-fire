@@ -358,8 +358,8 @@ const updateEventByAdmin = async (req, res) => {
     }
 
     if (event.eventType === 'event') {
-      event.payment = paymentPlan._id
       const paymentPlan = await Payment.findOne({ name: req.body.adminPayment })
+      event.payment = paymentPlan._id
     }
 
     event.status = 'published'
