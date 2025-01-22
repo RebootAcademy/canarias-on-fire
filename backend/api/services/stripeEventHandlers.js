@@ -98,14 +98,29 @@ const handleCheckoutSessionCompleted = async (session) => {
       event.paymentStatus = 'paid'
       await event.save()
 
-      // Agregar el item a la factura
+      // // Agregar el item a la factura
+      // await stripe.invoiceItems.create({
+      //   customer: session.customer,
+      //   amount: session.amount_total,
+      //   currency: session.currency,
+      //   description: `Payment for event: ${event.name}`
+      // })
+
+      const invoice = await stripe.invoices.create({
+        customer: session.customer,
+        auto_advance: false,
+        collection_method: 'charge_automatically',
+        metadata: { eventId: eventId },
+      })
+
       await stripe.invoiceItems.create({
         customer: session.customer,
         amount: session.amount_total,
         currency: session.currency,
-        description: `Payment for event: ${event.name}`
+        description: `Payment for event: ${event.name}`,
+        invoice: invoice.id
       })
-      
+
       // const pendingItems = await stripe.invoiceItems.list({
       //   customer: session.customer,
       //   pending: true,
@@ -113,17 +128,19 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       await new Promise((resolve) => setTimeout(resolve, 500))
 
-      const invoice = await stripe.invoices.create({
-        customer: session.customer,
-        auto_advance: false,
-        collection_method: 'charge_automatically',
-        metadata: { eventId: eventId }
-      })
+      // const invoice = await stripe.invoices.create({
+      //   customer: session.customer,
+      //   auto_advance: false,
+      //   collection_method: 'charge_automatically',
+      //   metadata: { eventId: eventId }
+      // })
 
-      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)  
+      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id)
 
       // Actualizar la compañía con la nueva factura
-      const company = await User.findOne({ 'stripe.customerId': session.customer })
+      const company = await User.findOne({
+        'stripe.customerId': session.customer,
+      })
 
       if (company) {
         const newInvoice = {
@@ -131,7 +148,7 @@ const handleCheckoutSessionCompleted = async (session) => {
           amount: session.amount_total,
           pdf: finalizedInvoice?.invoice_pdf,
           date: new Date(finalizedInvoice?.created * 1000),
-          status: finalizedInvoice?.status
+          status: finalizedInvoice?.status,
         }
         if (!company.invoices) {
           company.invoices = []
@@ -145,9 +162,11 @@ const handleCheckoutSessionCompleted = async (session) => {
 
         await company.save()
       } else {
-        console.error('[handleCheckoutSessionCompleted] Company not found for customer:', session.customer);
+        console.error(
+          '[handleCheckoutSessionCompleted] Company not found for customer:',
+          session.customer
+        )
       }
-
     } catch (error) {
       console.error('Error processing event payment:', error)
     }
