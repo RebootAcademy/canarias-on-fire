@@ -123,7 +123,7 @@ const handleCheckoutSessionCompleted = async (session) => {
           amount: session.amount_total,
           pdf: finalizedInvoice?.invoice_pdf,
           date: new Date(finalizedInvoice?.created * 1000),
-          status: finalizedInvoice?.status,
+          status: finalizedInvoice?.status
         }
         if (!company.invoices) {
           company.invoices = []
@@ -132,7 +132,8 @@ const handleCheckoutSessionCompleted = async (session) => {
           const paymentObj = company.invoices[company.invoices.length - 1]
           paymentObj.pdf = newInvoice.pdf
           paymentObj.status = newInvoice.status
-          paymentObj.invoiceId = newInvoice.id
+          paymentObj.invoiceId = newInvoice.id,
+          paymentObj.objectInfo = finalizedInvoice
         }
 
         await company.save()
