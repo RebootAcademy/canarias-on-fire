@@ -56,15 +56,16 @@ const limitedEvents = computed(() => {
       const priorityA = getEventPriority(a) || null;
       const priorityB = getEventPriority(b) || null;
 
-      if (!priorityA && priorityB) {
+      if ((!priorityA && priorityB) || (priorityA > priorityB)) {
         return 1; // Coloca los eventos sin "paymentId" al final
       }
-      if (priorityA && !priorityB) {
+      if ((priorityA && !priorityB) || (priorityA < priorityB)) {
         return -1; // Coloca los eventos con "paymentId" al principio
       }
 
       // Si las prioridades son iguales, compara las fechas
-      return compareDates(a.eventDate, b.eventDate);
+      // return compareDates(a.eventDate, b.eventDate);
+      return Math.random() - 0.5;
     })
     .slice(0, 9);
 })

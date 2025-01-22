@@ -91,23 +91,22 @@ const limitedEvents = computed(() => {
 
   return firstFilter
     .sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
-
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB
+      const priorityA = getEventPriority(a) || null;
+      const priorityB = getEventPriority(b) || null;
+      if ((!priorityA && priorityB) || (priorityA > priorityB)) {
+        return 1; // Coloca los eventos sin "paymentId" al final
+      }
+      if ((priorityA && !priorityB) || (priorityA < priorityB)) {
+        return -1; // Coloca los eventos con "paymentId" al principio
       }
 
-      return compareDates(a.eventDate, b.eventDate)
+      // return compareDates(a.eventDate, b.eventDate)
+      return Math.random() - 0.5;
     })
 })
 
-
 function getEventPriority(event) {
-  const paymentId =
-    event.eventType === 'event' ? event.payment?._id : event.payment
-  const payment = paymentStore.getPaymentById(paymentId?._id)
-  return payment?.features?.readPriority
+  return event.payment?.features?.readPriority
 }
 
 function compareDates(dateA, dateB) {

@@ -78,7 +78,7 @@ export const usePaymentStore = defineStore('paymentStore', {
   },
   getters: {
     getPaymentById: (state) => (id) => {
-      return state.payments.find(payment => payment._id === id)
+        return state.payments.find((payment) => payment._id === id)
     }
   }
 })

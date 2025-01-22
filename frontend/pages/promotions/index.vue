@@ -118,6 +118,8 @@ const limitedPromotions = computed(() => {
       if (priorityA !== priorityB) {
         return priorityB - priorityA
       }
+
+      return Math.random() - 0.5;
       // return compareDates(a.eventDate, b.eventDate)
       // Random organization
     })
