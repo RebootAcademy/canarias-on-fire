@@ -291,7 +291,7 @@ const checkIfUserHasPromotions = () => {
 
 const handleStatus = async () => {
   if (props.promotion.status === 'draft') {
-    if (!isAdmin.value && !checkIfUserHasPromotions()) {
+    if (isAdmin.value || !checkIfUserHasPromotions()) {
       await eventStore.updatePromotion(props.promotion._id, 'published')
     } else {
       toast({
