@@ -63,9 +63,14 @@ const limitedEvents = computed(() => {
         return -1; // Coloca los eventos con "paymentId" al principio
       }
 
-      // Si las prioridades son iguales, compara las fechas
-      // return compareDates(a.eventDate, b.eventDate);
-      return Math.random() - 0.5;
+      // Si las prioridades son iguales, ordenar por fecha o aleatoriamente
+      // Si el usuario selecciona ver por 'hoy', por 'Esta semana' o 'Este mes', ordenar por fecha
+      if (eventStore.selectedFilterByDate !== 'all') {
+        return compareDates(a.eventDate, b.eventDate)
+      } else {
+        // Ordenar aleatoriamente si el selector está en 'Todos'
+        return Math.random() - 0.5
+      }
     })
     .slice(0, 9);
 })
