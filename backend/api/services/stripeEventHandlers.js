@@ -126,11 +126,11 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       if (company) {
         const newInvoice = {
-          id: updatedInvoice?.id,
+          id: finalizedInvoice?.id,
           amount: session.amount_total,
-          pdf: updatedInvoice?.invoice_pdf,
+          pdf: finalizedInvoice?.invoice_pdf,
           date: new Date(finalizedInvoice?.created * 1000),
-          status: updatedInvoice?.status,
+          status: finalizedInvoice?.status,
         }
         if (!company.invoices) {
           company.invoices = []
