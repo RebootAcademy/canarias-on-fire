@@ -6,7 +6,6 @@
         :key="filter.label" 
         class="relative text-2xl text-gray-500 hover:text-primary active:text-primary"
         @click="activeDateFilter(filter.value)"
-        
       >
         <span :class="eventStore.selectedEventFilter === filter.value ? 'text-primary' : ''">{{ filter.label }}</span>
         <span

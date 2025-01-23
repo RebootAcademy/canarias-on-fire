@@ -50,9 +50,7 @@ const limitedEvents = computed(() => {
     filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
   }
 
-
-  
-   const eventsWithRandomOrder = filterEvents.map(event => ({
+  const eventsWithRandomOrder = filterEvents.map(event => ({
     ...event,
     randomOrder: Math.random().toFixed(2),
   }))

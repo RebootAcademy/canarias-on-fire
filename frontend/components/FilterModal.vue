@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isFilterModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50">
+  <div
+    v-if="isFilterModalOpen"
+    class="flex inset-0 justify-center items-center fixed w-screen h-screen z-40 bg-black bg-opacity-50"
+  >
     <div class="bg-background border-2 rounded-lg p-4 md:p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
         <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>

@@ -5,7 +5,7 @@
       :class="props.band ? 'text-md' : 'text-sm'"
     >
     {{ endDate ? $t('eventEndDate') : $t('eventDate') }}
-  </Label>
+    </Label>
     <Popover>
       <PopoverTrigger as-child>
         <Button
