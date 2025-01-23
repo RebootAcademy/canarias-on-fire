@@ -154,6 +154,10 @@
     "question9": {
       "question": "The search system isn't finding my event, why?",
       "answer": "It may take a few minutes to index after publication. If the issue persists, contact technical support."
+    },
+    "question10": {
+      "question": "Enable Location in Browser",
+      "answer": "If you're currently having trouble enabling location settings in a PC browser, you can get help by visiting the respective websites for Chrome, Safari, Microsoft Edge, or Firefox. <br><br><strong>Google Chrome:</strong> <br><strong>PC:</strong> Open the Google Chrome browser. Go to <strong>Settings > Privacy and security > Site Settings > Location</strong>. Allow sites to access your location. <br><strong>Android:</strong> Open Google Chrome. Go to <strong>Settings > Site Settings > Location</strong>. Allow location access. <br><br><strong>Safari:</strong> <br><strong>PC (macOS):</strong> Open Safari. Go to <strong>Safari > Preferences > Websites > Location</strong>. Allow location access. <br><strong>iOS:</strong> Go to <strong>Settings > Privacy > Location Services > Safari</strong>. Select <strong>Ask Next Time</strong> or <strong>While Using the App</strong>. <br><br><strong>Microsoft Edge:</strong> <br><strong>PC:</strong> Open Microsoft Edge. Go to <strong>Settings > Cookies and Site Permissions > Location</strong>. Allow location access. <br><strong>Android:</strong> Open Microsoft Edge. Go to <strong>Settings > Site Settings > Location</strong>. Allow location access. <br><br><strong>Mozilla Firefox:</strong> <br><strong>PC:</strong> Open Mozilla Firefox. Go to <strong>Preferences > Privacy & Security > Permissions > Location</strong>. Allow location access. <br><strong>Android:</strong> Open Firefox. Go to <strong>Settings > Privacy > Location</strong>. Allow location access."
     }
   },
   "accountManagement": {

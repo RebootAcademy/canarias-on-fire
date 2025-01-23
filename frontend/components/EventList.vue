@@ -37,7 +37,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
-  let filterEvents = eventsByDate.value
+  let filterEvents = [...eventsByDate.value]
     ?.filter(event =>
       event.status === 'published'
       && event.eventType === 'event')
@@ -49,12 +49,19 @@ const limitedEvents = computed(() => {
   if (eventStore.musicFilter !== 'all') {
     filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
   }
+
+
+  
+   const eventsWithRandomOrder = filterEvents.map(event => ({
+    ...event,
+    randomOrder: Math.random().toFixed(2),
+  }))
     
-  return filterEvents
+  return eventsWithRandomOrder
     .sort((a, b) => {
       // Primero compara las prioridades
-      const priorityA = getEventPriority(a) || null;
-      const priorityB = getEventPriority(b) || null;
+      const priorityA = getEventPriority(a) || undefined;
+      const priorityB = getEventPriority(b) || undefined;
 
       if ((!priorityA && priorityB) || (priorityA > priorityB)) {
         return 1; // Coloca los eventos sin "paymentId" al final
@@ -63,17 +70,15 @@ const limitedEvents = computed(() => {
         return -1; // Coloca los eventos con "paymentId" al principio
       }
 
-      // Si las prioridades son iguales, ordenar por fecha o aleatoriamente
-      // Si el usuario selecciona ver por 'hoy', por 'Esta semana' o 'Este mes', ordenar por fecha
       if (eventStore.selectedFilterByDate !== 'all') {
         return compareDates(a.eventDate, b.eventDate)
       } else {
-        // Ordenar aleatoriamente si el selector está en 'Todos'
-        return Math.random() - 0.5
+        return a.randomOrder - b.randomOrder
       }
     })
     .slice(0, 9);
 })
+
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment?._id : event.payment

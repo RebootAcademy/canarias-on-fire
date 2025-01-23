@@ -19,13 +19,14 @@
         </div>
       </div>
       <div>
-        <InfoLocation v-if="!userStore.acceptedGeolocation" class="my-4 mt-6"/>
-        <div class="flex flex-col justify-center w-full md:justify-start md:w-1/3 mb-6">
-          <EventFilter v-if="userStore.acceptedGeolocation"/>
-          <GeolocationMap  v-if="eventStore.selectedEventFilter === 'nearby'"/>
+        <InfoLocation v-if="!userStore.acceptedGeolocation" class="my-4 mt-6" />
+        <div
+          class="flex flex-col justify-center w-full md:justify-start md:w-1/3 mb-6"
+        >
+          <EventFilter v-if="userStore.acceptedGeolocation" />
+          <GeolocationMap v-if="eventStore.selectedEventFilter === 'nearby'" />
         </div>
         <div
-         
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
         >
           <EventCard
@@ -39,7 +40,7 @@
           {{ $t('notEventsFound') }}
         </p>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -48,7 +49,6 @@ import { storeToRefs } from 'pinia'
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
-
 
 const { filteredEvents } = storeToRefs(eventStore)
 
@@ -66,43 +66,42 @@ const openFilterModal = () => {
 }
 
 const limitedEvents = computed(() => {
-  let firstFilter 
-
-  if (eventStore.selectedEventFilter === 'nearby') {
-    firstFilter = filteredEvents.value
-      .filter(
-        (event) =>
-          event.status === 'published' &&
-        event.eventType === 'event' &&
-         event.dist?.calculated < eventStore.radioLocation &&
-        ((event.userId?.isActive &&
-        event.userId?.isValidated) || event.userId?.role === 'admin')
-      )
-  } else  {
-    firstFilter = filteredEvents.value.filter(
+  let firstFilter = filteredEvents.value.filter(
       (event) =>
         event.status === 'published' &&
         event.eventType === 'event' &&
-        ((event.userId?.isActive &&
-        event.userId?.isValidated) || event.userId?.role === 'admin')
+        ((event.userId?.isActive && event.userId?.isValidated) ||
+          event.userId?.role === 'admin')
     )
+
+  if (eventStore.selectedEventFilter === 'nearby') {
+    firstFilter = firstFilter.filter(
+      (event) =>
+        event.dist?.calculated < eventStore.radioLocation
+    )
+  } else {
+    firstFilter = firstFilter.map((event) => ({
+      ...event,
+      randomOrder: Math.random().toFixed(2),
+    }))
   }
 
+  return firstFilter.sort((a, b) => {
+    const priorityA = getEventPriority(a) || undefined
+    const priorityB = getEventPriority(b) || undefined
+    if ((!priorityA && priorityB) || priorityA > priorityB) {
+      return 1 // Coloca los eventos sin "paymentId" al final
+    }
+    if ((priorityA && !priorityB) || priorityA < priorityB) {
+      return -1 // Coloca los eventos con "paymentId" al principio
+    }
 
-  return firstFilter
-    .sort((a, b) => {
-      const priorityA = getEventPriority(a) || null;
-      const priorityB = getEventPriority(b) || null;
-      if ((!priorityA && priorityB) || (priorityA > priorityB)) {
-        return 1; // Coloca los eventos sin "paymentId" al final
-      }
-      if ((priorityA && !priorityB) || (priorityA < priorityB)) {
-        return -1; // Coloca los eventos con "paymentId" al principio
-      }
-
-      // return compareDates(a.eventDate, b.eventDate)
-      return Math.random() - 0.5;
-    })
+    if (a.randomOrder) {
+      return a.randomOrder - b.randomOrder
+    } else {
+      return compareDates(a.eventDate, b.eventDate)
+    }
+  })
 })
 
 function getEventPriority(event) {
@@ -119,7 +118,7 @@ function compareDates(dateA, dateB) {
   return dateA.day - dateB.day
 }
 
-onMounted(async() => {
+onMounted(async () => {
   await userStore.fetchAndSetUser(userStore.userData?.email)
 })
 </script>

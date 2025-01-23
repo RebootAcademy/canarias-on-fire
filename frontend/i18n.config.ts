@@ -29,6 +29,7 @@ import privacyEN from './locales/en/privacy.json'
 
 export default defineI18nConfig(() => ({
   legacy: false,
+  defaultLocale: 'es',
   locale: 'es',
   messages: {
     en: {

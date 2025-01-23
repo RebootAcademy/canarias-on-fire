@@ -6,8 +6,7 @@
         <ChevronDown size="16" class="icon-tabler-chevron-down" />
       </div>
         </summary>
-        <p class="mt-4">
-            {{ question.answer }}
+        <p class="mt-4" v-html="question.answer">
         </p>
     </details>
     <hr class="w-full border-t border-gray-300 my-4"/>
@@ -23,6 +22,8 @@ const props = defineProps({
         required: true
     }
 })
+
+console.log('q', props.question.browsers)
 
 </script>
 

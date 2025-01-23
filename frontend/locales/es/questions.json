@@ -154,6 +154,11 @@
     "question9": {
       "question": "El sistema de búsqueda no encuentra mi evento, ¿por qué?",
       "answer": "Puede tardar unos minutos en indexarse después de publicarlo. Si persiste, contacta a soporte técnico."
+    },
+    "question10": {
+      "question": "Activar la localización en el navegador",
+      "answer": "Si actualmente tienes problemas para habilitar la configuración de ubicación en un navegador de PC, puedes obtener ayuda sobre este tema al visitar los sitios web respectivos de Chrome, Safari, Microsoft Edge o Firefox. <br><br><strong>Google Chrome:</strong> <br><strong>PC:</strong> Abre el navegador Google Chrome. Ve a <strong>Configuración > Privacidad y seguridad > Configuración del sitio > Ubicación</strong>. Permite que los sitios web accedan a tu ubicación. <br><strong>Android:</strong> Abre Google Chrome. Ve a <strong>Configuración > Configuración del sitio > Ubicación</strong>. Permite el acceso a la ubicación. <br><br><strong>Safari:</strong> <br><strong>PC (macOS):</strong> Abre Safari. Ve a <strong>Safari > Preferencias > Sitios web > Ubicación</strong>. Permite el acceso a la ubicación. <br><strong>iOS:</strong> Ve a <strong>Configuración > Privacidad > Servicios de ubicación > Safari</strong>. Selecciona <strong>Preguntar la próxima vez</strong> o <strong>Al usar la aplicación</strong>. <br><br><strong>Microsoft Edge:</strong> <br><strong>PC:</strong> Abre Microsoft Edge. Ve a <strong>Configuración > Cookies y permisos del sitio > Ubicación</strong>. Permite el acceso a la ubicación. <br><strong>Android:</strong> Abre Microsoft Edge. Ve a <strong>Configuración > Configuración del sitio > Ubicación</strong>. Permite el acceso a la ubicación. <br><br><strong>Mozilla Firefox:</strong> <br><strong>PC:</strong> Abre Mozilla Firefox. Ve a <strong>Preferencias > Privacidad y seguridad > Permisos > Ubicación</strong>. Permite el acceso a la ubicación. <br><strong>Android:</strong> Abre Firefox. Ve a <strong>Configuración > Privacidad > Ubicación</strong>. Permite el acceso a la ubicación."
+      
     }
   },
   "accountManagement": {

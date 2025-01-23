@@ -27,14 +27,14 @@ onMounted(async () => {
   await subscriptionStore.fetchSubscriptions()
   await paymentStore.fetchPayments()
   const isLoading = ref(true)
-  
+
   await nextTick()
   if (localStorage.getItem('themePreference') === 'light') {
-    document.body.classList.remove('dark');
+    document.body.classList.remove('dark')
   } else {
-    document.body.classList.add('dark');
+    document.body.classList.add('dark')
     userStore.setThemePreference('dark')
-  }  
+  }
 
   async function monitorGeolocation() {
     if (!navigator.permissions) {
@@ -52,27 +52,30 @@ onMounted(async () => {
       })
 
       const handlePermissionChange = async () => {
+        console.log('permission', permissionStatus.state)
+        switch (permissionStatus.state) {
+          case 'granted':
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                const { latitude, longitude } = position.coords
+                await eventStore.fetchEvents(latitude, longitude) // Fetch events with location
+                await userStore.setAcceptedGeolocation(true)
+                // isLoading.value = false
+              },
+              (error) => {
+                console.error('Error obtaining location:', error.message)
+                isLoading.value = false
+              }
+            )
+            break
 
-        if (permissionStatus.state === 'granted') {
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              const { latitude, longitude } = position.coords
-              await eventStore.fetchEvents(latitude, longitude)
-              await userStore.setAcceptedGeolocation(true)
-            },
-            (error) => {
-              console.error('Error obteniendo la ubicación:', error.message)
-            }
-          )
-          isLoading.value = false
-        } else if (
-          permissionStatus.state === 'prompt' ||
-          permissionStatus.state === 'denied'
-        ) {
-          
-          await eventStore.fetchEvents()
-          await userStore.setAcceptedGeolocation(false)
-          isLoading.value = false
+          case 'prompt':
+          case 'denied':
+          default:
+            await eventStore.fetchEvents() 
+            await userStore.setAcceptedGeolocation(false)
+            isLoading.value = false
+            break
         }
       }
 
