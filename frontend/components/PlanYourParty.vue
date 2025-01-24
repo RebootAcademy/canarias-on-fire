@@ -65,6 +65,7 @@ function filterUsers(category) {
         if (category === 'bands') {
           return user.role === 'musician'
         }
+        console.log(category)
         return user.serviceType === category
     })
     .sort((a, b) => getPriority(b) - getPriority(a))

@@ -46,7 +46,7 @@ const optionsFilter = computed(() => {
         { label: t('values.bands'), value: 'bands', icon: 'Music' },
         { label: t('values.foodtruck'), value: 'foodtruck', icon: 'Truck' },
         { label: t('values.catering'), value: 'catering', icon: 'UtensilsCrossed' },
-        { label: t('values.lighting'), value: 'lighting', icon: 'Lightbulb' },
+        { label: t('values.lighting'), value: 'sound', icon: 'Lightbulb' },
         { label: t('values.photo'), value: 'photo', icon: 'Camera' },
         { label: t('values.furniture'), value: 'furniture', icon: 'Armchair' },
         { label: t('values.renting'), value: 'renting', icon: 'MapPin' },
