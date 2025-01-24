@@ -9,6 +9,10 @@ export const useUserStore = defineStore('userStore', {
     users: [],
     selectedUser: null,
     searchQuery: '',
+    authError: {
+      error: '',
+      message: ''
+    }
   }),
 
   actions: {
@@ -37,6 +41,11 @@ export const useUserStore = defineStore('userStore', {
       this.acceptedGeolocation = accepted
     },
 
+    setAuthError(error) {
+      this.authError.error = error.error
+      this.authError.message = error.error_description
+    },
+
     async fetchUsers() {
       try {
         const { data } = await useFetch(
@@ -62,6 +71,7 @@ export const useUserStore = defineStore('userStore', {
             },
           }
         )
+        console.log(response.user)
         this.users.push(response.user)
         return response.user
       } catch (error) {
@@ -71,16 +81,18 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async fetchAndSetUser(email) {
-      try {
-        const { data } = await useFetch(
-          `${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`
-        )
-        if (data.value) {
-          console.log('data fetched', data.value)
-          this.setUser(data.value)
+      if (email) {
+        try {
+          const { data } = await useFetch(
+            `${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`
+          )
+          if (data.value) {
+            console.log('data fetched', data.value)
+            this.setUser(data.value)
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error)
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error)
       }
     },
 
@@ -339,6 +351,9 @@ export const useUserStore = defineStore('userStore', {
       }
       return state.themePreference // Para el SSR
     },
+    checkAuthError () {
+      return this.authError
+    }
   },
   persist: {
     paths: ['userData', 'isAuthenticated'],

@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+const route = useRoute()
 const eventStore = useEventStore()
 const articleStore = useArticleStore()
 const paymentStore = usePaymentStore()
@@ -68,7 +69,6 @@ onMounted(async () => {
               }
             )
             break
-
           case 'prompt':
           case 'denied':
           default:

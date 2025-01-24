@@ -1,6 +1,10 @@
 <template>
   <div class="flex !flex-col min-h-screen w-screen xs:p-4 sm:p-14 lg:p-8 lg:px-24">
-    <div v-if="currentStep === 1" class="flex !flex-col">
+    <Spinner v-if="isLoading" />
+    <div v-else-if="!userVerified">
+      {{ $t('onBoarding.validateEmail') }}
+    </div>
+    <div v-else-if="currentStep === 1" class="flex !flex-col">
       <h1 class="text-primary text-2xl font-bold mb-6">{{ $t('onBoarding.step1')}}</h1>
       <p class="mb-8 text-gray-400">
         {{ $t('onBoarding.step1Description')}}
@@ -56,11 +60,34 @@
 </template>
 
 <script setup>
+const userStore = useUserStore()
 import { BriefcaseBusiness, Music } from 'lucide-vue-next'
-
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const currentStep = ref(1)
 const selectedRole = ref(null)
+const isLoading = ref(true)
+const userVerified = ref(false)
+
+onMounted(async () => {
+  if (!isLoading.value) isLoading.value = true
+  const auth0 = useAuth0()
+  const config = useRuntimeConfig()
+  try {
+    const accessToken = await auth0.getAccessTokenSilently()
+
+    const response = await fetch(`https://${config.public.auth0Domain}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    const user = await response.json()
+    userVerified.value = user.email_verified || false
+    isLoading.value = false
+  } catch (error) {
+    console.error('Error restoring session:', error)
+  }
+})
 
 const selectRole = (role) => {
   selectedRole.value = role

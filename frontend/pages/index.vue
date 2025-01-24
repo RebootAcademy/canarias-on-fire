@@ -42,11 +42,15 @@ useHead({
 })
 import * as LucideIcons from 'lucide-vue-next'
 
-
+import { useToast } from '@/components/ui/toast/use-toast'
+const { toast } = useToast()
 const eventStore = useEventStore()
 const userStore = useUserStore()
 const articleStore = useArticleStore()
 import { useRuntimeConfig } from '#app'
+
+const user = useNuxtApp().$user
+console.log(user)
 
 const users = ref([])
 const isLoading = ref(true)
@@ -74,9 +78,16 @@ async function fetchUsers() {
 }
 
 onMounted(async() => {
+  if (userStore.checkAuthError.error) {
+    toast({
+          description: userStore.checkAuthError.message,
+          variant: 'destructive',
+    })
+    userStore.setAuthError({error: '', message: ''})
+  }
   fetchUsers()
-  eventStore.resetFilters()
-   userStore.fetchAndSetUser(userStore.userData?.email)
+    eventStore.resetFilters()
+    userStore.fetchAndSetUser(userStore.userData?.email)
 })
 
 const searchQuery = computed({

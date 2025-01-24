@@ -122,7 +122,7 @@
               />
             </SelectTrigger>
             <SelectContent class="text-gray-500">
-              <SelectItem value="foodtruck">
+              <SelectItem value="promoter">
                 {{$t('onBoarding.step2Sector.promoter')}}
               </SelectItem>
               <SelectItem value="restoration">{{
@@ -222,8 +222,8 @@ const { t } = useI18n()
 
 const isCompanyNameSynced = ref(true)
 
-const foodSelected = ref('spanish')
-const serviceSelected = ref('foodtruck')
+const foodSelected = ref('')
+const serviceSelected = ref('')
 
 const formData = ref({
   companyName: '',
@@ -312,6 +312,7 @@ const errors = ref({
 })
 
 const submitForm = async () => {
+  console.log(formData.value)
   if (formData.value.termsAccepted) {
     errors.value = {
       companyName: '',
@@ -326,6 +327,7 @@ const submitForm = async () => {
     if (!validateCIF(formData.value.cif) && !validateNifNie(formData.value.cif) ) return (errors.value.cif = t('onBoarding.step2InvalidCIF'))
     
     if (formData.value.sector !== 'restoration') delete formData.value.type
+    if (formData.value.sector !== 'services') delete formData.value.serviceType
     try {
       const userId = userStore.userData._id
       if (!userId) {

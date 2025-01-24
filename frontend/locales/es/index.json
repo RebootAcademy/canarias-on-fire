@@ -40,6 +40,7 @@
     "button": "Empieza ahora"
   },
   "onBoarding": {
+    "validateEmail": "Por favor, revisa tu correo electrónico y haz clic en el enlace que te hemos enviado para verificar tu dirección de correo. Si no encuentras el correo en tu bandeja de entrada, revisa también la carpeta de spam o correo no deseado. Si el problema persiste, no dudes en contactarnos para ayudarte.",
     "step1": "PASO 1 de 2: Selecciona tu rol",
     "step1Description": " Para empezar, seleccione la función que mejor le describa. Esta elección nos permitirá personalizar su experiencia y solicitar la información específica que necesitamos para crear su cuenta.",
     "step1Company": "Soy una compañía",
