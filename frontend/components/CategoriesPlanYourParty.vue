@@ -37,7 +37,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
     // This is only for filter companies in Plan your party
-  },
+  }
 })
 
 const optionsFilter = computed(() => {

@@ -160,7 +160,7 @@ const scrapeGobCanarias = async () => {
     console.log('All events saved')
     page++
 
-    setTimeout(scrapePage, 5000)
+    setTimeout(scrapeGobCanarias, 5000)
   } catch (error) {
     console.error(`Error while scraping page ${page}:`, error)
   }

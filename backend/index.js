@@ -71,12 +71,12 @@ cron.schedule('0 9 * * 1', () => {
   scrapeGobCanarias()
 })
 
-cron.schedule('0 11 * * 1', () => {
+cron.schedule('0 10 * * 1', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')
   scrapeAytoLasPalmas()
 })
 
-cron.schedule('0 13 * * 1', () => {
+cron.schedule('0 11 * * 1', () => {
   console.log('Checking Ayuntamiento de Tenerife Events')
   scrapeAytoTenerife()
 })
