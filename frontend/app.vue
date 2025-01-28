@@ -14,83 +14,66 @@ const paymentStore = usePaymentStore()
 const userStore = useUserStore()
 const subscriptionStore = useSubscriptionStore()
 import Toaster from '@/components/ui/toast/Toaster.vue'
-
-/* onMounted(async () => {
-  await eventStore.fetchCategories()
-  await eventStore.fetchEvents()
-  await articleStore.fetchArticles()
-  await paymentStore.fetchPayments()
-  await subscriptionStore.fetchSubscriptions()
-}) */
+const isLoading = ref(true)
+const permissionState = ref(undefined)
 
 onMounted(async () => {
-  await eventStore.fetchCategories()
-  await articleStore.fetchArticles()
-  await subscriptionStore.fetchSubscriptions()
-  await paymentStore.fetchPayments()
-  const isLoading = ref(true)
+  isLoading.value = true
+  if (!navigator.permissions) {
+    console.warn('La API de permisos no está disponible en este navegador.')
+    await eventStore.fetchEvents()
+    isLoading.value = false
+    return
+  }
+    const permissionStatus = await navigator.permissions.query({ name: 'geolocation' })
+    permissionState.value = permissionStatus.state
+    permissionStatus.addEventListener('change', () => {
+      permissionState.value = permissionStatus.state
+})
+  await Promise.all([
+    eventStore.fetchCategories(),
+    articleStore.fetchArticles(),
+    subscriptionStore.fetchSubscriptions(),
+    paymentStore.fetchPayments()
+  ])
 
   await nextTick()
+
   if (localStorage.getItem('themePreference') === 'light') {
     document.body.classList.remove('dark')
   } else {
     document.body.classList.add('dark')
     userStore.setThemePreference('dark')
   }
+})
 
-  async function monitorGeolocation() {
-    if (!navigator.permissions) {
-      console.warn('La API de permisos no está disponible en este navegador.')
-      if (!isLoading.value) isLoading.value = true
-      await eventStore.fetchEvents()
-      isLoading.value = false
-      return
-    }
+watch(permissionState, async (newState, oldState) => {
+  console.log(`Permission changed from ${oldState} to ${newState}`)
+  isLoading.value = true
 
-    try {
-      if (!isLoading.value) isLoading.value = true
-      const permissionStatus = await navigator.permissions.query({
-        name: 'geolocation',
-      })
-
-      const handlePermissionChange = async () => {
-        console.log('permission', permissionStatus.state)
-        switch (permissionStatus.state) {
-          case 'granted':
-            navigator.geolocation.getCurrentPosition(
-              async (position) => {
-                const { latitude, longitude } = position.coords
-                await eventStore.fetchEvents(latitude, longitude) // Fetch events with location
-                await userStore.setAcceptedGeolocation(true)
-                // isLoading.value = false
-              },
-              (error) => {
-                console.error('Error obtaining location:', error.message)
-                isLoading.value = false
-              }
-            )
-            break
-          case 'prompt':
-          case 'denied':
-          default:
-            await eventStore.fetchEvents() 
-            await userStore.setAcceptedGeolocation(false)
-            isLoading.value = false
-            break
+  switch (newState) {
+    case 'prompt':
+    case 'granted':
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords
+          await eventStore.fetchEvents(latitude, longitude)
+          await userStore.setAcceptedGeolocation(true)
+          isLoading.value = false
+        },
+        async (error) => {
+          console.error('Error obtaining location:', error.message)
+          await eventStore.fetchEvents()
+          isLoading.value = false
         }
-      }
-
-      permissionStatus.addEventListener('change', handlePermissionChange)
-
-      await handlePermissionChange()
-    } catch (error) {
-      console.error('Error al manejar permisos de geolocalización:', error)
-      if (!isLoading.value) isLoading.value = true
+      )
+      break
+    case 'denied':
+    default:
       await eventStore.fetchEvents()
+      await userStore.setAcceptedGeolocation(false)
       isLoading.value = false
-    }
+      break
   }
-
-  monitorGeolocation()
 })
 </script>
