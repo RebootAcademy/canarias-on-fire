@@ -126,7 +126,11 @@
               'text-gray-300': isBasicPayment,
             }"
           >
-            {{ promotion.userId?.companyName || promotion.userId?.username }}
+            {{
+              promotion.userId?.commercialName ||
+              promotion.userId?.companyName || 
+              promotion.userId?.username 
+              }}
           </p>
           <!--  <div v-if="promotion.startTime" class="flex flex-row gap-2">
             <p
@@ -158,11 +162,14 @@
                <div class="flex  items-center gap-2">
                  <img v-if="userImage" :src="userImage" class="w-10 h-10 rounded-full object-contain" />
                  <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
-                   {{ promotion.userId?.role === 'company' ? promotion.userId?.companyName : promotion.userId?.username }}
+                   {{ 
+                    promotion.userId?.role === 'company' ? promotion.userId?.commercialName || 
+                    promotion.userId?.companyName : 
+                    promotion.userId?.username 
+                   }}
                  </p>
                </div>
               <p v-if="promotion.dist" class="text-secondary">{{(promotion.dist.calculated / 1000).toFixed(2)  }} km</p>
-
             </div>
           </div>
         </div>
@@ -213,7 +220,7 @@ const props = defineProps({
 })
 
 const isOpen = ref(false)
-const defaultImage = '/defaultImg.png'
+const defaultImage = '/v_logo.png'
 
 const userImage = computed(() => {
   if (props.promotion.userId?.profileImg) {

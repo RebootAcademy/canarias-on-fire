@@ -69,7 +69,14 @@
             <div class="flex items-center gap-1">
               <Calendar v-if="event.eventType === 'event'" size="16" />
               <User v-else size="16" />
-              <span>{{ event.eventType === 'event' ? formattedDate : (event.userId?.companyName || event.userId?.username) }}</span>
+              <span>{{ 
+                event.eventType === 'event' ? 
+                formattedDate : (
+                event.userId?.commercialName || 
+                event.userId?.companyName || 
+                event.userId?.username
+                )}}
+              </span>
             </div>
           </div>
         </div>
@@ -115,7 +122,7 @@
         <div v-if="event.eventPrice" class="my-6">
           <TicketButton />
         </div>
-        <div v-if="event.eventCapacity" class="my-6">
+        <div v-if="event.eventType === 'event' && event.eventCapacity" class="my-6">
           <h2 class="text-2xl font-semibold mt-4">
             {{ $t('previewText.capacity') }}
           </h2>
