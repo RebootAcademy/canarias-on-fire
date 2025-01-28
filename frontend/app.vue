@@ -65,6 +65,11 @@ watch(permissionState, async (newState, oldState) => {
           console.error('Error obtaining location:', error.message)
           await eventStore.fetchEvents()
           isLoading.value = false
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
         }
       )
       break

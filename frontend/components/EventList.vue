@@ -49,7 +49,6 @@ const limitedEvents = computed(() => {
   if (eventStore.musicFilter !== 'all') {
     filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
   }
-
   const eventsWithRandomOrder = filterEvents.map(event => ({
     ...event,
     randomOrder: Math.random().toFixed(2),
@@ -58,14 +57,14 @@ const limitedEvents = computed(() => {
   return eventsWithRandomOrder
     .sort((a, b) => {
       // Primero compara las prioridades
-      const priorityA = getEventPriority(a) || undefined;
-      const priorityB = getEventPriority(b) || undefined;
+      const priorityA = getEventPriority(a) || undefined
+      const priorityB = getEventPriority(b) || undefined
 
       if ((!priorityA && priorityB) || (priorityA > priorityB)) {
-        return 1; // Coloca los eventos sin "paymentId" al final
+        return 1 // Coloca los eventos sin "paymentId" al final
       }
       if ((priorityA && !priorityB) || (priorityA < priorityB)) {
-        return -1; // Coloca los eventos con "paymentId" al principio
+        return -1 // Coloca los eventos con "paymentId" al principio
       }
 
       if (eventStore.selectedFilterByDate !== 'all') {
@@ -74,9 +73,8 @@ const limitedEvents = computed(() => {
         return a.randomOrder - b.randomOrder
       }
     })
-    .slice(0, 9);
+    .slice(0, 9)
 })
-
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment?._id : event.payment

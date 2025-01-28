@@ -22,7 +22,7 @@ function getEndOfWeek(date) {
   return new Date(startOfWeek.setDate(startOfWeek.getDate() + 6))
 }
 
-const today = new Date();
+const today = new Date()
 const startOfWeek = getStartOfWeek(today)
 const endOfWeek = getEndOfWeek(today)    
 
@@ -36,7 +36,7 @@ const activeEventsCount = computed(() => {
       ((event.userId?.isActive &&
       event.userId?.isValidated) || event.userId?.role === 'admin') &&
       eventDate >= startOfWeek && eventDate <= endOfWeek 
-    );
-  }).length;
-});
+    )
+  }).length
+})
 </script>

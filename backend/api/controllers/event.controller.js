@@ -85,24 +85,26 @@ const getAllEvents = async (req, res) => {
         $geoNear: {
           near: {
             type: 'Point',
-            coordinates: [parseFloat(lat), parseFloat(lng)], // [lng, lat]
+            coordinates: [parseFloat(lat) || 0.0 , parseFloat(lng) || 0.0], // [lng, lat]
           },
           distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
-          maxDistance: 100000000,
           spherical: true, // Considerar la Tierra como una esfera
         },
       },
     ])
 
+    const eventsWithoutLocation = await Event.find({
+      'eventLocation.coordinates': { $exists: false },
+    })
+    console.log(eventsWithoutLocation)
+    console.log(eventsWithoutLocation.length)
+
+     const allEvents = [...eventsWithDistance, ...eventsWithoutLocation]
+
     // Ahora, poblar los eventos obtenidos
-    const populatedEvents = await Promise.all(
-      eventsWithDistance.map(async (event) => {
-        const populatedEvent = await Event.populate(event, {
-          path: 'categories location userId payment subscription',
-        })
-        return populatedEvent
-      })
-    )
+    const populatedEvents = await Event.populate(allEvents, {
+      path: 'categories location userId payment subscription',
+    })
 
     res.status(200).json({
       success: true,
