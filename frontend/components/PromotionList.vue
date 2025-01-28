@@ -26,6 +26,7 @@
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const userStore = useUserStore()
+const router = useRouter()
 const {t} = useI18n()
 const props = defineProps({
   filteredOption: { type: String, default: '' },

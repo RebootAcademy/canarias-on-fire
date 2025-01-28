@@ -1,6 +1,7 @@
 <template>
   <div>
-    <NuxtLayout />
+    <Spinner v-if="isLoading" />
+    <NuxtLayout v-else />
     <Toaster />
   </div>
 </template>

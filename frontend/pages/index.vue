@@ -50,7 +50,6 @@ const articleStore = useArticleStore()
 import { useRuntimeConfig } from '#app'
 
 const user = useNuxtApp().$user
-console.log(user)
 
 const users = ref([])
 const isLoading = ref(true)
@@ -86,8 +85,8 @@ onMounted(async() => {
     userStore.setAuthError({error: '', message: ''})
   }
   fetchUsers()
-    eventStore.resetFilters()
-    userStore.fetchAndSetUser(userStore.userData?.email)
+  eventStore.resetFilters()
+  userStore.fetchAndSetUser(userStore.userData?.email)
 })
 
 const searchQuery = computed({
