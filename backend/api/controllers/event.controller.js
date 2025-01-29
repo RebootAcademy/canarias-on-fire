@@ -6,6 +6,31 @@ const Payment = require('../models/payment.model')
 
 const createEvent = async (req, res) => {
   try {
+    const eventType = req.body.eventType
+    let isThereSame
+    if (eventType === 'promotion') {
+      isThereSame = await Event.findOne({
+        eventName: req.body.eventName,
+        userId: req.body.userId,
+      })
+    } else {
+      isThereSame = await Event.findOne({
+        eventName: req.body.eventName,
+        userId: req.body.userId,
+        'eventDate.year': req.body.eventDate.year,
+        'eventDate.month': req.body.eventDate.month,
+        'eventDate.day': req.body.eventDate.day,
+        status: { $ne: 'closed' },
+      })
+    }
+
+    if (isThereSame) {
+      console.log('pan caído')
+      return res.status(400).json({
+        success: false,
+        message: 'There is already a event/promotion with the same name for this user.',
+      })
+    }
     const newEvent = await Event.create(req.body)
     res.status(201).json({
       success: true,
@@ -27,6 +52,19 @@ const createPromotion = async (req, res) => {
     const promotionData = {
       ...req.body,
       eventType: 'promotion',
+    }
+
+    const isThereSamePromotion = await Event.findOne({
+      eventName: promotionData.eventName,
+      userId: promotionData.userId,
+    })
+
+    if (isThereSamePromotion) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'There is already a promotion with the same name for this user.',
+      })
     }
 
     const newPromotion = await Event.create(promotionData)
@@ -85,7 +123,7 @@ const getAllEvents = async (req, res) => {
         $geoNear: {
           near: {
             type: 'Point',
-            coordinates: [parseFloat(lat) || 0.0 , parseFloat(lng) || 0.0], // [lng, lat]
+            coordinates: [parseFloat(lat) || 0.0, parseFloat(lng) || 0.0], // [lng, lat]
           },
           distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
           spherical: true, // Considerar la Tierra como una esfera

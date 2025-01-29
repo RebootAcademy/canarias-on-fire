@@ -5,7 +5,10 @@
     <div class="flex w-full justify-end italic text-primary">
       <p v-if="!isValidated && !isAdmin">{{ $t('validateByAdmin') }}</p>
     </div>
-    <div v-if="isAdmin && eventStore.eventType === 'event'" class="w-full md:w-1/3">
+    <div
+      v-if="isAdmin && eventStore.eventType === 'event'"
+      class="w-full md:w-1/3"
+    >
       <p class="font-semibold mb-4">{{ $t('adminPlan') }}</p>
       <CustomSelect
         v-model:selected="eventStore.adminPayment"
@@ -75,27 +78,40 @@ const onSubmit = async () => {
   if (Object.values(errors).every((error) => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
-      router.push(`/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`)
+      router.push(
+        `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
+      )
     } else {
       eventStore.status = 'draft'
       eventStore.setUserId(userStore.userData._id)
 
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
+        console.log('isTrue', result)
+        console.log('isTrue', result.isRevoked)
+        if (result?.error?.statusCode === 400) {
+          toast({
+            description: t('errorCreating'),
+            variant: 'destructive',
+          })
+          return setTimeout(() => {
+            router.push(`/dashboard/${eventStore.eventType}s`)
+          }, 600)
+        }
         if (result) {
           router.push(
             `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
           )
         } else {
           toast({
-          description: t('errorCreatingEvent'),
-          variant: 'destructive'
-        })
+            description: t('errorCreatingEvent'),
+            variant: 'destructive',
+          })
         }
       } else {
         toast({
           description: t('userHasPromotions'),
-          variant: 'destructive'
+          variant: 'destructive',
         })
       }
     }

@@ -28,5 +28,6 @@
   "errorPasswordChanged": "Error cambiando contraseña",
   "cancelPromotionToast": "Promoción cancelada correctamente",
   "errorCancelPromotion": "Error cancelando promoción",
-  "errorCreatingEvent": "Error de creación de Evento"
+  "errorCreatingEvent": "Error de creación de Evento",
+  "errorCreating": "Este evento/promotion ya ha sido creada, revisa tu dashboard"
 }
