@@ -95,7 +95,12 @@ const applyFilters = () => {
     categories: selectedCategories.value
     // startTime: startTime.value,
   })
+  eventStore.selectedCategories = selectedCategories.value.map((category) => searchCategory(category))
   closeModal()
+}
+
+const searchCategory = (id) => {
+  return eventStore.categories.find((category) => category.id === id)
 }
 
 const resetFilters = () => {
