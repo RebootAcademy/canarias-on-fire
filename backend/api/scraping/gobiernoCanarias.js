@@ -12,7 +12,6 @@ const getLocationData= require('../services/geolocation')
 
 const gobCanScraper = new Scraper()
 let page = 1
-
 const gobCanUrl = process.env.GOB_CAN_URL
 
 const handleDate = (date) => {

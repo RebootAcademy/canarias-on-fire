@@ -17,6 +17,7 @@ const {
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
+const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
 
 mongoose.set('strictPopulate', false)
 
@@ -66,17 +67,22 @@ cron.schedule('0 0 * * *', () => {
   updateExpiredSubscriptions()
 })
 
-cron.schedule('0 9 * * 1', () => {
+cron.schedule('0 9 * * *', () => {
   console.log('Checking Gobierno de Canarias Events')
   scrapeGobCanarias()
 })
 
-cron.schedule('0 10 * * 1', () => {
+cron.schedule('30 9 * * *', () => {
+  console.log('Checking Gobierno de Canarias Events')
+  scrapeGobCanariasExpo()
+})
+
+cron.schedule('0 10 * * *', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')
   scrapeAytoLasPalmas()
 })
 
-cron.schedule('0 11 * * 1', () => {
+cron.schedule('0 11 * * *', () => {
   console.log('Checking Ayuntamiento de Tenerife Events')
   scrapeAytoTenerife()
 })

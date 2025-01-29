@@ -27,7 +27,6 @@ class Scraper {
 
     const fullUrl = query ? `${url}${query}` : url
     const page = await this.fetchHTML(fullUrl)
-    console.log(this.parsers)
     return this.parsers[url](page)
   }
 }

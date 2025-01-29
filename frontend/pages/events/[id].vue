@@ -159,7 +159,7 @@
             </p>
           </div>
         </div>
-        <div v-show="!isBasicPayment">
+        <div v-show="!isBasicPayment && !event.externalSource">
           <EventGallery />
         </div>
         <div class="flex gap-2 mt-6 mb-6">
@@ -334,7 +334,6 @@ const publishEvent = async () => {
       (activeSubscription?.status === 'canceled' && canceledAt > today)
 
     const isAdmin = userStore.userData.role === 'admin'
-
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
 
     if (isAdmin) {

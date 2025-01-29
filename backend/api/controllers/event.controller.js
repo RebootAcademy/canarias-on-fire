@@ -96,10 +96,8 @@ const getAllEvents = async (req, res) => {
     const eventsWithoutLocation = await Event.find({
       'eventLocation.coordinates': { $exists: false },
     })
-    console.log(eventsWithoutLocation)
-    console.log(eventsWithoutLocation.length)
 
-     const allEvents = [...eventsWithDistance, ...eventsWithoutLocation]
+    const allEvents = [...eventsWithDistance, ...eventsWithoutLocation]
 
     // Ahora, poblar los eventos obtenidos
     const populatedEvents = await Event.populate(allEvents, {
@@ -433,6 +431,9 @@ const checkExistence = async (event) => {
   try {
     const exists = await Event.findOne({
       eventName: { $regex: event.title, $options: 'i' }, //Check if title in DB includes incoming title
+      'eventDate.year': `${event.startYear}`,
+      'eventDate.month': `${event.startMonth}`,
+      'eventDate.day': `${event.startDay}`
     })
 
     return exists
@@ -536,5 +537,5 @@ module.exports = {
   deleteEvent,
   deleteAllMyClosedEvents,
   saveScrapedEvent,
-  cleanDB,
+  cleanDB
 }
