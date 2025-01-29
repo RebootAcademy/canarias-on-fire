@@ -73,7 +73,6 @@ const limitedEvents = computed(() => {
         return a.randomOrder - b.randomOrder
       }
     })
-    .slice(0, 9)
 })
 
 function getEventPriority(event) {

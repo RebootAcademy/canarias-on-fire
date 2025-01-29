@@ -24,19 +24,22 @@ function getEndOfWeek(date) {
 
 const today = new Date()
 const startOfWeek = getStartOfWeek(today)
-const endOfWeek = getEndOfWeek(today)    
+const endOfWeek = getEndOfWeek(today)
+endOfWeek.setHours(23, 59, 59, 999)
 
 const activeEventsCount = computed(() => {
   return eventStore.events.filter(event => {
     if (event.eventType === 'promotion') return false
-    const eventDate = new Date(event.eventDate?.year, event.eventDate?.month - 1, event.eventDate?.day)
+    const eventDate = new Date(event.eventDate?.year, parseInt(event.eventDate?.month) - 1, event.eventDate?.day)
+
     return (
       event.status === 'published' &&
       event.eventType === 'event' &&
       ((event.userId?.isActive &&
       event.userId?.isValidated) || event.userId?.role === 'admin') &&
-      eventDate >= startOfWeek && eventDate <= endOfWeek 
+      (eventDate <= endOfWeek)
     )
   }).length
 })
+
 </script>

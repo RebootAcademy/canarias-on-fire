@@ -277,7 +277,6 @@ export const useEventStore = defineStore('eventStore', {
           console.error('Error fetching event:', error.value)
           return { error: error.value }
         }
-        console.log('data', data.value?.result)
         this.event = data.value?.result
         return { data: this.event }
       } catch (error) {
