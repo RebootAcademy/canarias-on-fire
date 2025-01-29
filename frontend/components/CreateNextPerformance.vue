@@ -9,7 +9,7 @@
         <p>{{ userStore.userData?.nextPerformance?.location.address }}</p>
         <details>
           <summary class="text-primary">
-            {{ $t('previewText.showMap') }}do
+            {{ $t('previewText.showMap') }}
           </summary>
           <img
             :src="userStore.userData?.nextPerformance?.location.mapImageUrl"
