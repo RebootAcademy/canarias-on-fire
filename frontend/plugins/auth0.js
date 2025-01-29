@@ -21,7 +21,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
     // Silent authentication to restore the session
     try {
-      await getAccessTokenSilently()
+      if (isAuthenticated.value) {
+        await getAccessTokenSilently()
+      }
     } catch (error) {
       console.error('Silent authentication failed:', error)
     }
