@@ -37,7 +37,7 @@ const CompanySchema = new mongoose.Schema({
   },
   sector: {
     type: String,
-    enum: ['restoration', 'services', 'nightlife', 'activities', 'promoter'],
+    enum: ['restoration', 'services', 'nightlife', 'activities', 'promoter', 'hotels'],
     required: true,
   },
   type: {

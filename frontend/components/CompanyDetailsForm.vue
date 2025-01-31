@@ -222,8 +222,10 @@
 <script setup>
 import { formatDate } from '@vueuse/core'
 import { ArrowLeft } from 'lucide-vue-next'
+import { useToast } from '@/components/ui/toast/use-toast'
 const userStore = useUserStore()
 const router = useRouter()
+const { toast } = useToast()
 const { t } = useI18n()
 
 const isCompanyNameSynced = ref(true)
@@ -350,6 +352,10 @@ const submitForm = async () => {
         router.push('/dashboard/events')
       } else {
         console.error('Error updating user:', result.message)
+        toast({
+        description: t('newsletter.error'),
+        variant: 'destructive'
+      });
       }
     } catch (error) {
       console.error('Error updating user:', error)
