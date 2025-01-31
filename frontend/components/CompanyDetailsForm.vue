@@ -137,6 +137,12 @@
               <SelectItem value="activities">{{
                 $t('onBoarding.step2Sector.activities')
               }}</SelectItem>
+              <SelectItem value="hotels">{{
+                $t('onBoarding.step2Sector.hotels')
+              }}</SelectItem>
+              <SelectItem value="others">{{
+                $t('onBoarding.step2Sector.others')
+              }}</SelectItem>
             </SelectContent>
           </Select>
           <p v-if="errors.sector" class="text-red-500 text-sm mt-1 italic">
