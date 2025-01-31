@@ -84,13 +84,15 @@
     "requiredField": "Este campo es requerido",
     "step2Address": "Domicilio comercial",
     "step2Sector": {
-      "label": "Sector",
+      "label": "Tengo una empresa de:",
       "placeholder": "Selecciona el sector",
-      "promoter": "Promotor de Eventos",
-      "services": "Servicios",
-      "restoration": "Restauración",
-      "nigthlife": "Ocio nocturno",
-      "activities": "Actividades"
+      "promoter": "Creación y promoción de Eventos",
+      "services": "Servicios (Seleccionar uno)",
+      "restoration": "Hostelería  (Bares, Restaurantes, ...)",
+      "nigthlife": "Ocio nocturno (Pubs, Discotecas, ...)",
+      "activities": "Actividades Recreativas (Senderismo, Deportes, ...)",
+      "hotels": "Hoteles, apartamentos",
+      "others": "Otros"
     },
     "foodType": {
       "label": "Tipo de comida",
@@ -107,14 +109,14 @@
       "other": "Otra"
     },
     "serviceType": {
-      "label": "Tipo de Servicio",
+      "label": "Me dedico a:",
       "placeholder": "Selecciona el tipo de Servicio",
       "foodtruck": "Foodtruck",
       "catering": "Catering",
       "sound": "Sonido e Iluminación",
       "photo": "Fotografía",
       "furniture": "Mobiliario",
-      "renting": "Alquiler de Locales",
+      "renting": "Alquiler de espacios (locales)",
       "other": "Otros"
     },
     "step2CodRef": "Código de vendedor",

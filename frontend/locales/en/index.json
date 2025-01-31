@@ -84,13 +84,15 @@
     "step2ZIP": "Postal code",
     "requiredField": "This field is required",
     "step2Sector": {
-      "label": "Sector",
+      "label": "My business is about:",
       "placeholder": "Select sector",
-      "services": "Services",
-      "restoration": "Restoration",
-      "nigthlife": "Nigthlife",
-      "activities": "Activities",
-      "promoter": "Events promoter"
+      "services": "Services (Select one)",
+      "restoration": "Hospitality (Bars, restaurants, ...)",
+      "nigthlife": "Nigthlife (Pubs, Discotheques, ...)",
+      "activities": "Recreational Activities (Hiking, Sports, ...)",
+      "promoter": "Create and promote events",
+      "hotels": "Hotels, apartments",
+      "others": "Others"
     },
     "foodType": {
       "label": "Food type",
@@ -107,7 +109,7 @@
       "other": "Other"
     },
     "serviceType": {
-      "label": "Type of Service",
+      "label": "My services are about:",
       "placeholder": "Select type of Service",
       "foodtruck": "Foodtruck",
       "catering": "Catering",
