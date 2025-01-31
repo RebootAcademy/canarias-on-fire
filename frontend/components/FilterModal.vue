@@ -39,6 +39,15 @@
             {{ $t(`values.${category.name}`) }}
           </div>
         </div>
+        <div v-if="isMusicSelected()" class="mt-4 w-full flex justify-center">
+          <CustomSelect
+            :items="genresItems"
+            :placeholder="placeholderSelect"
+            v-model:selected="selectedOption"
+            :optionDefault="selectedOption"
+            class="w-4/5 md:w-1/3"
+          />
+        </div>
         <div class="flex justify-end gap-4 mt-4">
           <Button @click="resetFilters" variant="ghost" class="bg-gray">{{ $t('buttons.reset')}}</Button>
           <CustomBtn 
@@ -53,6 +62,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+const { t } = useI18n()
 
 const props = defineProps({
   type: {
@@ -67,6 +77,9 @@ const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
 const selectedIslands = ref(filters.value.islands)
 const selectedDate = ref(eventDate.value)
 const selectedCategories = ref(filters.value.categories)
+const selectedOption = ref('all')
+
+watch(selectedOption, (value) => eventStore.musicFilter = value)
 // const startTime = ref(null)
 
 const getCategories = computed(() => {
@@ -76,6 +89,9 @@ const getCategories = computed(() => {
 const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
 
 const toggleCategory = (category) => {
+  if (isMusicSelected()){
+    selectedOption.value = 'all'
+  }
   const index = selectedCategories.value.indexOf(category.id)
   if (index === -1) {
     selectedCategories.value.push(category.id)
@@ -123,6 +139,25 @@ watch(isFilterModalOpen, (newValue) => {
     selectedIslands.value = filters.value.islands
     selectedCategories.value = [...filters.value.categories]
   }
+})
+
+const isMusicSelected = () => {
+  return selectedCategories.value.some(
+      (c) => c === '6702ad06009a63bba556a1f3'
+    )
+}
+
+const genresItems = computed(() => {
+  return [
+    { value: 'all', label: t('onBoarding.step2Genres.all') },
+    { value: 'djs', label: t('onBoarding.step2Genres.djs') },
+    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
+    { value: 'electronic', label: t('onBoarding.step2Genres.electronic') },
+    { value: 'rock', label: t('onBoarding.step2Genres.rock') },
+    { value: 'jazz', label: t('onBoarding.step2Genres.jazz') },
+    { value: 'classic', label: t('onBoarding.step2Genres.classic') },
+    { value: 'other', label: t('onBoarding.step2Genres.other') },
+  ]
 })
 
 </script>
