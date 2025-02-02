@@ -86,6 +86,10 @@ const limitedEvents = computed(() => {
     }))
   }
 
+  if (eventStore.musicFilter !== 'all') {
+    firstFilter = firstFilter.filter(event => event.musicType === eventStore.musicFilter)
+  }
+
   return firstFilter.sort((a, b) => {
     const priorityA = getEventPriority(a) || undefined
     const priorityB = getEventPriority(b) || undefined

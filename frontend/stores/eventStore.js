@@ -736,8 +736,8 @@ export const useEventStore = defineStore('eventStore', {
         // Búsqueda por nombre o descripción del evento
         if (
           lowercaseQuery &&
-          !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-          !event.eventDescription.toLowerCase().includes(lowercaseQuery)
+          !event.eventName?.toLowerCase().includes(lowercaseQuery) &&
+          !event.eventDescription?.toLowerCase().includes(lowercaseQuery)
         ) {
           return false
         }
