@@ -124,6 +124,7 @@ const resetFilters = () => {
   selectedDate.value = null
   selectedCategories.value = []
   eventStore.resetFilters()
+  selectedOption.value = 'all'
 }
 
 watch(eventDate, (newDate) => {
