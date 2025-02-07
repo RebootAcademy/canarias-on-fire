@@ -17,6 +17,19 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 const isLoading = ref(true)
 const permissionState = ref(undefined)
 
+let permissionCheckInterval = null
+
+async function checkPermissions() {
+  const permissionStatus = await navigator.permissions.query({ name: 'geolocation' })
+  
+  if (permissionState.value !== permissionStatus.state) {
+    console.log(`Permission changed to ${permissionStatus.state}`)
+    permissionState.value = permissionStatus.state
+  }
+
+  return permissionStatus
+}
+
 onMounted(async () => {
   isLoading.value = true
   if (!navigator.permissions) {
@@ -25,11 +38,13 @@ onMounted(async () => {
     isLoading.value = false
     return
   }
-    const permissionStatus = await navigator.permissions.query({ name: 'geolocation' })
-    permissionState.value = permissionStatus.state
+
+    const permissionStatus = await checkPermissions()
+    permissionCheckInterval = setInterval(checkPermissions, 2000)
+
     permissionStatus.addEventListener('change', () => {
       permissionState.value = permissionStatus.state
-})
+    })
   await Promise.all([
     eventStore.fetchCategories(),
     articleStore.fetchArticles(),
@@ -44,6 +59,12 @@ onMounted(async () => {
   } else {
     document.body.classList.add('dark')
     userStore.setThemePreference('dark')
+  }
+})
+
+onUnmounted(() => {
+  if (permissionCheckInterval) {
+    clearInterval(permissionCheckInterval)
   }
 })
 

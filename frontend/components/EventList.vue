@@ -4,7 +4,7 @@
       class="w-full grid justify-items-strecth items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <EventCard
-        v-for="event in limitedEvents"
+        v-for="event in displayEvents"
         :key="event._id"
         :event="event"
         class="xs:w-[60%] sm:w-full"
@@ -78,6 +78,8 @@ const limitedEvents = computed(() => {
       }
     })
 })
+
+const displayEvents = computed(() => limitedEvents.value.splice(0,9))
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment?._id : event.payment
