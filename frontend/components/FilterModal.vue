@@ -19,8 +19,8 @@
             {{ island }}
           </label>
         </div>
-        <h3 class="font-semibold">{{ $t('modalFilter.date')}}</h3>
-        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p>
+        <!-- <h3 class="font-semibold">{{ $t('modalFilter.date')}}</h3>
+        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.dateDescription')}}</p> -->
         <div class="w-full">
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
