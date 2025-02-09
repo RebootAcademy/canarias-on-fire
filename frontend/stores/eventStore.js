@@ -561,6 +561,21 @@ export const useEventStore = defineStore('eventStore', {
         date1.getDate() === date2.getDate()
       )
     },
+
+    isWithinRange (start, end) {
+      if (!end) return false
+      const today = new Date()
+      return (
+        start.getFullYear() <= today.getFullYear() &&
+        start.getMonth() <= today.getMonth() &&
+        start.getDate() <= today.getDate()
+      ) && 
+      (
+        end.getFullYear() >= today.getFullYear() &&
+          end.getMonth() >= today.getMonth() &&
+          end.getDate() >= today.getDate()
+      )
+    }
   },
 
   getters: {
@@ -823,6 +838,8 @@ export const useEventStore = defineStore('eventStore', {
     filteredEventsByDate: (state) => (array) => {
       return array.filter((event) => {
         let eventDate = null
+        let eventEndDate = undefined
+
         if (event.eventDate) {
           eventDate = new Date(
             event.eventDate.year,
@@ -830,11 +847,20 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate.day
           )
         }
+
+        if (event.eventEndDate) {
+          eventEndDate = new Date(
+            event.eventEndDate.year,
+            event.eventEndDate.month - 1,
+            event.eventEndDate.day
+          )
+        }
+
         switch (state.selectedFilterByDate) {
           case 'all':
             return true // Devuelve todos los eventos
           case 'today':
-            return eventDate && state.isSameDay(eventDate, new Date()) // Comparar con la fecha de hoy
+            return eventDate && (state.isSameDay(eventDate, new Date()) || state.isWithinRange(eventDate,eventEndDate)) // Comparar con la fecha de hoy
           case 'weekend':
             return state.isCurrentWeek(eventDate) // Filtro por fin de semana
           case 'month':
