@@ -562,18 +562,19 @@ export const useEventStore = defineStore('eventStore', {
       )
     },
 
-    isWithinRange (start, end) {
+    isWithinRange (start, end, date) {
+      console.log(start)
+      console.log(date)
       if (!end) return false
-      const today = new Date()
       return (
-        start.getFullYear() <= today.getFullYear() &&
-        start.getMonth() <= today.getMonth() &&
-        start.getDate() <= today.getDate()
+        start.getFullYear() <= date.getFullYear() &&
+        start.getMonth() <= date.getMonth() &&
+        start.getDate() <= date.getDate()
       ) && 
       (
-        end.getFullYear() >= today.getFullYear() &&
-          end.getMonth() >= today.getMonth() &&
-          end.getDate() >= today.getDate()
+        end.getFullYear() >= date.getFullYear() &&
+          end.getMonth() >= date.getMonth() &&
+          end.getDate() >= date.getDate()
       )
     }
   },
@@ -790,9 +791,22 @@ export const useEventStore = defineStore('eventStore', {
           const filterDate = this.filters.date
           if (
             !event.eventDate ||
-            event.eventDate.year !== filterDate.year ||
-            event.eventDate.month !== filterDate.month ||
-            event.eventDate.day !== filterDate.day
+            // event.eventDate.year !== filterDate.year ||
+            // event.eventDate.month !== filterDate.month ||
+            // event.eventDate.day !== filterDate.day
+            this.isWithinRange(
+              new Date(
+                event.eventDate.year,
+                event.eventDate.month - 1,
+                event.eventDate.day
+              ),
+              new Date(
+                event.eventEndDate?.year,
+                event.eventEndDate?.month - 1,
+                event.eventEndDate?.day
+              ),
+              new Date(filterDate)
+            )
           ) {
             return false
           }
@@ -860,7 +874,11 @@ export const useEventStore = defineStore('eventStore', {
           case 'all':
             return true // Devuelve todos los eventos
           case 'today':
-            return eventDate && (state.isSameDay(eventDate, new Date()) || state.isWithinRange(eventDate,eventEndDate)) // Comparar con la fecha de hoy
+            return (
+              eventDate &&
+              (state.isSameDay(eventDate, new Date()) ||
+                state.isWithinRange(eventDate, eventEndDate, new Date()))
+            ) // Comparar con la fecha de hoy
           case 'weekend':
             return state.isCurrentWeek(eventDate) // Filtro por fin de semana
           case 'month':
