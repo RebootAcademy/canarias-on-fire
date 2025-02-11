@@ -3,6 +3,7 @@ const Event = require('../models/event.model')
 const Company = require('../models/company.model')
 const Subscription = require('../models/subscription.model')
 const Payment = require('../models/payment.model')
+const User = require('../models/user.model')
 
 const createEvent = async (req, res) => {
   try {
@@ -445,11 +446,20 @@ const deleteEvent = async (req, res) => {
 
 const deleteAllMyClosedEvents = async (req, res) => {
   try {
-    const events = await Event.deleteMany({
-      userId: req.params.id,
-      status: 'closed',
-      eventType: req.params.type,
-    })
+    const user = await User.findById(req.params.id)
+    let events
+    if (user.role === 'admin') {
+      events = await Event.deleteMany({
+        status: 'closed',
+        eventType: req.params.type,
+      })
+    } else {
+      events = await Event.deleteMany({
+        userId: req.params.id,
+        status: 'closed',
+        eventType: req.params.type,
+      })
+    }
     res.status(200).json({
       success: true,
       message: 'Events successfully deleted.',
