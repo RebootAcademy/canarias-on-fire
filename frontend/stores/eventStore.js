@@ -563,9 +563,16 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     isWithinRange (start, end, date) {
-      console.log(start)
-      console.log(date)
-      if (!end) return false
+      if (!start) return false
+      if (!end || isNaN(end.getTime())) {
+        // Mirar solo que la fecha inicial sea menor que la fecha actual
+        return (
+          start.getFullYear() <= date.getFullYear() &&
+          start.getMonth() <= date.getMonth() &&
+          start.getDate() <= date.getDate()
+        )
+      }
+      // Mirar que la fecha inicial sea menor que la actual y la final sea mayor.
       return (
         start.getFullYear() <= date.getFullYear() &&
         start.getMonth() <= date.getMonth() &&
@@ -573,8 +580,8 @@ export const useEventStore = defineStore('eventStore', {
       ) && 
       (
         end.getFullYear() >= date.getFullYear() &&
-          end.getMonth() >= date.getMonth() &&
-          end.getDate() >= date.getDate()
+        end.getMonth() >= date.getMonth() &&
+        end.getDate() >= date.getDate()
       )
     }
   },
@@ -791,10 +798,7 @@ export const useEventStore = defineStore('eventStore', {
           const filterDate = this.filters.date
           if (
             !event.eventDate ||
-            // event.eventDate.year !== filterDate.year ||
-            // event.eventDate.month !== filterDate.month ||
-            // event.eventDate.day !== filterDate.day
-            this.isWithinRange(
+            !this.isWithinRange(
               new Date(
                 event.eventDate.year,
                 event.eventDate.month - 1,
@@ -805,7 +809,11 @@ export const useEventStore = defineStore('eventStore', {
                 event.eventEndDate?.month - 1,
                 event.eventEndDate?.day
               ),
-              new Date(filterDate)
+              new Date(
+                filterDate.year,
+                filterDate.month - 1,
+                filterDate.day
+              )
             )
           ) {
             return false
