@@ -35,6 +35,18 @@
         <SearchInput v-model="searchQuery" />
         <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
         <FilterModal />
+        <div
+          v-if="
+            adminEvents.filter((event) => event.status === 'closed').length > 0
+          "
+        >
+          <Button
+            class="bg-red-500 hover:bg-red-700 text-white"
+            @click="tryToDelete = true"
+          >
+            {{ $t('buttons.deleteAll') }}
+          </Button>
+        </div>
       </div>
     </div>
     <hr class="mb-8 border-1 border-black w-full" />
@@ -93,11 +105,14 @@
       </div>
     </div>
     <hr class="mb-8 border-1 border-black w-full" />
-    <div v-if="myEvents.filter((event) => event.status === 'closed').length > 0" class="w-full flex justify-end mb-4">
+    <div
+      v-if="myEvents.filter((event) => event.status === 'closed').length > 0"
+      class="w-full flex justify-end mb-4"
+    >
       <Button
         class="bg-red-500 hover:bg-red-700 text-white"
         @click="tryToDelete = true"
-        >
+      >
         {{ $t('buttons.deleteAll') }}
       </Button>
     </div>
@@ -108,7 +123,11 @@
       <EventCard v-for="event in myEvents" :key="event._id" :event="event" />
     </div>
     <CustomModal v-model:open="tryToDelete">
-      <ConfirmModalClosedEvent @close="tryToDelete = false" type="event" @update:open="tryToDelete = $event" />
+      <ConfirmModalClosedEvent
+        @close="tryToDelete = false"
+        type="event"
+        @update:open="tryToDelete = $event"
+      />
     </CustomModal>
     <p v-if="myEvents.length === 0" class="text-gray-500 mt-4">
       {{ $t('notEventsFound') }}
