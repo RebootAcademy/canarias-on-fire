@@ -565,11 +565,11 @@ export const useEventStore = defineStore('eventStore', {
     isWithinRange (start, end, date) {
       if (!start) return false
       if (!end || isNaN(end.getTime())) {
-        // Mirar solo que la fecha inicial sea menor que la fecha actual
+        // Mirar solo que la fecha inicial sea igual a la fecha actual
         return (
-          start.getFullYear() <= date.getFullYear() &&
-          start.getMonth() <= date.getMonth() &&
-          start.getDate() <= date.getDate()
+          start.getFullYear() === date.getFullYear() &&
+          start.getMonth() === date.getMonth() &&
+          start.getDate() === date.getDate()
         )
       }
       // Mirar que la fecha inicial sea menor que la actual y la final sea mayor.
