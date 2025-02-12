@@ -888,9 +888,11 @@ export const useEventStore = defineStore('eventStore', {
                 state.isWithinRange(eventDate, eventEndDate, new Date()))
             ) // Comparar con la fecha de hoy
           case 'weekend':
-            return state.isCurrentWeek(eventDate) // Filtro por fin de semana
+            return state.isCurrentWeek(eventDate) ||
+                state.isWithinRange(eventDate, eventEndDate, new Date()) // Filtro por semana
           case 'month':
-            return eventDate && eventDate.getMonth() === new Date().getMonth() // Filtro por mes actual
+            return eventDate && eventDate.getMonth() === new Date().getMonth() ||
+                state.isWithinRange(eventDate, eventEndDate, new Date()) // Filtro por mes actual
           default:
             return true
         }

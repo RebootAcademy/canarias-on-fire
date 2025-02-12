@@ -10,10 +10,10 @@
         class="xs:w-[60%] sm:w-full"
       />
     </div>
-    <p v-if="limitedEvents?.length === 0" class="text-gray-500 mt-4">
+    <p v-if="displayEvents?.length === 0" class="text-gray-500 mt-4">
       {{ $t('notEventsFound') }}
     </p>
-    <div v-if="limitedEvents?.length > 9" class="mt-6 text-center">
+    <div v-if="displayEvents?.length > 9" class="mt-6 text-center">
       <NuxtLink to="/events">
         <Button variant="outline">
           {{ $t('buttons.seeMore') }}
