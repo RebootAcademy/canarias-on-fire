@@ -43,7 +43,7 @@
       <FilterModal type="promotion" />
     </div>
     <hr class="mb-4 border-1 border-black w-full" />
-    <div v-if="limitedPromotions.filter((promotion) => promotion.status === 'closed').length > 0 && userRole !== 'admin'" class="w-full flex justify-end mb-4 md:mb-0">
+    <div v-if="limitedPromotions.filter((promotion) => promotion.status === 'closed').length > 0" class="w-full flex justify-end mb-4 md:mb-0">
       <Button
         class="bg-red-500 hover:bg-red-700 text-white"
         @click="tryToDelete = true"
