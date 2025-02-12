@@ -2,7 +2,8 @@
   <div class="h-16 bg-background text-secondary flex items-end justify-between px-4 py-2">
     <div class="flex xs:justify-center md:justify-start xs:2/4 sm:w-1/3 text-3xl ml-1 font-extrabold">
       <NuxtLink to="/" class="flex items-end">
-        <NuxtImg src="/logo_color.png" alt="Evente Logo" class="w-28 md:w-36" />
+        <NuxtImg src="/logo_color.png" alt="Evente Logo" class="hidden sm:block w-28 md:w-36" />
+        <NuxtImg src="/v_logo.png" alt="Evente Logo" class="sm:hidden w-10" />
       </NuxtLink>
     </div>
     <div class="hidden md:flex w-1/3 justify-center">
