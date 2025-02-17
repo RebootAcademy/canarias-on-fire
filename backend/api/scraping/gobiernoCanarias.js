@@ -59,7 +59,7 @@ const checkCategory = (cat) => {
     case 'Cine':
       return '6702adbd009a63bba556a1f8'
     case 'Multidisciplinar':
-      return
+      return '6702adf7009a63bba556a1fb'
     default:
       //Museo
       return '6702ae2d009a63bba556a1fe'

@@ -20,6 +20,7 @@ const aytoTfUrl = process.env.AYTO_TF_URL
 const getRemainingData = async (link) => {
   const eventResponse = await axios.get(link)
   const eventPage = cheerio.load(eventResponse.data)
+
   const description = eventPage('.body_description')
     .text()
     .trim()
@@ -43,6 +44,10 @@ const getRemainingData = async (link) => {
     url,
     time
   }
+}
+
+const checkCategory = (cat) => {
+  return '6702adf7009a63bba556a1fb'
 }
 
 const handleDate = (date) => {
@@ -100,8 +105,11 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
           const { postalCode, coordinates, mapImageUrl } =
             await getLocationData(location, 'Tenerife')
 
+          const category = eventType.map((type) => checkCategory(type))
+
           return {
             title,
+            category,
             startYear,
             startMonth,
             startDay,
@@ -130,7 +138,6 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
 
 const scrapeAytoTenerife = async () => {
   try {
-    // await connectDB()
     const result = await aytoTfScraper.scrape(
       aytoTfUrl,
       ``
