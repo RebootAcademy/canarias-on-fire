@@ -477,6 +477,7 @@ const deleteAllMyClosedEvents = async (req, res) => {
 
 const checkExistence = async (event) => {
   try {
+    console.log(event.title)
     const exists = await Event.findOne({
       eventName: { $regex: event.title, $options: 'i' }, //Check if title in DB includes incoming title
       'eventDate.year': `${event.startYear}`,
@@ -493,11 +494,10 @@ const checkExistence = async (event) => {
 
 const saveScrapedEvent = async (event) => {
   try {
-    console.log(event)
     const exists = await checkExistence(event)
 
     if (exists) {
-      console.log('Duplicate event found:', event)
+      console.log('Duplicate event found:', event.title)
       return 'duplicated'
     }
 
@@ -572,6 +572,39 @@ const cleanDB = async (month) => {
   }
 }
 
+const removeDuplicateEvents = async () => {
+  try {
+    const duplicates = await Event.aggregate([
+      {
+        $group: {
+          _id: {
+            eventName: '$eventName',
+            year: '$eventDate.year',
+            month: '$eventDate.month',
+            day: '$eventDate.day',
+          },
+          ids: { $push: '$_id' }, // Collect all IDs of duplicates
+          count: { $sum: 1 }, // Count occurrences
+        },
+      },
+      { $match: { count: { $gt: 1 } } }, // Only keep duplicates
+    ])
+
+    // Extract the duplicate IDs, keeping the first and deleting the rest
+    const idsToDelete = duplicates.flatMap((event) => event.ids.slice(1))
+
+    if (idsToDelete.length > 0) {
+      await Event.deleteMany({ _id: { $in: idsToDelete } })
+      console.log(`Deleted ${idsToDelete.length} duplicate events.`)
+    } else {
+      console.log('No duplicate events found.')
+    }
+  } catch (error) {
+    console.error('Error removing duplicates:', error)
+  }
+}
+
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -585,5 +618,6 @@ module.exports = {
   deleteEvent,
   deleteAllMyClosedEvents,
   saveScrapedEvent,
-  cleanDB
+  cleanDB,
+  removeDuplicateEvents
 }

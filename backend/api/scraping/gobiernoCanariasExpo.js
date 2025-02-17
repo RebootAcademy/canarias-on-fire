@@ -97,7 +97,7 @@ const scrapeGobCanariasExpo = async () => {
       gobCanUrl,
       `?0b477641_page=${page}`
     )
-    console.log(result)
+
     if (!result || result.length === 0) {
       console.log('No events found')
       return
@@ -108,9 +108,8 @@ const scrapeGobCanariasExpo = async () => {
       try {
         const result = await saveScrapedEvent(event)
         if (result === 'duplicated') {
-          // console.log('No more new events. Stopping...')
-          // break // Exit the loop
           console.log(`Duplicated event: ${event.title}`)
+          break
         }
         console.log(`Event saved: ${event.title}`)
       } catch (error) {
