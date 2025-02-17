@@ -4,7 +4,6 @@
       :src="imagesToShow[currentImageIndex]?.url || defaultImage"
       class="w-full h-44 object-cover"
     />
-
     <!-- Flechas para cambiar de imagen -->
     <button
       v-if="imagesToShow.length > 1"
@@ -20,7 +19,6 @@
     >
       &#10095; <!-- Flecha derecha -->
     </button>
-
     <!-- Indicadores de imágenes -->
     <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
       <span

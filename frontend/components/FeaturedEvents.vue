@@ -12,16 +12,19 @@
               <CardContent class="bg-gray rounded-md">
                 <NuxtLink :to="`/events/${event._id}`">
                   <img
-                    v-if="event.coverImage"
-                    :src="event.coverImage"
-                    class="object-scale-down h-96 w-80"
-                  />
-                  <img
-                    v-else
-                    :src="event?.eventImages[0]?.url"
+                    :src="event.coverImage || 
+                      event?.eventImages[0]?.url ||
+                      defaultImage"
                     class="object-scale-down h-96 w-80"
                   />
                 </NuxtLink>
+                  <p 
+                    class="w-full text-center"
+                    v-if="!event.coverImage && 
+                      !event.eventImages[0]?.url"
+                  >
+                    {{ event.eventName }}
+                  </p>
               </CardContent>
             </Card>
           </CarouselItem>
@@ -40,6 +43,8 @@
 <script setup>
 const eventStore = useEventStore()
 const today = new Date()
+
+const defaultImage = '/defaultImg.png'
 
 const premiumEvents = ref([])
 /* const somePremium = eventStore?.events.filter((event) => event?.payment?.name === 'optima plus' && new Date(event.eventDate.year, event.eventDate.month - 1, event.eventDate.day) >= today ) */
