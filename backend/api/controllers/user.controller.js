@@ -155,7 +155,9 @@ const getUserById = async (req, res) => {
 
 const getAllBands = async (req, res) => {
   try {
-    const bands = await Musician.find({ role: 'musician' }).lean()
+    const bands = await User.find({
+      $or: [{ role: 'musician' }, { __t: 'musician' }],
+    }).lean()
 
     res.status(200).json({ 
       success: true, 
