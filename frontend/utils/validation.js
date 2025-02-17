@@ -44,6 +44,7 @@ const validateEventLocation = (t) => {
 
 const validateCategories = (t) => {
   const selectedCount = eventStore.selectedCategories.length
+  console.log(eventStore.selectedCategories)
   if (selectedCount < 1) {
     return t('categoriesRequired')
   } else if (selectedCount > 5) {

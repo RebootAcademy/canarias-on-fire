@@ -69,6 +69,7 @@ const { t } = useI18n()
 import { errors, validateFields } from '../utils/validation'
 const eventStore = useEventStore()
 const { selectedCategories } = storeToRefs(eventStore)
+console.log(selectedCategories)
 const typeOfServices = computed(() => [
   { label: t('values.foodtruck'), value: 'foodtruck', icon: 'Truck' },
   { label: t('values.catering'), value: 'catering', icon: 'UtensilsCrossed' },

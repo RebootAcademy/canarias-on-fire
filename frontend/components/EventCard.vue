@@ -10,7 +10,7 @@
   >
     <div
       v-if="event.status === 'closed'"
-      class="bg-whiteGray/40 absolute inset-0 z-40"
+      class="bg-whiteGray/40 rounded-md absolute inset-0 z-20"
     ></div>
 
     <div

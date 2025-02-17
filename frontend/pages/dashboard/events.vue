@@ -144,6 +144,11 @@ const userRole = computed(() => userStore.userData?.role)
 const selectOption = ref('all')
 const tryToDelete = ref(false)
 
+const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
+const eventsByDate = computed(() => {
+  return filteredEventsByDate?.value(filteredEvents?.value)
+})
+
 definePageMeta({
   layout: 'dashboard',
 })
@@ -173,21 +178,26 @@ const optionsFilters = computed(() => {
 const myEvents = computed(() => {
   let eventsType
   if (selectOption.value !== 'all') {
-    eventsType = eventStore.events.filter(
+    eventsType = eventsByDate.events.filter(
       (event) => event.status === selectOption.value
     )
   } else {
-    eventsType = eventStore.events
+    eventsType = eventsByDate.events
   }
 
-  return eventsType
+  let selection = eventsType
     .filter(
       (event) =>
         event.userId &&
         event.userId?._id === userStore.userData._id &&
         event.eventType === 'event'
     )
-    .sort((a, b) => {
+
+    if (eventStore.musicFilter !== 'all') {
+      selection = selection.filter(event => event.musicType === eventStore.musicFilter)
+    }
+
+    return selection.sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
 
@@ -200,13 +210,26 @@ const myEvents = computed(() => {
 })
 
 const adminEvents = computed(() => {
-  return eventStore.events
+  if (!eventsByDate.value) {
+    return []
+  }
+  let selection = eventsByDate.value
     .filter(
       (event) =>
         event.eventType === 'event' &&
-        (event.status === selectOption.value || selectOption.value === 'all')
+        (event.status === selectOption.value || 
+        selectOption.value === 'all') && (
+          searchQuery.value ?
+          event.eventName.toLowerCase().includes(searchQuery.value.toLowerCase()):
+          true
+        )
     )
-    .sort((a, b) => {
+
+    if (eventStore.musicFilter !== 'all') {
+      selection = selection.filter(event => event.musicType === eventStore.musicFilter)
+    }
+
+    return selection.sort((a, b) => {
       const priorityA = getEventPriority(a)
       const priorityB = getEventPriority(b)
 
