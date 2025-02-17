@@ -114,6 +114,7 @@ const props = defineProps({
 })
 
 const filteredCategories = computed(() => {
+  console.log(eventStore.selectedCategories)
   if (props.type === 'event') {
     eventStore.selectedCategories.some(
     (c) => c && c.type === 'promotion'
@@ -137,7 +138,7 @@ onMounted(async () => {
 const isSelected = (category) => {
   return (
     Array.isArray(eventStore.selectedCategories) &&
-    eventStore.selectedCategories.some((c) => c && c.id === category.id || c._id === category.id)
+    eventStore.selectedCategories.some((c) => c && (c.id === category.id || c._id === category.id))
   )
 }
 
@@ -151,10 +152,6 @@ const toggleCategory = (category) => {
   if (!category || !category.id) {
     console.error('Invalid category:', category)
     return
-  }
-
-  if (eventStore.selectedCategories.lenght > 0 ) {
-
   }
 
   if (!Array.isArray(eventStore.selectedCategories)) {
@@ -179,9 +176,9 @@ const toggleCategory = (category) => {
     }
   } else {
     const index = eventStore.selectedCategories.findIndex(
-      (c) => c && c.id === category.id
+      (c) => c && (c.id === category.id || c._id === category.id)
     )
-
+  console.log(index)
     if (index === -1) {
       updatedCategories = [...eventStore.selectedCategories, category]
     } else {
@@ -189,7 +186,7 @@ const toggleCategory = (category) => {
         eventStore.setSelectedCategoriesOfServices('delete')
       }
       updatedCategories = eventStore.selectedCategories.filter(
-        (c) => c && c.id !== category.id
+        (c) => c && c._id ? c._id !== category.id : c.id !== category.id
       )
     }
     eventStore.setSelectedCategories(updatedCategories)

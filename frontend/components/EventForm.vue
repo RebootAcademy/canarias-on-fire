@@ -75,47 +75,47 @@ const isAdmin = computed(() => userStore.userData.role === 'admin')
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
   validateFields(t)
-  // if (Object.values(errors).every((error) => error === '')) {
-  //   if (props.isEditing) {
-  //     await eventStore.updateEvent()
-  //     router.push(
-  //       `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
-  //     )
-  //   } else {
-  //     eventStore.status = 'draft'
-  //     eventStore.setUserId(userStore.userData._id)
+  if (Object.values(errors).every((error) => error === '')) {
+    if (props.isEditing) {
+      await eventStore.updateEvent()
+      router.push(
+        `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
+      )
+    } else {
+      eventStore.status = 'draft'
+      eventStore.setUserId(userStore.userData._id)
 
-  //     if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
-  //       const result = await eventStore.createEvent()
-  //       console.log('isTrue', result)
-  //       console.log('isTrue', result.isRevoked)
-  //       if (result?.error?.statusCode === 400) {
-  //         toast({
-  //           description: t('errorCreating'),
-  //           variant: 'destructive',
-  //         })
-  //         return setTimeout(() => {
-  //           router.push(`/dashboard/${eventStore.eventType}s`)
-  //         }, 600)
-  //       }
-  //       if (result) {
-  //         router.push(
-  //           `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
-  //         )
-  //       } else {
-  //         toast({
-  //           description: t('errorCreatingEvent'),
-  //           variant: 'destructive',
-  //         })
-  //       }
-  //     } else {
-  //       toast({
-  //         description: t('userHasPromotions'),
-  //         variant: 'destructive',
-  //       })
-  //     }
-  //   }
-  // }
+      if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
+        const result = await eventStore.createEvent()
+        console.log('isTrue', result)
+        console.log('isTrue', result.isRevoked)
+        if (result?.error?.statusCode === 400) {
+          toast({
+            description: t('errorCreating'),
+            variant: 'destructive',
+          })
+          return setTimeout(() => {
+            router.push(`/dashboard/${eventStore.eventType}s`)
+          }, 600)
+        }
+        if (result) {
+          router.push(
+            `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
+          )
+        } else {
+          toast({
+            description: t('errorCreatingEvent'),
+            variant: 'destructive',
+          })
+        }
+      } else {
+        toast({
+          description: t('userHasPromotions'),
+          variant: 'destructive',
+        })
+      }
+    }
+  }
 }
 
 const onSaveAndRedirect = async () => {
