@@ -1,127 +1,138 @@
 <template>
-  <div v-if="userStore.isAuthenticated && userRole === 'admin'">
-    <div
-      class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
-    >
+  <div>
+    <div v-if="userStore.isAuthenticated && userRole === 'admin'">
       <div
-        class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2"
+        class="w-full flex flex-col-reverse md:flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
       >
         <div
-          v-for="option in optionsFilters"
-          :key="option.label"
-          class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
-          :class="
-            selectOption === option.value
-              ? 'bg-black p-2  hover:bg-none'
-              : 'hover:bg-zinc-800 p-2'
-          "
-          @click="selectOption = option.value"
+          class="flex items-center justify-center text-sm md:text-base bg-gray rounded-lg border-1 border-gray md:p-2"
         >
-          <span
-            class="text-center w-full"
+          <div
+            v-for="option in optionsFilters"
+            :key="option.label"
+            class="flex justify-start cursor-pointer rounded-sm w-[80px] md:w-[100px]"
             :class="
               selectOption === option.value
-                ? 'font-bold text-white'
-                : 'text-whiteGray'
+                ? 'bg-black p-2  hover:bg-none'
+                : 'hover:bg-zinc-800 p-2'
             "
-            >{{ option.label }}</span
+            @click="selectOption = option.value"
           >
+            <span
+              class="text-center w-full"
+              :class="
+                selectOption === option.value
+                  ? 'font-bold text-white'
+                  : 'text-whiteGray'
+              "
+              >{{ option.label }}</span
+            >
+          </div>
         </div>
-      </div>
-      <!-- <div class="lg:hidden w-full md:w-1/3 mr-2">
+        <!-- <div class="lg:hidden w-full md:w-1/3 mr-2">
         <CustomSelect :optionDefault="selectOption" :items="optionsFilters" @update:selected="handleSelection"/>
       </div> -->
-      <div class="flex items-center justify-end gap-4 sm:w-1/2 lg:w-auto">
-        <SearchInput v-model="searchQuery" />
-        <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-        <FilterModal />
-        <div
-          v-if="
-            adminEvents.filter((event) => event.status === 'closed').length > 0
-          "
-        >
-          <Button
-            class="bg-red-500 hover:bg-red-700 text-white"
-            @click="tryToDelete = true"
-          >
-            {{ $t('buttons.deleteAll') }}
-          </Button>
-        </div>
-      </div>
-    </div>
-    <hr class="mb-8 border-1 border-black w-full" />
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
-    >
-      <EventCard v-for="event in adminEvents" :key="event._id" :event="event" />
-    </div>
-    <p v-if="adminEvents.length === 0" class="text-gray-500 mt-4">
-      {{ $t('notEventsFound') }}
-    </p>
-  </div>
-
-  <div v-if="userStore.isAuthenticated && userRole === 'company'">
-    <div
-      class="w-full flex flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
-    >
-      <div
-        class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2"
-      >
-        <div
-          v-for="option in optionsFilters"
-          :key="option.label"
-          class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
-          :class="
-            selectOption === option.value
-              ? 'bg-black  hover:bg-none'
-              : 'hover:bg-zinc-800'
-          "
-          @click="selectOption = option.value"
-        >
-          <span
-            class="text-center w-full"
-            :class="
-              selectOption === option.value
-                ? 'font-bold text-white'
-                : 'text-whiteGray'
+        <div class="flex items-center justify-end gap-4 sm:w-1/2 lg:w-auto">
+          <SearchInput v-model="searchQuery" />
+          <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
+          <FilterModal />
+          <div
+            v-if="
+              adminEvents.filter((event) => event.status === 'closed').length >
+              0
             "
-            >{{ option.label }}</span
           >
+            <Button
+              class="bg-red-500 hover:bg-red-700 text-white"
+              @click="tryToDelete = true"
+            >
+              {{ $t('buttons.deleteAll') }}
+            </Button>
+          </div>
         </div>
       </div>
-      <div class="lg:hidden w-1/3 mr-2">
-        <CustomSelect
-          :selectOption="selectOption"
-          :optionsFilters="optionsFilters"
-          @update:selected="handleSelection"
+      <hr class="mb-8 border-1 border-black w-full" />
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+      >
+        <EventCard
+          v-for="event in adminEvents"
+          :key="event._id"
+          :event="event"
         />
       </div>
-      <div
-        class="flex items-center justify-end gap-4 xs:w-2/3 sm:w-1/2 lg:w-auto"
-      >
-        <SearchInput v-model="searchQuery" />
-        <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-        <FilterModal />
-      </div>
-    </div>
-    <hr class="mb-8 border-1 border-black w-full" />
-    <div
-      v-if="myEvents.filter((event) => event.status === 'closed').length > 0"
-      class="w-full flex justify-end mb-4"
-    >
-      <Button
-        class="bg-red-500 hover:bg-red-700 text-white"
-        @click="tryToDelete = true"
-      >
-        {{ $t('buttons.deleteAll') }}
-      </Button>
+      <p v-if="adminEvents.length === 0" class="text-gray-500 mt-4">
+        {{ $t('notEventsFound') }}
+      </p>
     </div>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
-    >
-      <EventCard v-for="event in myEvents" :key="event._id" :event="event" />
+    <div v-if="userStore.isAuthenticated && userRole === 'company'">
+      <div
+        class="w-full flex flex-row items-center justify-between xs:gap-2 lg:px-4 mb-4"
+      >
+        <div
+          class="xs:hidden lg:flex bg-gray rounded-lg border-1 border-gray p-2"
+        >
+          <div
+            v-for="option in optionsFilters"
+            :key="option.label"
+            class="flex justify-start cursor-pointer rounded-sm w-[100px] p-2"
+            :class="
+              selectOption === option.value
+                ? 'bg-black  hover:bg-none'
+                : 'hover:bg-zinc-800'
+            "
+            @click="selectOption = option.value"
+          >
+            <span
+              class="text-center w-full"
+              :class="
+                selectOption === option.value
+                  ? 'font-bold text-white'
+                  : 'text-whiteGray'
+              "
+              >{{ option.label }}</span
+            >
+          </div>
+        </div>
+        <div class="lg:hidden w-1/3 mr-2">
+          <CustomSelect
+            :selectOption="selectOption"
+            :optionsFilters="optionsFilters"
+            @update:selected="handleSelection"
+          />
+        </div>
+        <div
+          class="flex items-center justify-end gap-4 xs:w-2/3 sm:w-1/2 lg:w-auto"
+        >
+          <SearchInput v-model="searchQuery" />
+          <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
+          <FilterModal />
+        </div>
+      </div>
+      <hr class="mb-8 border-1 border-black w-full" />
+      <div
+        v-if="myEvents.filter((event) => event.status === 'closed').length > 0"
+        class="w-full flex justify-end mb-4"
+      >
+        <Button
+          class="bg-red-500 hover:bg-red-700 text-white"
+          @click="tryToDelete = true"
+        >
+          {{ $t('buttons.deleteAll') }}
+        </Button>
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+      >
+        <EventCard v-for="event in myEvents" :key="event._id" :event="event" />
+      </div>
+      <p v-if="myEvents.length === 0" class="text-gray-500 mt-4">
+        {{ $t('notEventsFound') }}
+      </p>
     </div>
+
     <CustomModal v-model:open="tryToDelete">
       <ConfirmModalClosedEvent
         @close="tryToDelete = false"
@@ -129,9 +140,6 @@
         @update:open="tryToDelete = $event"
       />
     </CustomModal>
-    <p v-if="myEvents.length === 0" class="text-gray-500 mt-4">
-      {{ $t('notEventsFound') }}
-    </p>
   </div>
 </template>
 
