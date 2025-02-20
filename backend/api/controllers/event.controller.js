@@ -7,6 +7,7 @@ const User = require('../models/user.model')
 
 const createEvent = async (req, res) => {
   try {
+    const user = await User.findById(req.body.userId)
     const eventType = req.body.eventType
     let isThereSame
     if (eventType === 'promotion') {
@@ -26,13 +27,23 @@ const createEvent = async (req, res) => {
     }
 
     if (isThereSame) {
-      console.log('pan caído')
       return res.status(400).json({
         success: false,
         message: 'There is already a event/promotion with the same name for this user.',
       })
     }
-    const newEvent = await Event.create(req.body)
+
+    let newEvent
+    if (user.role === 'admin'){
+      let paymentPlan = await Payment.findOne({ name: req.body.adminPayment })
+      let event = { ...req.body, payment: paymentPlan._id, userId: user._id }
+      newEvent = await Event.create(event)
+    } else {
+      newEvent = await Event.create(req.body)
+    }
+
+    
+
     res.status(201).json({
       success: true,
       message: 'Event successfully created.',
@@ -225,23 +236,6 @@ const searchNearbyEvents = async (req, res) => {
       return res.status(400).json({ error: 'Se requieren latitud y longitud' })
     }
 
-    /* const query = {
-       eventLocation: {
-         $near: {
-           $geometry: {
-             type: 'Point',
-             coordinates: [parseFloat(lat), parseFloat(lng)],
-           },
-           distanceField: 'dist.calculated',
-           $maxDistance: maxDistance,
-         },
-       },
-     }
-      if (eventType) {
-        query.eventType = eventType
-        query.status = 'published'
-      }
-      console.log('Query: ', JSON.stringify(query, null, 2)) */
     const userCoordinates = [parseFloat(lat), parseFloat(lng)] // Longitud, Latitud
 
     // Agregamos la consulta con $geoNear para calcular la distancia
@@ -252,9 +246,9 @@ const searchNearbyEvents = async (req, res) => {
             type: 'Point',
             coordinates: userCoordinates,
           },
-          distanceField: 'dist.calculated', // Campo donde se almacenará la distancia
-          maxDistance: maxDistance, // Distancia máxima en metros
-          spherical: true, // Considerar la Tierra como una esfera
+          distanceField: 'dist.calculated', 
+          maxDistance: maxDistance,
+          spherical: true,
         },
       },
       {
@@ -264,8 +258,6 @@ const searchNearbyEvents = async (req, res) => {
         },
       },
     ])
-
-    console.log('events', events)
 
     const populatedEvents = await Event.populate(events, {
       path: 'categories location userId payment subscription',
@@ -477,7 +469,6 @@ const deleteAllMyClosedEvents = async (req, res) => {
 
 const checkExistence = async (event) => {
   try {
-    console.log(event.title)
     const exists = await Event.findOne({
       eventName: { $regex: event.title, $options: 'i' }, //Check if title in DB includes incoming title
       'eventDate.year': `${event.startYear}`,
@@ -497,7 +488,6 @@ const saveScrapedEvent = async (event) => {
     const exists = await checkExistence(event)
 
     if (exists) {
-      console.log('Duplicate event found:', event.title)
       return 'duplicated'
     }
 

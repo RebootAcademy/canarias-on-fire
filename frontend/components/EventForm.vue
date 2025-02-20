@@ -87,8 +87,6 @@ const onSubmit = async () => {
 
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
-        console.log('isTrue', result)
-        console.log('isTrue', result.isRevoked)
         if (result?.error?.statusCode === 400) {
           toast({
             description: t('errorCreating'),
