@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen justify-center">
+  <div class="flex justify-center">
     <div class="md:w-2/3 p-4">
       <header class="text-2xl font-bold mt-6 mb-3 tracking-tighter">{{ $t('editEvent') }}</header>
        <div v-if="loading" class="text-center">

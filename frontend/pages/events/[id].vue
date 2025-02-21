@@ -1,5 +1,5 @@
 <template>
-  <div class="relative mt-4 bg-background text-secondary w-screen">
+  <div class="relative px-2 md:px-0 mt-4 bg-background text-secondary">
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
