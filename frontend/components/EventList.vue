@@ -33,7 +33,8 @@ const {
   filteredEventsByDate, 
   filters, 
   selectedEventFilter,
-  musicFilter
+  musicFilter,
+  selectedFilterByDate
 } = storeToRefs(eventStore)
 
 const eventsByDate = computed(() => {
@@ -55,7 +56,8 @@ const noFilterSelected = () => {
     !endTime && 
     !categories.length && 
     selectedEventFilter.value === 'all' && 
-    musicFilter.value === 'all'
+    musicFilter.value === 'all' &&
+    selectedFilterByDate.value === 'all'
 }
 
 const limitedEvents = computed(() => {
@@ -65,13 +67,14 @@ const limitedEvents = computed(() => {
   
   let filterEvents = [...eventsByDate.value]
     ?.filter(event =>
-      event.status === 'published' &&
+      {
+        if (parseInt(event.eventDate?.day) === 23) console.log(event.eventName)
+        return event.status === 'published' &&
       event.eventType === 'event' && 
       ((event.userId?.isActive && 
         event.userId?.isValidated) ||
-          event.userId?.role === 'admin')
+          event.userId?.role === 'admin')}
     )
-     console.log('EVENTLIST', filterEvents.length)
 
   if (userStore.acceptedGeolocation && noFilterSelected()){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
@@ -80,6 +83,7 @@ const limitedEvents = computed(() => {
   if (eventStore.musicFilter !== 'all') {
     filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
   }
+    console.log('EVENTLIST', filterEvents.length)
   const eventsWithRandomOrder = filterEvents.map(event => ({
     ...event,
     randomOrder: Math.random().toFixed(2),
@@ -106,7 +110,7 @@ const limitedEvents = computed(() => {
     })
 })
 
-const displayEvents = computed(() => (eventStore.selectedFilterByDate === 'all' && eventStore.selectedCategories.length === 0) ? limitedEvents.value.splice(0,9): limitedEvents.value)
+const displayEvents = computed(() => noFilterSelected() ? limitedEvents.value.slice(0,9): limitedEvents.value)
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment?._id : event.payment
