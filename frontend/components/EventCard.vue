@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div
       class="relative h-[360px] rounded-lg overflow-hiddengroup hover:border-2 hover:border-primary focus:border-4 focus:border-secondary"
       :class="{
