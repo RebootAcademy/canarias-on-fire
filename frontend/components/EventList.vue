@@ -13,13 +13,13 @@
     <p v-if="displayEvents?.length === 0" class="text-gray-500 mt-4">
       {{ $t('notEventsFound') }}
     </p>
-    <div v-if="displayEvents?.length > 9" class="mt-6 text-center">
+    <!-- <div v-if="displayEvents?.length > 8" class="mt-6 text-center">
       <NuxtLink to="/events">
         <Button variant="outline">
           {{ $t('buttons.seeMore') }}
         </Button>
       </NuxtLink>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -62,6 +62,7 @@ const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
     return []
   }
+  
   let filterEvents = [...eventsByDate.value]
     ?.filter(event =>
       event.status === 'published' &&
@@ -70,6 +71,7 @@ const limitedEvents = computed(() => {
         event.userId?.isValidated) ||
           event.userId?.role === 'admin')
     )
+     console.log('EVENTLIST', filterEvents.length)
 
   if (userStore.acceptedGeolocation && noFilterSelected()){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
@@ -104,7 +106,7 @@ const limitedEvents = computed(() => {
     })
 })
 
-const displayEvents = computed(() => limitedEvents.value.splice(0,9))
+const displayEvents = computed(() => (eventStore.selectedFilterByDate === 'all' && eventStore.selectedCategories.length === 0) ? limitedEvents.value.splice(0,9): limitedEvents.value)
 
 function getEventPriority(event) {
   const paymentId = event.type === 'event' ? event.payment?._id : event.payment
