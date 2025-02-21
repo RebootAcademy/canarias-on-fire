@@ -3,7 +3,13 @@
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
-      class="w-full h-[300px] md:h-[550px] object-cover rounded-md"
+      :class="`w-full h-[300px] md:h-[550px] rounded-md 
+      ${(searchPaymentEvent !== 'basic' && 
+        eventStore.event.coverImage) || 
+        eventStore.event.externalSource ? 
+        'object-cover' : 
+        'object-contain'
+      }`"
     />
     <div class="flex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
