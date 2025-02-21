@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col bg-background">
+  <div class="mx-auto px-4 py-8 flex flex-col bg-background">
     <h1 class="text-primary text-2xl lg:text-[38px] font-bold mb-6">{{ $t('createArticle') }}</h1>
     <form @submit.prevent="createArticle">
       <div class="flex flex-col gap-1">

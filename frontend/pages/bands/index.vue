@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8 py-4 sm:px-8 md:px-16 lg:px-40 mt-8">
+  <div class="px-8 py-4 mt-8">
     <div class="flex flex-col md:flex-row justify-between items-center mb-8">
       <div class="flex w-full items-start">
         <h2 class="text-2xl lg:text-[38px] font-bold text-primary">

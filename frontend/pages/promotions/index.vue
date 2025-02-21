@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center bg-background">
     <Hero class="hidden sm:flex" />
-    <div class="w-full px-4 mt-8 md:mt-0 sm:w-2/3">
+    <div class="px-4 mt-8 md:mt-0">
       <div
         class="flex flex-col gap-2 md:flex-row md:gap-0 items-center justify-between w-full px-4 mb-4 md:mt-8"
       >

@@ -1,11 +1,11 @@
 <template>
   <Spinner v-if="isLoading" />
-  <div v-else class="h-full bg-background text-secondary w-full !flex !flex-col gap-2 items-center">
+  <div v-else class="h-full bg-background text-secondary !flex !flex-col gap-2 items-center">
     <NuxtImg src="/logo_color.png" alt="Evente Logo" class="min-w-[100px] max-w-[150px] mt-16 mb-10 md:hidden" />
     <Hero class="hidden md:flex"/>
     <div class="w-full flex flex-col items-center h-fit">
       <div
-        class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-3/4 md:w-3/4 lg:w-2/3"
+        class="flex flex-col gap-2 px-4 w-full sm:px-0 sm:w-full md:w-full"
       >
         <EventsCounter />
         <div class="w-full flex flex-col lg:flex-row justify-center md:justify-between mb-6 ">
@@ -25,7 +25,7 @@
         </div>
       </div>
       <Explore />
-      <div class="flex flex-col gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-2/3 mt-8">
+      <div class="flex flex-col gap-2 w-full mt-8">
         <FeaturedEvents class="hidden sm:block"/>
         <ScrollXSFeaturedEvents class="xs:hidden " />
         <ArticlesHeader />

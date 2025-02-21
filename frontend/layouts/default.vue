@@ -1,10 +1,18 @@
 <template>
-  <div class="flex !flex-col min-h-screen bg-background text-secondary">
+  <div class="flex flex-col min-h-screen bg-background text-secondary">
     <NavBar />
-    <main class="flex-grow w-full">
-      <NuxtPage class="flex-grow"/>
-      <CookieBanner />
-    </main>
+    <div class="flex flex-col md:flex-row">
+      <div class="hidden md:block flex-grow">
+        <!-- SECCIÓN PARA BANNER IZQUIERDO -->
+      </div>
+      <main class="flex-grow w-full max-w-[1240px]">
+        <NuxtPage class="flex-grow"/>
+        <CookieBanner />
+      </main>
+      <div class="hidden md:block flex-grow">
+        <!-- SECCIÓN PARA BANNER DERECHO -->
+      </div>
+    </div>
     <Footer />
     <ScrollButton/>
   </div>

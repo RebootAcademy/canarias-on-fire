@@ -1,5 +1,5 @@
 <template>
-  <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
+  <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary w-screen">
     <div
       @click="() => router.push(`/events/edit/${eventId}`)"
       class="flex items-center max-w-[160px] rounded-md gap-2 my-4 left-4 cursor-pointer border-2 border-primary bg-background p-2 hover:bg-primary "
