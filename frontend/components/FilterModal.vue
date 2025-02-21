@@ -33,7 +33,7 @@
             :key="category.id"
             @click="toggleCategory(category)"
             :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
-            class="text-xs p-2 md:p-4 rounded-lg bg-gray border-0 hover:bg-primary hover:text-white "
+            class="text-xs p-2 md:p-4 rounded-lg bg-gray border-0 hover:bg-primary hover:text-white select-none cursor-pointer"
             :class="selectedCategories.includes(category.id) ? 'bg-primary text-white' : ''"
           >
             {{ $t(`values.${category.name}`) }}

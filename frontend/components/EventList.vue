@@ -28,10 +28,35 @@ import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const userStore = useUserStore()
 const paymentStore = usePaymentStore()
-const { filteredEvents, filteredEventsByDate } = storeToRefs(eventStore)
+const { 
+  filteredEvents, 
+  filteredEventsByDate, 
+  filters, 
+  selectedEventFilter,
+  musicFilter
+} = storeToRefs(eventStore)
+
 const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
 })
+
+const noFilterSelected = () => {
+  const {
+    islands,
+    date,
+    startTime,
+    endTime,
+    categories
+  } = filters.value
+
+  return !islands.length && 
+    !date && 
+    !startTime && 
+    !endTime && 
+    !categories.length && 
+    selectedEventFilter.value === 'all' && 
+    musicFilter.value === 'all'
+}
 
 const limitedEvents = computed(() => {
   if (!eventsByDate.value) {
@@ -46,7 +71,7 @@ const limitedEvents = computed(() => {
           event.userId?.role === 'admin')
     )
 
-  if (userStore.acceptedGeolocation){
+  if (userStore.acceptedGeolocation && noFilterSelected()){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
   }
 
