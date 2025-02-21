@@ -1,8 +1,10 @@
 <template>
-  <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg">
+  <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg bg-[#1a1a1a]">
     <img
       :src="imagesToShow[currentImageIndex]?.url || defaultImage"
-      class="w-full h-44 object-cover"
+        :class="`w-full h-44 ${imagesToShow[currentImageIndex]?.url ? 
+        'object-cover' : 
+        'object-contain'}`"
     />
     <!-- Flechas para cambiar de imagen -->
     <button

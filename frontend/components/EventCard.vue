@@ -42,11 +42,6 @@
           :payment="isGoldPayment ? 'optima' : 'optima plus'"
         />
       </div>
-      <!--    <img
-          v-if="!isBasicPayment"
-          :src="event.coverImage || defaultImage"
-          class="w-full h-44 object-cover rounded-t-lg"
-        /> -->
       <img
         v-else
         :src="defaultImage"
