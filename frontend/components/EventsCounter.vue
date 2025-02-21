@@ -11,21 +11,7 @@
 <script setup>
 const eventStore = useEventStore()
 
-function getStartOfWeek(date) {
-  const day = date.getDay()
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1)
-  return new Date(date.setDate(diff))
-}
-
-function getEndOfWeek(date) {
-  const startOfWeek = getStartOfWeek(new Date(date));
-  return new Date(startOfWeek.setDate(startOfWeek.getDate() + 6))
-}
-
-const today = new Date()
-const startOfWeek = getStartOfWeek(today)
-const endOfWeek = getEndOfWeek(today)
-endOfWeek.setHours(23, 59, 59, 999)
+const { endOfWeek } = calculatedDates()
 
 const activeEventsCount = computed(() => {
   return eventStore.events.filter(event => {
