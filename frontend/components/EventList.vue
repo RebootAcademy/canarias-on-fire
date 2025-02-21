@@ -1,13 +1,13 @@
 <template>
   <div class="lg:px-6 w-full">
     <div
-      class="w-full grid justify-items-strecth items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
+      class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <EventCard
         v-for="event in displayEvents"
         :key="event._id"
         :event="event"
-        class="xs:w-[60%] sm:w-full"
+        class="xs:w-[80%] sm:w-full"
       />
     </div>
     <p v-if="displayEvents?.length === 0" class="text-gray-500 mt-4">
@@ -68,7 +68,7 @@ const limitedEvents = computed(() => {
   let filterEvents = [...eventsByDate.value]
     ?.filter(event =>
       {
-        if (parseInt(event.eventDate?.day) === 23) console.log(event.eventName)
+        if (event.eventName === "Evento 1") console.log(event.eventName)
         return event.status === 'published' &&
       event.eventType === 'event' && 
       ((event.userId?.isActive && 
