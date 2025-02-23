@@ -562,27 +562,13 @@ export const useEventStore = defineStore('eventStore', {
       )
     },
 
-    isWithinRange (start, end, date) {
-      if (!start) return false
-      if (!end || isNaN(end.getTime())) {
-        // Mirar solo que la fecha inicial sea igual a la fecha actual
-        return (
-          start.getFullYear() === date.getFullYear() &&
-          start.getMonth() === date.getMonth() &&
-          start.getDate() === date.getDate()
-        )
-      }
-      // Mirar que la fecha inicial sea menor que la actual y la final sea mayor.
-      return (
-        start.getFullYear() <= date.getFullYear() &&
-        start.getMonth() <= date.getMonth() &&
-        start.getDate() <= date.getDate()
-      ) && 
-      (
-        end.getFullYear() >= date.getFullYear() &&
-        end.getMonth() >= date.getMonth() &&
-        end.getDate() >= date.getDate()
-      )
+    isWithinRange(start, end, date) {
+      if (!start || !date) return false;
+      const startTime = start.getTime();
+      const endTime = end ? end.getTime() : Infinity;
+      const dateTime = date.getTime();
+
+      return startTime <= dateTime && dateTime <= endTime;
     }
   },
 
@@ -886,13 +872,21 @@ export const useEventStore = defineStore('eventStore', {
               eventDate &&
               (state.isSameDay(eventDate, new Date()) ||
                 state.isWithinRange(eventDate, eventEndDate, new Date()))
-            ) // Comparar con la fecha de hoy
+            )
           case 'weekend':
-            return state.isCurrentWeek(eventDate) ||
-                state.isWithinRange(eventDate, eventEndDate, calculatedDates().endOfWeek) // Filtro por semana
+            const startOfWeek = calculatedDates().startOfWeek
+            const endOfWeek = calculatedDates().endOfWeek
+            return (
+              state.isWithinRange(startOfWeek, endOfWeek, eventDate) ||
+              state.isWithinRange(eventDate, eventEndDate, endOfWeek)
+            )
           case 'month':
-            return eventDate && eventDate.getMonth() === new Date().getMonth() ||
-                state.isWithinRange(eventDate, eventEndDate, new Date()) // Filtro por mes actual
+            const now = new Date()
+            return (
+              eventDate &&
+              eventDate.getFullYear() === now.getFullYear() &&
+              eventDate.getMonth() === now.getMonth()
+            )
           default:
             return true
         }

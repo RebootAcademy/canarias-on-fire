@@ -85,7 +85,7 @@ const limitedEvents = computed(() => {
   if (eventStore.musicFilter !== 'all') {
     filterEvents = filterEvents.filter(event => event.musicType === eventStore.musicFilter)
   }
-    console.log('EVENTLIST', filterEvents.length)
+
   const eventsWithRandomOrder = filterEvents.map(event => ({
     ...event,
     randomOrder: Math.random().toFixed(2),

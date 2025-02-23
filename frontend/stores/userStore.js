@@ -71,7 +71,6 @@ export const useUserStore = defineStore('userStore', {
             },
           }
         )
-        console.log(response.user)
         this.users.push(response.user)
         return response.user
       } catch (error) {
@@ -87,7 +86,6 @@ export const useUserStore = defineStore('userStore', {
             `${useRuntimeConfig().public.apiBaseUrl}/users/current/${email}`
           )
           if (data.value) {
-            console.log('data fetched', data.value)
             this.setUser(data.value)
           }
         } catch (error) {
@@ -235,8 +233,6 @@ export const useUserStore = defineStore('userStore', {
           }
         )
 
-        console.log(data, 'data')
-
         if (data.value && data.value.success) {
           const updatedUser = data.value.result
           const userIndex = this.users.findIndex((user) => user._id === userId)
@@ -245,7 +241,6 @@ export const useUserStore = defineStore('userStore', {
           }
 
           if (this.userData && this.userData._id === userId) {
-            console.log('updatedUser', updatedUser)
             this.userData = updatedUser
           }
           this.fetchAndSetUser(this.userData.email)
