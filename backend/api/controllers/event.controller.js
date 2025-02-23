@@ -604,6 +604,65 @@ const removeDuplicateEvents = async () => {
   }
 }
 
+const closePassedEvents = async () => {
+  try {
+    const today = new Date()
+    const events = await Event.find({ status: { $ne: 'closed' } })
+
+     for (const event of events) {
+      let eventDate
+      let endDate
+       if (event.eventType === 'event') {
+         eventDate = new Date(
+           event.eventDate?.year,
+           event.eventDate?.month - 1,
+           event.eventDate?.day
+         )
+         let [hours, minutes] = [0, 0]
+         if (event.startTime) {
+           ;[hours, minutes] = event?.startTime?.split(':').map(Number)
+         }
+
+         endDate = event.eventEndDate
+           ? new Date(
+               event.eventEndDate.year,
+               event.eventEndDate.month - 1,
+               event.eventEndDate.day,
+               hours,
+               minutes
+             )
+           : new Date(
+               eventDate.getFullYear(),
+               eventDate.getMonth(),
+               eventDate.getDate(),
+               hours,
+               minutes
+             )
+       } else {
+         endDate = new Date(
+           event.eventDate?.end?.year,
+           event.eventDate?.end?.month - 1,
+           event.eventDate?.end?.day
+         )
+       }
+
+       // If the event has already passed, update its status
+       if (endDate < today) {
+         event.status = 'closed'
+         await event.save()
+         console.log(`Closed event: ${event._id}`)
+       }
+     }
+
+     console.log('Finished closing passed events.')
+             if (event.status !== 'closed' && endDate < today) {
+               this.updateEventStatus(event._id, 'closed')
+             }
+  } catch (error) {
+    console.error('Error closing passed events', error)
+  }
+}
+
 
 module.exports = {
   createEvent,
@@ -619,5 +678,6 @@ module.exports = {
   deleteAllMyClosedEvents,
   saveScrapedEvent,
   cleanDB,
-  removeDuplicateEvents
+  removeDuplicateEvents,
+  closePassedEvents
 }

@@ -573,119 +573,6 @@ export const useEventStore = defineStore('eventStore', {
   },
 
   getters: {
-    /* filteredEvents() {
-      if (!this.events) return []
-      const today = new Date()
-      console.log(this.events, 'Events')
-
-      return this.events.filter((event) => {
-        if (event.eventType === 'event'){
-
-          let endDate 
-          let eventDate = new Date(
-            event.eventDate?.year,
-            event.eventDate?.month - 1,
-            event.eventDate?.day
-          )
-  
-          const [hours, minutes] = event.startTime.split(':').map(Number)
-          if (event.eventEndDate) {
-            endDate = new Date(
-              event.eventEndDate.year.getFullYear(),
-              event.eventEndDate.getMonth(),
-              event.eventEndDate.getDate(),
-              hours,
-              minutes
-            )
-          } else {
-            endDate = new Date(
-              eventDate.getFullYear(),
-              eventDate.getMonth(),
-              eventDate.getDate(),
-              hours,
-              minutes
-            )
-          }
-  
-          if (event.status !== 'closed' && endDate < today) {
-            this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
-          }
-        } else {
-          let endDatePromotion = new Date(event.eventDate?.end.year, event.eventDate?.end.month - 1, event.eventDate?.end.day)
-          if (event.status !== 'closed' && endDatePromotion < today) {
-            this.updateEventStatus(event._id, 'closed') // Close the event if it has passed
-          }
-        }
-
-        // Filter events by active and validated users
-        if (!event.userId || !event.userId?.isActive) {
-          return false
-        }
-
-        if (this.searchQuery) {
-          // Search
-          const lowercaseQuery = this.searchQuery.toLowerCase()
-          if (
-            !event.eventName.toLowerCase().includes(lowercaseQuery) &&
-            !event.eventDescription.toLowerCase().includes(lowercaseQuery)
-          ) {
-            return false
-          }
-        }
-
-        // Filter by Categories
-        
-
-        // Filtrar por categorías seleccionadas
-        const allCategories = [
-          ...this.filters.categories,
-          ...this.selectedCategories,
-        ]
-        if (allCategories.length > 0) {
-          const eventCategoryIds = event.categories.map((cat) => cat._id)
-          if (!allCategories.some((id) => eventCategoryIds.includes(id))) {
-            return false
-          }
-        }
-        /* if (this.selectedCategories.length > 0) {
-          const eventCategoryIds = event.categories.map((c) => c._id)
-          const hasMatchingCategory = this.selectedCategories.some((sc) =>
-            eventCategoryIds.includes(sc.id)
-          )
-
-          if (!hasMatchingCategory) {
-            return false
-          }
-        }
-
-        // Filter by islands
-        if (this.filters.islands.length > 0) {
-          const eventIsland = getIslandFromPostalCode(
-            event.eventLocation.postalCode
-          )
-          if (!this.filters.islands.includes(eventIsland)) {
-            return false
-          }
-        }
-
-        // Filter by date
-        if (this.filters.date) {
-          const filterDate = this.filters.date
-          const eventDate = event.eventDate
-          if (
-            !eventDate ||
-            eventDate.year !== filterDate.year ||
-            eventDate.month !== filterDate.month ||
-            eventDate.day !== filterDate.day
-          ) {
-            return false
-          }
-        }
-
-        return true
-      })
-    }, */
-
     filteredEvents() {
       if (!this.events) return []
       const today = new Date()
@@ -735,11 +622,6 @@ export const useEventStore = defineStore('eventStore', {
             event.eventDate?.end?.month - 1,
             event.eventDate?.end?.day
           )
-        }
-
-        // Cerrar eventos vencidos
-        if (event.status !== 'closed' && endDate < today) {
-          this.updateEventStatus(event._id, 'closed')
         }
 
         // Búsqueda por nombre o descripción del evento

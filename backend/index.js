@@ -19,7 +19,10 @@ const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
 
-const {removeDuplicateEvents}= require('./api/controllers/event.controller.js')
+const {
+  removeDuplicateEvents,
+  closePassedEvents
+}= require('./api/controllers/event.controller.js')
 
 mongoose.set('strictPopulate', false)
 
@@ -89,9 +92,14 @@ cron.schedule('30 10 * * *', () => {
   scrapeAytoTenerife()
 })
 
-cron.schedule('00 11 * * *', () => {
+cron.schedule('0 11 * * *', () => {
   console.log('Checking Duplicated Events')
   removeDuplicateEvents()
+})
+
+cron.schedule ('0 1 * * *', () => {
+  console.log('Closing passed events')
+  closePassedEvents()
 })
 
 module.exports = app
