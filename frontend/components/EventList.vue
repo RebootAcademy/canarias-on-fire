@@ -34,7 +34,8 @@ const {
   filters, 
   selectedEventFilter,
   musicFilter,
-  selectedFilterByDate
+  selectedFilterByDate,
+  searchQuery
 } = storeToRefs(eventStore)
 
 const eventsByDate = computed(() => {
@@ -57,7 +58,8 @@ const noFilterSelected = () => {
     !categories.length && 
     selectedEventFilter.value === 'all' && 
     musicFilter.value === 'all' &&
-    selectedFilterByDate.value === 'all'
+    selectedFilterByDate.value === 'all' &&
+    !searchQuery.value
 }
 
 const limitedEvents = computed(() => {
