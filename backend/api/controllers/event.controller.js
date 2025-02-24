@@ -655,9 +655,6 @@ const closePassedEvents = async () => {
      }
 
      console.log('Finished closing passed events.')
-             if (event.status !== 'closed' && endDate < today) {
-               this.updateEventStatus(event._id, 'closed')
-             }
   } catch (error) {
     console.error('Error closing passed events', error)
   }
