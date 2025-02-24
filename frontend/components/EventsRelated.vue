@@ -7,7 +7,7 @@
         :key="event._id"
         :event="event"
         :isRelatedEvent="true"
-        class="flex-shrink-0 w-64"
+        class="flex-shrink-0 w-74 overflow-x-hidden"
       />
     </div>
     <div v-else class="flex customScrollBar overflow-x-auto pb-4 space-x-4">
