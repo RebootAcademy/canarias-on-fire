@@ -563,12 +563,12 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     isWithinRange(start, end, date) {
-      if (!start || !date) return false;
-      const startTime = start.getTime();
-      const endTime = end ? end.getTime() : Infinity;
-      const dateTime = date.getTime();
+      if (!start || !date) return false
+      const startTime = start.getTime()
+      const endTime = end ? end.getTime() : NaN
+      const dateTime = date.getTime()
 
-      return startTime <= dateTime && dateTime <= endTime;
+      return startTime <= dateTime && dateTime <= endTime
     }
   },
 
@@ -733,7 +733,7 @@ export const useEventStore = defineStore('eventStore', {
         if (event.eventDate) {
           eventDate = new Date(
             event.eventDate.year,
-            event.eventDate.month - 1,
+            parseInt(event.eventDate.month) - 1,
             event.eventDate.day
           )
         }
@@ -741,7 +741,7 @@ export const useEventStore = defineStore('eventStore', {
         if (event.eventEndDate) {
           eventEndDate = new Date(
             event.eventEndDate.year,
-            event.eventEndDate.month - 1,
+            parseInt(event.eventEndDate.month) - 1,
             event.eventEndDate.day
           )
         }

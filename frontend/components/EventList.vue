@@ -70,13 +70,17 @@ const limitedEvents = computed(() => {
   let filterEvents = [...eventsByDate.value]
     ?.filter(event =>
       {
-        if (event.eventName === "Evento 1") console.log(event.eventName)
-        return event.status === 'published' &&
-      event.eventType === 'event' && 
-      ((event.userId?.isActive && 
-        event.userId?.isValidated) ||
-          event.userId?.role === 'admin')}
+        return (
+          event.status === 'published' &&
+          event.eventType === 'event' && 
+          ((event.userId?.isActive && 
+          event.userId?.isValidated) ||
+          event.userId?.role === 'admin')
+        )
+      }
     )
+
+  // console.log(filterEvents)
 
   if (userStore.acceptedGeolocation && noFilterSelected()){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
