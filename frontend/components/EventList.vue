@@ -51,7 +51,7 @@ const noFilterSelected = () => {
     endTime,
     categories,
   } = filters.value
-  console.log(selectedCategories.value.length)
+
   return !islands.length && 
     ! selectedCategories.value.length &&
     !date && 
