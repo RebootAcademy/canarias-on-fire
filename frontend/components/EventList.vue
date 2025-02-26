@@ -35,7 +35,8 @@ const {
   selectedEventFilter,
   musicFilter,
   selectedFilterByDate,
-  searchQuery
+  searchQuery,
+  selectedCategories
 } = storeToRefs(eventStore)
 
 const eventsByDate = computed(() => {
@@ -48,10 +49,11 @@ const noFilterSelected = () => {
     date,
     startTime,
     endTime,
-    categories
+    categories,
   } = filters.value
-
+  console.log(selectedCategories.value.length)
   return !islands.length && 
+    ! selectedCategories.value.length &&
     !date && 
     !startTime && 
     !endTime && 
@@ -79,8 +81,6 @@ const limitedEvents = computed(() => {
         )
       }
     )
-
-  // console.log(filterEvents)
 
   if (userStore.acceptedGeolocation && noFilterSelected()){
     filterEvents = filterEvents.filter(event => event.dist?.calculated < eventStore.radioLocation)
