@@ -12,8 +12,8 @@
 import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 
-const { 
-  filteredEvents, 
+const {
+  events
 } = storeToRefs(eventStore)
 
 const { 
@@ -24,7 +24,7 @@ const {
 const blah = ref([])
 
 const activeEventsCount = computed(() => {
-  return filteredEvents.value.filter(event => {
+  return events.value.filter(event => {
     if (event.eventType === 'promotion') return false
     const eventDate = new Date(event.eventDate?.year, parseInt(event.eventDate?.month) - 1, parseInt(event.eventDate?.day))
     const eventEndDate = new Date(event.eventEndDate?.year, parseInt(event.eventEndDate?.month) - 1, event.eventEndDate?.day)
@@ -39,7 +39,4 @@ const activeEventsCount = computed(() => {
     )
   })
 })
-
-
-
 </script>
