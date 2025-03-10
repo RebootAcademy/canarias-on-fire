@@ -1,6 +1,6 @@
 <template>
-  <div class="ml-3">
-    <RadioGroup 
+  <div class="flex flex-col items-start md:ml-3 w-full md:w-1/4">
+    <!-- <RadioGroup 
       v-model="eventStore.eventType" 
       default-value="event"
     >
@@ -12,7 +12,19 @@
         <RadioGroupItem id="r2" value="promotion" />
         <Label for="r2">{{ $t('promotion') }}</Label>
       </div>
-    </RadioGroup>
+    </RadioGroup> -->
+    <button
+      class="w-full rounded-md hover:bg-gray hover:text-primary p-2"
+      :class="checkStyle('event')"
+     @click="()=>handleClick('event')">
+      {{ $t('event') }}
+    </button>
+    <button
+      class="w-full rounded-md hover:bg-gray hover:text-primary p-2"
+      :class="checkStyle('promotion')"
+     @click="()=>handleClick('promotion')">
+      {{ $t('promotion') }}
+    </button>
   </div>
 </template>
 
@@ -21,7 +33,13 @@ import { useEventStore } from '../stores/eventStore'
 
 const eventStore = useEventStore()
 
-if (!eventStore.eventType) {
+onMounted(() => {
   eventStore.eventType = 'event'
+})
+
+const checkStyle = (type) => {
+  if (type === eventStore.eventType) return 'bg-primary text-black'
 }
+
+const handleClick = (type) => eventStore.eventType = type
 </script>

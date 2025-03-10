@@ -58,7 +58,6 @@ function filterUsers(category) {
 
   userList.value = userStore.users
     .filter(user => {
-      console.log(user)
         if (category === 'all' || !category) {
           return user.isActive && 
           ((user.sector === 'services') || user.role === 'musician' || user.__t === 'musician')

@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 text-secondary text-lg">
     <!-- EVENT TYPE -->
-    <hr />
-    <div class="flex flex-col">
+    <hr v-if="!isEditing" />
+    <div v-if="!isEditing" class="flex flex-col">
       <p class="font-semibold">{{ $t('eventType') }}</p>
       <p class="text-sm mb-3">{{ $t('selectDateTime') }}</p>
       <EventTypeRadioGroup />
