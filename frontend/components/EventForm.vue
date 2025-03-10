@@ -74,7 +74,9 @@ const isAdmin = computed(() => userStore.userData.role === 'admin')
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
-  validateFields(t)
+  if (!eventStore.event.externalSource) {
+    validateFields(t)
+  }
   if (Object.values(errors).every((error) => error === '')) {
     if (props.isEditing) {
       await eventStore.updateEvent()
@@ -87,8 +89,6 @@ const onSubmit = async () => {
 
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
         const result = await eventStore.createEvent()
-        console.log('isTrue', result)
-        console.log('isTrue', result.isRevoked)
         if (result?.error?.statusCode === 400) {
           toast({
             description: t('errorCreating'),

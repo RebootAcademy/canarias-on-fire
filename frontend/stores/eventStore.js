@@ -373,7 +373,10 @@ export const useEventStore = defineStore('eventStore', {
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'
 
-      if (!isNew) delete eventData.userId
+      if (!isNew) {
+        delete eventData.userId
+        delete eventData.payment
+      }
 
       const { data, error } = await useFetch(url, {
         method,
