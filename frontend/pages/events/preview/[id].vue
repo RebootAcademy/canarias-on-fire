@@ -32,7 +32,11 @@
     <div class="flex items-center gap-4 mt-4 text-gray-600">
       <div v-if="eventStore.eventDate" class="flex items-center gap-1">
         <i class="far fa-calendar-alt"></i>
-        <span>{{ new Date(eventStore.eventDate).toLocaleDateString() }}</span>
+        <span>{{ new Date(
+          eventStore.eventDate.year,
+          eventStore.eventDate.month - 1,
+          eventStore.eventDate.day
+          ).toLocaleDateString() }}</span>
       </div>
       <div v-if="eventStore.startTime" class="flex items-center gap-1">
         <i class="far fa-clock"></i>
@@ -138,6 +142,7 @@ onMounted(async () => {
 
 const publishEvent = async () => {
   try {
+    console.log(eventStore.event)
     const today = new Date().getTime()
     const activeSubscription = userStore.userData?.activeSubscription
     const canceledAt = activeSubscription?.canceledAt
@@ -182,6 +187,8 @@ const publishEvent = async () => {
           `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
         )
       }
+    } else if (eventStore.event.payment) {    
+      return router.push(`/events/${eventId}`)
     } else if (eventStore.event.eventType === 'event') {
       router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
