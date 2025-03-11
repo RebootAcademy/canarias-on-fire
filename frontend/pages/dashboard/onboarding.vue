@@ -1,5 +1,5 @@
 <template>
-  <div class="flex !flex-col min-h-screen w-screen xs:p-4 sm:p-14 lg:p-8 lg:px-24">
+  <div class="flex !flex-col min-h-full w-full xs:p-4 sm:p-14 lg:p-8 lg:px-24">
     <Spinner v-if="isLoading" />
     <div v-else-if="!userVerified">
       {{ $t('onBoarding.validateEmail') }}
