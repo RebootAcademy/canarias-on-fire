@@ -186,11 +186,11 @@ const optionsFilters = computed(() => {
 const myEvents = computed(() => {
   let eventsType
   if (selectOption.value !== 'all') {
-    eventsType = eventsByDate.events.filter(
+    eventsType = eventsByDate.value.filter(
       (event) => event.status === selectOption.value
     )
   } else {
-    eventsType = eventsByDate.events
+    eventsType = eventsByDate.value
   }
 
   let selection = eventsType
