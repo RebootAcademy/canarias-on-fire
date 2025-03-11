@@ -142,7 +142,6 @@ onMounted(async () => {
 
 const publishEvent = async () => {
   try {
-    console.log(eventStore.event)
     const today = new Date().getTime()
     const activeSubscription = userStore.userData?.activeSubscription
     const canceledAt = activeSubscription?.canceledAt
@@ -169,7 +168,8 @@ const publishEvent = async () => {
       }
     }
     if (eventStore.event.eventType === 'promotion') {
-      if (isSubscriptionValid && !hasPublishedPromotions) {
+      //Permitir la publicación de la promoción si no tiene publicaciones previas o está editando una existente (ya tiene un subscriptionId)
+      if (isSubscriptionValid && (!hasPublishedPromotions || eventStore.event.subscription)) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
           await eventStore.fetchEvents()

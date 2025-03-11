@@ -373,6 +373,7 @@ export const useEventStore = defineStore('eventStore', {
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'
 
+      //Deshacerse de la info que no queremos enviar al backend, para evitar sobreescribirla
       if (!isNew) {
         delete eventData.userId
         delete eventData.payment
@@ -539,9 +540,9 @@ export const useEventStore = defineStore('eventStore', {
         externalUrl: this.externalUrl,
         eventImages: this.eventImages,
         coverImage: this.coverImage,
-        categories: this.selectedCategories.map((cat) =>
-          typeof cat === 'object' ? cat.id : cat
-        ),
+        categories: this.selectedCategories.map((cat) => typeof cat === 'object' ? 
+          (cat._id || cat.id) :
+          cat),
         categoriesOfServices: this.selectedCategoriesByServices,
         status: this.status,
         userId: this.userId,
