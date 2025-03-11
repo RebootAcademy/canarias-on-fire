@@ -328,6 +328,7 @@ const isClickTypeOfPay = ref(false)
 
 const modifyTypeOfEvent = (type) => {
   eventStore.isFree = type
+  if (eventStore.isFree) eventStore.eventPrice = 0
   isClickTypeOfPay.value = true
 }
 
