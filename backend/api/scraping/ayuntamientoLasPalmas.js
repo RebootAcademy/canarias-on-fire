@@ -169,8 +169,9 @@ const scrapeAytoLasPalmas = async () => {
         const result = await saveScrapedEvent(event)
         if (result === 'duplicated') {
           console.log(`Duplicated event: ${event.title}`)
+        } else {
+          console.log(`Event saved: ${event.title}`)
         }
-        console.log(`Event saved: ${event.title}`)
       } catch (error) {
         console.error(`Failed to save event: ${event.title}`, error)
       }

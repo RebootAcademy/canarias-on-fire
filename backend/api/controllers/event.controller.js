@@ -479,14 +479,12 @@ const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 
 const checkExistence = async (event) => {
   try {
-    console.log(event.title)
     const exists = await Event.findOne({
-      eventName: { $regex: escapeRegex(event.title), $options: 'i' }, //Check if title in DB includes incoming title
+      eventName: event.title,
       'eventDate.year': `${event.startYear}`,
       'eventDate.month': `${event.startMonth}`,
       'eventDate.day': `${event.startDay}`,
     })
-
     return exists
   } catch (error) {
     console.log('Error checking event existence')

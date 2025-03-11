@@ -72,32 +72,32 @@ cron.schedule('0 0 * * *', () => {
   updateExpiredSubscriptions()
 })
 
-cron.schedule('0 9 * * *', () => {
+cron.schedule('0 1 * * *', () => {
   console.log('Checking Gobierno de Canarias Events')
   scrapeGobCanarias()
 })
 
-cron.schedule('30 9 * * *', () => {
+cron.schedule('30 1 * * *', () => {
   console.log('Checking Gobierno de Canarias Events')
   scrapeGobCanariasExpo()
 })
 
-cron.schedule('0 10 * * *', () => {
+cron.schedule('0 2 * * *', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')
   scrapeAytoLasPalmas()
 })
 
-cron.schedule('30 10 * * *', () => {
+cron.schedule('30 2 * * *', () => {
   console.log('Checking Ayuntamiento de Tenerife Events')
   scrapeAytoTenerife()
 })
 
-cron.schedule('0 11 * * *', () => {
+cron.schedule('0 3 * * *', () => {
   console.log('Checking Duplicated Events')
   removeDuplicateEvents()
 })
 
-cron.schedule ('0 1 * * *', () => {
+cron.schedule ('30 3 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
 })
