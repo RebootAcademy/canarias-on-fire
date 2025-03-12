@@ -120,7 +120,8 @@
     "dateAndTime": "Fecha y hora",
     "capacity": "Aforo",
     "organizer": "Organizador",
-    "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium."
+    "featurePayedEvents": "* Caracteristica solo disponible en eventos Gold y Premium.",
+    "extraCharge":"* El cambio de fecha supone un cargo extra que se realizará en el próximo paso."
   },
   "promotions": {
     "canceledSubscrition": "Podrá disfrutar de su suscripción hasta el ",

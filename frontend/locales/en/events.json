@@ -120,7 +120,8 @@
     "organizer": "Organizer",
     "dateAndTime": "Date and time",
     "capacity": "Event capacity",
-    "featurePayedEvents": "* Feature only available for Gold and Premium events."
+    "featurePayedEvents": "* Feature only available for Gold and Premium events.",
+    "extraCharge": "* The change of date requires an extra charge that will take place in the following step."
   },
   "promotions": {
     "canceledSubscrition": "Your subscription will be valid until  ",

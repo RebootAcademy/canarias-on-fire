@@ -34,9 +34,12 @@ import { CalendarIcon } from 'lucide-vue-next'
 const {t} = useI18n()
 const today = new Date()
 const eventStore = useEventStore()
+const userStore = useUserStore()
 const dateError = ref('')
 const emit = defineEmits(['dateChanged'])
 const editingDate = ref('')
+
+const isAdmin = computed(() => userStore?.userData?.role === 'admin')
 
 const props = defineProps({
   band: {
@@ -104,7 +107,26 @@ const updateDate = (newDate) => {
       return
     }
     eventStore.eventEndDate = newDate
-  } else {
+    //Tener en cuenta si se está editando la fecha del evento para cobrar la diferencia en caso de que la nueva fecha sea más adelante en el tiempo.
+  } else if(!isAdmin.value && props.isEditing && !props.endDate && eventStore.event.payment){
+    const today = new Date()
+    if (!localStorage.originalDate) {
+      localStorage.originalDate = new Date(eventStore.eventDate.year, eventStore.eventDate.month - 1, eventStore.eventDate.day)
+    }
+
+    const currentDaysUntilEvent = Math.max(1, Math.ceil((new Date(localStorage.originalDate) - today) / (1000 * 60 * 60 * 24)))
+    const newFormattedDate = new Date(newDate.year, newDate.month - 1, newDate.day)
+    const newDaysUntilEvent = Math.max(1, Math.ceil((newFormattedDate - today) / (1000 * 60 * 60 * 24)))
+
+    if (newDaysUntilEvent > currentDaysUntilEvent) {
+      localStorage.dayDiff = newDaysUntilEvent - currentDaysUntilEvent
+      localStorage.plan = JSON.stringify(eventStore.event.payment)
+    } else {
+      delete localStorage.dayDiff
+      delete localStorage.plan
+    }
+    eventStore.eventDate = newDate
+  }else {
     eventStore.eventDate = newDate
   }
   

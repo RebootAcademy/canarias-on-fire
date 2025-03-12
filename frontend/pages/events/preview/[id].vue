@@ -53,6 +53,9 @@
             : `${eventStore.eventPrice}€`
         }}</span>
       </div>
+      <p v-if="hasDayDiff" class="text-xs text-primary">
+        {{ $t('previewText.extraCharge') }}
+      </p>
     </div>
     <div class="mt-8">
       <h2 class="text-2xl font-semibold">{{ $t('previewText.aboutEvent') }}</h2>
@@ -132,6 +135,8 @@ const eventStore = useEventStore()
 const route = useRoute()
 const router = useRouter()
 
+const hasDayDiff = computed(() => localStorage.dayDiff)
+
 const eventId = route.params.id
 const defaultImage = '/defaultImg.png'
 
@@ -187,6 +192,8 @@ const publishEvent = async () => {
           `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
         )
       }
+    } else if (eventStore.event.payment && localStorage.dayDiff) {
+      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     } else if (eventStore.event.payment) {    
       return router.push(`/events/${eventId}`)
     } else if (eventStore.event.eventType === 'event') {

@@ -19,3 +19,13 @@
     </div>
   </div>
 </template>
+
+<script setup>
+onMounted(() => {
+  if (localStorage.dayDiff) {
+    delete localStorage.dayDiff
+    delete localStorage.plan
+    delete localStorage.originalDate
+  }
+})
+</script>

@@ -379,6 +379,8 @@ export const useEventStore = defineStore('eventStore', {
         delete eventData.payment
       }
 
+      if (localStorage.dayDiff) delete eventData.eventDate
+
       const { data, error } = await useFetch(url, {
         method,
         body: eventData,

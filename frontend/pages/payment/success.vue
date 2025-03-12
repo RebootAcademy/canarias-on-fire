@@ -21,5 +21,10 @@ onMounted(async () => {
     // Aquí puedes hacer una llamada a tu API para verificar el estado de la sesión
     // Implementa la lógica para verificar el estado de la sesión y actualizar la UI
   }
+  if (localStorage.dayDiff) {
+    delete localStorage.dayDiff
+    delete localStorage.plan
+    delete localStorage.originalDate
+  }
 })
 </script>

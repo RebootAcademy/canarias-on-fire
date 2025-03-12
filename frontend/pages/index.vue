@@ -87,6 +87,11 @@ onMounted(async() => {
   fetchUsers()
   eventStore.resetFilters()
   userStore.fetchAndSetUser(userStore.userData?.email)
+  if (localStorage.dayDiff || localStorage.originalDate) {
+    delete localStorage.dayDiff
+    delete localStorage.originalDate
+    delete localStorage.plan
+  }
 })
 
 const searchQuery = computed({
