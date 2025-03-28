@@ -3,13 +3,15 @@
     <div
       v-for="item in options"
       :key="item.value"
-      class="flex text-xs md:text-lg items-center text-center  min-w-40 max-w-full md:max-w-64 md:min-h-24 justify-center bg-gray rounded-lg px-4 py-2 cursor-pointer hover:bg-primary hover:text-background "
+      
+      class="flex text-xs md:text-lg items-center text-center  min-w-40 max-w-full md:max-w-64 md:min-h-24 justify-center bg-gray rounded-lg cursor-pointer hover:bg-primary hover:text-background "
+      
       @click="selectedOption = item.value"
       :class="{
         'bg-transparent border-2 border-primary font-bold': selectedOption === item.value,
       }"
     >
-      <p>{{ item.label }}</p>
+      <NuxtImg :src="item.image" :alt="item.label"/>
     </div>
   </div>
 
@@ -42,15 +44,16 @@ const { t } = useI18n()
 const selectedOption = ref('events')
 
 const options = computed(() => [
-  { label: t('buttonsEvents.events'), value: 'events' },
-  { label: t('buttonsEvents.nightlifePromotion'), value: 'nightlife' },
+  { label: t('buttonsEvents.events'), value: 'events' , image: "/boton_eventos.png"},
+  { label: t('buttonsEvents.nightlifePromotion'), value: 'nightlife', image: "/boton_nocturno.png" },
   {
     label: t('buttonsEvents.food&DrinksPromotion'),
     value: 'food&drinks',
+    image: "/boton_bares.png"
   },
-  { label: t('buttonsEvents.kidsPromotion'), value: 'kids' },
-  { label: t('buttonsEvents.activitiesPromotion'), value: 'activities' },
-  { label: t('buttonsEvents.plansPromotion'), value: 'plans' },
-  { label: t('buttonsEvents.planYourParty'), value: 'createEvent' },
+  { label: t('buttonsEvents.kidsPromotion'), value: 'kids', image:"/boton_peques 2.png" },
+  { label: t('buttonsEvents.activitiesPromotion'), value: 'activities', image: "/boton_actividades.png" },
+  { label: t('buttonsEvents.plansPromotion'), value: 'plans', image: "/boton_escapada.png" },
+  { label: t('buttonsEvents.planYourParty'), value: 'createEvent', image: "/boton_fiesta.png" },
 ])
 </script>
