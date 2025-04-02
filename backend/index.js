@@ -40,7 +40,8 @@ app.use(
       const allowedOrigins = [
         'https://evente.netlify.app',
         'http://localhost:3000',
-        'https://evente.es'
+        'https://evente.es',
+        'http://evente.es'
       ]
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true)
