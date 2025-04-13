@@ -27,6 +27,11 @@
           {{ $t('footer.privacy') }}
         </span>
       </a>
+      <a href="/terms-conditions" class="hover:underline">
+        <span class="text-secondary hover:text-primary">
+          {{ $t('footer.terms') }}
+        </span>
+      </a>
     </div>
     <div class="text-xs md:text-md">{{ $t('footer.copyright') }}</div>
   </div>
