@@ -8,6 +8,8 @@
         </div>
         <p class="font-bold text-md md:text-lg">Términos y Condiciones de Uso de Evente</p>
         <p> Fecha de entrada en vigor: 01/04/2025</p>
+        <p>Bienvenido a Evente.es, la plataforma online creada y operada por Gerónimo on Fire S.L. con CIF B19431238. Estos Términos y Condiciones rigen el uso de nuestro sitio web (www.evente.com) y los servicios proporcionados a través de él. 
+            Al acceder o utilizar nuestros servicios, usted acepta estos Términos y Condiciones en su totalidad. Si no está de acuerdo con alguna parte de los mismos, le recomendamos que no utilice nuestro sitio web.</p>
         <p class="font-bold text-md md:text-lg">1. Definiciones</p>
         <ul>
             <li> Evente: Plataforma online que ofrece información y gestión de eventos en Canarias.</li>
