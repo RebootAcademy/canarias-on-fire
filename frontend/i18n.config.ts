@@ -26,6 +26,9 @@ import cookiesES from './locales/es/cookies.json'
 import cookiesEN from './locales/en/cookies.json'
 import privacyES from './locales/es/privacy.json'
 import privacyEN from './locales/en/privacy.json'
+import termsES from './locales/es/terms.json'
+import termsEN from './locales/en/terms.json'
+
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -47,6 +50,7 @@ export default defineI18nConfig(() => ({
       ...modalsEN,
       ...cookiesEN,
       ...privacyEN,
+      ...termsEN
     },
     es: {
       ...navbarEs,
@@ -63,6 +67,7 @@ export default defineI18nConfig(() => ({
       ...modalsES,
       ...cookiesES,
       ...privacyES,
+      ...termsES
     },
   },
 }))
