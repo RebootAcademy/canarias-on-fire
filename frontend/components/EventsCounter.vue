@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center p-6">
     <hr class="w-full border-t border-gray-300 mb-4" />
     <div class="flex items-center justify-center w-full px-4">
-      <p class="text-2xl font-bold text-center lg:text-3xl">{{  $t('counter') }} <span class="">{{ activeEventsCount.length }}</span></p>
+      <p class="text-2xl font-bold text-center lg:text-3xl">{{ activeEventsCount.length }} <span class="">{{  $t('counter') }} </span></p>
     </div>
     <hr class="w-full border-t border-gray-300 mt-4" />
   </div>
