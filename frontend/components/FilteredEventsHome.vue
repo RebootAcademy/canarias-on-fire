@@ -4,14 +4,14 @@
       v-for="item in options"
       :key="item.value"
       
-      class="flex text-xs md:text-lg items-center text-center  min-w-40 max-w-full md:max-w-full md:min-h-24 justify-center bg-gray rounded-lg cursor-pointer hover:bg-primary hover:text-background "
+      class="flex text-xs md:text-lg items-center text-center min-w-40 max-w-full md:max-w-64 md:min-h-24 justify-center bg-gray rounded-lg cursor-pointer hover:bg-primary hover:text-background "
       
       @click="selectedOption = item.value"
       :class="{
         'bg-transparent border-2 border-primary font-bold': selectedOption === item.value,
       }"
     >
-      <NuxtImg :src="item.image" :alt="item.label"/>
+      <img class="object-cover" :src="item.image" :alt="item.label"/>
     </div>
   </div>
 
