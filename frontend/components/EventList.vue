@@ -28,6 +28,7 @@ import { storeToRefs } from 'pinia'
 const eventStore = useEventStore()
 const userStore = useUserStore()
 const paymentStore = usePaymentStore()
+let category = null
 const { 
   filteredEvents, 
   filteredEventsByDate, 
@@ -36,8 +37,20 @@ const {
   musicFilter,
   selectedFilterByDate,
   searchQuery,
-  selectedCategories
-} = storeToRefs(eventStore)
+  selectedCategories, 
+  categories
+} = storeToRefs(eventStore) 
+const props = defineProps({
+  type: {
+    type: String,
+    required: false,
+    default: 'kids',
+  }})
+if (props.type === 'kids') {
+  //category = categories.value.filter((category) => category.name === 'kids')
+  category = categories.value.filter((category) => category.name === 'kids')
+  eventStore.toggleCategory(category[0])
+}
 
 const eventsByDate = computed(() => {
   return filteredEventsByDate?.value(filteredEvents?.value)
@@ -129,6 +142,11 @@ function compareDates(dateA, dateB) {
   if (dateA.month !== dateB.month) return dateA.month - dateB.month
   return dateA.day - dateB.day
 }
+
+const displayCategories = computed(() => {
+  if (!eventStore.categories) return []
+  return filterCategories.value.filter((cat) => cat.type === props.type)
+})
 </script>
 
 <style scoped>

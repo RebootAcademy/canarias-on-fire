@@ -18,15 +18,18 @@
   <div v-if="selectedOption === 'events'" class="mt-4">
     <CategoriesFilter type="event" />
     <EventsHeader />
-    <EventList />
+    <EventList/>
+  </div>
+  <div v-if="selectedOption === 'kids'" class="mt-4">
+    <EventsHeader />
+    <EventList type="kids"/>
   </div>
   <div
     v-if="
       selectedOption === 'nightlife' ||
       selectedOption === 'food&drinks' ||
       selectedOption === 'activities' ||
-      selectedOption === 'plans' ||
-      selectedOption === 'kids'
+      selectedOption === 'plans' 
     "
     class="mt-4"
   >
@@ -40,6 +43,7 @@
 
 <script setup>
 const { t } = useI18n()
+const eventStore = useEventStore()
 
 const selectedOption = ref('events')
 
