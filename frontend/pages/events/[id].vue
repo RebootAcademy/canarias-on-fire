@@ -40,6 +40,7 @@
         </div>
 
         <Share2
+          v-if="console.log("CLICK") || true"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
           @click="share"
         />
