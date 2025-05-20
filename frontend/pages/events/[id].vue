@@ -40,9 +40,8 @@
         </div>
 
         <Share2
-          v-if="searchPaymentEvent !== 'basic'"
           class="mr-2 w-8 cursor-pointer hover:text-primary"
-          @click="copyToClipboard"
+          @click="share"
         />
         <Pencil
           v-if="isAdmin || isOwner"
@@ -405,6 +404,13 @@ const copyToClipboard = async () => {
   } catch (err) {
     console.error('Error al copiar el enlace: ', err)
   }
+}
+
+const share = () => {
+  navigator.share({
+    text: "Vente a este evento!",
+    url: t('copyLink')
+  })
 }
 
 const copyCodePromo = async (code) => {
