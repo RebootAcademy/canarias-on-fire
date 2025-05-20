@@ -53,6 +53,7 @@
           :src="defaultImage"
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
         />
+        
         <!-- Main content -->
         <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
           <div class="px-4 py-2 flex justify-between">
@@ -69,6 +70,10 @@
                 </p>
               </span>
             </div>
+            <Share2
+                class="mr-2 w-8 cursor-pointer hover:text-primary"
+                @click="share"
+            />
             <!-- Options menu -->
             <div
               v-show="
@@ -164,9 +169,12 @@
                 + INFO
               </a>
               <p v-if="!nearby">{{ event?.dist?.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
+              
             </div>
+            
           </div>
         </NuxtLink>
+        
       </div>
     </div>
     <CustomModal v-model:open="isOpen">
@@ -185,13 +193,16 @@
         <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
       </div>
     </CustomModal>
+    
   </div>
+  
 </template>
 
 <script setup>
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
-import { MoreVertical, Pencil, Trash, BookCheck, BookDashed} from 'lucide-vue-next'
+import { MoreVertical, Pencil, Trash, BookCheck, BookDashed, Share2} from 'lucide-vue-next'
+import { VueSocialSharing } from 'vue-social-sharing'
 const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -214,6 +225,14 @@ const isOpen = ref(false)
 const isOwner = computed(() => {
   return userStore?.userData?._id === props?.event?.userId?._id
 })
+
+
+const share = () => {
+  navigator.share({
+    text: 'Vente a este evento!',
+    url: "evente.es/events/" + props.event._id
+  })
+}
 
 const defaultImage = '/defaultImg.png'
 
