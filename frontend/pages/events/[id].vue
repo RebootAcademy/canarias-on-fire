@@ -409,7 +409,7 @@ const copyToClipboard = async () => {
 const share = () => {
   navigator.share({
     text: "Vente a este evento!",
-    url: t('copyLink')
+    url: "evente.es/event/" + eventId
   })
 }
 
