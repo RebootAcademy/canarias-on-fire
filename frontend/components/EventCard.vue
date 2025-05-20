@@ -230,7 +230,7 @@ const isOwner = computed(() => {
 const share = () => {
   navigator.share({
     text: 'Vente a este evento!',
-    url: "evente.es/events/" + props.event._id
+    url: "/events/" + props.event._id
   })
 }
 
