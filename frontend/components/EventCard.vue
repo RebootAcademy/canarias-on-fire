@@ -202,7 +202,7 @@
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
 import { MoreVertical, Pencil, Trash, BookCheck, BookDashed, Share2} from 'lucide-vue-next'
-import { VueSocialSharing } from 'vue-social-sharing'
+// import { VueSocialSharing } from 'vue-social-sharing'
 const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
