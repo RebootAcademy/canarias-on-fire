@@ -13,7 +13,7 @@
         v-if="event.status === 'closed'"
         class="bg-whiteGray/40 rounded-md absolute inset-0 z-20"
       ></div>
-  
+
       <div
         class="absolute inset-0 rounded-lg border-2 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-300 hover:border-primary"
         :class="{
@@ -22,12 +22,13 @@
           'border-primary ': isPremiumPayment,
         }"
       ></div>
-  
+
       <div class="relative w-full h-full rounded-lg">
         <!-- Event status -->
         <span
           v-show="
-            userStore?.userData && (userStore.userData.role === 'admin' || isOwner)
+            userStore?.userData &&
+            (userStore.userData.role === 'admin' || isOwner)
           "
           :class="[
             'absolute top-2 left-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1 z-[1]',
@@ -35,6 +36,20 @@
           ]"
         >
           {{ event.status }}
+        </span>
+        <span
+          v-show="userStore?.userData && userStore.userData.role === 'admin'"
+          :class="[
+            'absolute top-2 right-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1 z-[1]',
+            { 'text-red-500 italic': !event.reviewed },
+            { 'text-green-500': event.reviewed },
+          ]"
+        >
+          {{
+            event.reviewed
+              ? $t('eventsDashboard.reviewed')
+              : $t('eventsDashboard.notReviewed')
+          }}
         </span>
         <!-- Event Image -->
         <div v-if="!isBasicPayment || event.externalSource">
@@ -53,7 +68,7 @@
           :src="defaultImage"
           class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
         />
-        
+
         <!-- Main content -->
         <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
           <div class="px-4 py-2 flex justify-between">
@@ -63,16 +78,17 @@
                 v-for="(category, idx) in event.categories"
                 :key="category._id"
               >
-                <p 
-                  v-if="idx < 3" 
-                  class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center">
+                <p
+                  v-if="idx < 3"
+                  class="bg-gray text-secondary text-xs font-normal px-2.5 py-0.5 rounded-full self-center"
+                >
                   {{ $t(`values.${category.name}`) }}
                 </p>
               </span>
             </div>
             <Share2
-                class="mr-2 w-8 cursor-pointer hover:text-primary"
-                @click="share"
+              class="mr-2 w-8 cursor-pointer hover:text-primary"
+              @click="share"
             />
             <!-- Options menu -->
             <div
@@ -92,15 +108,29 @@
                     @select="handleStatus"
                     class="cursor-pointer"
                   >
-                    <BookCheck 
-                      v-if="event.status === 'draft'" 
-                      class="mr-2 h-4 w-4" 
+                    <BookCheck
+                      v-if="event.status === 'draft'"
+                      class="mr-2 h-4 w-4"
                     />
-                    <BookDashed 
-                      v-if="event.status === 'published'" 
-                      class="mr-2 h-4 w-4" 
+                    <BookDashed
+                      v-if="event.status === 'published'"
+                      class="mr-2 h-4 w-4"
                     />
-                    <span>{{event.status === 'draft' ? $t('buttons.publish') : $t('buttons.draft')}}</span>
+                    <span>{{
+                      event.status === 'draft'
+                        ? $t('buttons.publish')
+                        : $t('buttons.draft')
+                    }}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    v-show="
+                      userStore.userData && userStore.userData.role === 'admin'
+                    "
+                    @select="handleReviewed"
+                    class="cursor-pointer"
+                  >
+                    <Pencil class="mr-2 h-4 w-4" />
+                    <span>{{ $t('buttons.reviewed') }}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem @select="editEvent" class="cursor-pointer">
                     <Pencil class="mr-2 h-4 w-4" />
@@ -129,13 +159,16 @@
                 ' text-secondary': isBasicPayment,
               }"
             >
-              {{ formattedDate() }} 
-              {{ event.startTime ? '-' : ''}} 
-              {{ event.startTime }} 
-              {{event.endTime ? '-' : ''}} 
+              {{ formattedDate() }}
+              {{ event.startTime ? '-' : '' }}
+              {{ event.startTime }}
+              {{ event.endTime ? '-' : '' }}
               {{ event.endTime }}
             </p>
-            <p v-if="event?.eventLocation?.address" class="text-sm line-clamp-1">
+            <p
+              v-if="event?.eventLocation?.address"
+              class="text-sm line-clamp-1"
+            >
               {{ event.eventLocation.address }}
             </p>
             <div
@@ -149,10 +182,10 @@
                   'text-black': isGoldPayment || isPremiumPayment,
                 }"
               >
-                {{ 
-                  event.eventPrice === 0 ? 
-                    $t('price.free') : 
-                    `${event.eventPrice} €` 
+                {{
+                  event.eventPrice === 0
+                    ? $t('price.free')
+                    : `${event.eventPrice} €`
                 }}
               </p>
               <a
@@ -168,19 +201,24 @@
               >
                 + INFO
               </a>
-              <p v-if="!nearby">{{ event?.dist?.calculated ? `${(event.dist.calculated / 1000).toFixed(2)} km` : '' }}</p>
-              
+              <p v-if="!nearby">
+                {{
+                  event?.dist?.calculated
+                    ? `${(event.dist.calculated / 1000).toFixed(2)} km`
+                    : ''
+                }}
+              </p>
             </div>
-            
           </div>
         </NuxtLink>
-        
       </div>
     </div>
     <CustomModal v-model:open="isOpen">
       <p class="font-bold text-2xl">{{ $t('areYouSure') }}</p>
       <p class="text-lg">
-        {{ event.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo') }}
+        {{
+          event.eventType === 'event' ? $t('deleteEvent') : $t('deletePromo')
+        }}
       </p>
       <div class="flex justify-end gap-4 mt-2">
         <!-- <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />  -->
@@ -193,15 +231,20 @@
         <CustomBtn :title="$t('buttons.confirm')" @click="deleteEvent" />
       </div>
     </CustomModal>
-    
   </div>
-  
 </template>
 
 <script setup>
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
-import { MoreVertical, Pencil, Trash, BookCheck, BookDashed, Share2} from 'lucide-vue-next'
+import {
+  MoreVertical,
+  Pencil,
+  Trash,
+  BookCheck,
+  BookDashed,
+  Share2,
+} from 'lucide-vue-next'
 // import { VueSocialSharing } from 'vue-social-sharing'
 const { t } = useI18n()
 const userStore = useUserStore()
@@ -226,11 +269,10 @@ const isOwner = computed(() => {
   return userStore?.userData?._id === props?.event?.userId?._id
 })
 
-
 const share = () => {
   navigator.share({
     text: 'Vente a este evento!',
-    url: "/events/" + props.event._id
+    url: '/events/' + props.event._id,
   })
 }
 
@@ -255,6 +297,14 @@ const isPremiumPayment = computed(() => getPaymentType.value === 'optima plus')
 
 const editEvent = () => {
   router.push(`/events/edit/${props.event._id}`)
+}
+
+const handleReviewed = async () => {
+  if (props.event.reviewed === false || props.event.reviewed === undefined) {
+    await eventStore.updateEventReviewed(props.event._id, true)
+  } else {
+    null
+  }
 }
 
 const deleteEvent = async () => {

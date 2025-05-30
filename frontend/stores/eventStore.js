@@ -59,6 +59,7 @@ export const useEventStore = defineStore('eventStore', {
     musicFilter: 'all',
     loading: false,
     error: false,
+    reviewed: false,
   }),
 
   actions: {
@@ -232,7 +233,8 @@ export const useEventStore = defineStore('eventStore', {
         (this.payment = null),
         (this.status = null),
         (this.startTime = ''),
-        (this.endTime = '')
+        (this.endTime = ''),
+        (this.reviewed = false)
     },
 
     async fetchEvents(lat, lng) {
@@ -493,6 +495,34 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    // new
+    async updateEventReviewed(eventId, reviewed) {
+      try {
+        const data = await $fetch(`/events/${eventId}`, {
+          method: 'PATCH',
+          body: { reviewed },
+          baseURL: useRuntimeConfig().public.apiBaseUrl,
+        })
+
+        if (data.success) {
+          this.event = data.result
+          this.events = this.events.map((event) =>
+            event._id === eventId ? { ...event, reviewed } : event
+          )
+          return { data: this.event }
+        } else {
+          const customError = new Error(
+            data.error || 'Failed to update event status'
+          )
+          console.error('Error updating event status:', customError)
+          return { error: customError }
+        }
+      } catch (error) {
+        console.error('Error updating event reviewed:', error)
+        return { error }
+      }
+    },
+
     async deleteEvent(id) {
       const { error } = await useFetch(`/events/${id}`, {
         method: 'DELETE',
@@ -551,6 +581,7 @@ export const useEventStore = defineStore('eventStore', {
         payment: this.payment,
         musicType: this.musicType,
         adminPayment: this.adminPayment,
+        reviewed: this.reviewed,
       }
     },
 
@@ -577,7 +608,7 @@ export const useEventStore = defineStore('eventStore', {
       const dateTime = date.getTime()
 
       return startTime <= dateTime && dateTime <= endTime
-    }
+    },
   },
 
   getters: {

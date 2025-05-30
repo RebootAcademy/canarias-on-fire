@@ -2,7 +2,7 @@
   <div class="flex justify-center">
     <div class="md:w-2/3 p-4">
       <header class="text-2xl font-bold mt-6 mb-3 tracking-tighter">{{ $t('editEvent') }}</header>
-       <div v-if="loading" class="text-center">
+      <div v-if="loading" class="text-center">
         <p>{{ $t('loadingEditEvent') }}</p>
       </div>
 
@@ -25,11 +25,11 @@ const { event, loading, error } = storeToRefs(eventStore)
 
 const eventId = route.params.id
 
-onMounted( () => {
-   eventStore.fetchEventById(eventId)
+onMounted(() => {
+  eventStore.fetchEventById(eventId)
 })
 
 useHead({
-  title: 'Edit Event'
+  title: 'Edit Event',
 })
 </script>

@@ -9,7 +9,7 @@ const EventSchema = new mongoose.Schema({
     },
   ],
   musicType: {
-    type: String
+    type: String,
   },
   eventName: {
     type: String,
@@ -31,14 +31,14 @@ const EventSchema = new mongoose.Schema({
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point'
+      default: 'Point',
     },
     coordinates: {
       type: [Number],
       // required: true,
     },
     address: {
-      type: String
+      type: String,
     },
     postalCode: {
       type: Number,
@@ -121,11 +121,12 @@ const EventSchema = new mongoose.Schema({
   },
   externalSource: {
     type: Boolean,
-    default: false
+    default: false,
   },
   stripe: {
-    type: Object
-  }
+    type: Object,
+  },
+  reviewed: { type: Boolean, default: false },
 })
 EventSchema.index({ eventLocation: '2dsphere' })
 

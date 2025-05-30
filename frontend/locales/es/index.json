@@ -159,7 +159,8 @@
     "manage": "Administrar",
     "searchLocals": "Buscar cerca de mí",
     "download": "Descargar",
-    "deleteAll": "Borrar los finalizados"
+    "deleteAll": "Borrar los finalizados",
+    "reviewed": "Revisado"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",

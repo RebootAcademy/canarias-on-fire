@@ -118,11 +118,14 @@
     "categories": "Categorías",
     "categoriesDescription": "Selecciona hasta 3 categorías para encontrar eventos que coincidan con tus intereses."
   },
+
   "eventsDashboard": {
     "all": "Todos",
     "draft": "Borradores",
     "published": "Publicados",
-    "closed": "Cerrados"
+    "closed": "Cerrados",
+    "reviewed": "Revisado",
+    "notReviewed": "No revisado"
   },
   "previewText": {
     "author": "Autor",
