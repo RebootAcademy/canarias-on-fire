@@ -26,7 +26,6 @@ const createEvent = async (req, res) => {
     }
 
     if (isThereSame) {
-      console.log('pan caído')
       return res.status(400).json({
         success: false,
         message: 'There is already a event/promotion with the same name for this user.',

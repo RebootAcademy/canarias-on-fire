@@ -122,7 +122,9 @@
     "all": "All",
     "draft": "Draft",
     "published": "Published",
-    "closed": "Closed"
+    "closed": "Closed",
+    "reviewed": "Reviewed",
+    "notReviewed": "Not reviewed"
   },
   "previewText": {
     "author": "Author",

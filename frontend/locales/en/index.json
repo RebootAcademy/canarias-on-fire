@@ -159,7 +159,8 @@
     "manage": "Manage",
     "searchLocals": "Search near me",
     "download": "Donwload",
-    "deleteAll": "Delete all finished"
+    "deleteAll": "Delete all finished",
+    "reviewed": "Reviewed"
   },
   "successView": {
     "paymentTitle": "Your payment has been successful completed",

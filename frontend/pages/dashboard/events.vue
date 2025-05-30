@@ -180,6 +180,8 @@ const optionsFilters = computed(() => {
     { label: t('eventsDashboard.draft'), value: 'draft' },
     { label: t('eventsDashboard.published'), value: 'published' },
     { label: t('eventsDashboard.closed'), value: 'closed' },
+    { label: t('eventsDashboard.notReviewed'), value: 'noReviewed' },
+
   ]
 })
 
