@@ -61,6 +61,7 @@
   },
   "dashboardNav": {
     "events": "Events",
+    "emails": "Send Email",
     "eventsAndPromotions": "Events & Promotions",
     "manageEvents": "Manage Events",
     "myEvents": "My events",
