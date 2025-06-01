@@ -1,19 +1,39 @@
 <template>
   <div>
     <form @submit.prevent="sendEmail">
-      <div class="mb-4">
-        <div class="mb-4">
+      <div class="flex flex-col gap-4">
+        <div>
+          <Label class="block text-sm font-medium text-gray-300">{{
+            $t('contact.subject')
+          }}</Label>
+          <Input
+            v-model="subject"
+            type="text"
+            placeholder="Asunto del correo"
+            class="mt-1 block w-full text-gray-500"
+          />
+        </div>
+        <div class="mb-2">
           <Label class="block text-sm font-medium text-gray-300">
             {{ $t('imageEmail') }}</Label
           >
           <Input type="file" @change="handleFileChange" accept="image/*" />
-          <Button
-            type="button"
-            @click="uploadImage"
-            class="mt-2 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
-          >
-            {{ isUpdating ? $t('buttons.updating') : $t('buttons.upload') }}
-          </Button>
+          <div class="flex gap-x-4">
+            <Button
+              type="button"
+              @click="uploadImage"
+              class="mt-4 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
+            >
+              {{ isUpdating ? $t('buttons.updating') : $t('buttons.upload') }}
+            </Button>
+            <Button
+              type="button"
+              @click="HandleLastImgUrl"
+              class="mt-4 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
+            >
+              Usar última imagen
+            </Button>
+          </div>
         </div>
         <div>
           <img :src="urlImg" alt="Imagen subida" v-if="urlImg" />
@@ -21,7 +41,7 @@
       </div>
 
       <button
-        class="bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1"
+        class="bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1 p-2"
         type="submit"
         :disabled="isUpdating"
       >
@@ -42,10 +62,24 @@ definePageMeta({
 
 const isUpdating = ref(false)
 const selectedFile = ref(null)
+const subject = ref('')
 const urlImg = ref('')
+const LastImgUrl = ref('')
 
 const handleFileChange = (event) => {
   selectedFile.value = event.target.files[0]
+}
+
+const HandleLastImgUrl = () => {
+  LastImgUrl.value = localStorage.getItem('lastImageUrl')
+  if (LastImgUrl.value) {
+    urlImg.value = LastImgUrl.value
+  } else {
+    toast({
+      description: t('noPreviousImage'),
+      variant: 'destructive',
+    })
+  }
 }
 
 const uploadImage = async () => {
@@ -55,6 +89,7 @@ const uploadImage = async () => {
     console.error('No file selected')
     return
   }
+
   const config = useRuntimeConfig()
 
   const cloudName = config.public.cloudinaryCloudName
@@ -76,6 +111,7 @@ const uploadImage = async () => {
     const data = await response.json()
     if (data.secure_url) {
       urlImg.value = data.secure_url
+      localStorage.setItem('lastImageUrl', urlImg.value)
     }
     isUpdating.value = false
   } catch (error) {
@@ -96,11 +132,10 @@ const sendEmail = async () => {
         },
         body: JSON.stringify({
           imageUrl: urlImg.value,
+          subject: subject.value,
         }),
       }
     )
-
-
 
     if (error.value || !data.value?.success) {
       toast({
@@ -122,4 +157,5 @@ const sendEmail = async () => {
     isUpdating.value = false
   }
 }
+console.log(subject.value)
 </script>

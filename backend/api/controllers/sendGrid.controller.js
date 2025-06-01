@@ -2,7 +2,7 @@ const sendEmailWithSendGrid = require('../services/sendGrid')
 
 const handleSendEmail = async (req, res) => {
   try {
-    const { /*to,*/ imageUrl } = req.body
+    const { /*to,*/ subject, imageUrl } = req.body
 
     if (/*!to ||*/ !imageUrl) {
       return res.status(400).json({
@@ -11,7 +11,7 @@ const handleSendEmail = async (req, res) => {
       })
     }
 
-    const response = await sendEmailWithSendGrid(/*to,*/ imageUrl)
+    const response = await sendEmailWithSendGrid(/*to,*/subject, imageUrl)
     console.log('Email response:', response)
     if (response[0].statusCode === 202) {
       return res.status(202).json({
