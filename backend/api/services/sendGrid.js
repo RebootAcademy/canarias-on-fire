@@ -1,7 +1,12 @@
 const sgMail = require('@sendgrid/mail')
 const fs = require('fs').promises
 const path = require('path')
-
+const templatePath = path.join(
+  __dirname,
+  'nodemailer', // baja a services/nodemailer/
+  'emailTemplates', // baja a services/nodemailer/emailTemplates/
+  'promotion.html' // ahí está el fichero
+)
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 /**
@@ -14,10 +19,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const sendEmailWithSendGrid = async (/*to,*/ subject, imageUrl) => {
   try {
-    const absolutePath = path.resolve(
-      '/home/ayo/code/proyects/proyect-canariasOnFire/canarias-on-fire/backend/api/services/nodemailer/emailTemplates/promotion.html'
-    )
-    let htmlContent = await fs.readFile(absolutePath, 'utf8')
+
+    let htmlContent = await fs.readFile(templatePath, 'utf8')
 
     htmlContent = htmlContent.replace(/{{urlImage}}/g, imageUrl)
 

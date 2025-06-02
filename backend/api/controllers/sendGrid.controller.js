@@ -12,7 +12,7 @@ const handleSendEmail = async (req, res) => {
     }
 
     const response = await sendEmailWithSendGrid(/*to,*/subject, imageUrl)
-    console.log('Email response:', response)
+
     if (response[0].statusCode === 202) {
       return res.status(202).json({
         success: true,
