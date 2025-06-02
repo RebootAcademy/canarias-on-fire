@@ -24,7 +24,7 @@ const sendEmailWithSendGrid = async (/*to,*/subject, imageUrl) => {
     const msg = {
       from: process.env.PROMO_EMAIL, // Debe estar verificado en SendGrid
       to: [
-        'ayose89@gmail.com',
+        'ayose89@gmail.com','davidchueca@hotmail.com'
       ] /*Array.isArray(to) ? to : to.split(',').map(e => e.trim())*/,
       subject: subject,
       html: htmlContent,

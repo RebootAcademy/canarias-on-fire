@@ -28,5 +28,7 @@
   "cancelPromotionToast": "Promotion canceled successfully",
   "errorCancelPromotion": "Error canceling promotion",
   "errorCreatingEvent": "Error creating Event",
-  "errorCreating": "This event/promotion has already been created, check your dashboard"
+  "errorCreating": "This event/promotion has already been created, check your dashboard",
+  "notIsImage": "The file you uploaded is not an image",
+  "noPreviousImage": "No previous image found"
 }

@@ -11,6 +11,7 @@
             type="text"
             placeholder="Asunto del correo"
             class="mt-1 block w-full text-gray-500"
+            required
           />
         </div>
         <div class="mb-2">
@@ -41,7 +42,7 @@
       </div>
 
       <button
-        class="bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1 p-2"
+        class="mt-4 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1 p-2"
         type="submit"
         :disabled="isUpdating"
       >
@@ -67,7 +68,18 @@ const urlImg = ref('')
 const LastImgUrl = ref('')
 
 const handleFileChange = (event) => {
-  selectedFile.value = event.target.files[0]
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (!file.type.startsWith('image/')) {
+    toast({
+      description: t('notIsImage'),
+      variant: 'destructive',
+    })
+    return
+  }
+
+  selectedFile.value = file // Ahora sí, archivo válido
 }
 
 const HandleLastImgUrl = () => {
@@ -86,7 +98,11 @@ const uploadImage = async () => {
   isUpdating.value = true
 
   if (!selectedFile.value) {
-    console.error('No file selected')
+    toast({
+      description: t('notIsImage'),
+      variant: 'destructive',
+    })
+    isUpdating.value = false
     return
   }
 
@@ -122,6 +138,15 @@ const uploadImage = async () => {
 
 const sendEmail = async () => {
   isUpdating.value = true
+
+  if (!urlImg.value) {
+    toast({
+      description: t('notIsImage'),
+      variant: 'destructive',
+    })
+    isUpdating.value = false
+    return
+  }
   try {
     const { data, error } = await useFetch(
       `${useRuntimeConfig().public.apiBaseUrl}/email`,
@@ -146,6 +171,10 @@ const sendEmail = async () => {
       toast({
         description: t('emailSent'),
       })
+      subject.value = ''
+      urlImg.value = ''
+      selectedFile.value = null
+      LastImgUrl.value = ''
     }
   } catch (error) {
     console.error('Error sending email:', error)
