@@ -125,4 +125,5 @@ function compareDates(dateA, dateB) {
 onMounted(async () => {
   await userStore.fetchAndSetUser(userStore.userData?.email)
 })
+
 </script>

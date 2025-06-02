@@ -277,7 +277,6 @@ const share = () => {
 }
 
 const defaultImage = '/defaultImg.png'
-
 const getPaymentType = computed(() => {
   switch (props.event.payment?.name) {
     case 'basic':
