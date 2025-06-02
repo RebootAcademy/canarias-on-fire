@@ -12,7 +12,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
  * @returns {Promise}
  */
 
-const sendEmailWithSendGrid = async (/*to,*/subject, imageUrl) => {
+const sendEmailWithSendGrid = async (/*to,*/ subject, imageUrl) => {
   try {
     const absolutePath = path.resolve(
       '/home/ayo/code/proyects/proyect-canariasOnFire/canarias-on-fire/backend/api/services/nodemailer/emailTemplates/promotion.html'
@@ -24,7 +24,8 @@ const sendEmailWithSendGrid = async (/*to,*/subject, imageUrl) => {
     const msg = {
       from: process.env.PROMO_EMAIL, // Debe estar verificado en SendGrid
       to: [
-        'ayose89@gmail.com','davidchueca@hotmail.com'
+        process.config.MY_EMAIL,
+        process.env.DAVID_EMAIL,
       ] /*Array.isArray(to) ? to : to.split(',').map(e => e.trim())*/,
       subject: subject,
       html: htmlContent,
