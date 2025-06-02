@@ -180,8 +180,7 @@ const optionsFilters = computed(() => {
     { label: t('eventsDashboard.draft'), value: 'draft' },
     { label: t('eventsDashboard.published'), value: 'published' },
     { label: t('eventsDashboard.closed'), value: 'closed' },
-    { label: t('eventsDashboard.notReviewed'), value: 'noReviewed' },
-
+    { label: t('eventsDashboard.notReviewed'), value: 'notReviewed' },
   ]
 })
 
@@ -197,26 +196,28 @@ const myEvents = computed(() => {
 
   let selection = eventsType
     .filter(
-      (event) =>
-        event.userId &&
-        event.userId?._id === userStore.userData._id &&
-        event.eventType === 'event'
-    )
+    (event) =>
+      event.userId &&
+      event.userId?._id === userStore.userData._id &&
+      event.eventType === 'event'
+  )
 
-    if (eventStore.musicFilter !== 'all') {
-      selection = selection.filter(event => event.musicType === eventStore.musicFilter)
+  if (eventStore.musicFilter !== 'all') {
+    selection = selection.filter(
+      (event) => event.musicType === eventStore.musicFilter
+    )
+  }
+
+  return selection.sort((a, b) => {
+    const priorityA = getEventPriority(a)
+    const priorityB = getEventPriority(b)
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB
     }
 
-    return selection.sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
-
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB
-      }
-
-      return compareDates(a.eventDate, b.eventDate)
-    })
+    return compareDates(a.eventDate, b.eventDate)
+  })
 })
 
 const adminEvents = computed(() => {
@@ -225,30 +226,44 @@ const adminEvents = computed(() => {
   }
   let selection = eventsByDate.value
     .filter(
-      (event) =>
-        event.eventType === 'event' &&
+    (event) =>
+      event.eventType === 'event' &&
         (event.status === selectOption.value || 
         selectOption.value === 'all') && (
           searchQuery.value ?
           event.eventName.toLowerCase().includes(searchQuery.value.toLowerCase()):
           true
         )
-    )
+  )
 
-    if (eventStore.musicFilter !== 'all') {
-      selection = selection.filter(event => event.musicType === eventStore.musicFilter)
+  if (eventStore.musicFilter !== 'all') {
+    selection = selection.filter(
+      (event) => event.musicType === eventStore.musicFilter
+    )
+  }
+
+  if (selectOption.value === 'notReviewed') {
+    selection = eventStore.events.filter(
+      (event) =>
+        (event.reviewed === false || !event.reviewed) &&
+        (searchQuery.value
+          ? event.eventName
+              .toLowerCase()
+              .includes(searchQuery.value.toLowerCase())
+          : true)
+    )
+  }
+
+  return selection.sort((a, b) => {
+    const priorityA = getEventPriority(a)
+    const priorityB = getEventPriority(b)
+
+    if (priorityA !== priorityB && selectOption.value !== 'notReviewed') {
+      return priorityA - priorityB
     }
 
-    return selection.sort((a, b) => {
-      const priorityA = getEventPriority(a)
-      const priorityB = getEventPriority(b)
-
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB
-      }
-
-      return compareDates(a.eventDate, b.eventDate)
-    })
+    return compareDates(a.eventDate, b.eventDate)
+  })
 })
 
 function getEventPriority(event) {

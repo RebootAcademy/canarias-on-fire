@@ -61,6 +61,7 @@
   },
   "dashboardNav": {
     "events": "Eventos",
+    "emails": "Enviar Correo",
     "eventsAndPromotions": "Eventos y Promociones",
     "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",

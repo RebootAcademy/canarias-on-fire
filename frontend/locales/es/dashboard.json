@@ -6,6 +6,7 @@
   "userName": "Nombre de usuario",
   "addUser": "Añadir usuario",
   "email": "Correo electrónico",
+  "imageEmail": "Imagen del correo electrónico",
   "subscription": "Subcripción",
   "role": "Rol",
   "geoLocationPermission": "Para una mejor experiencia, activa el permiso de ubicación del navegador",

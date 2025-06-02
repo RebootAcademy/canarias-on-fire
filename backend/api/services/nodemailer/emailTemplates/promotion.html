@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--[if !mso]><!-->
+    <style type="text/css">
+      /* Reset general */
+      body, table, td, a {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+      table, td {
+        mso-table-rspace: 0pt;
+        mso-table-lspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+      }
+      /* Remover márgenes extras en Outlook */
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+        min-width: 100%;
+        background-color: #ffffff;
+      }
+      img {
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+      }
+      table {
+        border-collapse: collapse !important;
+      }
+      /* Estilos responsivos */
+      @media only screen and (max-width: 600px) {
+        .container {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        .mobile-padding {
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+        }
+        .footer-text {
+          font-size: 13px !important;
+          line-height: 1.4 !important;
+        }
+      }
+    </style>
+    <!--<![endif]-->
+  </head>
+
+  <body style="background-color: #ffffff; margin: 0; padding: 0;">
+    <!-- Container principal (fondo blanco o muy suave) -->
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="background-color: #f9f9f9;" 
+    >
+      <tr>
+        <td align="center">
+          <!-- Tabla interna (máx. 600px) -->
+          <table
+            class="container"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="600"
+            style="width: 600px; max-width: 90vw; background-color: #ffffff;"
+          >
+            <tr>
+              <td
+                align="center"
+                style="padding: 40px 0; text-align: center;"
+              >
+                <!-- Imagen destacada, escalable -->
+                <img
+                  src="{{urlImage}}"
+                  alt="Imagen principal"
+                  style="
+                    display: block;
+                    width: 100%;
+                    max-width: 100%;
+                    height: auto;
+                    border: 0;
+                    outline: none;
+                    text-decoration: none;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 4px;
+                  "
+                />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td align="center">
+          <table
+            class="container"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="600"
+            style="width: 600px; max-width: 90vw; background-color: #f5f5f5;"
+          >
+            <tr>
+              <td
+                class="mobile-padding"
+                style="
+                  padding: 20px;
+                  font-family: Arial, sans-serif;
+                  color: #333333;
+                  font-size: 14px;
+                  line-height: 1.6;
+                  text-align: center;
+                "
+              >
+                <p style="margin: 0 0 15px 0;">
+                  Esta imagen forma parte de una invitación informativa sobre
+                  <strong>Evente.es</strong>, una plataforma digital creada para
+                  impulsar y dar visibilidad a la cultura en Canarias. Si
+                  organizas o disfrutas de eventos, te animamos a descubrir cómo
+                  puedes participar. No es publicidad automatizada, sino una
+                  invitación directa y cercana a formar parte de un proyecto
+                  cultural en crecimiento.
+                </p>
+                <p style="margin: 0 0 15px 0;">
+                  Puedes saber más en
+                  <a
+                    href="https://www.evente.es"
+                    style="color: #0066cc; text-decoration: none;"
+                    target="_blank"
+                  >
+                    www.evente.es
+                  </a>
+                  o escribirnos directamente a
+                  <a
+                    href="mailto:info@evente-es.com"
+                    style="color: #0066cc; text-decoration: none;"
+                    target="_blank"
+                  >
+                    info@evente-es.com
+                  </a
+                  >.
+                </p>
+                <p class="footer-text" style="margin: 0;">
+                  © 2025 Evente.es. Todos los derechos reservados.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

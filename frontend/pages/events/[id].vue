@@ -427,4 +427,6 @@ const copyCodePromo = async (code) => {
 const handleSubscription = (type) => {
   router.push(`/pricing/${type === 'promotion' ? 'promotions' : 'events'}`)
 }
+
+
 </script>
