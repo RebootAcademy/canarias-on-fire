@@ -168,7 +168,9 @@
   },
   "canceledView": {
     "paymentTitle": "El intento de pago se ha cancelado correctamente",
-    "subscriptionTitle": "Su intento de suscripción se ha cancelado correctamente"
+    "subscriptionTitle": "Su intento de suscripción se ha cancelado correctamente",
+    "unsubscribeSuccess": "Su intento de cancelación de suscripción se ha cancelado correctamente",
+    "sureunsubscribe": "¿Está seguro de que desea cancelar la suscripción?"
   },
   "gallery": {
     "title": "Galería"

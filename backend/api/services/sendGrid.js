@@ -1,6 +1,8 @@
 const sgMail = require('@sendgrid/mail')
+const crypto = require('crypto')
 const fs = require('fs').promises
 const path = require('path')
+const { getClientModel } = require('../models/client.model')
 const templatePath = path.join(
   __dirname,
   'nodemailer', // baja a services/nodemailer/
@@ -17,32 +19,67 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
  * @returns {Promise}
  */
 
-const sendEmailWithSendGrid = async (/*to,*/ subject, imageUrl) => {
-  try {
+function generateUnsubscribeToken(email, secret) {
+  return crypto.createHmac('sha256', secret).update(email).digest('hex')
+}
 
-    let htmlContent = await fs.readFile(templatePath, 'utf8')
+async function sendEmailWithSendGrid(subject, imageUrl) {
+  const Client = await getClientModel()
+  const clients = await Client.find({
+    _id: { $in: ['17', '18'] },
+    subscribed: true,
+  })
 
-    htmlContent = htmlContent.replace(/{{urlImage}}/g, imageUrl)
+  const template = await fs.readFile(templatePath, 'utf8')
+  const results = []
 
-    const msg = {
-      from: process.env.PROMO_EMAIL, // Debe estar verificado en SendGrid
-      to: [
-        process.env.MY_EMAIL,
-        process.env.DAVID_EMAIL,
-      ] /*Array.isArray(to) ? to : to.split(',').map(e => e.trim())*/,
-      subject: subject,
-      html: htmlContent,
+  for (const client of clients) {
+    if (!client.unsubscribeToken) {
+      client.unsubscribeToken = generateUnsubscribeToken(
+        client.correo,
+        process.env.JWT_SECRET
+      )
+      await client.save()
     }
 
-    const response = await sgMail.sendMultiple(msg)
-    return response
-  } catch (error) {
-    console.error(
-      'Error enviando correo con SendGrid:',
-      error.response?.body || error.message
-    )
-    throw error
+    const unsubscribeUrl = `${process.env.FRONTEND_URL}/clients/unsubscribe/${client._id}?token=${client.unsubscribeToken}`
+
+    const html = template
+      .replace('{{name}}', client.nombre)
+      .replace('{{urlImage}}', imageUrl)
+      .replace('{{unsubscribeUrl}}', unsubscribeUrl)
+
+    const msg = {
+      to: client.correo,
+      from: process.env.PROMO_EMAIL,
+      subject,
+      html,
+    }
+
+    try {
+      const response = await sgMail.send(msg)
+      if (response[0].statusCode !== 202) {
+        throw new Error(`Failed to send email: ${response[0].statusCode}`)
+      }
+
+      results.push({
+        email: client.correo,
+        statusCode: response[0].statusCode,
+      })
+    } catch (error) {
+      console.error(
+        `❌ Error enviando a ${client.correo}:`,
+        error.response?.body || error.message
+      )
+      results.push({
+        email: client.correo,
+        statusCode: null,
+        error: error.message,
+      })
+    }
   }
+
+  return results
 }
 
 module.exports = sendEmailWithSendGrid
