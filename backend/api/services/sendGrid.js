@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const fs = require('fs').promises
 const path = require('path')
 const { getClientModel } = require('../models/client.model')
+
 const templatePath = path.join(
   __dirname,
   'nodemailer', // baja a services/nodemailer/
@@ -42,7 +43,7 @@ async function sendEmailWithSendGrid(subject, imageUrl) {
       await client.save()
     }
 
-    const unsubscribeUrl = `${process.env.FRONTEND_URL}/clients/unsubscribe/${client._id}?token=${client.unsubscribeToken}`
+    const unsubscribeUrl = `${process.env.FRONTEND_URL}/newsletter/unsubscribe/${client._id}?token=${client.unsubscribeToken}`
 
     const html = template
       .replace('{{name}}', client.nombre)

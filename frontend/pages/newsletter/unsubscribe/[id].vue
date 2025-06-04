@@ -56,7 +56,7 @@ const handleUnsubscribe = async () => {
   }
   try {
     const response = await $fetch(
-      `${useRuntimeConfig().public.apiBaseUrl}/clients/unsubscribe/${
+      `${useRuntimeConfig().public.apiBaseUrl}/newsletter/unsubscribe/${
         route.params.id
       }?token=${token}`,
       {
@@ -67,7 +67,6 @@ const handleUnsubscribe = async () => {
       // Handle successful unsubscription
       title.value = t('canceledView.unsubscribeSuccess')
       unsubscribe.value = true
-      console.log('Unsubscription successful')
     } else {
       // Handle failure
       console.error('Unsubscription failed:', response.message)
