@@ -36,7 +36,7 @@ const addEmailToList = async (req, res) => {
 }
 
 const handleUnsubscribe = async (req, res) => {
-  const clientId = parseInt(req.params.id, 10)
+  const clientId = req.params.id;
   const tokenFromQuery = req.query.token
 
   if (!clientId || !tokenFromQuery) {
