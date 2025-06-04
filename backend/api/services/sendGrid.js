@@ -27,7 +27,7 @@ function generateUnsubscribeToken(email, secret) {
 async function sendEmailWithSendGrid(subject, imageUrl) {
   const Client = await getClientModel()
   const clients = await Client.find({
-    _id: { $in: ['17', '18'] },
+    _id: { $in: ['david', 'ayopruebas', "ayopruebas2"] },
     subscribed: true,
   })
 
