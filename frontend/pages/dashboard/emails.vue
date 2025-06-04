@@ -149,7 +149,7 @@ const sendEmail = async () => {
   }
   try {
     const { data, error } = await useFetch(
-      `${useRuntimeConfig().public.apiBaseUrl}/email`,
+      `${useRuntimeConfig().public.apiBaseUrl}/newsletter/send-email`,
       {
         method: 'POST',
         headers: {

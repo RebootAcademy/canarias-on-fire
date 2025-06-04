@@ -346,9 +346,9 @@ export const useUserStore = defineStore('userStore', {
       }
       return state.themePreference // Para el SSR
     },
-    checkAuthError () {
+    checkAuthError() {
       return this.authError
-    }
+    },
   },
   persist: {
     paths: ['userData', 'isAuthenticated'],

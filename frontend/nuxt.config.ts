@@ -109,6 +109,9 @@ export default defineNuxtConfig({
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' },
     '/event/:id': { ssr: true },
+    '/api/clients/unsubscribe/**': {
+      csurf: false,
+    },
   },
   plugins: ['~/plugins/auth0.js'],
 })
