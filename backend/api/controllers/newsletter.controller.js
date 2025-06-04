@@ -36,7 +36,7 @@ const addEmailToList = async (req, res) => {
 }
 
 const handleUnsubscribe = async (req, res) => {
-  const clientId = req.params.id;
+  const clientId = req.params.id
   const tokenFromQuery = req.query.token
 
   if (!clientId || !tokenFromQuery) {
@@ -109,7 +109,7 @@ const handleSendEmail = async (req, res) => {
     }
 
     const response = await sendEmailWithSendGrid(/*to,*/ subject, imageUrl)
-
+    console.log(response, 'en newletters')
     if (response[0].statusCode === 202) {
       return res.status(202).json({
         success: true,
@@ -131,5 +131,5 @@ const handleSendEmail = async (req, res) => {
 module.exports = {
   addEmailToList,
   handleUnsubscribe,
-  handleSendEmail
+  handleSendEmail,
 }
