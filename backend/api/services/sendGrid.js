@@ -1,38 +1,36 @@
-const sgMail = require('@sendgrid/mail')
-const crypto = require('crypto')
 const fs = require('fs').promises
 const path = require('path')
+const { addEmailJob } = require('./emailQueue')
+const crypto = require('crypto')
 const { getClientModel } = require('../models/client.model')
+const redis = require('../services/redisClient')
 
 const templatePath = path.join(
   __dirname,
-  'nodemailer', // baja a services/nodemailer/
-  'emailTemplates', // baja a services/nodemailer/emailTemplates/
-  'promotion.html' // ahí está el fichero
+  'nodemailer',
+  'emailTemplates',
+  'promotion.html'
 )
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-/**
- * Envía un correo con una imagen personalizada usando SendGrid.
- * @param {string|string[]} to - Correo o correos de destino.
- * @param {string} subject - Asunto del correo.
- * @param {string} imageUrl - URL de la imagen a insertar en el HTML.
- * @returns {Promise}
- */
 
 function generateUnsubscribeToken(email, secret) {
   return crypto.createHmac('sha256', secret).update(email).digest('hex')
 }
 
-async function sendEmailWithSendGrid(subject, imageUrl) {
+async function sendEmailWithSendGrid(type, subject, imageUrl) {
   const Client = await getClientModel()
   const clients = await Client.find({
-    _id: { $in: ['david', 'ayopruebas', "ayopruebas2"] },
+    _id: { $in: ['ayopruebas', 'ayopruebas2'] },
     subscribed: true,
+    tipo: type,
   })
 
   const template = await fs.readFile(templatePath, 'utf8')
-  const results = []
+  const result = []
+
+  if (!Array.isArray(clients) || clients.length === 0) {
+    console.warn('No clients found for email sending.')
+    return []
+  }
 
   for (const client of clients) {
     if (!client.unsubscribeToken) {
@@ -50,37 +48,30 @@ async function sendEmailWithSendGrid(subject, imageUrl) {
       .replace('{{urlImage}}', imageUrl)
       .replace('{{unsubscribeUrl}}', unsubscribeUrl)
 
-    const msg = {
+    // Limpiar correo enviado anteriormente
+    await redis.del(`email:delivered:${client.correo}`)
+
+    // guardamos el nuevo contenido del email en RedisClient
+    await redis.setex(
+      `email:${client.correo}`,
+      300, // 5 minutos
+      JSON.stringify({ subject, html })
+    )
+
+    // Añade a la cola con reintentos y espera que se procese uno por uno
+    const job = await addEmailJob({
       to: client.correo,
-      from: process.env.PROMO_EMAIL,
       subject,
       html,
-    }
-
-    try {
-      const response = await sgMail.send(msg)
-      if (response[0].statusCode !== 202) {
-        throw new Error(`Failed to send email: ${response[0].statusCode}`)
-      }
-
-      results.push({
-        email: client.correo,
-        statusCode: response[0].statusCode,
-      })
-    } catch (error) {
-      console.error(
-        `❌ Error enviando a ${client.correo}:`,
-        error.response?.body || error.message
-      )
-      results.push({
-        email: client.correo,
-        statusCode: null,
-        error: error.message,
-      })
-    }
+    })
+    const jobResult = await job.finished()
+    result.push({
+      email: client.correo,
+      statusCode: jobResult[0].statusCode,
+    })
   }
 
-  return results
+  return result
 }
 
 module.exports = sendEmailWithSendGrid

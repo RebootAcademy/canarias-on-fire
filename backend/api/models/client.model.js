@@ -53,25 +53,21 @@ async function getClientModel() {
   return ClientModel
 }
 
-async function contarTipos() {
-  try {
-    const ClientModel = await getClientModel()
-    const tiposUnicos = await ClientModel.distinct('tipo')
-    console.log('Tipos distintos:', tiposUnicos)
-    console.log('Cantidad de tipos distintos:', tiposUnicos.length)
+async function getTiposClients() {
+   try {
+     const ClientModel = await getClientModel()
+     const tiposUnicos = await ClientModel.distinct('tipo')
+     console.log(tiposUnicos)
+    return tiposUnicos
+   } catch (error) {
+    console.error('Error al obtener tipos de clientes:', error)
+    throw error
+   } finally {
+     if (clienteDB) {
+       await clienteDB.close()
+       console.log('Conexión a la base de datos de clientes cerrada')
+     }
+   }
+ }
 
-    const conteoPorTipo = await ClientModel.aggregate([
-      { $group: { _id: '$tipo', count: { $sum: 1 } } },
-    ])
-    console.log('Conteo por tipo:', conteoPorTipo)
-  } catch (error) {
-    console.error('Error al contar tipos:', error)
-  } finally {
-    if (clienteDB) {
-      await clienteDB.close()
-      console.log('Conexión a la base de datos de clientes cerrada')
-    }
-  }
-}
-
-module.exports = { contarTipos, getClientModel }
+module.exports = { getTiposClients, getClientModel }

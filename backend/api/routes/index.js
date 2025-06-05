@@ -10,7 +10,7 @@ const SubscriptionRouter = require('./subscription.router')
 const PaymentRouter = require('./payment.router')
 const NewsletterRouter = require('./newsletter.router')
 const Auth0CreateUser = require('../services/auth0-create-user')
-
+const WebhooksRouter = require('./webhook.router')
 router
   .use('/auth', AuthRouter)
   .use('/users', UserRouter)
@@ -22,5 +22,6 @@ router
   .use('/payments', PaymentRouter)
   .use('/newsletter', NewsletterRouter)
   .use('/services/auth0-create-user', Auth0CreateUser)
+  .use('/webhooks', WebhooksRouter)
 
 module.exports = router
