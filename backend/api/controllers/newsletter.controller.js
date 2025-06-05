@@ -99,17 +99,16 @@ const handleUnsubscribe = async (req, res) => {
 
 const handleSendEmail = async (req, res) => {
   try {
-    const { /*to,*/ subject, imageUrl } = req.body
+    const { type, subject, imageUrl } = req.body
 
-    if (/*!to ||*/ !imageUrl) {
+    if ( !imageUrl) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields: to, subject, or htmlContent',
       })
     }
 
-    const response = await sendEmailWithSendGrid(/*to,*/ subject, imageUrl)
-    console.log(response, 'en newletters')
+    const response = await sendEmailWithSendGrid(type, subject, imageUrl)
     if (response[0].statusCode === 202) {
       return res.status(202).json({
         success: true,

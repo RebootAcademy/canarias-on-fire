@@ -16,15 +16,21 @@ function generateUnsubscribeToken(email, secret) {
   return crypto.createHmac('sha256', secret).update(email).digest('hex')
 }
 
-async function sendEmailWithSendGrid(subject, imageUrl) {
+async function sendEmailWithSendGrid(type, subject, imageUrl) {
   const Client = await getClientModel()
   const clients = await Client.find({
     _id: { $in: ['ayopruebas', 'ayopruebas2'] },
     subscribed: true,
+    tipo: type,
   })
 
   const template = await fs.readFile(templatePath, 'utf8')
   const result = []
+
+  if (!Array.isArray(clients) || clients.length === 0) {
+    console.warn('No clients found for email sending.')
+    return []
+  }
 
   for (const client of clients) {
     if (!client.unsubscribeToken) {

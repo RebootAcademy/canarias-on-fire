@@ -19,7 +19,7 @@
             {{ $t('imageEmail') }}</Label
           >
           <Input type="file" @change="handleFileChange" accept="image/*" />
-          <div class="flex gap-x-4">
+          <div class="flex gap-x-4 flex-col md:flex-row">
             <Button
               type="button"
               @click="uploadImage"
@@ -34,6 +34,45 @@
             >
               Usar última imagen
             </Button>
+
+<div
+               class="mt-4 border-2 rounded-md border-primary w-full md:w-[200px] text-center"
+              role="combobox"
+              :aria-expanded="open"
+              aria-haspopup="listbox"
+             >
+               <button
+                 type="button"
+                 :class="[
+                   'bg-transparent text-secondary hover:bg-primary-gradient w-full flex items-center justify-center p-2',
+                   { 'h-full': !open },
+                 ]"
+                 @click="toggleOpen"
+                :aria-label="selectedOption ? `Tipo seleccionado: ${selectedOption}` : 'Selecciona un tipo'"
+               >
+                 <span class="text-[0.875rem] font-semibold">{{
+                   selectedOption || 'Selecciona un tipo'
+                 }}</span>
+               </button>
+
+               <ul
+                 v-if="open"
+                 class="z-50 w-full bg-black border border-primary"
+                role="listbox"
+                :aria-label="'Opciones de tipo de cliente'"
+               >
+                 <li
+                   v-for="tipo in optionsType"
+                   :key="tipo"
+                   class="p-2 text-secondary hover:bg-primary-gradient cursor-pointer"
+                   @click="selectOption(tipo)"
+                  role="option"
+                  :aria-selected="selectedOption === tipo"
+                 >
+                   {{ tipo }}
+                 </li>
+               </ul>
+             </div>
           </div>
         </div>
         <div>
@@ -41,13 +80,13 @@
         </div>
       </div>
 
-      <button
-        class="mt-4 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1 p-2"
+      <Button
+        class="mt-4 bg-transparent text-secondary border-2 border-primary hover:bg-primary-gradient hover:border-1 p-2 w-full md:w-auto"
         type="submit"
         :disabled="isUpdating"
       >
         {{ $t('dashboardNav.emails') }}
-      </button>
+      </Button>
     </form>
   </div>
 </template>
@@ -56,6 +95,7 @@
 const { t } = useI18n()
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
+const optionsType = ['AYTO', 'CIAS', 'PROMOTORES', 'SURFSCHOOL', 'TEMATICOS']
 
 definePageMeta({
   layout: 'dashboard',
@@ -141,7 +181,16 @@ const sendEmail = async () => {
 
   if (!urlImg.value) {
     toast({
-      description: t('notIsImage'),
+      description: t('Not is a Image'),
+      variant: 'destructive',
+    })
+    isUpdating.value = false
+    return
+  }
+
+  if (!selectedOption.value) {
+    toast({
+      description: t('select a Type'), // o un texto como "Debes seleccionar un tipo"
       variant: 'destructive',
     })
     isUpdating.value = false
@@ -158,6 +207,7 @@ const sendEmail = async () => {
         body: JSON.stringify({
           imageUrl: urlImg.value,
           subject: subject.value,
+          type: selectedOption.value,
         }),
       }
     )
@@ -175,6 +225,7 @@ const sendEmail = async () => {
       urlImg.value = ''
       selectedFile.value = null
       LastImgUrl.value = ''
+      selectedOption.value = null
     }
   } catch (error) {
     console.error('Error sending email:', error)
@@ -186,5 +237,16 @@ const sendEmail = async () => {
     isUpdating.value = false
   }
 }
-console.log(subject.value)
+
+const open = ref(false)
+const selectedOption = ref(null)
+
+const toggleOpen = () => {
+  open.value = !open.value
+}
+
+const selectOption = (option) => {
+  selectedOption.value = option
+  open.value = false
+}
 </script>
