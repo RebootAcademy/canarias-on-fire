@@ -11,7 +11,7 @@ emailQueue.process(1, async (job) => {
   const { to, subject, html } = job.data
 
   const sendSmtpEmail = {
-    sender: { name: 'info@evente-es.com', email: process.env.PROMO_EMAIL },
+    sender: { name: 'Evente', email: process.env.PROMO_EMAIL },
     to: [{ email: to }],
     subject,
     htmlContent: html,
