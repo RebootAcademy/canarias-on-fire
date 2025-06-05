@@ -3,7 +3,7 @@ const path = require('path')
 const { addEmailJob } = require('./emailQueue')
 const crypto = require('crypto')
 const { getClientModel } = require('../models/client.model')
-const client = require('@sendgrid/client')
+const redis = require('../services/redisClient')
 
 const templatePath = path.join(
   __dirname,
@@ -41,7 +41,17 @@ async function sendEmailWithSendGrid(subject, imageUrl) {
       .replace('{{name}}', client.nombre)
       .replace('{{urlImage}}', imageUrl)
       .replace('{{unsubscribeUrl}}', unsubscribeUrl)
-      
+
+    // Limpiar correo enviado anteriormente
+    await redis.del(`email:delivered:${client.correo}`)
+
+    // guardamos el nuevo contenido del email en RedisClient
+    await redis.setex(
+      `email:${client.correo}`,
+      300, // 5 minutos
+      JSON.stringify({ subject, html })
+    )
+
     // Añade a la cola con reintentos y espera que se procese uno por uno
     const job = await addEmailJob({
       to: client.correo,

@@ -2,7 +2,7 @@ const Queue = require('bull')
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const emailQueue = new Queue('email', process.env.REDIS_URL, {
+const emailQueue = new Queue('email', process.env.BULL_KEY_URL, {
   redis: {
     tls: {},
   },
