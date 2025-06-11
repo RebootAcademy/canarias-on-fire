@@ -1,5 +1,5 @@
 //const sendEmailWithSendGrid = require('../services/sendGrid')
-const sendEmailWithBrevo = require('../services/sendEmailWithBrevo')
+const { sendEmailWithBrevo } = require('../services/sendEmailWithBrevo')
 const { getClientModel } = require('../models/client.model')
 const sgClient = require('@sendgrid/client')
 sgClient.setApiKey(process.env.SENDGRID_API_KEY)
@@ -99,36 +99,23 @@ const handleUnsubscribe = async (req, res) => {
 }
 
 const handleSendEmail = async (req, res) => {
-  try {
-    const { type, subject, imageUrl, test } = req.body
+  const { type, subject, imageUrl, test } = req.body
 
-    if (!imageUrl) {
-      return res.status(400).json({
-        success: false,
-        error: 'Missing required fields: to, subject, or htmlContent',
-      })
-    }
-
-    const response = await sendEmailWithBrevo(type, subject, imageUrl, test)
-
-    if (
-      response.every((res) => res.statusCode === 201 || res.statusCode === 202)
-    ) {
-      return res.status(201).json({
-        success: true,
-        message: 'Email sent successfully',
-      })
-    } else {
-      throw new Error('Failed to send email')
-    }
-  } catch (error) {
-    console.error('Error sending email:', error)
-    return res.status(500).json({
+  if (!imageUrl) {
+    return res.status(400).json({
       success: false,
-      error: 'Error sending email',
-      message: error.message,
+      error: 'Missing required fields: to, subject, or htmlContent',
     })
   }
+
+  sendEmailWithBrevo(type, subject, imageUrl, test).catch((err) =>
+    console.error('Error en envío async:', err)
+  )
+
+  res.status(201).json({
+    success: true,
+    message: 'Email sent successfully',
+  })
 }
 
 module.exports = {

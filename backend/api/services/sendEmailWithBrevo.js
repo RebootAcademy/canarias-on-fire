@@ -3,7 +3,7 @@ const path = require('path')
 const brevoClient = require('./brevoClient')
 const crypto = require('crypto')
 const { getClientModel } = require('../models/client.model')
-const redis = require('../services/redisClient')
+const { getEmailLogModel } = require('../models/EmailLog.model')
 
 const templatePath = path.join(
   __dirname,
@@ -43,13 +43,18 @@ async function sendWithRetry(sendSmtpEmail, maxAttempts = 5, backoff = 5000) {
 
 async function sendEmailWithBrevo(type, subject, imageUrl, test) {
   const Client = await getClientModel()
+  const EmailLog = await getEmailLogModel()
+
   const query = {
     subscribed: true,
     tipo: type,
   }
 
   if (test) {
-    query._id = { $in: ['ayopruebas', 'ayopruebas2'] }
+    const testClientIds = process.env.TEST_CLIENT_IDS?.split(',') || []
+    if (testClientIds.length > 0) {
+      query._id = { $in: testClientIds }
+    }
   }
 
   const clients = await Client.find(query).lean()
@@ -63,7 +68,6 @@ async function sendEmailWithBrevo(type, subject, imageUrl, test) {
     return []
   }
 
-  // Preparar correos
   const emails = []
   for (const client of clients) {
     try {
@@ -85,23 +89,16 @@ async function sendEmailWithBrevo(type, subject, imageUrl, test) {
         .replace('{{urlImage}}', imageUrl)
         .replace('{{unsubscribeUrl}}', unsubscribeUrl)
 
-      // Limpiar correo enviado anteriormente
-      await redis.del(`email:delivered:${client.correo}`).catch((err) => {
-        console.error(
-          `Error al eliminar email:delivered:${client.correo} en Redis:`,
-          err.message
-        )
-      })
+      await EmailLog.deleteOne({ email: client.correo })
 
-      // Guardar el nuevo contenido del email en Redis
-      await redis
-        .setex(`email:${client.correo}`, 300, JSON.stringify({ subject, html }))
-        .catch((err) => {
-          console.error(
-            `Error al guardar email:${client.correo} en Redis:`,
-            err.message
-          )
-        })
+      await EmailLog.create({
+        email: client.correo,
+        subject,
+        html,
+        status: 'pending',
+        attempts: 0,
+        timestamp: Date.now(),
+      })
 
       emails.push({
         to: client.correo,
@@ -161,19 +158,21 @@ async function sendEmailWithBrevo(type, subject, imageUrl, test) {
 
     sentCount++
 
-    // Cada 100 emails enviados, esperar 1 hora antes de continuar
     if (sentCount % 100 === 0 && sentCount < emails.length) {
       console.log(
         'Límite de 100 emails alcanzado, esperando 1 hora para continuar...'
       )
-      await new Promise((resolve) => setTimeout(resolve, 3600 * 1000)) // 1 hora
+      await new Promise((resolve) => setTimeout(resolve, 3600 * 1000))
     }
 
-    // Para evitar saturar el servidor, podrías añadir un pequeño delay (opcional)
-    await new Promise((resolve) => setTimeout(resolve, 200)) // 200ms de pausa entre correos
+    await new Promise((resolve) => setTimeout(resolve, 10000))
   }
 
   return result
 }
 
-module.exports = sendEmailWithBrevo
+module.exports = {
+  sendEmailWithBrevo,
+  sendWithRetry,
+  generateUnsubscribeToken,
+}
