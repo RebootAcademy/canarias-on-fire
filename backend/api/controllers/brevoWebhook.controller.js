@@ -1,5 +1,4 @@
 const redis = require('../services/redisClient')
-const { addEmailJob } = require('../services/emailQueueBrevo')
 
 const MAX_ATTEMPTS = 6
 const ATTEMPT_EXPIRATION = 3600 // 1 hora
@@ -60,20 +59,28 @@ const createEmailEvent = async (req, res) => {
 
       console.log(`Reintentando email (${attempts}/${MAX_ATTEMPTS}):`, email)
       const { subject, html } = JSON.parse(json)
-
-      await addEmailJob({
+      const sendSmtpEmail = {
+        sender: { name: 'Evente', email: process.env.PROMO_EMAIL },
         to: email,
-        subject,
-        html,
-      })
+        subject: subject,
+        htmlContent: html,
+        headers: {
+          'Message-ID': `<${crypto.randomUUID()}@evente-es.com>`,
+          'Thread-Topic': subject,
+          'Thread-Index': crypto.randomBytes(22).toString('base64'),
+          'In-Reply-To': '',
+          References: '',
+        },
+      }
+      await sendWithRetry(sendSmtpEmail)
     }
-} catch (err) {
-  console.error(`Error procesando evento para email ${event?.email}:`, err)
-  // Return 500 for processing errors to trigger retries
-  return res.status(500).send('Processing error')
-}
+  } catch (err) {
+    console.error(`Error procesando evento para email ${event?.email}:`, err)
+    // Return 500 for processing errors to trigger retries
+    return res.status(500).send('Processing error')
+  }
 
-res.status(200).send('OK')
+  res.status(200).send('OK')
 }
 
 module.exports = {

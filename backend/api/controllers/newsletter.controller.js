@@ -100,7 +100,7 @@ const handleUnsubscribe = async (req, res) => {
 
 const handleSendEmail = async (req, res) => {
   try {
-    const { type, subject, imageUrl } = req.body
+    const { type, subject, imageUrl, test } = req.body
 
     if (!imageUrl) {
       return res.status(400).json({
@@ -109,9 +109,11 @@ const handleSendEmail = async (req, res) => {
       })
     }
 
-    const response = await sendEmailWithBrevo(type, subject, imageUrl)
-    console.log(response, 'response en newlettercontroller')
-    if (response.every((res) => res.statusCode === 201)) {
+    const response = await sendEmailWithBrevo(type, subject, imageUrl, test)
+
+    if (
+      response.every((res) => res.statusCode === 201 || res.statusCode === 202)
+    ) {
       return res.status(201).json({
         success: true,
         message: 'Email sent successfully',
