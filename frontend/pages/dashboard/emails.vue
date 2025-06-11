@@ -334,7 +334,7 @@ const HandleLastImgUrl = () => {
 /* Enviar email */
 const sendEmail = async () => {
   isUpdating.value = true
-  console.log('llego a sendemail')
+
 
   try {
     const response = await $fetch(
@@ -350,9 +350,8 @@ const sendEmail = async () => {
         }),
       }
     )
-    console.log('llego a sendemail despues del try')
+
     if (response.success) {
-      console.log('entrando en enviado')
 
       toast({ description: t('emailSent') })
       // Resetear formulario
@@ -414,7 +413,7 @@ const handleSendEmail = async () => {
       return
     }
   }
-  console.log('llego primera estapa de sendemail')
+
 
   await sendEmail()
 }
