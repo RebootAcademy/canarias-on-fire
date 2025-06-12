@@ -14,6 +14,10 @@ const {
   updateExpiredSubscriptions,
 } = require('./api/services/subscriptionService')
 
+const {
+  updateExpiredPromotions,
+} = require('./api/controllers/event.controller.js')
+
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
@@ -21,8 +25,8 @@ const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
 
 const {
   removeDuplicateEvents,
-  closePassedEvents
-}= require('./api/controllers/event.controller.js')
+  closePassedEvents,
+} = require('./api/controllers/event.controller.js')
 
 mongoose.set('strictPopulate', false)
 
@@ -41,7 +45,7 @@ app.use(
         'https://evente.netlify.app',
         'http://localhost:3000',
         'https://evente.es',
-        'http://evente.es'
+        'http://evente.es',
       ]
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true)
@@ -68,11 +72,14 @@ app.listen(process.env.PORT, async (error) => {
   console.info(`Evente API running on PORT ${process.env.PORT}`)
 })
 
-// Ejecutar la revisión todos los días a la medianoche
-cron.schedule('0 0 * * *', () => {
-  console.log('Running subscription expiration check')
-  updateExpiredSubscriptions()
-})
+//check expired Subcriptions and promotions
+const runExpirationChecks = async () => {
+  console.log('Running subscription + promotion expiration checks')
+  await updateExpiredSubscriptions()
+  await updateExpiredPromotions()
+}
+
+cron.schedule('0 0 * * *', runExpirationChecks)
 
 cron.schedule('0 1 * * *', () => {
   console.log('Checking Gobierno de Canarias Events')
@@ -99,7 +106,7 @@ cron.schedule('0 3 * * *', () => {
   removeDuplicateEvents()
 })
 
-cron.schedule ('30 3 * * *', () => {
+cron.schedule('30 3 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
 })

@@ -28,7 +28,8 @@ const createEvent = async (req, res) => {
     if (isThereSame) {
       return res.status(400).json({
         success: false,
-        message: 'There is already a event/promotion with the same name for this user.',
+        message:
+          'There is already a event/promotion with the same name for this user.',
       })
     }
     const newEvent = await Event.create(req.body)
@@ -608,57 +609,82 @@ const closePassedEvents = async () => {
     const today = new Date()
     const events = await Event.find({ status: { $ne: 'closed' } })
 
-     for (const event of events) {
+    for (const event of events) {
       let eventDate
       let endDate
-       if (event.eventType === 'event') {
-         eventDate = new Date(
-           event.eventDate?.year,
-           event.eventDate?.month - 1,
-           event.eventDate?.day
-         )
-         let [hours, minutes] = [0, 0]
-         if (event.startTime) {
-           ;[hours, minutes] = event?.startTime?.split(':').map(Number)
-         }
+      if (event.eventType === 'event') {
+        eventDate = new Date(
+          event.eventDate?.year,
+          event.eventDate?.month - 1,
+          event.eventDate?.day
+        )
+        let [hours, minutes] = [0, 0]
+        if (event.startTime) {
+          ;[hours, minutes] = event?.startTime?.split(':').map(Number)
+        }
 
-         endDate = event.eventEndDate
-           ? new Date(
-               event.eventEndDate.year,
-               event.eventEndDate.month - 1,
-               event.eventEndDate.day,
-               hours,
-               minutes
-             )
-           : new Date(
-               eventDate.getFullYear(),
-               eventDate.getMonth(),
-               eventDate.getDate(),
-               hours,
-               minutes
-             )
-       } else {
-         endDate = new Date(
-           event.eventDate?.end?.year,
-           event.eventDate?.end?.month - 1,
-           event.eventDate?.end?.day
-         )
-       }
+        endDate = event.eventEndDate
+          ? new Date(
+              event.eventEndDate.year,
+              event.eventEndDate.month - 1,
+              event.eventEndDate.day,
+              hours,
+              minutes
+            )
+          : new Date(
+              eventDate.getFullYear(),
+              eventDate.getMonth(),
+              eventDate.getDate(),
+              hours,
+              minutes
+            )
+      } else {
+        endDate = new Date(
+          event.eventDate?.end?.year,
+          event.eventDate?.end?.month - 1,
+          event.eventDate?.end?.day
+        )
+      }
 
-       // If the event has already passed, update its status
-       if (endDate < today) {
-         event.status = 'closed'
-         await event.save()
-         console.log(`Closed event: ${event._id}`)
-       }
-     }
+      // If the event has already passed, update its status
+      if (endDate < today) {
+        event.status = 'closed'
+        await event.save()
+        console.log(`Closed event: ${event._id}`)
+      }
+    }
 
-     console.log('Finished closing passed events.')
+    console.log('Finished closing passed events.')
   } catch (error) {
     console.error('Error closing passed events', error)
   }
 }
 
+const updateExpiredPromotions = async () => {
+  const events = await Event.find().populate(
+    'categories location userId payment subscription'
+  )
+  const promotions = events.filter((event) => event.eventType === 'promotion')
+
+  const now = new Date()
+
+  for (const promotion of promotions) {
+    const subscriptionStatus = promotion.userId?.activeSubscription?.status
+    const canceledAt = promotion.userId?.activeSubscription.canceledAt
+ 
+    if (
+      (subscriptionStatus === 'canceled' ||
+        subscriptionStatus === 'inactive') &&
+      promotion.status !== 'closed' &&
+      canceledAt &&
+      new Date(canceledAt) <= now
+    ) {
+      console.log(`Cerrando promoción: ${promotion.eventName}`)
+      promotion.status = 'closed'
+      await promotion.save()
+    }
+  }
+}
 
 module.exports = {
   createEvent,
@@ -675,5 +701,6 @@ module.exports = {
   saveScrapedEvent,
   cleanDB,
   removeDuplicateEvents,
-  closePassedEvents
+  closePassedEvents,
+  updateExpiredPromotions,
 }
