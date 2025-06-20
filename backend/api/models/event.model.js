@@ -53,7 +53,14 @@ const EventSchema = new mongoose.Schema({
     type: Number,
   },
   isFree: {
-    type: Boolean,
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+    validate: {
+      validator: function (value) {
+        return typeof value === 'boolean' || value === 'not_available'
+      },
+      message: "isFree must be a boolean or 'not_available'.",
+    },
   },
   eventCapacity: {
     type: String,

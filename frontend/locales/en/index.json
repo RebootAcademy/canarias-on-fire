@@ -160,7 +160,8 @@
     "searchLocals": "Search near me",
     "download": "Donwload",
     "deleteAll": "Delete all finished",
-    "reviewed": "Reviewed"
+    "reviewed": "Reviewed",
+    "notAvailable": "Not available"
   },
   "successView": {
     "paymentTitle": "Your payment has been successful completed",

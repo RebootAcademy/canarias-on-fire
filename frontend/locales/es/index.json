@@ -160,7 +160,8 @@
     "searchLocals": "Buscar cerca de mí",
     "download": "Descargar",
     "deleteAll": "Borrar los finalizados",
-    "reviewed": "Revisado"
+    "reviewed": "Revisado",
+    "notAvailable": "No disponible"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",
