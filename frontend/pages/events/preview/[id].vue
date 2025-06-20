@@ -2,7 +2,7 @@
   <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
     <div
       @click="() => router.push(`/events/edit/${eventId}`)"
-      class="flex items-center max-w-[160px] rounded-md gap-2 my-4 left-4 cursor-pointer border-2 border-primary bg-background p-2 hover:bg-primary "
+      class="flex items-center max-w-[160px] rounded-md gap-2 my-4 left-4 cursor-pointer border-2 border-primary bg-background p-2 hover:bg-primary"
     >
       <ArrowLeft />
       <p>{{ $t('goEdit') }}</p>
@@ -32,15 +32,20 @@
     <div class="flex items-center gap-4 mt-4 text-gray-600">
       <div v-if="eventStore.eventDate" class="flex items-center gap-1">
         <i class="far fa-calendar-alt"></i>
-        <span>{{ new Date(
-          eventStore.eventDate.year,
-          eventStore.eventDate.month - 1,
-          eventStore.eventDate.day
-          ).toLocaleDateString() }}</span>
+        <span>{{
+          new Date(
+            eventStore.eventDate.year,
+            eventStore.eventDate.month - 1,
+            eventStore.eventDate.day
+          ).toLocaleDateString()
+        }}</span>
       </div>
       <div v-if="eventStore.startTime" class="flex items-center gap-1">
         <i class="far fa-clock"></i>
-        <span>{{ eventStore.startTime }} {{eventStore.endTime ? '-' : ''}} {{ eventStore.endTime }}</span>
+        <span
+          >{{ eventStore.startTime }} {{ eventStore.endTime ? '-' : '' }}
+          {{ eventStore.endTime }}</span
+        >
       </div>
       <div
         v-if="eventStore.eventType === 'event'"
@@ -48,8 +53,10 @@
       >
         <i class="fas fa-euro-sign"></i>
         <span>{{
-          eventStore.eventPrice === 0
+          eventStore.eventPrice === 0 && eventStore.isFree !== 'not_available'
             ? $t('price.free')
+            : eventStore.isFree === 'not_available'
+            ?  `${$t('eventPrice')}: ${$t('buttons.notAvailable')}`
             : `${eventStore.eventPrice}€`
         }}</span>
       </div>
@@ -76,7 +83,10 @@
         />
       </details>
     </div>
-    <div v-if="eventStore.eventType === 'promotion' && eventStore.eventDiscount" class="w-fit">
+    <div
+      v-if="eventStore.eventType === 'promotion' && eventStore.eventDiscount"
+      class="w-fit"
+    >
       <DiscountSquare
         :event="{
           eventDiscount: eventStore.eventDiscount,
@@ -168,13 +178,16 @@ const publishEvent = async () => {
         console.error('Failed to publish promotion')
         toast({
           description: t('errorCreatingEvent'),
-          variant: 'destructive'
+          variant: 'destructive',
         })
       }
     }
     if (eventStore.event.eventType === 'promotion') {
       //Permitir la publicación de la promoción si no tiene publicaciones previas o está editando una existente (ya tiene un subscriptionId)
-      if (isSubscriptionValid && (!hasPublishedPromotions || eventStore.event.subscription)) {
+      if (
+        isSubscriptionValid &&
+        (!hasPublishedPromotions || eventStore.event.subscription)
+      ) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
           await eventStore.fetchEvents()
@@ -194,7 +207,7 @@ const publishEvent = async () => {
       }
     } else if (eventStore.event.payment && localStorage.dayDiff) {
       router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
-    } else if (eventStore.event.payment) {    
+    } else if (eventStore.event.payment) {
       return router.push(`/events/${eventId}`)
     } else if (eventStore.event.eventType === 'event') {
       router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)

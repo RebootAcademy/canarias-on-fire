@@ -182,11 +182,26 @@
                   'text-black': isGoldPayment || isPremiumPayment,
                 }"
               >
-                {{
-                  event.eventPrice === 0
-                    ? $t('price.free')
-                    : `${event.eventPrice} €`
-                }}
+                <!-- Precio gratis -->
+                <template
+                  v-if="
+                    eventStore.eventPrice === 0 &&
+                    eventStore.isFree !== 'not_available'
+                  "
+                >
+                  {{ $t('price.free') }}
+                </template>
+
+                <!-- Precio no disponible -->
+                <template v-else-if="eventStore.isFree === 'not_available'">
+                  <span
+                    >{{ $t('eventPrice') }}:
+                    {{ $t('buttons.notAvailable') }}</span
+                  >
+                </template>
+
+                <!-- Precio estándar -->
+                <template v-else> {{ eventStore.eventPrice }}€ </template>
               </p>
               <a
                 v-else
@@ -262,7 +277,6 @@ const props = defineProps({
     default: false,
   },
 })
-
 const isOpen = ref(false)
 
 const isOwner = computed(() => {

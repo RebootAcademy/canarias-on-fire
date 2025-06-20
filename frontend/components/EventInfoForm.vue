@@ -206,7 +206,7 @@
         <div
           class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
           :class="
-            isClickTypeOfPay && eventStore.isFree === true
+            (isClickTypeOfPay || isEditing) && eventStore.isFree === true
               ? 'border-primary'
               : 'border-whiteGray'
           "
@@ -217,13 +217,25 @@
         <div
           class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
           :class="
-            isClickTypeOfPay && eventStore.isFree === false
+            (isClickTypeOfPay || isEditing) && eventStore.isFree === false
               ? 'border-primary'
               : 'border-whiteGray'
           "
           @click="modifyTypeOfEvent(false)"
         >
           <p>{{ $t('buttons.pay') }}</p>
+        </div>
+        <div
+          class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
+          :class="
+            (isClickTypeOfPay || isEditing) &&
+            eventStore.isFree === 'not_available'
+              ? 'border-primary'
+              : 'border-whiteGray'
+          "
+          @click="modifyTypeOfEvent('not_available')"
+        >
+          <p>{{ $t('buttons.notAvailable') }}</p>
         </div>
       </div>
     </div>
@@ -304,8 +316,8 @@ const checkCodePromo = ref(false)
 const changeMap = ref(props.isEditing)
 
 const eventDiscounts = computed(() => {
-   return [
-   { label: t('onBoarding.step2Genres.all'), value: 'all' },
+  return [
+    { label: t('onBoarding.step2Genres.all'), value: 'all' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
     { label: t('eventTypeDiscount.3x1'), value: '3x1' },
     { label: t('eventTypeDiscount.3x2'), value: '3x2' },
@@ -343,10 +355,10 @@ const isClickTypeOfPay = ref(false)
 
 const modifyTypeOfEvent = (type) => {
   eventStore.isFree = type
-  if (eventStore.isFree) eventStore.eventPrice = 0
+  if (eventStore.isFree || eventStore.isFree === 'not_available')
+    eventStore.eventPrice = 0
   isClickTypeOfPay.value = true
 }
-
 onMounted(() => {
   if (props.isEditing && eventStore.event) {
     // Populate form fields with existing event data
