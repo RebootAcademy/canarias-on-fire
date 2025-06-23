@@ -300,6 +300,7 @@
 <script setup>
 import { Info } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
+import { useEventStore } from '../stores/eventStore'
 const { t, locale } = useI18n()
 import { errors, validateFields } from '../utils/validation'
 const paymentStore = usePaymentStore()
@@ -378,6 +379,7 @@ onMounted(() => {
     eventStore.coverImage = eventStore.event.coverImage
   }
 })
+
 </script>
 
 <style scoped>

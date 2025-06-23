@@ -14,15 +14,25 @@
       </div>
     </RadioGroup> -->
     <button
+      v-if="
+        userStore.userData.role === 'admin' ||
+        userStore.userData.sector === 'promoter'
+      "
       class="w-full rounded-md hover:bg-gray hover:text-primary p-2"
       :class="checkStyle('event')"
-     @click="()=>handleClick('event')">
+      @click="() => handleClick('event')"
+    >
       {{ $t('event') }}
     </button>
     <button
+      v-if="
+        userStore.userData.role === 'admin' ||
+        userStore.userData.sector !== 'promoter'
+      "
       class="w-full rounded-md hover:bg-gray hover:text-primary p-2"
       :class="checkStyle('promotion')"
-     @click="()=>handleClick('promotion')">
+      @click="() => handleClick('promotion')"
+    >
       {{ $t('promotion') }}
     </button>
   </div>
@@ -30,16 +40,14 @@
 
 <script setup>
 import { useEventStore } from '../stores/eventStore'
+import { useUserStore } from '../stores/userStore'
 
 const eventStore = useEventStore()
-
-onMounted(() => {
-  eventStore.eventType = 'event'
-})
+const userStore = useUserStore()
 
 const checkStyle = (type) => {
   if (type === eventStore.eventType) return 'bg-primary text-black'
 }
 
-const handleClick = (type) => eventStore.eventType = type
+const handleClick = (type) => (eventStore.eventType = type)
 </script>
