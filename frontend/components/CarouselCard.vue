@@ -5,6 +5,7 @@
         :class="`w-full h-44 ${imagesToShow[currentImageIndex]?.url ? 
         'object-cover' : 
         'object-contain'}`"
+        @error="onImageError"
     />
     <!-- Flechas para cambiar de imagen -->
     <button
@@ -95,5 +96,9 @@ const goToImage = (index) => {
   
 }
 
+
+const onImageError = (event) => {
+  event.target.src = defaultImage
+}
 
 </script>
