@@ -195,9 +195,14 @@
           />
           <label for="terms" class="ml-2 block text-sm text-gray-400">
             {{ $t('onBoarding.step2TermsPart1') }}
-            <a href="#" class="text-yellow-500">{{
-              $t('onBoarding.step2TermsPart2')
-            }}</a>
+          <a
+            href="https://evente.es/terms-conditions"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-yellow-500"
+          >
+            {{ $t('onBoarding.step2TermsPart2') }}
+          </a>
           </label>
         </div>
         <div v-if="errors.termsAccepted">
