@@ -19,7 +19,7 @@
         class="hover:underline text-secondary hover:text-primary hover:bg-transparent"
         variant="ghost"
       >
-        {{ $t('login') }}
+      <img src="/imagen-de-perfil.png" class="w-[2.2rem]" alt="Login Icon">
       </Button>
       <NuxtLink to="/dashboard" v-if="userStore?.isAuthenticated">
         <MenuDropdown />
