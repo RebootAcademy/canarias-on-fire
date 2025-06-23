@@ -41,6 +41,9 @@
 <script setup>
 import { errors, validateFields } from '../utils/validation'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { useUserStore } from '../stores/userStore'
+import { useEventStore } from '../stores/eventStore'
+
 const { toast } = useToast()
 const props = defineProps({
   isEditing: {
@@ -71,6 +74,20 @@ const { t } = useI18n()
 
 const isValidated = computed(() => userStore.userData.isValidated)
 const isAdmin = computed(() => userStore.userData.role === 'admin')
+
+watch(
+  () => userStore.userData,
+  (newVal) => {
+    if (!newVal) return
+    if (newVal.role === 'admin' || newVal.sector === 'promoter') {
+      eventStore.eventType = 'event'
+    } else {
+      eventStore.eventType = 'promotion'
+    }
+  },
+  { immediate: true }
+)
+
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)

@@ -69,7 +69,7 @@ const { t } = useI18n()
 import { errors, validateFields } from '../utils/validation'
 const eventStore = useEventStore()
 const { selectedCategories } = storeToRefs(eventStore)
-console.log(selectedCategories)
+
 const typeOfServices = computed(() => [
   { label: t('values.foodtruck'), value: 'foodtruck', icon: 'Truck' },
   { label: t('values.catering'), value: 'catering', icon: 'UtensilsCrossed' },
@@ -114,7 +114,7 @@ const props = defineProps({
 })
 
 const filteredCategories = computed(() => {
-  console.log(eventStore.selectedCategories)
+
   if (props.type === 'event') {
     eventStore.selectedCategories.some(
     (c) => c && c.type === 'promotion'
@@ -178,7 +178,7 @@ const toggleCategory = (category) => {
     const index = eventStore.selectedCategories.findIndex(
       (c) => c && (c.id === category.id || c._id === category.id)
     )
-  console.log(index)
+
     if (index === -1) {
       updatedCategories = [...eventStore.selectedCategories, category]
     } else {
