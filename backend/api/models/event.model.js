@@ -133,6 +133,10 @@ const EventSchema = new mongoose.Schema({
   stripe: {
     type: Object,
   },
+  nameByAdmin: {
+    type: String,
+    default: '',
+  },
   reviewed: { type: Boolean, default: false },
 })
 EventSchema.index({ eventLocation: '2dsphere' })

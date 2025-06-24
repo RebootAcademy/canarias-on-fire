@@ -55,6 +55,19 @@
         </span>
       </Label>
     </div>
+        <hr/>
+    <div v-if="userStore.userData.role === 'admin' && eventStore.eventType === 'promotion'" class="flex flex-col gap-1 w-full md:w-1/2">
+      <p class="font-semibold">Nombre de la compañia para la que creas esta promocion</p>
+      <Label for="eventName" class="text-sm text-gray-500">
+        Nombre de la compañia
+        <Input
+        v-model="eventStore.nameByAdmin"
+        id="nameByAdmin"
+        type="text"
+        class="p-2 border rounded-md mb-1"
+        />
+    </Label>
+  </div>
     <div
       v-if="eventStore.eventType === 'event'"
       class="flex w-full justify-between items-center"
@@ -301,6 +314,7 @@
 import { Info } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import { useEventStore } from '../stores/eventStore'
+import { useUserStore } from '../stores/userStore'
 const { t, locale } = useI18n()
 import { errors, validateFields } from '../utils/validation'
 const paymentStore = usePaymentStore()
@@ -312,6 +326,7 @@ const props = defineProps({
   },
 })
 
+const userStore = useUserStore()
 const hasEndDate = ref(false)
 const checkCodePromo = ref(false)
 const changeMap = ref(props.isEditing)
@@ -377,6 +392,7 @@ onMounted(() => {
     eventStore.externalUrl = eventStore.event.externalUrl
     eventStore.eventImages = eventStore.event.eventImages
     eventStore.coverImage = eventStore.event.coverImage
+    eventStore.nameByAdmin = eventStore.event.nameByAdmin || ''
   }
 })
 

@@ -127,6 +127,8 @@
             }"
           >
             {{
+              promotion.nameByAdmin && promotion.nameByAdmin !== '' ?
+              promotion.nameByAdmin :
               promotion.userId?.commercialName ||
               promotion.userId?.companyName || 
               promotion.userId?.username 
@@ -163,6 +165,8 @@
                  <img v-if="userImage" :src="userImage" class="w-10 h-10 rounded-full object-contain" />
                  <p :class="isBasicPayment ? 'text-primary' : 'text-secondary'">
                    {{ 
+                   promotion.nameByAdmin && promotion.nameByAdmin !== '' ? 
+                    promotion.nameByAdmin :
                     promotion.userId?.role === 'company' ? promotion.userId?.commercialName || 
                     promotion.userId?.companyName : 
                     promotion.userId?.username 

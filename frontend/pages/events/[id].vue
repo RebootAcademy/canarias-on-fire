@@ -75,6 +75,8 @@
               <Calendar v-if="event.eventType === 'event'" size="16" />
               <User v-else size="16" />
               <span>{{ 
+                event.nameByAdmin && event.nameByAdmin !== '' ? 
+                event.nameByAdmin :
                 event.eventType === 'event' ? 
                 formattedDate : (
                 event.userId?.commercialName || 

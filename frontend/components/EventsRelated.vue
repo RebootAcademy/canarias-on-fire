@@ -80,18 +80,21 @@ const relatedEvents = computed(() => {
 const currentPromotionRestaurants = computed(() => {
   const validSectors = ['restoration', 'nightlife', 'hotels']
 
-  // 1) Filtrar primeros los eventos de tipo 'promotion' que tengan alguno de los sectores
   const filtered = events.value.filter(
     (event) =>
       event.eventType === 'promotion' &&
-      validSectors.some((sector) => event.userId.sector.includes(sector))
+      (
+        event.userId?.role === 'admin' ||
+        validSectors.some((sector) => event.userId?.sector?.includes(sector))
+      )
   )
 
-  // 2) Ordenar segun el índice del primer sector coincidente en validSectors
   const sorted = filtered.sort((a, b) => {
-    // Buscar el primer sector válido que contenga cada evento
-    const sectorA = validSectors.find((s) => a.userId.sector.includes(s)) || ''
-    const sectorB = validSectors.find((s) => b.userId.sector.includes(s)) || ''
+    if (a.userId?.role === 'admin' && b.userId?.role !== 'admin') return -1
+    if (b.userId?.role === 'admin' && a.userId?.role !== 'admin') return 1
+
+    const sectorA = validSectors.find((s) => a.userId?.sector?.includes(s)) || ''
+    const sectorB = validSectors.find((s) => b.userId?.sector?.includes(s)) || ''
 
     return validSectors.indexOf(sectorA) - validSectors.indexOf(sectorB)
   })
@@ -102,18 +105,26 @@ const currentPromotionRestaurants = computed(() => {
 // Filtrar promociones de otros sectores
 const currentPromotionOthers = computed(() => {
   const validSectors = ['activities', 'promoter', 'services']
-  // 1) Filtrar primeros los eventos de tipo 'promotion' que tengan alguno de los sectores
+
+  // Obtener ids de eventos que ya están en currentPromotionRestaurants
+  const restaurantIds = new Set(currentPromotionRestaurants.value.map(e => e._id))
+
   const filtered = events.value.filter(
     (event) =>
       event.eventType === 'promotion' &&
-      validSectors.some((sector) => event.userId.sector.includes(sector))
+      (
+        event.userId?.role === 'admin' ||
+        validSectors.some((sector) => event.userId?.sector?.includes(sector))
+      ) &&
+      !restaurantIds.has(event._id) // Excluir los que ya están en restaurantes
   )
 
-  // 2) Ordenar segun el índice del primer sector coincidente en validSectors
   const sorted = filtered.sort((a, b) => {
-    // Buscar el primer sector válido que contenga cada evento
-    const sectorA = validSectors.find((s) => a.userId.sector.includes(s)) || ''
-    const sectorB = validSectors.find((s) => b.userId.sector.includes(s)) || ''
+    if (a.userId?.role === 'admin' && b.userId?.role !== 'admin') return -1
+    if (b.userId?.role === 'admin' && a.userId?.role !== 'admin') return 1
+
+    const sectorA = validSectors.find((s) => a.userId?.sector?.includes(s)) || ''
+    const sectorB = validSectors.find((s) => b.userId?.sector?.includes(s)) || ''
 
     return validSectors.indexOf(sectorA) - validSectors.indexOf(sectorB)
   })

@@ -1,8 +1,8 @@
 <template>
   <DropdownMenu >
     <DropdownMenuTrigger as-child>
-      <Avatar>
-        <AvatarImage :src="userProfileImage" alt="User Avatar" />
+      <Avatar :class="[theme !== 'dark' ? 'ring-1 ring-black rounded-full' : '']">
+        <AvatarImage  :src="userProfileImage" alt="User Avatar" />
         <AvatarFallback>{{ userInitials }}</AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
@@ -31,8 +31,11 @@ onMounted(() => {
 })
 
 const userProfileImage = computed(() => {
-  return userStore.userData?.profileImg || user?.value?.picture
+  return userStore.userData?.profileImg || user?.value?.picture || '/usuario.png'
 })
+
+const theme = computed(() => userStore.themePreference)
+
 
 const userInitials = computed(() => {
   const name = userStore.userData?.username || user?.value?.name || ''
