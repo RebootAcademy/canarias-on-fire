@@ -234,7 +234,8 @@ export const useEventStore = defineStore('eventStore', {
         (this.status = null),
         (this.startTime = ''),
         (this.endTime = ''),
-        (this.reviewed = false)
+        (this.reviewed = false),
+        (this.nameByAdmin = '')
     },
 
     async fetchEvents(lat, lng) {
@@ -582,6 +583,7 @@ export const useEventStore = defineStore('eventStore', {
         musicType: this.musicType,
         adminPayment: this.adminPayment,
         reviewed: this.reviewed,
+        nameByAdmin: this.nameByAdmin || '',
       }
     },
 

@@ -19,7 +19,9 @@
         class="hover:underline text-secondary hover:text-primary hover:bg-transparent"
         variant="ghost"
       >
-      <img src="/imagen-de-perfil.png" class="w-[2.2rem]" alt="Login Icon">
+      <img v-if="theme === 'dark'" src="/imagen-de-perfil.png" class="w-[2.2rem]" alt="Login Icon">
+      <img v-else src="/imagen-de-perfil-black.png" class="w-[2.2rem]" alt="Login Icon">
+
       </Button>
       <NuxtLink to="/dashboard" v-if="userStore?.isAuthenticated">
         <MenuDropdown />
@@ -37,7 +39,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 const userStore = useUserStore()
 
 const auth0 = ref(null)
-const theme = ref('dark')
+const theme = computed(() => userStore.themePreference)
 
 function toggleTheme() {
   if (theme.value === 'dark') {
