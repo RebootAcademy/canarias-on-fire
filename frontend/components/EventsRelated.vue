@@ -60,7 +60,7 @@ const currentEventCategories = computed(() => {
 
 // Filtrar eventos relacionados basados en las categorías del evento actual
 const relatedEvents = computed(() => {
-  if (!currentEventCategories.value.length) return []
+   if (!Array.isArray(events.value) || !Array.isArray(currentEventCategories.value) || currentEventCategories.value.length === 0) return []
 
   return events.value
     .filter(
@@ -79,6 +79,8 @@ const relatedEvents = computed(() => {
 // Filtrar promociones de restaurantes
 const currentPromotionRestaurants = computed(() => {
   const validSectors = ['restoration', 'nightlife', 'hotels']
+
+ if (!Array.isArray(events.value)) return []
 
   const filtered = events.value.filter(
     (event) =>
@@ -106,6 +108,8 @@ const currentPromotionRestaurants = computed(() => {
 const currentPromotionOthers = computed(() => {
   const validSectors = ['activities', 'promoter', 'services']
 
+  if (!Array.isArray(events.value)) return []
+  
   // Obtener ids de eventos que ya están en currentPromotionRestaurants
   const restaurantIds = new Set(currentPromotionRestaurants.value.map(e => e._id))
 
@@ -139,6 +143,9 @@ const currentPromotionEvents = computed(() => {
 
 // Filtrar promociones cercanas basadas en la ubicación del evento actual
 const promotionsNearList = computed(() => {
+    if (!event.value || !event.value.eventLocation || !event.value.eventLocation.coordinates) {
+    return []
+  }
   const [long1, lat1] = event.value.eventLocation.coordinates
   const currentPromotions = [
     ...currentPromotionRestaurants.value,
