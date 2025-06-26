@@ -62,6 +62,13 @@
               {{ $t(`values.${category.name}`) }}
             </span>
           </div>
+             <Share2
+              :class="{
+                'hover:text-secondary': isGoldPayment,
+              }"
+              class=" w-5 cursor-pointer hover:text-primary"
+              @click="share"
+            />
           <!-- Options menu -->
           <div
             v-show="
@@ -72,7 +79,10 @@
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <MoreVertical
-                  class="h-4 w-4 text-gray-500 hover:text-secondary"
+                   :class="{
+                'hover:text-secondary': isGoldPayment,
+              }"
+                  class="h-4 w-4 text-gray-500 hover:text-primary"
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -203,7 +213,7 @@
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
 const { t } = useI18n()
-import { MoreVertical, Pencil, Trash, BookCheck, BookDashed } from 'lucide-vue-next'
+import { MoreVertical, Pencil, Trash, BookCheck, BookDashed, Share2 } from 'lucide-vue-next'
 
 const props = defineProps({
   promotion: {
@@ -329,6 +339,13 @@ const isCanceledAndOutOfDate = computed(() => {
 
 const handleSubscription = () => {
   router.push(`/pricing/promotions`)
+}
+
+const share = () => {
+  navigator.share({
+    text: 'Vente a este evento!',
+    url: '/events/' + props.promotion._id,
+  })
 }
 </script>
 

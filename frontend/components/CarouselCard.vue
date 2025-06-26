@@ -1,12 +1,25 @@
 <template>
   <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg bg-[#1a1a1a]">
-    <img
-      :src="imagesToShow[currentImageIndex]?.url || defaultImage"
-        :class="`w-full h-44 ${imagesToShow[currentImageIndex]?.url ? 
-        'object-cover' : 
-        'object-contain'}`"
-        @error="onImageError"
-    />
+    <div class="relative">
+      <img
+        :src="imagesToShow[currentImageIndex]?.url || defaultImage"
+          :class="`w-full h-44 ${imagesToShow[currentImageIndex]?.url ? 
+          'object-cover' : 
+          'object-contain'}`"
+          @error="onImageError"
+      />
+      <div v-if="promotionImage" class="absolute bg-primary rounded-full  top-[0.9rem] right-[1.3rem] w-[2.4rem] h-10"></div>
+      <img
+          v-if="promotionImage"
+          :src="promotionImage"
+          :alt="props.event?.eventDiscount"
+          class="absolute top-2 right-2 w-16 h-16"
+      />
+      <div  v-if="typeof props.event?.eventDiscount === 'string' && props.event.eventDiscount.includes('%')"
+        class="absolute top-2 right-2 bg-black h-12 w-12 border-2 border-primary rounded-full bg-primary-gradient flex justify-center items-center font-bold"
+      ><span class="pointer-events-none text-black">{{props?.event?.eventDiscount}}</span>
+      </div>
+    </div>
     <!-- Flechas para cambiar de imagen -->
     <button
       v-if="imagesToShow.length > 1"
@@ -99,6 +112,16 @@ const goToImage = (index) => {
 
 const onImageError = (event) => {
   event.target.src = defaultImage
+}
+
+const promotionImage = computed(() => {
+  return promotionsOptions[props.event?.eventDiscount] || null;
+});
+
+const promotionsOptions = {
+  '2x1': '/promotions/2x1.png',
+  '3x1': '/promotions/3x1.png',
+  '3x2': '/promotions/3x2.png',
 }
 
 </script>
