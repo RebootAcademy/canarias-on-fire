@@ -21,13 +21,21 @@ class Scraper {
   }
 
   async scrape(url, query) {
-    if (!this.parsers[url]) {
-      throw new Error(`No parser found for domain: ${url}`)
+    const fullUrl = query ? `${url}${query}` : url
+
+    // Buscar parser por coincidencia de inicio de URL
+    const parserEntry = Object.entries(this.parsers).find(([baseUrl]) =>
+      fullUrl.startsWith(baseUrl)
+    )
+
+    if (!parserEntry) {
+      throw new Error(`No parser found for URL: ${fullUrl}`)
     }
 
-    const fullUrl = query ? `${url}${query}` : url
+    const [baseUrl, parserFunction] = parserEntry
+
     const page = await this.fetchHTML(fullUrl)
-    return this.parsers[url](page)
+    return parserFunction(page)
   }
 }
 

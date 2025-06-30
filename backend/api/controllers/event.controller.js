@@ -533,7 +533,8 @@ const saveScrapedEvent = async (event) => {
             mapImageUrl: event.mapImageUrl,
           }
         : null,
-      startTime: event.time,
+      startTime: event.time || null,
+      endTime: event.endTime || null,
       eventDescription: event.description,
       externalUrl: event.link,
       coverImage: event.imgUrl,
