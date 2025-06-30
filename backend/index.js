@@ -22,6 +22,7 @@ const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
+const scrapeCabildoGranCanaria = require('./api/scraping/cabildoLasPalmas');
 
 const {
   removeDuplicateEvents,
@@ -102,11 +103,17 @@ cron.schedule('30 2 * * *', () => {
 })
 
 cron.schedule('0 3 * * *', () => {
+  console.log('Checking Cabildo de Las Palmas de Gran Canaria Events')
+  scrapeCabildoGranCanaria()
+})
+
+cron.schedule('30 3 * * *', () => {
   console.log('Checking Duplicated Events')
   removeDuplicateEvents()
 })
 
-cron.schedule('30 3 * * *', () => {
+
+cron.schedule('0 4 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
 })

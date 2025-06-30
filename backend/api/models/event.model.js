@@ -55,12 +55,14 @@ const EventSchema = new mongoose.Schema({
   isFree: {
     type: mongoose.Schema.Types.Mixed,
     required: true,
+    default: 'not_available',
     validate: {
       validator: function (value) {
         return typeof value === 'boolean' || value === 'not_available'
       },
       message: "isFree must be a boolean or 'not_available'.",
     },
+    
   },
   eventCapacity: {
     type: String,

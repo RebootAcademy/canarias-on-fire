@@ -8,7 +8,7 @@ const {
   saveScrapedEvent 
 } = require('../controllers/event.controller')
 
-const getLocationData= require('../services/geolocation')
+const getLocationData = require('../services/geolocation')
 
 const gobCanScraper = new Scraper()
 let page = 1
