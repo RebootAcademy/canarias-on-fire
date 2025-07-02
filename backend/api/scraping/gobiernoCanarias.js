@@ -4,15 +4,14 @@ const connectDB = require('../config/db')
 
 const Scraper = require('./scraper')
 
-const { 
-  saveScrapedEvent 
-} = require('../controllers/event.controller')
+const { saveScrapedEvent } = require('../controllers/event.controller')
 
 const getLocationData = require('../services/geolocation')
 
 const gobCanScraper = new Scraper()
 let page = 1
 const gobCanUrl = process.env.GOB_CAN_URL
+
 
 const handleDate = (date) => {
   let [datePart, time] = date.text().trim().split(' ')
@@ -40,12 +39,12 @@ const handleDate = (date) => {
     lastDay,
     month,
     year,
-    time
+    time,
   }
 }
 
 const checkCategory = (cat) => {
-  switch(cat){
+  switch (cat) {
     case 'Artes plásticas y visuales':
       return '6702adbd009a63bba556a1f8'
     case 'Artes escénicas':
@@ -66,36 +65,37 @@ const checkCategory = (cat) => {
   }
 }
 
-
-gobCanScraper.addParser(
-  gobCanUrl,
-  async (page) => {
-    try {
-      const events = await Promise.all(
-        page('.collection-item-2').map(async (index, element) => {
-          const eventType = page(element).find('[fs-cmsfilter-field="categoria"]').text().trim()
+gobCanScraper.addParser(gobCanUrl, async (page) => {
+  try {
+    const events = await Promise.all(
+      page('.collection-item-2')
+        .map(async (index, element) => {
+          const eventType = page(element)
+            .find('[fs-cmsfilter-field="categoria"]')
+            .text()
+            .trim()
           const title = page(element).find('.titulo-espectaculo').text().trim()
           const description = page(element).find('.texto').text().trim()
           const date = page(element).find('[fs-cmsfilter-type="date"]')
-          const imgUrl = page(element).find('img._00-imagen-agenda').attr('src').trim()
-          const location = page(element).find('[fs-cmsfilter-field="lugar"]').text().trim()
-          const island = page(element).find('[fs-cmsfilter-field="isla"]').text().trim()
+          const imgUrl = page(element)
+            .find('img._00-imagen-agenda')
+            .attr('src')
+            .trim()
+          const location = page(element)
+            .find('[fs-cmsfilter-field="lugar"]')
+            .text()
+            .trim()
+          const island = page(element)
+            .find('[fs-cmsfilter-field="isla"]')
+            .text()
+            .trim()
           const link = page(element).find('.info.w-inline-block').attr('href')
 
-          const {
-            startDay,
-            month,
-            year,
-            time,
-            lastDay,
-          } = handleDate(date)
+          const { startDay, month, year, time, lastDay } = handleDate(date)
 
           const category = checkCategory(eventType)
-          const {
-            postalCode,
-            coordinates,
-            mapImageUrl
-          } = await getLocationData(location, island)
+          const { postalCode, coordinates, mapImageUrl } =
+            await getLocationData(location, island)
 
           return {
             title,
@@ -115,18 +115,18 @@ gobCanScraper.addParser(
             imgUrl,
             link,
             island,
-            userId: process.env.ADMIN_ID
+            userId: process.env.ADMIN_ID,
           }
-        }).get() // Cheerio's .map needs .get() to convert the iterator to an array
-      )
+        })
+        .get() // Cheerio's .map needs .get() to convert the iterator to an array
+    )
 
-      return events
-    } catch (error) {
-      console.log(`Error scraping web: ${gobCanUrl}`)
-      console.error(error)
-    }
+    return events
+  } catch (error) {
+    console.log(`Error scraping web: ${gobCanUrl}`)
+    console.error(error)
   }
-)
+})
 
 const scrapeGobCanarias = async () => {
   console.log(`page: ${page}`)
@@ -147,9 +147,10 @@ const scrapeGobCanarias = async () => {
       try {
         const result = await saveScrapedEvent(event)
         if (result === 'duplicated') {
-          console.log(`Duplicated event: ${event.title}`)
+          continue
+        } else {
+          console.log(`Event saved: ${event.title}`)
         }
-        console.log(`Event saved: ${event.title}`)
       } catch (error) {
         console.error(`Failed to save event: ${event.title}`, error)
       }

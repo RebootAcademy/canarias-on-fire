@@ -88,10 +88,10 @@ cron.schedule('0 1 * * *', () => {
   scrapeGobCanarias()
 })
 
-cron.schedule('30 1 * * *', () => {
+/* cron.schedule('30 1 * * *', () => {
   console.log('Checking Gobierno de Canarias Events')
   scrapeGobCanariasExpo()
-})
+}) */
 
 cron.schedule('0 2 * * *', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')

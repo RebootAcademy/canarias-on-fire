@@ -498,30 +498,34 @@ const saveScrapedEvent = async (event) => {
     const exists = await checkExistence(event)
 
     if (exists) {
-      const currentEventDate = new Date(
-        `${exists.eventEndDate.year}-${exists.eventEndDate.month}-${exists.eventEndDate.day}`
-      )
-      const incomingEventDate = new Date(
-        `${event.lastYear}-${event.lastMonth}-${event.lastDay}`
-      )
-
-      console.log(`current date: ${currentEventDate} ---- incomingoDate ${incomingEventDate}`)
-
-      if (incomingEventDate > currentEventDate) {
-        console.log(`Updating last dates for this event:${exists.eventName}`)
-        await Event.updateOne(
-          { _id: exists._id },
-          {
-            $set: {
-              eventEndDate: {
-                year: event.lastYear,
-                month: event.lastMonth,
-                day: event.lastDay,
-              },
-            },
-          }
+      if (exists.eventEndDate && event.lastYear && event.lastMonth && event.lastDay) {
+        const currentEventDate = new Date(
+          `${exists.eventEndDate.year}-${exists.eventEndDate.month}-${exists.eventEndDate.day}`
         )
-      } 
+        const incomingEventDate = new Date(
+          `${event.lastYear}-${event.lastMonth}-${event.lastDay}`
+        )
+
+        console.log(
+          `current date: ${currentEventDate} ---- incomingoDate ${incomingEventDate}`
+        )
+
+        if (incomingEventDate > currentEventDate) {
+          console.log(`Updating last dates for this event:${exists.eventName}`)
+          await Event.updateOne(
+            { _id: exists._id },
+            {
+              $set: {
+                eventEndDate: {
+                  year: event.lastYear,
+                  month: event.lastMonth,
+                  day: event.lastDay,
+                },
+              },
+            }
+          )
+        }
+      }
       console.log('Duplicate event found:', event.title)
       return 'duplicated'
     }
@@ -552,7 +556,10 @@ const saveScrapedEvent = async (event) => {
         : null,
       eventLocation: event.location
         ? {
-            postalCode: event.postalCode,
+            postalCode: (() => {
+              const pc = Number(event.postalCode)
+              return !isNaN(pc) ? pc : null
+            })(),
             address: event.location,
             coordinates: event.coordinates,
             mapImageUrl: event.mapImageUrl,
