@@ -35,7 +35,7 @@ class Scraper {
     const [baseUrl, parserFunction] = parserEntry
 
     const page = await this.fetchHTML(fullUrl)
-    return parserFunction(page)
+    return parserFunction(page, fullUrl)
   }
 }
 
