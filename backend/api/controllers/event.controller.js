@@ -483,16 +483,9 @@ const checkExistence = async (event) => {
       eventName: event.title,
       externalUrl: event.link,
       $expr: {
-        $and: [
-          { $eq: [{ $toString: '$eventDate.year' }, String(event.startYear)] },
-          {
-            $eq: [{ $toString: '$eventDate.month' }, String(event.startMonth)],
-          },
-          { $eq: [{ $toString: '$eventDate.day' }, String(event.startDay)] },
-        ],
+        $eq: [{ $toString: '$eventDate.year' }, String(event.startYear)],
       },
     })
-    console.log(`Esto existe actualmente en la DB: ${exists.eventName}`)
     return exists
   } catch (error) {
     console.log('Error checking event existence')
@@ -505,6 +498,30 @@ const saveScrapedEvent = async (event) => {
     const exists = await checkExistence(event)
 
     if (exists) {
+      const currentEventDate = new Date(
+        `${exists.eventEndDate.year}-${exists.eventEndDate.month}-${exists.eventEndDate.day}`
+      )
+      const incomingEventDate = new Date(
+        `${event.lastYear}-${event.lastMonth}-${event.lastDay}`
+      )
+
+      console.log(`current date: ${currentEventDate} ---- incomingoDate ${incomingEventDate}`)
+
+      if (incomingEventDate > currentEventDate) {
+        console.log(`Updating last dates for this event:${exists.eventName}`)
+        await Event.updateOne(
+          { _id: exists._id },
+          {
+            $set: {
+              eventEndDate: {
+                year: event.lastYear,
+                month: event.lastMonth,
+                day: event.lastDay,
+              },
+            },
+          }
+        )
+      } 
       console.log('Duplicate event found:', event.title)
       return 'duplicated'
     }
