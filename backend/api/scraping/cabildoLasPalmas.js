@@ -128,9 +128,11 @@ granCanScraper.addParser(granCanUrl, async ($) => {
       const category = checkCategory(title)
       // Acumulamos promesas
       eventPromises.push(
-        scrapeEventDetails(fullLink).then(async ({ description, imgUrl }) => {
+        (async () => {
+          const { description, imgUrl } = await scrapeEventDetails(fullLink)
           const { postalCode, coordinates, mapImageUrl } =
             await getLocationData(location, 'Gran Canaria')
+          
           events.push({
             title,
             category: [category],
@@ -152,7 +154,7 @@ granCanScraper.addParser(granCanUrl, async ($) => {
             island: 'Gran Canaria',
             userId: process.env.ADMIN_ID,
           })
-        })
+        })()
       )
     })
   })
