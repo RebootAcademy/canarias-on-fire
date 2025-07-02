@@ -128,9 +128,11 @@ granCanScraper.addParser(granCanUrl, async ($) => {
       const category = checkCategory(title)
       // Acumulamos promesas
       eventPromises.push(
-        scrapeEventDetails(fullLink).then(async ({ description, imgUrl }) => {
+        (async () => {
+          const { description, imgUrl } = await scrapeEventDetails(fullLink)
           const { postalCode, coordinates, mapImageUrl } =
             await getLocationData(location, 'Gran Canaria')
+          
           events.push({
             title,
             category: [category],
@@ -148,11 +150,11 @@ granCanScraper.addParser(granCanUrl, async ($) => {
             mapImageUrl: mapImageUrl || '',
             postalCode: postalCode || '',
             imgUrl: imgUrl || '',
-            fullLink,
+            link: fullLink,
             island: 'Gran Canaria',
             userId: process.env.ADMIN_ID,
           })
-        })
+        })()
       )
     })
   })
@@ -238,7 +240,7 @@ const scrapeCabildoGranCanaria = async () => {
             console.log(`⚠️  Duplicated: ${event.title}`)
           } else {
             console.log(
-              `✅ Saved: ${event.title} (${event.startDay}/${event.startMonth} - ${event.lastDay}/${event.lastMonth})`
+              `✅ Saved: ${event.title} (${event.startDay}/${event.startMonth} - ${event.lastDay}/${event.lastMonth}) link: ${event.link}`
             )
           }
         } catch (err) {

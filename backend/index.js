@@ -23,6 +23,7 @@ const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
 const scrapeCabildoGranCanaria = require('./api/scraping/cabildoLasPalmas');
+const scrapeTeaTenerife = require('./api/scraping/cabildoTenerife.js')
 
 const {
   removeDuplicateEvents,
@@ -108,12 +109,17 @@ cron.schedule('0 3 * * *', () => {
 })
 
 cron.schedule('30 3 * * *', () => {
+  console.log('Checking TEA Eventos en Tenerife')
+  scrapeTeaTenerife()
+})
+
+cron.schedule('0 4 * * *', () => {
   console.log('Checking Duplicated Events')
   removeDuplicateEvents()
 })
 
 
-cron.schedule('0 4 * * *', () => {
+cron.schedule('30 4 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
 })

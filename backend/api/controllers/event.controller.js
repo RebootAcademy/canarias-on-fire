@@ -481,10 +481,18 @@ const checkExistence = async (event) => {
   try {
     const exists = await Event.findOne({
       eventName: event.title,
-      'eventDate.year': `${event.startYear}`,
-      'eventDate.month': `${event.startMonth}`,
-      'eventDate.day': `${event.startDay}`,
+      externalUrl: event.link,
+      $expr: {
+        $and: [
+          { $eq: [{ $toString: '$eventDate.year' }, String(event.startYear)] },
+          {
+            $eq: [{ $toString: '$eventDate.month' }, String(event.startMonth)],
+          },
+          { $eq: [{ $toString: '$eventDate.day' }, String(event.startDay)] },
+        ],
+      },
     })
+    console.log(`Esto existe actualmente en la DB: ${exists.eventName}`)
     return exists
   } catch (error) {
     console.log('Error checking event existence')
@@ -543,7 +551,7 @@ const saveScrapedEvent = async (event) => {
       userId: event.userId,
       payment: '6702b0ef009a63bba556a209',
     })
-    console.log('Event added:', event)
+
     return {
       success: true,
       message: 'Event added successfully',
@@ -672,7 +680,7 @@ const updateExpiredPromotions = async () => {
   for (const promotion of promotions) {
     const subscriptionStatus = promotion.userId?.activeSubscription?.status
     const canceledAt = promotion.userId?.activeSubscription.canceledAt
- 
+
     if (
       (subscriptionStatus === 'canceled' ||
         subscriptionStatus === 'inactive') &&
