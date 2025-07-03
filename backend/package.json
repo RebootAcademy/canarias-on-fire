@@ -28,7 +28,10 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.15",
     "puppeteer": "^24.11.1",
-    "stripe": "^16.6.0"
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "stripe": "^16.6.0",
+    "user-agents": "^1.1.589"
   },
   "devDependencies": {
     "nodemon": "^3.1.3",

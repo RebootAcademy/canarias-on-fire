@@ -1,8 +1,10 @@
 require('dotenv').config()
 const connectDB = require('../config/db')
-const Scraper = require('./scraper')
+const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
 const getLocationData = require('../services/geolocation')
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const granCanScraper = new Scraper()
 const granCanUrl = process.env.CAB_GRANCAN_URL
@@ -68,7 +70,6 @@ const scrapeEventDetails = async (url) => {
 
 granCanScraper.addParser(granCanUrl, async ($) => {
   const events = []
-  const eventPromises = []
 
   const textMonthAndYear = $('#agenda-completa .botones-avance .mes')
     .first()
@@ -84,23 +85,24 @@ granCanScraper.addParser(granCanUrl, async ($) => {
     defaultMonth = monthMap[matchMonthAndYear[1].toLowerCase()] || defaultMonth
   }
 
+  const tasks = []
+  const seen = new Set()
+
   $('#tabla-agenda-completa tbody tr').each((_, row) => {
     const dataTextDay = $(row).find('td').first().text().trim()
-
     const matchDay = dataTextDay.match(/(\d{1,2})\s+([a-záéíóúñ]+)/i)
     let day = null
     let dynamicMonth = defaultMonth
+
     if (matchDay) {
       day = matchDay[1].padStart(2, '0')
       const monthName = matchDay[2].toLowerCase()
-
       if (monthMap[monthName]) {
         dynamicMonth = monthMap[monthName]
       }
     }
 
     const td = $(row).find('td').eq(1)
-
     td.find('.evento').each((_, el) => {
       const eventoDiv = $(el)
       const anchor = eventoDiv.find('a').first()
@@ -116,6 +118,7 @@ granCanScraper.addParser(granCanUrl, async ($) => {
         const spanInside = span.find('.mb-2').eq(1)
         timeText = spanInside.text().trim()
       }
+
       const matchTime = timeText.match(/(\d{2}:\d{2})\s*h.*?(\d{2}:\d{2})\s*h/i)
       const startTime = matchTime ? matchTime[1] : null
       const endTime = matchTime ? matchTime[2] : null
@@ -123,39 +126,65 @@ granCanScraper.addParser(granCanUrl, async ($) => {
       const location = span.find('.evento-localizacion').first().text().trim()
       const category = checkCategory(title)
 
-      eventPromises.push(
-        (async () => {
-          const { description, imgUrl } = await scrapeEventDetails(fullLink)
-          const { postalCode, coordinates, mapImageUrl } =
-            await getLocationData(location, 'Gran Canaria')
+      const key = `${title}_${location}`
 
-          events.push({
-            title,
-            category: [category],
-            startYear: year,
-            lastYear: year,
-            startMonth: dynamicMonth,
-            lastMonth: dynamicMonth,
-            startDay: day,
-            lastDay: day,
-            time: startTime,
-            endTime,
-            description,
-            location,
-            coordinates: coordinates || null,
-            mapImageUrl: mapImageUrl || '',
-            postalCode: postalCode || '',
-            imgUrl: imgUrl || '',
-            link: fullLink,
-            island: 'Gran Canaria',
-            userId: process.env.ADMIN_ID,
-          })
-        })()
-      )
+      if (seen.has(key)) return // ❌ evento repetido, lo ignoramos
+
+      seen.add(key) // ✅ registrar evento único
+
+      // Guardamos la tarea para ejecutarla secuencialmente
+      tasks.push({
+        title,
+        fullLink,
+        location,
+        category,
+        startTime,
+        endTime,
+        year,
+        dynamicMonth,
+        day,
+      })
     })
   })
 
-  await Promise.all(eventPromises)
+  // Ejecutar tareas una por una
+  for (const task of tasks) {
+    try {
+      const { description, imgUrl } = await scrapeEventDetails(task.fullLink)
+      const { postalCode, coordinates, mapImageUrl } = await getLocationData(
+        task.location,
+        'Gran Canaria'
+      )
+
+      events.push({
+        title: task.title,
+        category: [task.category],
+        startYear: task.year,
+        lastYear: task.year,
+        startMonth: task.dynamicMonth,
+        lastMonth: task.dynamicMonth,
+        startDay: task.day,
+        lastDay: task.day,
+        time: task.startTime,
+        endTime: task.endTime,
+        description,
+        location: task.location,
+        coordinates: coordinates || null,
+        mapImageUrl: mapImageUrl || '',
+        postalCode: postalCode || '',
+        imgUrl: imgUrl || '',
+        link: task.fullLink,
+        island: 'Gran Canaria',
+        userId: process.env.ADMIN_ID,
+      })
+
+      // Agrega un pequeño delay para parecer humano (por ejemplo, 1-2 segundos)
+      await wait(3000)
+    } catch (err) {
+      console.error(`❌ Error procesando evento ${task.title}`, err)
+    }
+  }
+
   return events
 })
 
@@ -187,11 +216,6 @@ const mergeEventDates = (existing, incoming) => {
     incoming.lastMonth,
     incoming.lastDay
   )
-
-  console.log('existingStart:', existingStart)
-  console.log('existingEnd:', existingEnd)
-  console.log('incStart:', incStart)
-  console.log('incEnd:', incEnd)
 
   if (incStart < existingStart) {
     console.log(
@@ -246,7 +270,6 @@ const scrapeCabildoGranCanaria = async () => {
           )
           if (existingEvent) {
             mergeEventDates(existingEvent, event)
-            console.log(`🔄 Fechas actualizadas para evento existente: ${key}`)
           }
         }
       })
@@ -259,7 +282,7 @@ const scrapeCabildoGranCanaria = async () => {
         continue
       }
 
-      await new Promise((r) => setTimeout(r, 1500))
+      await wait(10000) // Espera 10 segundos entre meses para evitar bloqueos
     }
 
     for (const event of filteredEvents) {

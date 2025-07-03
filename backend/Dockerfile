@@ -12,14 +12,14 @@ RUN apt-get update && apt-get install -yq     gconf-service     libasound2     l
 # Copia los archivos de definición de dependencias
 COPY package.json package-lock.json ./
 
-# Instala las dependencias de producción
-RUN npm ci --only=production
+# Instala las dependencias
+RUN npm ci
 
 # Establece la variable de entorno para el directorio de caché de Puppeteer
 ENV PUPPETEER_CACHE_DIR=/usr/src/app/backend/.cache/puppeteer
 
 # Instala el navegador Chrome que Puppeteer necesita
-RUN npx puppeteer browsers install chrome
+RUN npx puppeteer browsers install chrome 
 
 # Copia el resto del código de la aplicación
 COPY . .
