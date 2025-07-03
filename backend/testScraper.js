@@ -12,11 +12,11 @@ async function main() {
     try {
         await dbConnect()
         await scrapeCabildoGranCanaria()
-        //await scrapeGobCanarias()
+        await scrapeGobCanarias()
         //await scrapperGobiernoExpo()
-        //await scrapeAytoLasPalmas()
-        //await scrapeAytoTenerife()
-        //await scrapeTeaTenerife()
+        await scrapeAytoLasPalmas()
+        await scrapeAytoTenerife()
+        await scrapeTeaTenerife()
         console.log('Scraping completed successfully.')
     } catch (error) {
         console.error('Error during scraping:', error)
