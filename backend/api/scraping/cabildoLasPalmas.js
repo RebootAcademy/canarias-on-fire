@@ -178,8 +178,8 @@ granCanScraper.addParser(granCanUrl, async ($) => {
         userId: process.env.ADMIN_ID,
       })
 
-      // Agrega un pequeño delay para parecer humano (por ejemplo, 1-2 segundos)
-      await wait(3000)
+      // delay para evitar bloqueos
+      await wait(6000)
     } catch (err) {
       console.error(`❌ Error procesando evento ${task.title}`, err)
     }
@@ -241,10 +241,8 @@ const scrapeCabildoGranCanaria = async () => {
   const currentYear = now.getFullYear()
   const startMonth = now.getMonth() + 1
   const endMonth = 12
-  const groupedEvents = {}
   const uniqueEvents = new Set() // Para evitar duplicados
   const filteredEvents = [] // Donde guardarás los eventos únicos
-  let maxMonthFound = startMonth
 
   try {
     for (let m = startMonth; m <= endMonth; m++) {

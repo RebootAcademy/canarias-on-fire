@@ -7,6 +7,8 @@ const getLocationData = require('../services/geolocation')
 const ACTIVIDADES_URL = process.env.TEA_TENERIFE_URL_ACT
 const CINE_URL = process.env.TEA_TENERIFE_URL_CINE
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 if (!ACTIVIDADES_URL || !CINE_URL) {
   throw new Error(
     '❌ TEA_TENERIFE_URL_ACT o TEA_TENERIFE_URL_CINE is not defined in .env'
@@ -92,20 +94,19 @@ const scrapeEventDetails = async (url, scraper, isCine = false) => {
   }
 }
 
-const setupParser = (scraper, url, categoryId, isCine = false) => {
+const setupParser = async (scraper, url, categoryId, isCine = false) => {
   scraper.addParser(url, async ($) => {
     const events = []
-    const promises = []
     const items = $('.items .item.active')
     console.log(
       `👀 Encontrados ${items.length} items en ${isCine ? 'CINE' : 'ACTIVIDADES'}`
     )
 
-    $('.items .item.active').each((_, el) => {
-      const item = $(el)
+    for (let i = 0; i < items.length; i++) {
+      const item = $(items[i])
       const dateText = item.find('.text .date').first().text().trim()
       const dateParsed = parseEventDates(dateText)
-      if (!dateParsed) return
+      if (!dateParsed) continue
 
       const title = item.find('h3').first().text().trim()
       const anchor = item.find('.text a').first()
@@ -125,49 +126,53 @@ const setupParser = (scraper, url, categoryId, isCine = false) => {
         }
       }
 
-      promises.push(
-        (async () => {
-          const { description, imgUrl: detailImg } = await scrapeEventDetails(
-            fullLink,
-            scraper,
-            isCine
-          )
-          const location = 'TEA Tenerife'
-          const { postalCode, coordinates, mapImageUrl } =
-            await getLocationData(location, 'Tenerife')
+      try {
+        const { description, imgUrl: detailImg } = await scrapeEventDetails(
+          fullLink,
+          scraper,
+          isCine
+        )
+        const location = 'TEA Tenerife'
+        const { postalCode, coordinates, mapImageUrl } = await getLocationData(
+          location,
+          'Tenerife'
+        )
 
-          events.push({
-            title,
-            category: categoryId,
-            startYear: String(dateParsed.from.getFullYear()),
-            lastYear: dateParsed.to
-              ? dateParsed.to.getFullYear()
-              : dateParsed.from.getFullYear(),
-            startMonth: String(dateParsed.from.getMonth() + 1).padStart(2, '0'),
-            lastMonth: dateParsed.to
-              ? String(dateParsed.to.getMonth() + 1).padStart(2, '0')
-              : String(dateParsed.from.getMonth() + 1).padStart(2, '0'),
-            startDay: String(dateParsed.from.getDate()).padStart(2, '0'),
-            lastDay: dateParsed.to
-              ? String(dateParsed.to.getDate()).padStart(2, '0')
-              : String(dateParsed.from.getDate()).padStart(2, '0'),
-            time: null,
-            endTime: null,
-            description,
-            location,
-            coordinates: coordinates || null,
-            mapImageUrl: mapImageUrl || '',
-            postalCode: postalCode || '',
-            imgUrl: isCine ? detailImg : imgUrl,
-            link: fullLink,
-            island: 'Tenerife',
-            userId: process.env.ADMIN_ID,
-          })
-        })()
-      )
-    })
+        events.push({
+          title,
+          category: categoryId,
+          startYear: String(dateParsed.from.getFullYear()),
+          lastYear: dateParsed.to
+            ? dateParsed.to.getFullYear()
+            : dateParsed.from.getFullYear(),
+          startMonth: String(dateParsed.from.getMonth() + 1).padStart(2, '0'),
+          lastMonth: dateParsed.to
+            ? String(dateParsed.to.getMonth() + 1).padStart(2, '0')
+            : String(dateParsed.from.getMonth() + 1).padStart(2, '0'),
+          startDay: String(dateParsed.from.getDate()).padStart(2, '0'),
+          lastDay: dateParsed.to
+            ? String(dateParsed.to.getDate()).padStart(2, '0')
+            : String(dateParsed.from.getDate()).padStart(2, '0'),
+          time: null,
+          endTime: null,
+          description,
+          location,
+          coordinates: coordinates || null,
+          mapImageUrl: mapImageUrl || '',
+          postalCode: postalCode || '',
+          imgUrl: isCine ? detailImg : imgUrl,
+          link: fullLink,
+          island: 'Tenerife',
+          userId: process.env.ADMIN_ID,
+        })
+      } catch (err) {
+        console.error(`❌ Error fetching details from ${fullLink}`, err)
+      }
 
-    await Promise.all(promises)
+      // Añadir un retraso de 3 segundos entre cada petición
+      await delay(6000)
+    }
+
     return events
   })
 }
@@ -176,8 +181,8 @@ const scrapeTeaTenerife = async () => {
   const scraper = new Scraper()
 
   // Parsers para actividades y cine
-  setupParser(scraper, ACTIVIDADES_URL, CATEGORY_IDS.actividades, false)
-  setupParser(scraper, CINE_URL, CATEGORY_IDS.cine, true)
+  await setupParser(scraper, ACTIVIDADES_URL, CATEGORY_IDS.actividades, false)
+  await setupParser(scraper, CINE_URL, CATEGORY_IDS.cine, true)
 
   try {
     console.log('🔎 Scraping TEA Tenerife - Actividades...')
@@ -190,7 +195,9 @@ const scrapeTeaTenerife = async () => {
 
     for (const event of allEvents) {
       try {
-        console.log(`📝 Saving event: ${event.title} (${event.startMonth})-${event.startYear}-${event.startDay}`)
+        console.log(
+          `📝 Saving event: ${event.title} (${event.startMonth})-${event.startYear}-${event.startDay}`
+        )
 
         // Aquí se guarda el evento
         // Descomentar la siguiente línea cuando saveScrapedEvent esté implementado
