@@ -7,40 +7,49 @@ puppeteer.use(StealthPlugin())
 
 class Scraper {
   constructor() {
-    // { baseUrl: parserFn }
-    this.parsers = {}
+    this.parsers = {} // Objeto para almacenar los parsers
+    this.browser = null // Navegador global
   }
 
+  // Inicializa el navegador solo una vez
+  async initBrowser() {
+    if (!this.browser) {
+      this.browser = await puppeteer.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-notifications',
+          '--disable-popup-blocking',
+          '--ignore-certificate-errors',
+          '--disable-gpu',
+          '--no-zygote',
+          '--no-first-run',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--disable-features=site-per-process',
+          '--disable-site-isolation-trials',
+          
+          '--window-size=1920,1080',
+        ],
+      })
+    }
+    return this.browser
+  }
+
+  // Método para agregar un parser para una URL específica
   addParser(baseUrl, parserFn) {
     this.parsers[baseUrl] = parserFn
   }
 
+  // Obtener el HTML de una página
   async fetchHTML(url) {
     const userAgent = new UserAgent({ deviceCategory: 'desktop' }).toString()
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-notifications',
-        '--disable-popup-blocking',
-        '--ignore-certificate-errors',
-        '--disable-gpu',
-        '--no-zygote',
-        '--no-first-run',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-features=site-per-process',
-        '--disable-site-isolation-trials',
-        '--disable-setuid-sandbox',
-        '--disable-infobars',
-        '--window-size=1920,1080',
-      ],
-    })
-
+    const browser = await this.initBrowser() // Reutiliza el navegador
+    let page
     try {
-      const page = await browser.newPage()
+      page = await browser.newPage()
       await page.setUserAgent(userAgent)
       await page.setViewport({ width: 1920, height: 1080 })
 
@@ -52,10 +61,13 @@ class Scraper {
       console.error(`❌ Error fetching with Puppeteer:`, error)
       throw new Error(`Could not fetch page with Puppeteer: ${url}`)
     } finally {
-      await browser.close()
+      if (page) {
+        await page.close() // Cierra solo la página, no el navegador
+      }
     }
   }
 
+  // Realizar el scraping con la URL y el parser adecuado
   async scrape(url, query) {
     const fullUrl = query ? `${url}${query}` : url
 
@@ -70,6 +82,13 @@ class Scraper {
     const [baseUrl, parserFn] = parserEntry
     const $ = await this.fetchHTML(fullUrl)
     return parserFn($)
+  }
+
+  // Cerrar el navegador
+  async closeBrowser() {
+    if (this.browser) {
+      await this.browser.close()
+    }
   }
 }
 
