@@ -22,7 +22,7 @@ const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
-const scrapeCabildoGranCanaria = require('./api/scraping/cabildoLasPalmas');
+const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas.js');
 const scrapeTeaTenerife = require('./api/scraping/teaTenerife.js')
 
 const {

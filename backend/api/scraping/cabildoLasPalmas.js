@@ -126,7 +126,7 @@ granCanScraper.addParser(granCanUrl, async ($) => {
       const location = span.find('.evento-localizacion').first().text().trim()
       const category = checkCategory(title)
 
-      const key = `${title}_${location}`
+      const key = `${title}_${location}_${day}_${dynamicMonth}_${year}`
 
       if (seen.has(key)) return // ❌ evento repetido, lo ignoramos
 

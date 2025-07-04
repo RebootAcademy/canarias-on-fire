@@ -496,9 +496,14 @@ const checkExistence = async (event) => {
 const saveScrapedEvent = async (event) => {
   try {
     const exists = await checkExistence(event)
-
+    
     if (exists) {
-      if (exists.eventEndDate && event.lastYear && event.lastMonth && event.lastDay) {
+      if (
+        exists.eventEndDate &&
+        event.lastYear &&
+        event.lastMonth &&
+        event.lastDay
+      ) {
         const currentEventDate = new Date(
           `${exists.eventEndDate.year}-${exists.eventEndDate.month}-${exists.eventEndDate.day}`
         )
@@ -506,27 +511,61 @@ const saveScrapedEvent = async (event) => {
           `${event.lastYear}-${event.lastMonth}-${event.lastDay}`
         )
 
-        console.log(
-          `current date: ${currentEventDate} ---- incomingoDate ${incomingEventDate}`
-        )
-
         if (incomingEventDate > currentEventDate) {
-          console.log(`Updating last dates for this event:${exists.eventName}`)
+          console.log(` Updating last dates for this event:${exists.eventName}`)
           await Event.updateOne(
             { _id: exists._id },
             {
               $set: {
-                eventEndDate: {
-                  year: event.lastYear,
-                  month: event.lastMonth,
-                  day: event.lastDay,
+                categories: event.category,
+                eventName: event.title,
+                eventType: 'event',
+                eventDate: {
+                  calendar: {
+                    type: 'gregory',
+                  },
+                  era: 'AD',
+                  year: event.startYear,
+                  month: event.startMonth,
+                  day: event.startDay,
                 },
+                eventEndDate: event.lastDay
+                  ? {
+                      calendar: {
+                        type: 'gregory',
+                      },
+                      era: 'AD',
+                      year: event.lastYear,
+                      month: event.lastMonth,
+                      day: event.lastDay,
+                    }
+                  : null,
+                eventLocation: event.location
+                  ? { type: 'Point',
+                      postalCode: (() => {
+                        const pc = Number(event.postalCode)
+                        return !isNaN(pc) ? pc : null
+                      })(),
+                      address: event.location,
+                      coordinates: event.coordinates,
+                      mapImageUrl: event.mapImageUrl,
+                    }
+                  : null,
+                startTime: event.time || null,
+                endTime: event.endTime || null,
+                eventDescription: event.description,
+                externalUrl: event.link,
+                coverImage: event.imgUrl,
+                externalSource: true,
+                status: 'published',
+                userId: event.userId,
+                payment: '6702b0ef009a63bba556a209',
               },
             }
           )
+          return 'updated'
         }
       }
-      console.log('Duplicate event found:', event.title)
       return 'duplicated'
     }
 

@@ -130,9 +130,24 @@ const paymentStore = usePaymentStore()
 const { t } = useI18n()
 
 const isLoading = ref(false)
-
+console.log('props.payments', props.payments)
 const sortedPayments = computed(() => {
-  return props.payments.sort((a, b) => a.basePrice - b.basePrice)
+  return props.payments
+    .filter((p) => p.name !== 'optima plus') // Quitar "optima plus"
+    .map((p) => {
+      const originalFeatures = p.features || {}
+
+      // Eliminar la feature "rssPublication"
+      const filteredFeatures = Object.fromEntries(
+        Object.entries(originalFeatures).filter(([key]) => key !== 'rssPublication')
+      )
+
+      return {
+        ...p,
+        features: filteredFeatures,
+      }
+    })
+    .sort((a, b) => a.basePrice - b.basePrice)
 })
 
 const featureDescriptions = computed(() => ({

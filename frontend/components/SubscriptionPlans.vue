@@ -199,8 +199,8 @@ const getNameSubscriptionPlan = (plan) => {
       return t('plansName.basic')
     case 'optima':
       return t('plansName.optima')
-    case 'optima plus':
-      return t('plansName.optimaPlus')
+   /*  case 'optima plus':
+      return t('plansName.optimaPlus') */
     default:
       break
   }
@@ -278,7 +278,7 @@ const getSubscriptionAction = (plan) => {
     return 'unknown'
   }
 
-  const planOrder = ['basic', 'optima', 'optima plus']
+  const planOrder = ['basic', 'optima'/* , 'optima plus' */]
   const currentPlanIndex = planOrder.indexOf(currentPlan.name)
   const newPlanIndex = planOrder.indexOf(plan.name)
 

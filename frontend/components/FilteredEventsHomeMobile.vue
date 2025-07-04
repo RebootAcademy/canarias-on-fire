@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex border-2 border-primary p-2 rounded-md flex-col justify-center gap-4"
+    class="flex border-2 border-primary p-2 rounded-md flex justify-center items-center  gap-4"
   >
     <span>{{ $t('buttonsEvents.events') }}</span>
   </div>
@@ -16,7 +16,7 @@
       <button
         :key="selectedOption"
         type="button"
-        class="border-2 rounded-md border-primary bg-transparent text-secondary hover:bg-primary-gradient w-full flex items-center justify-between p-2 min-h-[2.5rem]"
+        class="relative border-2 rounded-md border-primary bg-transparent text-secondary  bg-primary-gradient w-full flex items-center justify-center p-2 min-h-[2.5rem]"
         :class="open ? 'rounded-b-none' : 'rounded-b-md'"
         @click="toggleOpen"
       >
@@ -30,7 +30,7 @@
         <img
           src="/caret-abajo.png"
           alt="Caret Icon"
-          class="w-3 transition-transform duration-300"
+          class="absolute top-3 right-2 w-3 transition-transform duration-300"
           :class="{ 'rotate-180': open }"
         />
       </button>
