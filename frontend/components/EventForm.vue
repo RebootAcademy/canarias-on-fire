@@ -61,10 +61,10 @@ const tariffItems = computed(() => [
     label: t('plansName.optima'),
     value: 'optima',
   },
-  {
+ /*  {
     label: t('plansName.optimaPlus'),
     value: 'optima plus',
-  },
+  }, */
 ])
 
 const userStore = useUserStore()
@@ -87,7 +87,6 @@ watch(
   },
   { immediate: true }
 )
-
 
 const onSubmit = async () => {
   eventStore.setHasTriedSubmit(true)
