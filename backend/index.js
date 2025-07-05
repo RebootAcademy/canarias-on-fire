@@ -24,6 +24,8 @@ const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
 const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas.js');
 const scrapeTeaTenerife = require('./api/scraping/teaTenerife.js')
+const Scraper = require('./api/scraping/scraperWithPuppeteer.js')
+const scraper = new Scraper()
 
 const {
   removeDuplicateEvents,
@@ -122,6 +124,11 @@ cron.schedule('0 4 * * *', () => {
 cron.schedule('30 4 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
+})
+
+cron.schedule('0 5 * * *', async () => {
+  console.log('Closing Browser')
+   scraper.closeBrowser()
 })
 
 module.exports = app
