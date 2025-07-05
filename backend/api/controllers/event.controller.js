@@ -477,95 +477,141 @@ const deleteAllMyClosedEvents = async (req, res) => {
 
 const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 
-const checkExistence = async (event) => {
-  try {
-    const exists = await Event.findOne({
-      eventName: event.title,
-      externalUrl: event.link,
-      $expr: {
-        $eq: [{ $toString: '$eventDate.year' }, String(event.startYear)],
-      },
-    })
-    return exists
-  } catch (error) {
-    console.log('Error checking event existence')
-    throw Error(error)
-  }
-}
+const hasValidEndDate = (e) => e.lastYear && e.lastMonth && e.lastDay
+const hasValidStartDate = (e) => e.startYear && e.startMonth && e.startDay
 
 const saveScrapedEvent = async (event) => {
-  try {
-    const exists = await checkExistence(event)
-    
-    if (exists) {
-      if (
-        exists.eventEndDate &&
-        event.lastYear &&
-        event.lastMonth &&
-        event.lastDay
-      ) {
-        const currentEventDate = new Date(
-          `${exists.eventEndDate.year}-${exists.eventEndDate.month}-${exists.eventEndDate.day}`
-        )
-        const incomingEventDate = new Date(
-          `${event.lastYear}-${event.lastMonth}-${event.lastDay}`
-        )
+  const safeDate = (dateObj) => {
+    if (!dateObj) return null
+    const { year, month, day } = dateObj
+    if (!year || !month || !day) return null
+    return new Date(`${year}-${month}-${day}`)
+  }
 
-        if (incomingEventDate > currentEventDate) {
-          console.log(` Updating last dates for this event:${exists.eventName}`)
-          await Event.updateOne(
-            { _id: exists._id },
-            {
-              $set: {
-                categories: event.category,
-                eventName: event.title,
-                eventType: 'event',
-                eventDate: {
-                  calendar: {
-                    type: 'gregory',
-                  },
-                  era: 'AD',
-                  year: event.startYear,
-                  month: event.startMonth,
-                  day: event.startDay,
-                },
-                eventEndDate: event.lastDay
-                  ? {
-                      calendar: {
-                        type: 'gregory',
-                      },
-                      era: 'AD',
-                      year: event.lastYear,
-                      month: event.lastMonth,
-                      day: event.lastDay,
-                    }
-                  : null,
-                eventLocation: event.location
-                  ? { type: 'Point',
-                      postalCode: (() => {
-                        const pc = Number(event.postalCode)
-                        return !isNaN(pc) ? pc : null
-                      })(),
-                      address: event.location,
-                      coordinates: event.coordinates,
-                      mapImageUrl: event.mapImageUrl,
-                    }
-                  : null,
-                startTime: event.time || null,
-                endTime: event.endTime || null,
-                eventDescription: event.description,
-                externalUrl: event.link,
-                coverImage: event.imgUrl,
-                externalSource: true,
-                status: 'published',
-                userId: event.userId,
-                payment: '6702b0ef009a63bba556a209',
-              },
-            }
-          )
-          return 'updated'
+  const checkExistence = async (event) => {
+    try {
+      const query = {
+        eventName: event.title,
+      }
+
+      if (event.location) {
+        query.eventLocation = {
+          address: event.location,
         }
       }
+
+      if (event.link) {
+        query.externalUrl = event.link
+      }
+
+      if (hasValidStartDate(event)) {
+        query.eventDate = {
+          calendar: { type: 'gregory' },
+          era: 'AD',
+          year: event.startYear,
+          month: event.startMonth,
+          day: event.startDay,
+        }
+      }
+      if (hasValidEndDate(event)) {
+        query.eventEndDate = {
+          calendar: { type: 'gregory' },
+          era: 'AD',
+          year: event.lastYear,
+          month: event.lastMonth,
+          day: event.lastDay,
+        }
+      }
+
+      const exists = await Event.find(query)
+      return exists
+    } catch (error) {
+      console.log('Error checking event existence')
+      throw new Error(error)
+    }
+  }
+
+  try {
+    const existingEvents = await checkExistence(event)
+
+    if (existingEvents.length > 0) {
+      // Ver si alguno tiene una fecha antigua y necesita actualización
+      const shouldUpdate = existingEvents.some((ev) => {
+        const currentEventEndDate = safeDate(ev.eventEndDate)
+        const currentEventDate = safeDate(ev.eventDate)
+
+        const incomingEventEndDate = safeDate({
+          year: event.lastYear,
+          month: event.lastMonth,
+          day: event.lastDay,
+        })
+        if (!currentEventEndDate && hasValidEndDate(event)) return true
+        if (!currentEventDate && hasValidStartDate(event)) return true
+        if (
+          !ev.externalUrl &&
+          event.link &&
+          hasValidEndDate(event) &&
+          hasValidStartDate(event)
+        )
+          return true
+        if (currentEventEndDate && hasValidEndDate(event)) {
+          return incomingEventEndDate > currentEventEndDate
+        }
+        return false
+      })
+
+      if (shouldUpdate) {
+        const idsToUpdate = existingEvents.map((ev) => ev._id)
+        await Event.updateMany(
+          { _id: { $in: idsToUpdate } },
+          {
+            $set: {
+              categories: event.category,
+              eventName: event.title,
+              eventType: 'event',
+              eventDate: {
+                calendar: { type: 'gregory' },
+                era: 'AD',
+                year: event.startYear,
+                month: event.startMonth,
+                day: event.startDay,
+              },
+              eventEndDate: event.lastDay
+                ? {
+                    calendar: { type: 'gregory' },
+                    era: 'AD',
+                    year: event.lastYear,
+                    month: event.lastMonth,
+                    day: event.lastDay,
+                  }
+                : null,
+              eventLocation: event.location
+                ? {
+                    type: 'Point',
+                    postalCode: (() => {
+                      const pc = Number(event.postalCode)
+                      return !isNaN(pc) ? pc : null
+                    })(),
+                    address: event.location,
+                    coordinates: event.coordinates,
+                    mapImageUrl: event.mapImageUrl,
+                  }
+                : null,
+              startTime: event.time || null,
+              endTime: event.endTime || null,
+              eventDescription: event.description,
+              externalUrl: event.link,
+              coverImage: event.imgUrl,
+              externalSource: true,
+              status: 'published',
+              userId: event.userId,
+              payment: '6702b0ef009a63bba556a209',
+            },
+          }
+        )
+        return 'updated'
+      }
+
       return 'duplicated'
     }
 
@@ -651,26 +697,44 @@ const removeDuplicateEvents = async () => {
         $group: {
           _id: {
             eventName: '$eventName',
-            year: '$eventDate.year',
-            month: '$eventDate.month',
-            day: '$eventDate.day',
+            eventLocation: '$eventLocation.address',
           },
-          ids: { $push: '$_id' }, // Collect all IDs of duplicates
-          count: { $sum: 1 }, // Count occurrences
+          ids: { $push: '$_id' },
+          count: { $sum: 1 },
         },
       },
-      { $match: { count: { $gt: 1 } } }, // Only keep duplicates
+      { $match: { count: { $gt: 1 } } },
     ])
 
-    // Extract the duplicate IDs, keeping the first and deleting the rest
-    const idsToDelete = duplicates.flatMap((event) => event.ids.slice(1))
+const idsToDeleteAll = []
 
-    if (idsToDelete.length > 0) {
-      await Event.deleteMany({ _id: { $in: idsToDelete } })
-      console.log(`Deleted ${idsToDelete.length} duplicate events.`)
-    } else {
-      console.log('No duplicate events found.')
-    }
+for (const group of duplicates) {
+  const events = await Event.find({ _id: { $in: group.ids } })
+
+  const scoredEvents = events.map((ev) => {
+    let score = 0
+    if (ev.eventDate && hasValidStartDate(ev.eventDate)) score++
+    if (ev.eventEndDate && hasValidEndDate(ev.eventEndDate)) score++
+    if (ev.eventLocation && ev.eventLocation.address) score++
+    if (ev.externalUrl) score++
+    if (ev.eventDescription) score++
+    if (ev.coverImage) score++
+    if (ev.startTime) score++
+    if (ev.endTime) score++
+
+    return { ev, score }
+  })
+
+  scoredEvents.sort((a, b) => b.score - a.score)
+
+  const idsToDelete = scoredEvents.slice(1).map((item) => item.ev._id)
+  idsToDeleteAll.push(...idsToDelete)
+}
+
+if (idsToDeleteAll.length > 0) {
+  await Event.deleteMany({ _id: { $in: idsToDeleteAll } })
+  console.log(`Deleted ${idsToDeleteAll.length} duplicate events in total`)
+}
   } catch (error) {
     console.error('Error removing duplicates:', error)
   }

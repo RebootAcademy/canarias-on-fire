@@ -29,6 +29,7 @@ const monthMap = {
 
 const CATEGORY_MAPPINGS = {
   música: '6702ad06009a63bba556a1f3',
+  concierto: '6702ad06009a63bba556a1f3',
   cine: '6702adbd009a63bba556a1f8',
   literatura: '6702adbd009a63bba556a1f8',
   taller: '6702ae68009a63bba556a201',

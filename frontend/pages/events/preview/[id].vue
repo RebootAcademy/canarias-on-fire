@@ -205,17 +205,13 @@ const publishEvent = async () => {
           `/subscription?id=${eventId}&type=${eventStore.event.eventType}`
         )
       }
-    } else if (eventStore.event.payment && localStorage.dayDiff) {
-      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
-    } else if (eventStore.event.payment) {
-      return router.push(`/events/${eventId}`)
     } else if (eventStore.event.eventType === 'event') {
-      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
+      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`);
     }
   } catch (error) {
-    console.log('Error al publicar el evento:', error)
+    console.log('Error al publicar el evento:', error);
   }
-}
+};
 
 const checkIfUserHasPromotions = (event) => {
   if (event.eventType === 'event') return false

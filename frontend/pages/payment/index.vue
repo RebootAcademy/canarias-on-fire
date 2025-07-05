@@ -21,17 +21,35 @@
 </template>
 
 <script setup>
+import { useAuth0 } from '@auth0/auth0-vue'
+
 const route = useRoute()
 const userStore = useUserStore()
 const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
+const eventStore = useEventStore()
+
+const { user, isAuthenticated } = useAuth0()
 
 onMounted(async () => {
-  const userId = route.query.userId
-  if (userId) {
-    userStore.selectedUser = userStore.users.find(user => user._id === userId)
+
+  const eventId = route.query.id
+  if (eventId) {
+    await eventStore.fetchEventById(eventId)
   }
+
+  // If user is authenticated via Auth0, ensure userStore.userData is populated
+  if (isAuthenticated.value && user.value?.email) {
+    await userStore.fetchAndSetUser(user.value.email)
+  }
+
+  // The userId for payment processing should come from userStore.userData
+  // If userStore.userData is still null, it means the user is not logged in or data is not fetched.
+  // In this case, the payment process for basic plan will fail, which is expected.
+  // For paid plans, Stripe will handle authentication.
+
   await subscriptionStore.fetchSubscriptions()
+
 })
 
 const getCurrentPlanName = computed(() => {
