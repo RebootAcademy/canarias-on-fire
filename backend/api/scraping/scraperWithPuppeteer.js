@@ -4,19 +4,62 @@ const UserAgent = require('user-agents')
 const cheerio = require('cheerio')
 
 puppeteer.use(StealthPlugin())
+const CHROME_FLAGS = [
+  // ====================
+  // Proceso y Sandbox
+  // ====================
+  '--no-sandbox',
+  '--disable-setuid-sandbox',
+  '--no-zygote', // un solo zygote en vez de muchos
+  '--single-process', // TODO: riesgo de crash global
+  '--no-first-run',
+  '--no-default-browser-check',
 
-class Scraper {
-  constructor() {
-    this.parsers = {} // Objeto para almacenar los parsers
-    this.browser = null // Navegador global
-  }
+  // ====================
+  // Renderizado y GPU
+  // ====================
+  '--headless', // obligatorio para headless
+  '--disable-gpu', // en headless es redundante
+  '--disable-software-rasterizer',
+  '--disable-accelerated-2d-canvas',
+  '--disable-accelerated-2d-canvas',
+  '--disable-gpu-compositing',
+  '--disable-v8-idle-tasks',
 
-  // Inicializa el navegador solo una vez
-  async initBrowser() {
-    if (!this.browser) {
-      this.browser = await puppeteer.launch({
-        headless: true,
-        args: [
+  // ====================
+  // Red y Recursos
+  // ====================
+  '--disable-dev-shm-usage', // usa /tmp en vez de /dev/shm
+  '--disable-background-networking',
+  '--disable-background-timer-throttling',
+  '--disable-client-side-phishing-detection',
+  '--disable-extensions',
+  '--disable-default-apps',
+  '--disable-sync',
+  '--disable-translate',
+  '--disable-features=VizDisplayCompositor,TranslateUI,SitePerProcess',
+  '--disable-renderer-backgrounding',
+  '--disable-renderer-throttling',
+  '--disable-ipc-flooding-protection',
+  '--disable-breakpad',
+  '--metrics-recording-only',
+  '--mute-audio',
+
+  // ====================
+  // Seguridad y Estabilidad
+  // ====================
+  '--ignore-certificate-errors',
+  '--disable-popup-blocking',
+  '--disable-infobars',
+
+  // ====================
+  // Ventanas y Viewport
+  // ====================
+  '--window-size=1200,800',
+  '--hide-scrollbars',
+]
+
+let crhomeflags2 = [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-notifications',
@@ -29,9 +72,24 @@ class Scraper {
           '--disable-accelerated-2d-canvas',
           '--disable-features=site-per-process',
           '--disable-site-isolation-trials',
+          '---window-size=800,600',
+          '--disable-plugins',
+          '--disable-extensions',
+          '--disable-features=TranslateUI',
+          '--hide-scrollbars',
+        ]
+class Scraper {
+  constructor() {
+    this.parsers = {} // Objeto para almacenar los parsers
+    this.browser = null // Navegador global
+  }
 
-          '--window-size=1920,1080',
-        ],
+  // Inicializa el navegador solo una vez
+  async initBrowser() {
+    if (!this.browser) {
+      this.browser = await puppeteer.launch({
+        headless: true,
+        args: CHROME_FLAGS
       })
     }
     return this.browser
@@ -51,7 +109,7 @@ class Scraper {
     try {
       page = await browser.newPage()
       await page.setUserAgent(userAgent)
-      await page.setViewport({ width: 1920, height: 1080 })
+      await page.setViewport({ width: 800, height: 600 })
       // Interceptar solicitudes para bloquear recursos innecesarios
       await page.setRequestInterception(true)
       page.on('request', (request) => {
