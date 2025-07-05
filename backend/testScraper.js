@@ -14,12 +14,12 @@ const {
 async function main() {
     try {
         await dbConnect()
-        //await scrapeCabildoGranCanaria()
-        //await scrapeGobCanarias()
+        await scrapeCabildoGranCanaria()
+        await scrapeGobCanarias()
         // await scrapperGobiernoExpo()
-        //await scrapeAytoLasPalmas()
-        //await scrapeAytoTenerife()
-        //await scrapeTeaTenerife() 
+        await scrapeAytoLasPalmas()
+        await scrapeAytoTenerife()
+        await scrapeTeaTenerife() 
         await removeDuplicateEvents()
         console.log('Scraping completed successfully.')
     } catch (error) {
