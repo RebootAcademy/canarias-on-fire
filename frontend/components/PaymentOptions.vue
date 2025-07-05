@@ -114,10 +114,10 @@
 const props = defineProps({
   payments: {
     type: Array,
-    required: true, 
+    required: true,
   },
   stripePayment: {
-      type: Boolean,
+    type: Boolean,
       default: false
     }
 })
@@ -129,8 +129,8 @@ const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
 const { t } = useI18n()
 
-const isLoading = ref(false)
-console.log('props.payments', props.payments)
+const isLoading = ref(false);
+
 const sortedPayments = computed(() => {
   return props.payments
     .filter((p) => p.name !== 'optima plus') // Quitar "optima plus"
@@ -140,7 +140,7 @@ const sortedPayments = computed(() => {
       // Eliminar la feature "rssPublication"
       const filteredFeatures = Object.fromEntries(
         Object.entries(originalFeatures).filter(([key]) => key !== 'rssPublication')
-      )
+        )
 
       return {
         ...p,
@@ -190,26 +190,22 @@ const formatDate = (dateObj) => {
 }
 
 const calculateFinalPrice = (basePrice, eventDate) => {
-  const today = new Date()
-  const event = new Date(eventDate)
-  let daysUntilEvent
-  if (!localStorage.dayDiff) {
-    daysUntilEvent = Math.max(1, Math.ceil((event - today) / (1000 * 60 * 60 * 24)))
-  } else {
-    daysUntilEvent = localStorage.dayDiff
-  }
+  const today = new Date();
+  const event = new Date(eventDate);
+  const daysUntilEvent = Math.max(
+    1,
+    Math.ceil((event - today) / (1000 * 60 * 60 * 24))
+  );
 
-  const pricePerDay = basePrice / 30
-  
-  let finalPrice
-  if (!localStorage) {
-    finalPrice = basePrice + (pricePerDay * daysUntilEvent)
+  if (daysUntilEvent <= 30) {
+    return basePrice;
   } else {
-    finalPrice = pricePerDay * daysUntilEvent
+    const pricePerDay = basePrice / 30;
+    const extraDays = daysUntilEvent - 30;
+    const finalPrice = basePrice + extraDays * pricePerDay;
+    return Math.round(finalPrice * 100) / 100;
   }
-  
-  return Math.round(finalPrice * 100) / 100
-}
+};
 
 const choosePayment = async (plan) => {
   try {
@@ -265,15 +261,7 @@ const getNameSubscriptionPlan = (plan) => {
     default:
       break
   }
-}
-
-onMounted(()=> {
-  const plan = JSON.parse(localStorage.plan)
-  if (localStorage.dayDiff) {
-    isLoading.value = true
-    choosePayment(plan)
-  }
-})
+};
 </script>
 
 <style scoped>

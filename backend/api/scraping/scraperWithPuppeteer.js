@@ -29,7 +29,7 @@ class Scraper {
           '--disable-accelerated-2d-canvas',
           '--disable-features=site-per-process',
           '--disable-site-isolation-trials',
-          
+
           '--window-size=1920,1080',
         ],
       })
@@ -52,8 +52,22 @@ class Scraper {
       page = await browser.newPage()
       await page.setUserAgent(userAgent)
       await page.setViewport({ width: 1920, height: 1080 })
-
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 }) 
+      // Interceptar solicitudes para bloquear recursos innecesarios
+      await page.setRequestInterception(true)
+      page.on('request', (request) => {
+        const blocked = ['image', 'stylesheet', 'font', 'media']
+        const resourceType = request.resourceType()
+        if (
+          blocked.includes(resourceType) ||
+          /doubleclick|analytics/.test(request.url())
+        ) {
+          request.abort()
+        } else if (!request.isInterceptResolutionHandled()) {
+          request.continue()
+        }
+      })
+      // Navegar a la URL
+      await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 })
       console.log(`🔍 loadUrl: ${url}`)
       const html = await page.content()
       return cheerio.load(html)
