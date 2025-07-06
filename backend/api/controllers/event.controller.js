@@ -716,7 +716,7 @@ for (const group of duplicates) {
     if (ev.eventDate && hasValidStartDate(ev.eventDate)) score++
     if (ev.eventEndDate && hasValidEndDate(ev.eventEndDate)) score++
     if (ev.eventLocation && ev.eventLocation.address) score++
-    if (ev.externalUrl) score++
+    if (ev.externalUrl) score+=2
     if (ev.eventDescription) score++
     if (ev.coverImage) score++
     if (ev.startTime) score++
