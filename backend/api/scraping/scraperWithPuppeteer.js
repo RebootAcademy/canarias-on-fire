@@ -4,80 +4,26 @@ const UserAgent = require('user-agents')
 const cheerio = require('cheerio')
 
 puppeteer.use(StealthPlugin())
-const CHROME_FLAGS = [
-  // ====================
-  // Proceso y Sandbox
-  // ====================
+
+let CHROME_FLAGS = [
   '--no-sandbox',
   '--disable-setuid-sandbox',
-  '--no-zygote', // un solo zygote en vez de muchos
-  '--single-process', // TODO: riesgo de crash global
-  '--no-first-run',
-  '--no-default-browser-check',
-
-  // ====================
-  // Renderizado y GPU
-  // ====================
-  '--headless', // obligatorio para headless
-  '--disable-gpu', // en headless es redundante
-  '--disable-software-rasterizer',
-  '--disable-accelerated-2d-canvas',
-  '--disable-accelerated-2d-canvas',
-  '--disable-gpu-compositing',
-  '--disable-v8-idle-tasks',
-
-  // ====================
-  // Red y Recursos
-  // ====================
-  '--disable-dev-shm-usage', // usa /tmp en vez de /dev/shm
-  '--disable-background-networking',
-  '--disable-background-timer-throttling',
-  '--disable-client-side-phishing-detection',
-  '--disable-extensions',
-  '--disable-default-apps',
-  '--disable-sync',
-  '--disable-translate',
-  '--disable-features=VizDisplayCompositor,TranslateUI,SitePerProcess',
-  '--disable-renderer-backgrounding',
-  '--disable-renderer-throttling',
-  '--disable-ipc-flooding-protection',
-  '--disable-breakpad',
-  '--metrics-recording-only',
-  '--mute-audio',
-
-  // ====================
-  // Seguridad y Estabilidad
-  // ====================
-  '--ignore-certificate-errors',
+  '--disable-notifications',
   '--disable-popup-blocking',
-  '--disable-infobars',
-
-  // ====================
-  // Ventanas y Viewport
-  // ====================
-  '--window-size=1200,800',
+  '--ignore-certificate-errors',
+  '--disable-gpu',
+  '--no-zygote',
+  '--no-first-run',
+  '--disable-dev-shm-usage',
+  '--disable-accelerated-2d-canvas',
+  '--disable-features=site-per-process',
+  '--disable-site-isolation-trials',
+  '---window-size=800,600',
+  '--disable-plugins',
+  '--disable-extensions',
+  '--disable-features=TranslateUI',
   '--hide-scrollbars',
 ]
-
-let crhomeflags2 = [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-notifications',
-          '--disable-popup-blocking',
-          '--ignore-certificate-errors',
-          '--disable-gpu',
-          '--no-zygote',
-          '--no-first-run',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--disable-features=site-per-process',
-          '--disable-site-isolation-trials',
-          '---window-size=800,600',
-          '--disable-plugins',
-          '--disable-extensions',
-          '--disable-features=TranslateUI',
-          '--hide-scrollbars',
-        ]
 class Scraper {
   constructor() {
     this.parsers = {} // Objeto para almacenar los parsers
@@ -88,8 +34,8 @@ class Scraper {
   async initBrowser() {
     if (!this.browser) {
       this.browser = await puppeteer.launch({
-        headless: true,
-        args: CHROME_FLAGS
+        headless: 'new',
+        args: CHROME_FLAGS,
       })
     }
     return this.browser

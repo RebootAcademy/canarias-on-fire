@@ -147,7 +147,7 @@ granCanScraper.addParser(granCanUrl, async ($) => {
         link: fullLink,
         location,
         category,
-        startTime,
+        time: startTime,
         endTime,
         day,
         dynamicMonth,
@@ -350,7 +350,7 @@ const scrapeCabildoGranCanaria = async () => {
         } else if (status === 'updated') {
           console.log(`✅ Evento Actualizado: ${eventToSave.title}`)
         } else {
-          console.log(`✅ Evento guardado: ${eventToSave.title}`)
+          console.log(`✅ Evento guardado: ------>\ntitle:${eventToSave.title}\nstartTime:${eventToSave.startDay}/${eventToSave.startMonth}/${eventToSave.startYear} endTime:${eventToSave.lastDay}/${eventToSave.lastMonth}/${eventToSave.lastYear}\ntime:${eventToSave.startTime}endTime:${eventToSave.endTime}\nExternalUrl:${eventToSave.link}\nCoverImg:${eventToSave.imgUrl}\nlocation:${eventToSave.location}<------\n`)
         }
       } catch (err) {
         console.error(`❌ Error guardando evento ${event.title}`, err)
