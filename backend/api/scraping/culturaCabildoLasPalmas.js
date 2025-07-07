@@ -69,15 +69,6 @@ const scrapeEventDetails = async (url) => {
   }
 }
 
-// Función para construir fecha a partir de strings, validando
-const buildDate = (y, m, d) => {
-  const date = new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`)
-  if (isNaN(date)) {
-    console.warn(`⚠️ Fecha inválida construida: ${y}-${m}-${d}`)
-  }
-  return date
-}
-
 // Parser para extraer eventos de una página con la estructura dada
 granCanScraper.addParser(granCanUrl, async ($) => {
   const events = []
@@ -350,7 +341,9 @@ const scrapeCabildoGranCanaria = async () => {
         } else if (status === 'updated') {
           console.log(`✅ Evento Actualizado: ${eventToSave.title}`)
         } else {
-          console.log(`✅ Evento guardado: ------>\ntitle:${eventToSave.title}\nstartTime:${eventToSave.startDay}/${eventToSave.startMonth}/${eventToSave.startYear} endTime:${eventToSave.lastDay}/${eventToSave.lastMonth}/${eventToSave.lastYear}\ntime:${eventToSave.startTime}endTime:${eventToSave.endTime}\nExternalUrl:${eventToSave.link}\nCoverImg:${eventToSave.imgUrl}\nlocation:${eventToSave.location}<------\n`)
+          console.log(
+            `✅ Evento guardado: ------>\ntitle:${eventToSave.title}\nstartTime:${eventToSave.startDay}/${eventToSave.startMonth}/${eventToSave.startYear} endTime:${eventToSave.lastDay}/${eventToSave.lastMonth}/${eventToSave.lastYear}\ntime:${eventToSave.startTime}endTime:${eventToSave.endTime}\nExternalUrl:${eventToSave.link}\nCoverImg:${eventToSave.imgUrl}\nlocation:${eventToSave.location}<------\n`
+          )
         }
       } catch (err) {
         console.error(`❌ Error guardando evento ${event.title}`, err)
@@ -360,6 +353,19 @@ const scrapeCabildoGranCanaria = async () => {
     console.log('🎉 Scraping completo.')
   } catch (err) {
     console.error('🔥 Error general en scraping:', err)
+  } finally {
+    try {
+      if (global.gc) {
+        global.gc()
+        console.log('Garbage collection in ayto tenerife')
+      } else {
+        console.log('Garbage collection is not exposed')
+      }
+      await granCanScraper.closeBrowser()
+      console.log('🧹 Navegador cerrado.')
+    } catch (err) {
+      console.error('⚠️ Error cerrando el navegador:', err)
+    }
   }
 }
 

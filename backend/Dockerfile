@@ -1,6 +1,6 @@
 # Usa una imagen oficial de Node.js como imagen padre, basándose en la versión de .node-version
 ARG NODE_VERSION=20.18.1
-FROM node:${NODE_VERSION}-slim
+FROM node:${NODE_VERSION}
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app/backend
@@ -28,4 +28,4 @@ COPY . .
 EXPOSE 5000
 
 # Define el comando para ejecutar tu aplicación
-CMD [ "npm", "start" ]
+CMD ["node", "--expose-gc", "index.js"]

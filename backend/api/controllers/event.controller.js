@@ -477,8 +477,8 @@ const deleteAllMyClosedEvents = async (req, res) => {
 
 const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 
-const hasValidEndDate = (e) => e.lastYear && e.lastMonth && e.lastDay
 const hasValidStartDate = (e) => e.startYear && e.startMonth && e.startDay
+const hasValidEndDate = (e) => e.lastYear && e.lastMonth && e.lastDay
 
 const saveScrapedEvent = async (event) => {
   const safeDate = (dateObj) => {
@@ -488,6 +488,11 @@ const saveScrapedEvent = async (event) => {
     return new Date(`${year}-${month}-${day}`)
   }
 
+  const castIn = (value) => {
+    const number = Number(value)
+    return isNaN(number) ? [value] : [value, number]
+  }
+
   const checkExistence = async (event) => {
     try {
       const query = {
@@ -495,9 +500,7 @@ const saveScrapedEvent = async (event) => {
       }
 
       if (event.location) {
-        query.eventLocation = {
-          address: event.location,
-        }
+        query['eventLocation.address'] = event.location
       }
 
       if (event.link) {
@@ -505,29 +508,25 @@ const saveScrapedEvent = async (event) => {
       }
 
       if (hasValidStartDate(event)) {
-        query.eventDate = {
-          calendar: { type: 'gregory' },
-          era: 'AD',
-          year: event.startYear,
-          month: event.startMonth,
-          day: event.startDay,
-        }
+        query['eventDate.year'] = { $in: castIn(event.startYear) }
+        query['eventDate.month'] = { $in: castIn(event.startMonth) }
+        query['eventDate.day'] = { $in: castIn(event.startDay) }
       }
+
       if (hasValidEndDate(event)) {
-        query.eventEndDate = {
-          calendar: { type: 'gregory' },
-          era: 'AD',
-          year: event.lastYear,
-          month: event.lastMonth,
-          day: event.lastDay,
-        }
+        query['eventEndDate.year'] = { $in: castIn(event.lastYear) }
+        query['eventEndDate.month'] = { $in: castIn(event.lastMonth) }
+        query['eventEndDate.day'] = { $in: castIn(event.lastDay) }
       }
+
+      // Debug: puedes ver la query final antes de ejecutar
+      // console.log("Query generada:", JSON.stringify(query, null, 2))
 
       const exists = await Event.find(query)
       return exists
     } catch (error) {
-      console.log('Error checking event existence')
-      throw new Error(error)
+      console.error('Error checking event existence:', error)
+      throw error
     }
   }
 
@@ -698,6 +697,7 @@ const removeDuplicateEvents = async () => {
           _id: {
             eventName: '$eventName',
             eventLocation: '$eventLocation.address',
+            externalUrl: '$externalUrl',
           },
           ids: { $push: '$_id' },
           count: { $sum: 1 },
@@ -705,36 +705,36 @@ const removeDuplicateEvents = async () => {
       },
       { $match: { count: { $gt: 1 } } },
     ])
+    console.log('duplicados', duplicates)
+    const idsToDeleteAll = []
 
-const idsToDeleteAll = []
+    for (const group of duplicates) {
+      const events = await Event.find({ _id: { $in: group.ids } })
 
-for (const group of duplicates) {
-  const events = await Event.find({ _id: { $in: group.ids } })
+      const scoredEvents = events.map((ev) => {
+        let score = 0
+        if (ev.eventDate && hasValidStartDate(ev.eventDate)) score++
+        if (ev.eventEndDate && hasValidEndDate(ev.eventEndDate)) score++
+        if (ev.eventLocation && ev.eventLocation.address) score++
+        if (ev.externalUrl) score += 2
+        if (ev.eventDescription) score++
+        if (ev.coverImage) score++
+        if (ev.startTime) score++
+        if (ev.endTime) score++
 
-  const scoredEvents = events.map((ev) => {
-    let score = 0
-    if (ev.eventDate && hasValidStartDate(ev.eventDate)) score++
-    if (ev.eventEndDate && hasValidEndDate(ev.eventEndDate)) score++
-    if (ev.eventLocation && ev.eventLocation.address) score++
-    if (ev.externalUrl) score+=2
-    if (ev.eventDescription) score++
-    if (ev.coverImage) score++
-    if (ev.startTime) score++
-    if (ev.endTime) score++
+        return { ev, score }
+      })
 
-    return { ev, score }
-  })
+      scoredEvents.sort((a, b) => b.score - a.score)
 
-  scoredEvents.sort((a, b) => b.score - a.score)
+      const idsToDelete = scoredEvents.slice(1).map((item) => item.ev._id)
+      idsToDeleteAll.push(...idsToDelete)
+    }
 
-  const idsToDelete = scoredEvents.slice(1).map((item) => item.ev._id)
-  idsToDeleteAll.push(...idsToDelete)
-}
-
-if (idsToDeleteAll.length > 0) {
-  await Event.deleteMany({ _id: { $in: idsToDeleteAll } })
-  console.log(`Deleted ${idsToDeleteAll.length} duplicate events in total`)
-}
+    if (idsToDeleteAll.length > 0) {
+      await Event.deleteMany({ _id: { $in: idsToDeleteAll } })
+      console.log(`Deleted ${idsToDeleteAll.length} duplicate events in total`)
+    }
   } catch (error) {
     console.error('Error removing duplicates:', error)
   }

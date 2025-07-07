@@ -101,14 +101,18 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
     console.log(
       `👀 Encontrados ${items.length} items en ${isCine ? 'CINE' : 'ACTIVIDADES'}`
     )
-
+    const location = 'TEA Tenerife'
+    const { postalCode, coordinates, mapImageUrl } = await getLocationData(
+      location,
+      'Tenerife'
+    )
     for (let i = 0; i < items.length; i++) {
       const item = $(items[i])
       const dateText = item.find('.text .date').first().text().trim()
       const dateParsed = parseEventDates(dateText)
       if (!dateParsed) continue
 
-      const title = item.find('h3').first().text().trim()
+      const title = item.find('.text h3').first().text().trim()
       const anchor = item.find('.text a').first()
       const link = anchor.attr('href') || ''
       const fullLink = link.startsWith('http')
@@ -117,7 +121,7 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
 
       let imgUrl = ''
       if (!isCine) {
-        const imgEl = item.find('.image img')
+        const imgEl = item.find('.image a img')
         if (imgEl.length) {
           const rawImg = imgEl.attr('src') || ''
           imgUrl = rawImg.startsWith('http')
@@ -132,19 +136,14 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
           scraper,
           isCine
         )
-        const location = 'TEA Tenerife'
-        const { postalCode, coordinates, mapImageUrl } = await getLocationData(
-          location,
-          'Tenerife'
-        )
 
         events.push({
           title,
           category: categoryId,
           startYear: String(dateParsed.from.getFullYear()),
           lastYear: dateParsed.to
-            ? dateParsed.to.getFullYear()
-            : dateParsed.from.getFullYear(),
+            ? String(dateParsed.to.getFullYear())
+            : String(dateParsed.from.getFullYear()),
           startMonth: String(dateParsed.from.getMonth() + 1).padStart(2, '0'),
           lastMonth: dateParsed.to
             ? String(dateParsed.to.getMonth() + 1).padStart(2, '0')
@@ -170,7 +169,7 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
       }
 
       // Añadir un retraso de 3 segundos entre cada petición
-      await delay(6000)
+      await delay(4000)
     }
 
     return events
@@ -187,7 +186,14 @@ const scrapeTeaTenerife = async () => {
   try {
     console.log('🔎 Scraping TEA Tenerife - Actividades...')
     const eventsAct = await scraper.scrape(ACTIVIDADES_URL)
-
+    await delay(4000)
+    if (global.gc) {
+      global.gc()
+      console.log('Garbage collection Between scrapers in teaTenerife')
+    } else {
+      console.log('Garbage collection is not exposed')
+    }
+    await scraper.closeBrowser()
     console.log('🔎 Scraping TEA Tenerife - Cine...')
     const eventsCine = await scraper.scrape(CINE_URL)
 
@@ -214,6 +220,19 @@ const scrapeTeaTenerife = async () => {
     console.log('🎉 TEA Tenerife scraping completed!')
   } catch (err) {
     console.error('🔥 Error during TEA Tenerife scraping:', err)
+  } finally {
+    try {
+      if (global.gc) {
+        global.gc()
+        console.log('Garbage collection in teaTenerife')
+      } else {
+        console.log('Garbage collection is not exposed')
+      }
+      await scraper.closeBrowser()
+      console.log('🧹 Navegador cerrado.')
+    } catch (err) {
+      console.error('⚠️ Error cerrando el navegador:', err)
+    }
   }
 }
 
