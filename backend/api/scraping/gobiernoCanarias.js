@@ -12,7 +12,6 @@ const gobCanScraper = new Scraper()
 let page = 1
 const gobCanUrl = process.env.GOB_CAN_URL
 
-
 const handleDate = (date) => {
   let [datePart, time] = date.text().trim().split(' ')
   let [startDay, month, year] = datePart.split('/')
@@ -161,6 +160,13 @@ const scrapeGobCanarias = async () => {
     setTimeout(scrapeGobCanarias, 5000)
   } catch (error) {
     console.error(`Error while scraping page ${page}:`, error)
+  } finally {
+    if (global.gc) {
+      global.gc()
+      console.log('Garbage collection in gobCanarias')
+    } else {
+      console.log('Garbage collection is not exposed')
+    }
   }
 }
 

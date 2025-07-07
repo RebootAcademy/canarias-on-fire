@@ -7,9 +7,7 @@ const connectDB = require('../config/db')
 
 const { saveScrapedEvent } = require('../controllers/event.controller')
 
-const { 
-  formatMonth
-} = require('../utils')
+const { formatMonth } = require('../utils')
 
 const getLocationData = require('../services/geolocation')
 
@@ -21,15 +19,9 @@ const getRemainingData = async (link) => {
   const eventResponse = await axios.get(link)
   const eventPage = cheerio.load(eventResponse.data)
 
-  const description = eventPage('.body_description')
-    .text()
-    .trim()
-  const location = eventPage('.evento-ubicacion')
-    .text()
-    .trim()
-  const startTime = eventPage('#fecha-inicio')
-    .text()
-    .trim()
+  const description = eventPage('.body_description').text().trim()
+  const location = eventPage('.evento-ubicacion').text().trim()
+  const startTime = eventPage('#fecha-inicio').text().trim()
 
   const match = startTime.match(/\((\d{2}:\d{2})/)
   const time = match ? match[1] : null
@@ -42,7 +34,7 @@ const getRemainingData = async (link) => {
     description,
     location,
     url,
-    time
+    time,
   }
 }
 
@@ -55,12 +47,12 @@ const handleDate = (date) => {
     date = date.slice(2)
   }
 
-  const [ day, month, year ] = date.split(' ')
+  const [day, month, year] = date.split(' ')
   const numMonth = formatMonth(month)
   return {
     day,
     numMonth,
-    year
+    year,
   }
 }
 
@@ -76,30 +68,26 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
           const extraction = detailsLink.slice(startIndex)
           const linkUrl = `${process.env.AYTO_TF_URL}/${extraction}`
 
-          const startDate = page(element)
-          .find('.event-start-date')
-          .text()
-          const endDate = page(element)
-          .find('.event-end-date')
-          .text()
+          const startDate = page(element).find('.event-start-date').text()
+          const endDate = page(element).find('.event-end-date').text()
 
           const {
             day: startDay,
             numMonth: startMonth,
-            year: startYear
+            year: startYear,
           } = handleDate(startDate.trim())
 
           const {
             day: lastDay,
             numMonth: lastMonth,
-            year: lastYear
+            year: lastYear,
           } = handleDate(endDate.trim())
 
           const {
             description,
             location,
             url: link,
-            time
+            time,
           } = await getRemainingData(linkUrl)
 
           const { postalCode, coordinates, mapImageUrl } =
@@ -124,7 +112,7 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
             coordinates,
             mapImageUrl,
             link,
-            userId: process.env.ADMIN_ID
+            userId: process.env.ADMIN_ID,
           }
         })
         .get() // Cheerio's .map needs .get() to convert the iterator to an array
@@ -139,10 +127,7 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
 
 const scrapeAytoTenerife = async () => {
   try {
-    const result = await aytoTfScraper.scrape(
-      aytoTfUrl,
-      ``
-    )
+    const result = await aytoTfScraper.scrape(aytoTfUrl, ``)
 
     if (!result || result.length === 0) {
       console.log('No events found')
@@ -165,6 +150,13 @@ const scrapeAytoTenerife = async () => {
     console.log('All events saved')
   } catch (error) {
     console.error(`Error while scraping:`, error)
+  } finally {
+    if (global.gc) {
+      global.gc()
+      console.log('Garbage collection in ayto tenerife')
+    } else {
+      console.log('Garbage collection is not exposed')
+    }
   }
 }
 

@@ -2,11 +2,8 @@
   <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg bg-[#1a1a1a]">
     <div class="relative">
       <img
-        :src="imagesToShow[currentImageIndex]?.url || defaultImage"
-          :class="`w-full h-44 ${imagesToShow[currentImageIndex]?.url ? 
-          'object-cover' : 
-          'object-contain'}`"
-          @error="onImageError"
+        :src="imageSrc"
+        :class="`w-full h-44 ${isDefaultImage ? 'object-contain' : 'object-cover'}`"
       />
       <div v-if="promotionImage" class="absolute bg-primary rounded-full  top-[0.9rem] right-[1.3rem] w-[2.4rem] h-10"></div>
       <img
@@ -52,6 +49,8 @@
 </template>
 
 <script setup>
+import { ref, computed, watch } from 'vue';
+
 const props = defineProps({
   event: {
     type: Object,
@@ -66,26 +65,71 @@ const props = defineProps({
 const defaultImage = '/defaultImg.png'
 
 const currentImageIndex = ref(0)
+const imageSrc = ref('')
+const isDefaultImage = ref(false)
 
 
 const imagesToShow = computed(() => {
-    const images = [];
+  const images = [];
      let filteredEventImages
   if (typeof props.event.coverImage === 'string') {
-      images.push({ url: props.event.coverImage });
-    }
+    images.push({ url: props.event.coverImage });
+  }
   if (props.type === 'event') {
      filteredEventImages = props.event.eventImages.filter(image => image.url !== props.event.coverImage)
-     images.push(...filteredEventImages);
+    images.push(...filteredEventImages);
   } else if (props.type === 'promotion') {
     filteredEventImages = props?.event?.eventImages?.filter(image => image.url !== props.event.coverImage) || []
-     images.push(...filteredEventImages);
+    images.push(...filteredEventImages);
   } else {
     filteredEventImages = props.event.articleImages.filter(image => image.url !== props.event.coverImage)
-     images.push(...filteredEventImages);
+    images.push(...filteredEventImages);
   }
-  return images
+  return images.length > 0 ? images : [{ url: defaultImage }]
 })
+
+const loadImageWithFallback = (url) => {
+  if (!url || url === defaultImage) {
+    imageSrc.value = defaultImage;
+    isDefaultImage.value = true;
+    return;
+  }
+
+  let isHandled = false;
+  const timeout = 5000; // 5 segundos de timeout
+
+  const timeoutId = setTimeout(() => {
+    if (!isHandled) {
+      isHandled = true;
+      imageSrc.value = defaultImage;
+      isDefaultImage.value = true;
+    }
+  }, timeout);
+
+  const img = new Image();
+  img.onload = () => {
+    if (!isHandled) {
+      clearTimeout(timeoutId);
+      isHandled = true;
+      imageSrc.value = url;
+      isDefaultImage.value = false;
+    }
+  };
+  img.onerror = () => {
+    if (!isHandled) {
+      clearTimeout(timeoutId);
+      isHandled = true;
+      imageSrc.value = defaultImage;
+      isDefaultImage.value = true;
+    }
+  };
+  img.src = url;
+};
+
+watch(() => imagesToShow.value[currentImageIndex.value]?.url, (newUrl) => {
+  loadImageWithFallback(newUrl);
+}, { immediate: true });
+
 
 // Función para ir a la imagen anterior
 const prevImage = () => {

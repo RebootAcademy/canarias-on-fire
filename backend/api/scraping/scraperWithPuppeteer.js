@@ -106,6 +106,7 @@ class Scraper {
   async closeBrowser() {
     if (this.browser) {
       await this.browser.close()
+      this.browser = null
     }
   }
 }
