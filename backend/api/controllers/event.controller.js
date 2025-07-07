@@ -705,7 +705,6 @@ const removeDuplicateEvents = async () => {
       },
       { $match: { count: { $gt: 1 } } },
     ])
-    console.log('duplicados', duplicates)
     const idsToDeleteAll = []
 
     for (const group of duplicates) {
