@@ -18,6 +18,7 @@ const {
   updateExpiredPromotions,
 } = require('./api/controllers/event.controller.js')
 
+const scrapeLaAgenda = require('./api/scraping/laAgenda.js')
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
@@ -90,10 +91,10 @@ cron.schedule('0 1 * * *', () => {
   scrapeGobCanarias()
 })
 
-/* cron.schedule('30 1 * * *', () => {
-  console.log('Checking Gobierno de Canarias Events')
-  scrapeGobCanariasExpo()
-}) */
+ cron.schedule('30 1 * * *', () => {
+  console.log('Checking La agenda')
+  scrapeLaAgenda()
+}) 
 
 cron.schedule('0 2 * * *', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')
