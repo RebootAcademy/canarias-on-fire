@@ -12,7 +12,6 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
-          hid: 'description',
           name: 'description',
           content:
             'Descubre eventos emocionantes en tu área, desde conciertos hasta conferencias. ¡Únete a nuestra comunidad y no te pierdas ninguna promoción!',
@@ -35,7 +34,7 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          children: `
+          innerHTML: `
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -51,7 +50,7 @@ export default defineNuxtConfig({
       ],
       noscript: [
         {
-          children:
+          innerHTML:
             '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2716869701843648&ev=PageView&noscript=1" />',
         },
       ],
@@ -61,7 +60,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    // '@pinia-plugin-persistedstate/nuxt', // Removed as it's deprecated and causing issues
     'nuxt-csurf',
     '@nuxt/image',
     '@nuxt/devtools',
@@ -69,26 +68,24 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     '@nuxtjs/sitemap',
   ],
-  sitemap: {
-    hostname: 'https://evente.es',
-    gzip: true,
-      routes: async () => {
-        interface SitemapEvent {
-          loc: string;
-        }
+sitemap: {
+  siteUrl: 'https://evente.es',
+  gzip: true,
+  routes: async () => {
+    interface SitemapEvent { loc: string }
 
-        try {
-          const config = useRuntimeConfig();
-          const data = await $fetch<SitemapEvent[]>(`${config.public.apiBaseUrl}/api/events/sitemap`);
-          return data.map((event) => ({
-            loc: event.loc,
-          }));
-        } catch (error) {
-          console.error('❌ Error generando rutas para sitemap:', error);
-          return [];
-      }
+    try {
+      const data = await $fetch<SitemapEvent[]>(
+        `${process.env.API_BASE_URL}/api/events/sitemap`
+      )
+      // Devuelve un array de URLs (strings)
+      return data.map(event => event.loc)
+    } catch (error) {
+      console.error('❌ Error generando rutas para sitemap:', error)
+      return []
     }
-  },
+  }
+},
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'es',
