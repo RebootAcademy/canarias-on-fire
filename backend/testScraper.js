@@ -7,6 +7,7 @@ const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias')
 const scrapeTeaTenerife = require('./api/scraping/teaTenerife')
+const scrapeLaAgenda = require('./api/scraping/laAgenda.js')
 const Scraper = require('./api/scraping/scraperWithPuppeteer.js')
 const scraper = new Scraper()
 const {
@@ -20,7 +21,8 @@ async function main() {
     // await scrapperGobiernoExpo()
     //await scrapeAytoLasPalmas()
     //await scrapeAytoTenerife()
-    await scrapeTeaTenerife()
+    //await scrapeTeaTenerife()
+    await scrapeLaAgenda()
     await removeDuplicateEvents()
     console.log('Scraping completed successfully.')
   } catch (error) {
