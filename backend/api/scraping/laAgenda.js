@@ -1,5 +1,4 @@
 require('dotenv').config()
-const connectDB = require('../config/db')
 const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
 const getLocationData = require('../services/geolocation')
@@ -9,19 +8,21 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const laAgendaScraper = new Scraper()
 const laAgendaUrl = process.env.LA_AGENDA_URL
 if (!laAgendaUrl) {
-  throw new Error('CAB_GRANCAN_URL is not defined in environment variables')
+  throw new Error('LA_AGENDA_URL is not defined in environment variables')
 }
 
 const CATEGORY_MAPPINGS = {
   música: '6702ad06009a63bba556a1f3',
   concierto: '6702ad06009a63bba556a1f3',
-  cine: '6702adbd009a63bba556a1f8',
+  cine: '6702ae1e009a63bba556a1fd',
   literatura: '6702adbd009a63bba556a1f8',
   taller: '6702ae68009a63bba556a201',
   exposición: '6702adbd009a63bba556a1f8',
   museo: '6702ae2d009a63bba556a1fe',
   actividades: '6702adf7009a63bba556a1fb',
+  arte: '6702adbd009a63bba556a1f8',
   'visita guiada': '6702adf7009a63bba556a1fb',
+  baile: '6702ae0c009a63bba556a1fc',
 }
 const DEFAULT_CATEGORY = '6702adf7009a63bba556a1fb'
 
