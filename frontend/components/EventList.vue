@@ -95,7 +95,7 @@ const limitedEvents = computed(() => {
     )
   })
 
-  if (userStore.acceptedGeolocation) {
+  if (userStore.acceptedGeolocation && noFilterSelected()) {
     filterEvents = filterEvents.filter(
       (event) => event.dist?.calculated < eventStore.radioLocation
     )
