@@ -67,7 +67,21 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxtjs/i18n',
     '@element-plus/nuxt',
+    '@nuxtjs/sitemap',
   ],
+  sitemap: {
+    hostname: 'https://evente.es',
+    gzip: true,
+    routes: async () => {
+      interface SitemapEvent {
+        loc: string;
+      }
+      const data = await $fetch<SitemapEvent[]>('/api/events/sitemap');
+      return data.map((event) => ({
+        loc: event.loc,
+      }));
+    },
+  },
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'es',
