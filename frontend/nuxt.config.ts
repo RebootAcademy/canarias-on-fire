@@ -76,7 +76,8 @@ export default defineNuxtConfig({
       interface SitemapEvent {
         loc: string;
       }
-      const data = await $fetch<SitemapEvent[]>('/api/events/sitemap');
+      const config = useRuntimeConfig();
+      const data = await $fetch<SitemapEvent[]>(`${config.public.apiBaseUrl}/api/events/sitemap`);
       return data.map((event) => ({
         loc: event.loc,
       }));
