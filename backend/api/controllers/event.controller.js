@@ -795,6 +795,18 @@ const closePassedEvents = async () => {
   }
 }
 
+const getSitemapEvents = async (req, res) => {
+  try {
+    const events = await Event.find({ status: 'published' })
+    const urls = events.map(event => {
+      return { loc: `/events/${event._id}` }
+    })
+    res.status(200).json(urls)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 const updateExpiredPromotions = async () => {
   const events = await Event.find().populate(
     'categories location userId payment subscription'
@@ -838,4 +850,5 @@ module.exports = {
   removeDuplicateEvents,
   closePassedEvents,
   updateExpiredPromotions,
+  getSitemapEvents
 }
