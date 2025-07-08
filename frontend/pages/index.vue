@@ -69,7 +69,7 @@ const { data: usersData, pending: usersPending, error: usersError } = useAsyncDa
   }
 );
 
-const isLoading = computed(() => usersPending.value);
+const isLoading = computed(() =>  isLoading.value = pending ?? false);
 
 onMounted(async() => {
   if (userStore.checkAuthError.error) {
