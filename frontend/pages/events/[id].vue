@@ -2,7 +2,7 @@
   <div class="relative px-2 md:px-0 mt-4 bg-background text-secondary">
     <img
       :src="eventStore.event.coverImage || defaultImage"
-      alt="Event Image"
+      :alt="event.eventName"
       :class="`w-full h-[300px] md:h-[550px] rounded-md 
       ${(searchPaymentEvent !== 'basic' && 
         eventStore.event.coverImage) || 
@@ -227,6 +227,7 @@ const { toast } = useToast()
 import { formatEventDate } from '@/utils/dateUtils'
 import { storeToRefs } from 'pinia'
 import DiscountSquare from '~/components/DiscountSquare.vue'
+import { useHead } from '#app'
 
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -234,6 +235,55 @@ const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
 const route = useRoute()
 const router = useRouter()
+
+useHead(() => ({
+  title: event.value.eventName,
+  meta: [
+    { name: 'description', content: event.value.eventDescription.substring(0, 155) },
+    { property: 'og:title', content: event.value.eventName },
+    { property: 'og:description', content: event.value.eventDescription.substring(0, 155) },
+    { property: 'og:image', content: event.value.coverImage || defaultImage },
+    { property: 'og:url', content: `https://evente.es/events/${eventId}` },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ],
+  link: [
+    { rel: 'canonical', href: `https://evente.es/events/${eventId}` }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: event.value.eventName,
+        startDate: event.value.eventDate,
+        endDate: event.value.eventEndDate,
+        description: event.value.eventDescription.replace(/<[^>]*>?/gm, '').substring(0, 500),
+        image: event.value.coverImage || `https://evente.es${defaultImage}`,
+        location: {
+          '@type': 'Place',
+          name: event.value.eventLocation?.address,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: event.value.eventLocation?.address,
+          }
+        },
+        offers: {
+          '@type': 'Offer',
+          price: event.value.eventPrice,
+          priceCurrency: 'EUR',
+          url: `https://evente.es/events/${eventId}`,
+          availability: 'https://schema.org/InStock'
+        },
+        organizer: {
+            '@type': 'Organization',
+            name: event.value.userId?.commercialName || event.value.userId?.companyName || 'Organizador del evento',
+            url: 'https://evente.es'
+        }
+      })
+    }
+  ]
+}))
 
 
 const isOpen = ref({
