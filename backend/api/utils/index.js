@@ -1,4 +1,5 @@
 const Event = require('../models/event.model')
+const slugify = require('slugify')
 
 const formatMonth = (month) => {
   const months = {
