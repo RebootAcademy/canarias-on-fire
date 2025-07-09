@@ -240,6 +240,9 @@ const isOpen = ref({
   status: false,
   type: null,
 })
+const slug = route.params.slug
+const { data, pending, error } = await eventStore.fetchEventBySlug(slug)
+const eventId = data?._id
 
 const eventType = computed(() => {
   return eventStore.event.eventType
@@ -247,11 +250,10 @@ const eventType = computed(() => {
 
 const { event } = storeToRefs(eventStore)
 const defaultImage = '/defaultImg.png'
-const eventId = route.params.id
 const isAdmin = userStore.userData?.role === 'admin'
 const isValidated = userStore?.userData?.isValidated
 const searchPaymentEvent = computed(() => {
-  let payment = eventStore.events.find((e) => e._id === eventId)
+  let payment = eventStore.events.find((e) => e._id === data?._id)
   return payment?.payment?.name
 })
 
@@ -271,7 +273,6 @@ const categoryServices = computed(() => {
   return eventStore.event?.categoriesOfServices
 })
 
-const { data, pending, error } = await eventStore.fetchEventById(eventId)
 
 if (error) {
   console.error('Error fetching event:', error)
@@ -282,7 +283,7 @@ const isOwner = computed(() => {
 })
 
 const editEvent = () => {
-  router.push(`/events/edit/${eventId}`)
+  router.push(`/events/edit/${slug}`)
 }
 
 const deleteEvent = async () => {
@@ -346,7 +347,7 @@ const publishEvent = async () => {
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
       if (result) {
-        router.push(`/events/${eventId}`)
+        router.push(`/events/${slug}`)
       } else {
         console.error('Failed to publish promotion')
         toast({
@@ -360,7 +361,7 @@ const publishEvent = async () => {
       if (isSubscriptionValid && !hasPublishedPromotions) {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
-          router.push(`/events/${eventId}`)
+          router.push(`/events/${slug}`)
         } else {
           console.error('Failed to publish promotion')
         }
@@ -411,7 +412,7 @@ const copyToClipboard = async () => {
 const share = () => {
   navigator.share({
     text: "Vente a este evento!",
-    url: "/events/" + eventId
+    url: "/events/" + slug
   })
 }
 
@@ -437,7 +438,7 @@ useSeoMeta({
   ogTitle: event?.value?.eventName || 'Evento',
   ogDescription: event?.value?.eventDescription?.substring(0, 155) || '',
   ogImage: event?.value?.coverImage || defaultImage,
-  ogUrl: `https://evente.es/events/${eventId}`,
+  ogUrl: `https://evente.es/events/${slug}`,
 })
 
 </script>

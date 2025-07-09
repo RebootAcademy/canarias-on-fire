@@ -14,6 +14,7 @@ const {
   deleteAllMyClosedEvents,
   updateStatusPromotion,
   getSitemapEvents,
+  getEventBySlug
 } = require('../controllers/event.controller')
 
 router
@@ -21,6 +22,7 @@ router
   .post('/', createEvent)
   .post('/promotion', createPromotion)
   .get('/', getAllEvents)
+  .get('/slug/:slug', getEventBySlug)
   .get('/sitemap.xml', getSitemapEvents) // ✅ SEO-compatible
   .get('/geolocation', searchNearbyEvents)
   .get('/user/:userId', getEventsByUserId)

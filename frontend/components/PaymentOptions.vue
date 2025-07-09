@@ -211,6 +211,7 @@ const choosePayment = async (plan) => {
   try {
     const userId = getUserId()
     const eventId = eventStore.event._id
+    const slug = eventStore.event.slug
     const eventDate = formatDate(eventStore.event.eventDate)
 
     if (plan.name === 'basic') {
@@ -223,7 +224,7 @@ const choosePayment = async (plan) => {
       if (result.success) {
         const publishResult = await eventStore.updateEventStatus(eventId, 'published')
         if (publishResult) {
-          router.push(`/events/${eventId}`)
+          router.push(`/events/${slug}`)
         } else {
           console.error('Failed to publish event')
         }

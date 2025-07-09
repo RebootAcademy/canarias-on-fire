@@ -140,6 +140,7 @@ const EventSchema = new mongoose.Schema({
     default: '',
   },
   reviewed: { type: Boolean, default: false },
+  slug: { type: String },
 })
 EventSchema.index({ eventLocation: '2dsphere' })
 

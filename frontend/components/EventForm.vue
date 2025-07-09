@@ -93,17 +93,19 @@ const onSubmit = async () => {
   if (!eventStore.event.externalSource) {
     validateFields(t)
   }
-
+  
   if (eventStore.event.reviewed === false && props.isEditing && isAdmin) {
-    await eventStore.updateEventReviewed(eventStore.event._id, true)
+    const { data } = await eventStore.updateEventReviewed(eventStore.event._id, true);
+
   }
 
   if (Object.values(errors).every((error) => error === '')) {
+
     if (props.isEditing) {
       await eventStore.updateEvent()
 
       router.push(
-        `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
+        `/events/preview/${eventStore.event.slug}?type=${eventStore.eventType}`
       )
     } else {
       eventStore.status = 'draft'
@@ -122,7 +124,7 @@ const onSubmit = async () => {
         }
         if (result) {
           router.push(
-            `/events/preview/${eventStore.event._id}?type=${eventStore.eventType}`
+            `/events/preview/${eventStore.event.slug}?type=${eventStore.eventType}`
           )
         } else {
           toast({

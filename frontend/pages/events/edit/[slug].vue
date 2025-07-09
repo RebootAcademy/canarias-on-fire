@@ -23,10 +23,10 @@ const eventStore = useEventStore()
 
 const { event, loading, error } = storeToRefs(eventStore)
 
-const eventId = route.params.id
+const slug = route.params.slug
 
 onMounted(() => {
-  eventStore.fetchEventById(eventId)
+  eventStore.fetchEventBySlug(slug)
 })
 
 useHead({

@@ -18,12 +18,14 @@ const {
   updateExpiredPromotions,
 } = require('./api/controllers/event.controller.js')
 
+const { updateSlugs } = require('./api/utils/index.js')
+
 const scrapeLaAgenda = require('./api/scraping/laAgenda.js')
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias.js')
 const scrapeGobCanariasExpo = require('./api/scraping/gobiernoCanariasExpo.js')
-const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas.js');
+const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas.js')
 const scrapeTeaTenerife = require('./api/scraping/teaTenerife.js')
 const Scraper = require('./api/scraping/scraperWithPuppeteer.js')
 const scraper = new Scraper()
@@ -77,6 +79,7 @@ app.listen(process.env.PORT, async (error) => {
   console.info(`Evente API running on PORT ${process.env.PORT}`)
 })
 
+
 //check expired Subcriptions and promotions
 const runExpirationChecks = async () => {
   console.log('Running subscription + promotion expiration checks')
@@ -91,10 +94,10 @@ cron.schedule('0 1 * * *', () => {
   scrapeGobCanarias()
 })
 
- cron.schedule('30 1 * * *', () => {
+cron.schedule('30 1 * * *', () => {
   console.log('Checking La agenda')
   scrapeLaAgenda()
-}) 
+})
 
 cron.schedule('0 2 * * *', () => {
   console.log('Checking Ayuntamiento de Las Palmas Events')
@@ -121,15 +124,16 @@ cron.schedule('0 4 * * *', () => {
   removeDuplicateEvents()
 })
 
-
 cron.schedule('30 4 * * *', () => {
   console.log('Closing passed events')
   closePassedEvents()
 })
 
-cron.schedule('0 5 * * *', async () => {
+cron.schedule('00 5 * * *', updateSlugs)
+
+cron.schedule('30 5 * * *', async () => {
   console.log('Closing Browser')
-   scraper.closeBrowser()
+  scraper.closeBrowser()
 })
 
 module.exports = app

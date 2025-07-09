@@ -70,7 +70,7 @@
         />
 
         <!-- Main content -->
-        <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
+        <NuxtLink :to="`/events/${event.slug}`" class="cursor-pointer">
           <div class="px-4 py-2 flex justify-between">
             <!-- Categories -->
             <div class="flex flex-wrap gap-2">
@@ -148,7 +148,7 @@
             </div>
           </div>
         </NuxtLink>
-        <NuxtLink :to="`/events/${event._id}`" class="cursor-pointer">
+        <NuxtLink :to="`/events/${event.slug}`" class="cursor-pointer">
           <div class="flex flex-col justify-between items-start px-4">
             <h3 class="text-xl text-secondary font-semibold mb-2 line-clamp-2">
               {{ event.eventName }}
@@ -286,7 +286,7 @@ const isOwner = computed(() => {
 const share = () => {
   navigator.share({
     text: 'Vente a este evento!',
-    url: '/events/' + props.event._id,
+    url: '/events/' + props.event.slug,
   })
 }
 
@@ -309,7 +309,7 @@ const isGoldPayment = computed(() => getPaymentType.value === 'optima')
 const isPremiumPayment = computed(() => getPaymentType.value === 'optima plus')
 
 const editEvent = () => {
-  router.push(`/events/edit/${props.event._id}`)
+  router.push(`/events/edit/${props.event.slug}`)
 }
 
 const handleReviewed = async () => {

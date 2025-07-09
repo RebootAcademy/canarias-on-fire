@@ -28,8 +28,37 @@ const removeParenthesesContent = (str) => {
   return str.replace(/\(.*?\)/g, '').trim()
 }
 
+async function updateSlugs() {
+  const events = await Event.find({ $or: [{ slug: { $exists: false } }, { slug: '' }] });
+
+  if (events.length === 0) {
+    console.log('No se encontraron eventos sin slug para actualizar.');
+    return;
+  }
+
+  for (const event of events) {
+    if (event.eventName) {
+      let baseSlug = slugify(event.eventName, { lower: true, strict: true });
+      let finalSlug = baseSlug;
+      let counter = 1;
+      while (await Event.findOne({ slug: finalSlug, _id: { $ne: event._id } })) {
+        finalSlug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      event.slug = finalSlug;
+
+      await event.save();
+      console.log(`Slug para "${event.eventName}" (ID: ${event._id}) actualizado a "${event.slug}"`);
+    } else {
+      console.warn(`Evento con ID ${event._id} no tiene eventName. No se pudo generar slug.`);
+    }
+  }
+  console.log('Proceso de actualización de slugs completado.');
+}
+
 module.exports = {
   formatMonth,
   getDate,
-  removeParenthesesContent
+  removeParenthesesContent,
+  updateSlugs
 }

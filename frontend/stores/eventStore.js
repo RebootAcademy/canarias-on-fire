@@ -291,6 +291,32 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
+    async fetchEventBySlug(slug) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const { data, error } = await useFetch(`/events/slug/${slug}`, {
+          baseURL: useRuntimeConfig().public.apiBaseUrl,
+        })
+
+        if (error.value) {
+          console.error('Error fetching event:', error.value)
+          this.error = error.value
+          return { error: error.value }
+        }
+
+        this.event = data.value?.result
+        return { data: this.event }
+      } catch (error) {
+        this.error = error.message
+        console.error('Error fetching event:', this.error)
+        return { error: this.error }
+      } finally {
+        this.loading = false
+      }
+    },
+
     async fetchUserEvents(userId) {
       const { data, error } = await useFetch(`/events/user/${userId}`, {
         baseURL: useRuntimeConfig().public.apiBaseUrl,
@@ -496,12 +522,14 @@ export const useEventStore = defineStore('eventStore', {
 
     // new
     async updateEventReviewed(eventId, reviewed) {
+      console.log('entrando en reviewed')
       try {
         const data = await $fetch(`/events/${eventId}`, {
           method: 'PATCH',
           body: { reviewed },
           baseURL: useRuntimeConfig().public.apiBaseUrl,
         })
+
 
         if (data.success) {
           this.event = data.result
@@ -571,9 +599,9 @@ export const useEventStore = defineStore('eventStore', {
         externalUrl: this.externalUrl,
         eventImages: this.eventImages,
         coverImage: this.coverImage,
-        categories: this.selectedCategories.map((cat) => typeof cat === 'object' ? 
-          (cat._id || cat.id) :
-          cat),
+        categories: this.selectedCategories.map((cat) =>
+          typeof cat === 'object' ? cat._id || cat.id : cat
+        ),
         categoriesOfServices: this.selectedCategoriesByServices,
         status: this.status,
         userId: this.userId,
@@ -716,11 +744,7 @@ export const useEventStore = defineStore('eventStore', {
                 event.eventEndDate?.month - 1,
                 event.eventEndDate?.day
               ),
-              new Date(
-                filterDate.year,
-                filterDate.month - 1,
-                filterDate.day
-              )
+              new Date(filterDate.year, filterDate.month - 1, filterDate.day)
             )
           ) {
             return false

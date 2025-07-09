@@ -45,7 +45,7 @@
         :src="defaultImage"
         class="ml-[1%] w-[98%] h-44 mt-[1%] object-contain rounded-t-lg z-0 bg-[#1a1a1a]"
       />
-      <NuxtLink :to="`/events/${promotion._id}`">
+      <NuxtLink :to="`/events/${promotion.slug}`">
         <!-- Main content -->
         <div class="px-3 py-2 flex justify-between p-4">
           <!-- Categories -->
@@ -127,7 +127,7 @@
           </div>
         </div>
       </NuxtLink>
-      <NuxtLink :to="`/events/${promotion._id}`">
+      <NuxtLink :to="`/events/${promotion.slug}`">
         <div class="flex flex-col justify-between items-start px-4">
           <h3 class="text-xl font-semibold mb-2">{{ promotion.eventName }}</h3>
           <p
@@ -266,7 +266,7 @@ const formattedDate = () => {
 }
 
 const editEvent = () => {
-  router.push(`/events/edit/${props.promotion._id}`)
+  router.push(`/events/edit/${props.promotion.slug}`)
 }
 
 const deleteEvent = async () => {
@@ -344,7 +344,7 @@ const handleSubscription = () => {
 const share = () => {
   navigator.share({
     text: 'Vente a este evento!',
-    url: '/events/' + props.promotion._id,
+    url: '/events/' + props.promotion.slug
   })
 }
 </script>
