@@ -798,12 +798,36 @@ const closePassedEvents = async () => {
 const getSitemapEvents = async (req, res) => {
   try {
     const events = await Event.find({ status: 'published' })
+
+
+    const baseUrl = process.env.API_BASE_URL
+
+    const urls = events.map(event => {
+      return `
+  <url>
+    <loc>${baseUrl}/events/${event._id}</loc>
+  </url>`
+    }).join('')
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`
+
+    res.header('Content-Type', 'application/xml')
+    res.status(200).send(xml)
+
+  } catch (error) {
+    res.status(500).send('Error al generar sitemap')
+=======
     const urls = events.map(event => {
       return { loc: `/events/${event._id}` }
     })
     res.status(200).json(urls)
   } catch (error) {
     res.status(500).json({ message: error.message })
+
   }
 }
 
