@@ -51,25 +51,30 @@ import { useRuntimeConfig } from '#app'
 
 const user = useNuxtApp().$user
 
-const config = useRuntimeConfig()
+const users = ref([])
+const isLoading = ref(true)
 
-const { data: usersData, pending: usersPending, error: usersError } = useAsyncData(
-  'users',
-  async () => {
-    const response = await $fetch(`${config.public.apiBaseUrl}/users`);
-    return response.result;
-  },
-  {
-    server: true,
-    default: () => [],
-    transform: (data) => {
-      userStore.users = data;
-      return data;
+async function fetchUsers() {
+  try {
+    if (!isLoading.value) isLoading.value = true
+    const config = useRuntimeConfig()
+    const response = await fetch(`${config.public.apiBaseUrl}/users`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
-  }
-);
 
-const isLoading = computed(() =>  isLoading.value = pending ?? false);
+    const data = await response.json()
+
+    if (data && data.result) {
+      users.value = data.result
+      userStore.users = data.result
+    }
+    isLoading.value = false
+  } catch (error) {
+    console.error('Error fetching users:', error)
+  }
+}
 
 onMounted(async() => {
   if (userStore.checkAuthError.error) {
@@ -79,6 +84,7 @@ onMounted(async() => {
     })
     userStore.setAuthError({error: '', message: ''})
   }
+  fetchUsers()
   eventStore.resetFilters()
   userStore.fetchAndSetUser(userStore.userData?.email)
   if (localStorage.dayDiff || localStorage.originalDate) {
