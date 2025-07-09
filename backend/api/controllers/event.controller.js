@@ -820,7 +820,6 @@ ${urls}
 
   } catch (error) {
     res.status(500).send('Error al generar sitemap')
-=======
     const urls = events.map(event => {
       return { loc: `/events/${event._id}` }
     })
