@@ -1,9 +1,10 @@
 require('dotenv').config()
 
 const dbConnect = require('./api/config/db')
-const slugify = require('slugify');
+const slugify = require('slugify')
 const Event = require('./api/models/event.model.js')
 
+const { updateSlugs } = require('./api/utils/index.js')
 const scrapperGobiernoExpo = require('./api/scraping/gobiernoCanariasExpo')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
@@ -17,7 +18,6 @@ const {
   removeDuplicateEvents,
 } = require('./api/controllers/event.controller.js')
 
-
 async function main() {
   try {
     await dbConnect()
@@ -29,7 +29,7 @@ async function main() {
     //await scrapeTeaTenerife()
     //await scrapeLaAgenda()
     //await removeDuplicateEvents()
-    //await updateSlugs()
+    await updateSlugs()
     console.log('Scraping completed successfully.')
   } catch (error) {
     console.error('Error during scraping:', error)
@@ -37,10 +37,9 @@ async function main() {
     await scraper.closeBrowser()
   }
 }
- main()
+main()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error('Error in main function:', error)
     process.exit(1)
   })
- 

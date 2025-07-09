@@ -1,3 +1,5 @@
+const Event = require('../models/event.model')
+
 const formatMonth = (month) => {
   const months = {
     Ene: '1', enero: '1',
