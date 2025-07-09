@@ -1,4 +1,5 @@
 const e = require('express')
+const slugify = require('slugify')
 const Event = require('../models/event.model')
 const Company = require('../models/company.model')
 const Subscription = require('../models/subscription.model')
@@ -32,7 +33,19 @@ const createEvent = async (req, res) => {
           'There is already a event/promotion with the same name for this user.',
       })
     }
-    const newEvent = await Event.create(req.body)
+
+    const eventData = { ...req.body }
+    eventData.slug = slugify(eventData.eventName, { lower: true, strict: true })
+
+    let finalSlug = eventData.slug
+    let counter = 1
+    while (await Event.findOne({ slug: finalSlug })) {
+      finalSlug = `${eventData.slug}-${counter}`
+      counter++
+    }
+    eventData.slug = finalSlug // Asigna el slug único
+
+    const newEvent = await Event.create(eventData) // Pasa el objeto con el slug
     res.status(201).json({
       success: true,
       message: 'Event successfully created.',
@@ -50,9 +63,18 @@ const createEvent = async (req, res) => {
 
 const createPromotion = async (req, res) => {
   try {
+    let baseSlug = slugify(req.body.eventName, { lower: true, strict: true })
+    let finalSlug = baseSlug
+    let counter = 1
+    while (await Event.findOne({ slug: finalSlug })) {
+      finalSlug = `${baseSlug}-${counter}`
+      counter++
+    }
+
     const promotionData = {
       ...req.body,
       eventType: 'promotion',
+      slug: finalSlug, // Asigna el slug único aquí
     }
 
     const isThereSamePromotion = await Event.findOne({
@@ -314,21 +336,41 @@ const updateStatusPromotion = async (req, res) => {
 
 const updateEvent = async (req, res) => {
   try {
-    const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
+    const eventfound = await Event.findById(req.params.id)
+    const user = await User.findOne({ _id: eventfound.userId })
+    const isAdmin = user?.role === 'admin'
+
+    let updateData = { ...req.body }
+    if (req.body.eventName) {
+      let baseSlug = slugify(req.body.eventName, { lower: true, strict: true })
+      let finalSlug = baseSlug
+      let counter = 1
+
+      // Busca si ya existe un evento con este slug, excluyendo el propio evento que estamos actualizando
+      while (
+        await Event.findOne({ slug: finalSlug, _id: { $ne: req.params.id } })
+      ) {
+        finalSlug = `${baseSlug}-${counter}`
+        counter++
+      }
+      updateData.slug = finalSlug // Asigna el nuevo slug único
+    }
+
+    const event = await Event.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     })
 
+    console.log(event?.eventName, 'evento actualizadonse')
     if (!event) {
       return res.status(404).json({
         success: false,
         message: 'Event not found',
       })
     }
-
     if (event.eventType === 'promotion') {
       const company = await Company.findById(event.userId)
-      if (!company) {
+      if (!company && !isAdmin) {
         return res.status(404).json({
           success: false,
           message: 'Company not found',
@@ -336,18 +378,18 @@ const updateEvent = async (req, res) => {
       }
 
       const today = new Date().getTime() // Evitar posibles diferencias en la comparación de fechas
-      const canceledAt = company.activeSubscription.canceledAt
-        ? company.activeSubscription.canceledAt.getTime()
+      const canceledAt = company?.activeSubscription?.canceledAt
+        ? company?.activeSubscription?.canceledAt.getTime()
         : 0
 
       if (
-        company.activeSubscription.status === 'active' ||
-        (company.activeSubscription.status === 'canceled' && canceledAt > today)
+        company?.activeSubscription?.status === 'active' ||
+        (company?.activeSubscription?.status === 'canceled' && canceledAt > today) 
       ) {
-        event.subscription = company.activeSubscription.plan
+        event.subscription = company?.activeSubscription?.plan
       } else {
         const basicSubscription = await Subscription.findOne({ name: 'basic' })
-        if (!basicSubscription) {
+        if (!basicSubscription  && !isAdmin) {
           return res.status(500).json({
             success: false,
             message: 'Basic subscription not found',
@@ -357,7 +399,7 @@ const updateEvent = async (req, res) => {
       }
       await event.save()
     }
-
+ 
     res.status(200).json({
       success: true,
       message: 'Event successfully updated.',
@@ -383,6 +425,19 @@ const updateEventByAdmin = async (req, res) => {
       })
     }
 
+    if (req.body.eventName && req.body.eventName !== event.eventName) {
+      let baseSlug = slugify(req.body.eventName, { lower: true, strict: true })
+      let finalSlug = baseSlug
+      let counter = 1
+      while (
+        await Event.findOne({ slug: finalSlug, _id: { $ne: req.params.id } })
+      ) {
+        finalSlug = `${baseSlug}-${counter}`
+        counter++
+      }
+      event.slug = finalSlug
+    }
+
     if (event.eventType === 'promotion') {
       const subscription = await Subscription.findOne({
         name: 'optima',
@@ -398,7 +453,7 @@ const updateEventByAdmin = async (req, res) => {
 
     if (event.eventType === 'event') {
       const paymentPlan = await Payment.findOne({ name: req.body.adminPayment })
-      event.payment = paymentPlan._id
+      event.payment = paymentPlan?._id
     }
 
     event.status = 'published'
@@ -480,6 +535,8 @@ const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 const hasValidStartDate = (e) => e.startYear && e.startMonth && e.startDay
 const hasValidEndDate = (e) => e.lastYear && e.lastMonth && e.lastDay
 
+
+//todo generar manejar duplicados slugs
 const saveScrapedEvent = async (event) => {
   const safeDate = (dateObj) => {
     if (!dateObj) return null
@@ -605,6 +662,7 @@ const saveScrapedEvent = async (event) => {
               status: 'published',
               userId: event.userId,
               payment: '6702b0ef009a63bba556a209',
+              slug: slugify(event.title, { lower: true, strict: true }),
             },
           }
         )
@@ -658,6 +716,7 @@ const saveScrapedEvent = async (event) => {
       status: 'published',
       userId: event.userId,
       payment: '6702b0ef009a63bba556a209',
+      slug: slugify(event.title, { lower: true, strict: true }),
     })
 
     return {
@@ -797,16 +856,18 @@ const closePassedEvents = async () => {
 
 const getSitemapEvents = async (req, res) => {
   try {
-    const events = await Event.find({ status: 'published' })
+    const events = await Event.find({ status: 'published' }, 'slug') // solo traer el slug
 
-    const baseUrl = process.env.API_BASE_URL
+    const baseUrl = process.env.FRONTEND_URL
 
-    const urls = events.map(event => {
-      return `
+    const urls = events
+      .map((event) => {
+        return `
   <url>
-    <loc>${baseUrl}/events/${event._id}</loc>
+    <loc>${baseUrl}/events/${event.slug}</loc>
   </url>`
-    }).join('')
+      })
+      .join('')
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset 
@@ -816,7 +877,6 @@ ${urls}
 
     res.header('Content-Type', 'application/xml')
     res.status(200).send(xml)
-
   } catch (error) {
     res.status(500).send('Error al generar sitemap')
   }
@@ -848,6 +908,24 @@ const updateExpiredPromotions = async () => {
   }
 }
 
+const getEventBySlug = async (req, res) => {
+  try {
+    const event = await Event.findOne({
+      slug: req.params.slug,
+      status: { $in: ['published', 'draft'] },
+    })
+
+    if (!event) {
+      return res.status(404).json({ message: 'Evento no encontrado' })
+    }
+
+    res.status(200).json({ success: true, result: event })
+  } catch (error) {
+    console.error('Error fetching event by slug:', error)
+    res.status(500).json({ message: 'Error interno del servidor' })
+  }
+}
+
 module.exports = {
   createEvent,
   createPromotion,
@@ -865,5 +943,6 @@ module.exports = {
   removeDuplicateEvents,
   closePassedEvents,
   updateExpiredPromotions,
-  getSitemapEvents
+  getSitemapEvents,
+  getEventBySlug,
 }

@@ -10,7 +10,7 @@
           <CarouselItem v-for="event in premiumEvents" :key="event.id">
             <Card class="border-0 flex items-center justify-center bg-gray-900">
               <CardContent class="bg-gray rounded-md">
-                <NuxtLink :to="`/events/${event._id}`">
+                <NuxtLink :to="`/events/${event.slug}`">
                   <img
                     :src="event.coverImage || 
                       event?.eventImages[0]?.url ||

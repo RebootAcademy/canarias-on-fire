@@ -1,7 +1,7 @@
 <template>
   <div class="relative px-6 md:px-12 mt-4 bg-background text-secondary">
     <div
-      @click="() => router.push(`/events/edit/${eventId}`)"
+      @click="() => router.push(`/events/edit/${slug}`)"
       class="flex items-center max-w-[160px] rounded-md gap-2 my-4 left-4 cursor-pointer border-2 border-primary bg-background p-2 hover:bg-primary"
     >
       <ArrowLeft />
@@ -56,7 +56,7 @@
           eventStore.eventPrice === 0 && eventStore.isFree !== 'not_available'
             ? $t('price.free')
             : eventStore.isFree === 'not_available'
-            ?  `${$t('eventPrice')}: ${$t('buttons.notAvailable')}`
+            ? `${$t('eventPrice')}: ${$t('buttons.notAvailable')}`
             : `${eventStore.eventPrice}€`
         }}</span>
       </div>
@@ -128,7 +128,7 @@
       >{{ $t('buttons.publish') }}</Button
     >
     <Button
-      @click="() => router.push(`/events/edit/${eventId}`)"
+      @click="() => router.push(`/events/edit/${slug}`)"
       class="mt-8 ml-4 bg-background text-secondary border-2 border-primary hover:bg-primary hover:text-black"
       >{{ $t('goEdit') }}</Button
     >
@@ -147,11 +147,12 @@ const router = useRouter()
 
 const hasDayDiff = computed(() => localStorage.dayDiff)
 
-const eventId = route.params.id
+const slug = route.params.slug
 const defaultImage = '/defaultImg.png'
-
+let eventId
 onMounted(async () => {
-  const result = await eventStore.fetchEventById(eventId)
+  const { data, pending, error } = await eventStore.fetchEventBySlug(slug)
+  eventId = data?._id
   eventStore.normalizeCategories()
 })
 
@@ -173,7 +174,7 @@ const publishEvent = async () => {
     if (isAdmin) {
       const result = await eventStore.updateEventByAdmin(eventId)
       if (result) {
-        return router.push(`/events/${eventId}`)
+        return router.push(`/events/${slug}`)
       } else {
         console.error('Failed to publish promotion')
         toast({
@@ -191,7 +192,7 @@ const publishEvent = async () => {
         const result = await eventStore.updateEventStatus(eventId, 'published')
         if (result) {
           await eventStore.fetchEvents()
-          router.push(`/events/${eventId}`)
+          router.push(`/events/${slug}`)
         } else {
           console.error('Failed to publish promotion')
         }
@@ -206,12 +207,12 @@ const publishEvent = async () => {
         )
       }
     } else if (eventStore.event.eventType === 'event') {
-      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`);
+      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
     }
   } catch (error) {
-    console.log('Error al publicar el evento:', error);
+    console.log('Error al publicar el evento:', error)
   }
-};
+}
 
 const checkIfUserHasPromotions = (event) => {
   if (event.eventType === 'event') return false

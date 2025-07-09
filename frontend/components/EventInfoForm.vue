@@ -330,7 +330,6 @@ const userStore = useUserStore()
 const hasEndDate = ref(false)
 const checkCodePromo = ref(false)
 const changeMap = ref(props.isEditing)
-
 const eventDiscounts = computed(() => {
   return [
     { label: t('onBoarding.step2Genres.all'), value: 'all' },
@@ -366,6 +365,7 @@ watch(
 )
 
 const eventStore = useEventStore()
+//TODO ARREGLAR ACTUALIZACION DEL EVENTTYPE
 
 const isClickTypeOfPay = ref(false)
 

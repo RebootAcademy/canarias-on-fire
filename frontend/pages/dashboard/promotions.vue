@@ -43,11 +43,17 @@
       <FilterModal type="promotion" />
     </div>
     <hr class="mb-4 border-1 border-black w-full" />
-    <div v-if="limitedPromotions.filter((promotion) => promotion.status === 'closed').length > 0" class="w-full flex justify-end mb-4 md:mb-0">
+    <div
+      v-if="
+        limitedPromotions.filter((promotion) => promotion.status === 'closed')
+          .length > 0
+      "
+      class="w-full flex justify-end mb-4 md:mb-0"
+    >
       <Button
         class="bg-red-500 hover:bg-red-700 text-white"
         @click="tryToDelete = true"
-        >
+      >
         {{ $t('buttons.deleteAll') }}
       </Button>
     </div>
@@ -60,8 +66,12 @@
         :promotion="promotion"
       />
       <CustomModal v-model:open="tryToDelete">
-      <ConfirmModalClosedEvent @close="tryToDelete = false" type="promotion" @update:open="tryToDelete = $event" />
-    </CustomModal>
+        <ConfirmModalClosedEvent
+          @close="tryToDelete = false"
+          type="promotion"
+          @update:open="tryToDelete = $event"
+        />
+      </CustomModal>
       <p v-if="limitedPromotions.length === 0" class="text-gray-500 mt-4">
         {{ $t('notEventsFound') }}
       </p>
@@ -81,6 +91,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 const { t } = useI18n()
 const userStore = useUserStore()
 const eventStore = useEventStore()
@@ -88,7 +99,6 @@ const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
 const userData = computed(() => userStore.userData)
 const tryToDelete = ref(false)
-
 
 const userRole = computed(() => userStore.userData?.role)
 
@@ -105,7 +115,7 @@ const optionsFilters = computed(() => {
 const selectedPromotion = ref('all')
 const eventDiscounts = computed(() => {
   return [
-  { label: t('onBoarding.step2Genres.all'), value: 'all' },
+    { label: t('onBoarding.step2Genres.all'), value: 'all' },
     { label: t('eventTypeDiscount.2x1'), value: '2x1' },
     { label: t('eventTypeDiscount.3x1'), value: '3x1' },
     { label: t('eventTypeDiscount.3x2'), value: '3x2' },
@@ -204,5 +214,9 @@ definePageMeta({
 
 useHead({
   title: 'Promotions',
+})
+
+onMounted(() => {
+  eventStore.fetchEvents()
 })
 </script>
