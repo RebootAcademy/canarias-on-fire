@@ -1,7 +1,7 @@
 const router = require('express').Router()
 
 const { isAuth, checkRole } = require('../middlewares')
-const { 
+const {
   createEvent,
   createPromotion,
   getAllEvents,
@@ -12,7 +12,8 @@ const {
   deleteEvent,
   updateEventByAdmin,
   deleteAllMyClosedEvents,
-  updateStatusPromotion
+  updateStatusPromotion,
+  getSitemapEvents,
 } = require('../controllers/event.controller')
 
 router
@@ -20,6 +21,7 @@ router
   .post('/', createEvent)
   .post('/promotion', createPromotion)
   .get('/', getAllEvents)
+  .get('/sitemap.xml', getSitemapEvents) // ✅ SEO-compatible
   .get('/geolocation', searchNearbyEvents)
   .get('/user/:userId', getEventsByUserId)
   .get(

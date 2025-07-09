@@ -431,4 +431,13 @@ const handleSubscription = (type) => {
 }
 
 
+useSeoMeta({
+  title: event?.value?.eventName || 'Evento',
+  description: event?.value?.eventDescription?.substring(0, 155) || '',
+  ogTitle: event?.value?.eventName || 'Evento',
+  ogDescription: event?.value?.eventDescription?.substring(0, 155) || '',
+  ogImage: event?.value?.coverImage || defaultImage,
+  ogUrl: `https://evente.es/events/${eventId}`,
+})
+
 </script>
