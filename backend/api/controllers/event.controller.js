@@ -384,12 +384,13 @@ const updateEvent = async (req, res) => {
 
       if (
         company?.activeSubscription?.status === 'active' ||
-        (company?.activeSubscription?.status === 'canceled' && canceledAt > today) 
+        (company?.activeSubscription?.status === 'canceled' &&
+          canceledAt > today)
       ) {
         event.subscription = company?.activeSubscription?.plan
       } else {
         const basicSubscription = await Subscription.findOne({ name: 'basic' })
-        if (!basicSubscription  && !isAdmin) {
+        if (!basicSubscription && !isAdmin) {
           return res.status(500).json({
             success: false,
             message: 'Basic subscription not found',
@@ -399,7 +400,7 @@ const updateEvent = async (req, res) => {
       }
       await event.save()
     }
- 
+
     res.status(200).json({
       success: true,
       message: 'Event successfully updated.',
@@ -534,7 +535,6 @@ const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 
 const hasValidStartDate = (e) => e.startYear && e.startMonth && e.startDay
 const hasValidEndDate = (e) => e.lastYear && e.lastMonth && e.lastDay
-
 
 //todo generar manejar duplicados slugs
 const saveScrapedEvent = async (event) => {
@@ -856,55 +856,59 @@ const closePassedEvents = async () => {
 
 const getSitemapEvents = async (req, res) => {
   try {
-    const events = await Event.find({ status: 'published' }, 'slug updatedAt').sort({ updatedAt: -1 }); // Ordenamos por fecha de actualización más reciente
+    const events = await Event.find({ status: 'published' }, 'slug updatedAt')
+      .sort({ updatedAt: -1 })
+      .lean()
 
-    const baseUrl = process.env.FRONTEND_URL;
+    const baseUrl = process.env.FRONTEND_URL
 
     // --- AÑADIMOS LA URL DE LA PÁGINA PRINCIPAL DE EVENTOS ---
-    // Si hay eventos, usamos la fecha de actualización del más reciente. Si no, usamos la fecha actual.
-    const lastmodEventsPage = events.length > 0 
-      ? events[0].updatedAt.toISOString().split('T')[0] 
-      : new Date().toISOString().split('T')[0];
-    
+    const lastmodEventsPage =
+      events.length > 0
+        ? 
+          new Date(events[0].updatedAt['$date']).toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0]
+
     const mainEventPageUrl = `
       <url>
         <loc>${baseUrl}/events/</loc>
         <lastmod>${lastmodEventsPage}</lastmod>
       </url>
-    `;
-    
+    `
+
     // --- GENERAMOS LAS URLS DE LOS EVENTOS INDIVIDUALES ---
     const individualUrls = events
       .map((event) => {
-        const lastmod = event.updatedAt
-          ? `<lastmod>${event.updatedAt.toISOString().split('T')[0]}</lastmod>`
-          : ''; // Si updatedAt no existe, no se añade la etiqueta.
+        // CORREGIDO: Comprobamos si la clave $date existe antes de usarla
+        const lastmod =
+          event.updatedAt && event.updatedAt['$date']
+            ? `<lastmod>${new Date(event.updatedAt['$date']).toISOString().split('T')[0]}</lastmod>`
+            : ''
 
         return `
             <url>
               <loc>${baseUrl}/events/${event.slug}</loc>
               ${lastmod}
             </url>
-            `;
+            `
       })
-      .join('');
+      .join('')
 
     // --- UNIMOS AMBAS PARTES PARA GENERAR EL XML COMPLETO ---
-    const xml = `
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        ${mainEventPageUrl}
-        ${individualUrls}
-        </urlset>
-        `;
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${mainEventPageUrl}
+${individualUrls}
+</urlset>
+`
 
-    res.header('Content-Type', 'application/xml');
-    res.status(200).send(xml);
+    res.header('Content-Type', 'application/xml')
+    res.status(200).send(xml)
   } catch (error) {
-    console.error('Error al generar sitemap:', error);
-    res.status(500).send('Error al generar sitemap');
+    console.error('Error al generar sitemap:', error)
+    res.status(500).send('Error al generar sitemap')
   }
-};
+}
 
 const updateExpiredPromotions = async () => {
   const events = await Event.find().populate(
