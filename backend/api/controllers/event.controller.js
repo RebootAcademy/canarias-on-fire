@@ -856,31 +856,55 @@ const closePassedEvents = async () => {
 
 const getSitemapEvents = async (req, res) => {
   try {
-    const events = await Event.find({ status: 'published' }, 'slug') // solo traer el slug
+    const events = await Event.find({ status: 'published' }, 'slug updatedAt').sort({ updatedAt: -1 }); // Ordenamos por fecha de actualización más reciente
 
-    const baseUrl = process.env.FRONTEND_URL
+    const baseUrl = process.env.FRONTEND_URL;
 
-    const urls = events
+    // --- AÑADIMOS LA URL DE LA PÁGINA PRINCIPAL DE EVENTOS ---
+    // Si hay eventos, usamos la fecha de actualización del más reciente. Si no, usamos la fecha actual.
+    const lastmodEventsPage = events.length > 0 
+      ? events[0].updatedAt.toISOString().split('T')[0] 
+      : new Date().toISOString().split('T')[0];
+    
+    const mainEventPageUrl = `
+      <url>
+        <loc>${baseUrl}/events/</loc>
+        <lastmod>${lastmodEventsPage}</lastmod>
+      </url>
+    `;
+    
+    // --- GENERAMOS LAS URLS DE LOS EVENTOS INDIVIDUALES ---
+    const individualUrls = events
       .map((event) => {
+        const lastmod = event.updatedAt
+          ? `<lastmod>${event.updatedAt.toISOString().split('T')[0]}</lastmod>`
+          : ''; // Si updatedAt no existe, no se añade la etiqueta.
+
         return `
-  <url>
-    <loc>${baseUrl}/events/${event.slug}</loc>
-  </url>`
+            <url>
+              <loc>${baseUrl}/events/${event.slug}</loc>
+              ${lastmod}
+            </url>
+            `;
       })
-      .join('')
+      .join('');
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
-</urlset>`
+    // --- UNIMOS AMBAS PARTES PARA GENERAR EL XML COMPLETO ---
+    const xml = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        ${mainEventPageUrl}
+        ${individualUrls}
+        </urlset>
+        `;
 
-    res.header('Content-Type', 'application/xml')
-    res.status(200).send(xml)
+    res.header('Content-Type', 'application/xml');
+    res.status(200).send(xml);
   } catch (error) {
-    res.status(500).send('Error al generar sitemap')
+    console.error('Error al generar sitemap:', error);
+    res.status(500).send('Error al generar sitemap');
   }
-}
+};
 
 const updateExpiredPromotions = async () => {
   const events = await Event.find().populate(
