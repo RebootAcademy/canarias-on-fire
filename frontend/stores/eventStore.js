@@ -306,7 +306,14 @@ export const useEventStore = defineStore('eventStore', {
           return { error: error.value }
         }
 
-        this.event = data.value?.result
+        const eventData = data.value?.result
+        if (eventData && eventData.categories && this.categories.length > 0) {
+          eventData.categories = eventData.categories.map(catId => {
+            return this.categories.find(c => c.id === catId || c._id === catId) || catId;
+          }).filter(Boolean);
+        }
+
+        this.event = eventData
         return { data: this.event }
       } catch (error) {
         this.error = error.message

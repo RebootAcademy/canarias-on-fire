@@ -69,7 +69,7 @@ const relatedEvents = computed(() => {
         e.status === 'published' &&
         e.categories.some((cat) =>
           currentEventCategories.value.some(
-            (currentCat) => currentCat._id === cat._id
+            (currentCat) => currentCat.id === cat._id
           )
         )
     )
