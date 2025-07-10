@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const response = await fetch('https://canarias-on-fire-zojd.onrender.com/api/events/sitemap.xml');
+  const response = await fetch(`${process.env.API_BASE_URL}/events/sitemap.xml`);
 
   // Si el backend falla
   if (!response.ok) {
