@@ -14,7 +14,7 @@
     <div class="flex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
         <span
-          v-for="category in event.categories"
+          v-for="category in event?.categories"
           :key="category._id"
           class="bg-gray text-secondary text-xs font-semibold px-4 py-1 rounded-full"
         >
@@ -249,6 +249,7 @@ const eventType = computed(() => {
 })
 
 const { event } = storeToRefs(eventStore)
+
 const defaultImage = '/defaultImg.png'
 const isAdmin = userStore.userData?.role === 'admin'
 const isValidated = userStore?.userData?.isValidated
@@ -433,12 +434,82 @@ const handleSubscription = (type) => {
 
 
 useSeoMeta({
-  title: event?.value?.eventName || 'Evento',
-  description: event?.value?.eventDescription?.substring(0, 155) || '',
-  ogTitle: event?.value?.eventName || 'Evento',
-  ogDescription: event?.value?.eventDescription?.substring(0, 155) || '',
-  ogImage: event?.value?.coverImage || defaultImage,
-  ogUrl: `https://evente.es/events/${slug}`,
+  title: event.value?.eventName || 'Evento',
+  description: event.value?.eventDescription
+    ? event.value.eventDescription.replace(/<[^>]+>/g, '').substring(0, 155)
+    : 'Descripción del evento',
+  ogTitle: event.value?.eventName || 'Evento',
+  ogDescription: event.value?.eventDescription
+    ? event.value.eventDescription.replace(/<[^>]+>/g, '').substring(0, 155)
+    : 'Descripción del evento',
+  ogImage: event.value?.coverImage || '/defaultImg.png',
+  ogUrl: event.value?.externalUrl || `https://evente.es/events/${event.value?.slug || ''}`,
+  ogType: 'event',
+  twitterTitle: event.value?.eventName || 'Evento',
+  twitterDescription: event.value?.eventDescription
+    ? event.value.eventDescription.replace(/<[^>]+>/g, '').substring(0, 155)
+    : 'Descripción del evento',
+  twitterImage: event.value?.coverImage || '/defaultImg.png',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  title: event.value?.eventName || 'Evento | Evente',
+  meta: [
+    {
+      name: 'description',
+      content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '',
+    },
+    { property: 'og:title', content: event.value?.eventName || '' },
+    { property: 'og:description', content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '' },
+    { property: 'og:image', content: event.value?.coverImage || defaultImage },
+    { property: 'og:url', content: `https://evente.es/events/${slug}` },
+    { property: 'og:type', content: 'event' },
+    { name: 'twitter:title', content: event.value?.eventName || '' },
+    { name: 'twitter:description', content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '' },
+    { name: 'twitter:image', content: event.value?.coverImage || defaultImage },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `https://evente.es/events/${slug}`,
+    },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: event.value?.eventName,
+        description: event.value?.eventDescription?.replace(/<[^>]*>?/gm, ''),
+        startDate: `${event.value?.eventDate?.calendar?.year}-${String(event.value?.eventDate?.calendar?.month).padStart(2, '0')}-${String(event.value?.eventDate?.calendar?.day).padStart(2, '0')}T${event.value?.startTime}:00`,
+        endDate: event.value?.eventEndDate || undefined,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: {
+          '@type': 'Place',
+          name: event.value?.eventLocation?.address,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: event.value?.eventLocation?.address,
+            postalCode: event.value?.eventLocation?.postalCode,
+            addressLocality: 'Puerto del Rosario',
+            addressRegion: 'Las Palmas',
+            addressCountry: 'ES',
+          },
+        },
+        image: [event.value?.coverImage],
+        url: `https://evente.es/events/${slug}`,
+        organizer: {
+          '@type': 'Organization',
+          name: 'Evente',
+          url: 'https://evente.es',
+        },
+      }),
+    },
+  ],
 })
 
 </script>
