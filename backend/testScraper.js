@@ -4,7 +4,7 @@ const dbConnect = require('./api/config/db')
 const slugify = require('slugify')
 const Event = require('./api/models/event.model.js')
 
-const { updateSlugs } = require('./api/utils/index.js')
+const { updateSlugs, fixBrokenDates } = require('./api/utils/index.js')
 const scrapperGobiernoExpo = require('./api/scraping/gobiernoCanariasExpo')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
 const scrapeAytoLasPalmas = require('./api/scraping/ayuntamientoLasPalmas.js')
@@ -12,6 +12,7 @@ const scrapeCabildoGranCanaria = require('./api/scraping/culturaCabildoLasPalmas
 const scrapeGobCanarias = require('./api/scraping/gobiernoCanarias')
 const scrapeTeaTenerife = require('./api/scraping/teaTenerife')
 const scrapeLaAgenda = require('./api/scraping/laAgenda.js')
+const {closePassedEvents} = require('./api/controllers/event.controller.js')
 const Scraper = require('./api/scraping/scraperWithPuppeteer.js')
 const scraper = new Scraper()
 const {
@@ -29,7 +30,9 @@ async function main() {
     //await scrapeTeaTenerife()
     //await scrapeLaAgenda()
     //await removeDuplicateEvents()
-    await updateSlugs()
+    //await updateSlugs()
+    //await fixBrokenDates()
+    //await closePassedEvents()
     console.log('Scraping completed successfully.')
   } catch (error) {
     console.error('Error during scraping:', error)
