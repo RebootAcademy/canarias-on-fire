@@ -864,9 +864,8 @@ const getSitemapEvents = async (req, res) => {
 
     // --- AÑADIMOS LA URL DE LA PÁGINA PRINCIPAL DE EVENTOS ---
     const lastmodEventsPage =
-      events.length > 0
-        ? 
-          new Date(events[0].updatedAt['$date']).toISOString().split('T')[0]
+      events.length > 0 && events[0].updatedAt
+        ? new Date(events[0].updatedAt).toISOString().split('T')[0]
         : new Date().toISOString().split('T')[0]
 
     const mainEventPageUrl = `
@@ -880,10 +879,9 @@ const getSitemapEvents = async (req, res) => {
     const individualUrls = events
       .map((event) => {
         // CORREGIDO: Comprobamos si la clave $date existe antes de usarla
-        const lastmod =
-          event.updatedAt && event.updatedAt['$date']
-            ? `<lastmod>${new Date(event.updatedAt['$date']).toISOString().split('T')[0]}</lastmod>`
-            : ''
+        const lastmod = event.updatedAt
+          ? `<lastmod>${new Date(event.updatedAt).toISOString().split('T')[0]}</lastmod>`
+          : ''
 
         return `
             <url>
