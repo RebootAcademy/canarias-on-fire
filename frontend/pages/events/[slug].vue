@@ -309,9 +309,6 @@ if (error) {
 }
 
 
-console.log(eventStore.event?.userId)
-console.log(userStore.userData)
-
 
 const isOwner = computed(() => {
   return eventStore.event?.userId === userStore.userData?._id
