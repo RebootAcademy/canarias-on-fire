@@ -6,8 +6,8 @@
       required
     >
       <SelectTrigger
-        v-if="isMusicSelected()"
-        class="border border-primary  flex justify-center items-center"
+        class="border flex justify-center items-center"
+        :class="{ 'border-primary': isMusicSelected() }"
       >
         <SelectValue :placeholder="placeholder" class="text-gray-500" />
       </SelectTrigger>
