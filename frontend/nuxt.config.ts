@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     head: {
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/v_logo.ico' },
-        { rel: 'canonical', href: 'https://evente.netlify.app' },
+        { rel: 'canonical', href: 'https://evente.es' },
       ],
       title: 'Evente',
       meta: [
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
           content:
             'https://res.cloudinary.com/drs1a2bso/image/upload/fl_preserve_transparency/v1725710854/logo_color_c8o0q3.jpg?_s=public-apps',
         },
-        { property: 'og:url', content: 'https://evente.netlify.app' },
+        { property: 'og:url', content: 'https://evente.es' },
       ],
       script: [
         {
