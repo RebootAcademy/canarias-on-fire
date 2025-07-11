@@ -308,8 +308,13 @@ if (error) {
   console.error('Error fetching event:', error)
 }
 
+
+console.log(eventStore.event?.userId)
+console.log(userStore.userData)
+
+
 const isOwner = computed(() => {
-  return eventStore.event?.userId?._id === userStore.userData?._id
+  return eventStore.event?.userId === userStore.userData?._id
 })
 
 const editEvent = () => {
