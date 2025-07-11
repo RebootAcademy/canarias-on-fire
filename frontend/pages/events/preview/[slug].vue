@@ -7,11 +7,15 @@
       <ArrowLeft />
       <p>{{ $t('goEdit') }}</p>
     </div>
-    <img
-      :src="eventStore.event.coverImage || defaultImage"
-      alt="Event Image"
-      class="w-full h-[300px] md:h-[550px] object-cover rounded-md"
-    />
+  <img
+    :src="eventStore.event.coverImage || defaultImage"
+    alt="Event Image"
+    @click="toggleHeight"
+    :class="[
+      'w-full rounded-md object-cover cursor-pointer transition-all duration-300',
+      isAutoHeight ? 'h-auto' : 'h-[300px] md:h-[550px]'
+    ]"
+  />
     <div class="lex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
         <span
@@ -234,5 +238,11 @@ const copyCodePromo = async (code) => {
   } catch (err) {
     console.error('Error al copiar el enlace: ', err)
   }
+}
+
+const isAutoHeight = ref(false)
+
+const toggleHeight = () => {
+  isAutoHeight.value = !isAutoHeight.value
 }
 </script>

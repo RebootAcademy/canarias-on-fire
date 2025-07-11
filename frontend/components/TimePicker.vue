@@ -1,5 +1,5 @@
 <template>
-  <div class="w-4/5 text-gray-500">
+  <div class="w-4/5 text-gray-500 flex flex-col h-24 ">
     <Label 
       :for="id" 
       class="text-xs text-gray-500"
@@ -10,7 +10,7 @@
       v-model="time" 
       :id="id" 
       type="time" 
-      class="p-2 border rounded-md flex flex-row-reverse" 
+      class="p-2 border rounded-md flex justify-center flex-row-reverse" 
     />
   </div>
 </template>

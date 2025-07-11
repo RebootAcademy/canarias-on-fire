@@ -215,7 +215,7 @@
         {{ $t('eventPriceDescription') }}
       </p>
 
-      <div class="flex justify-center sm:justify-start gap-4">
+      <div class="flex flex-col sm:flex-row justify-center sm:justify-start gap-4">
         <div
           class="border-2 px-8 md:px-16 py-4 rounded-sm cursor-pointer"
           :class="

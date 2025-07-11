@@ -3,13 +3,11 @@
     <img
       :src="eventStore.event.coverImage || defaultImage"
       alt="Event Image"
-      :class="`w-full h-[300px] md:h-[550px] rounded-md 
-      ${(searchPaymentEvent !== 'basic' && 
-        eventStore.event.coverImage) || 
-        eventStore.event.externalSource ? 
-        'object-cover' : 
-        'object-contain'
-      }`"
+      :class="`w-full object-cover rounded-md cursor-pointer
+      ${isAutoHeight ? 'h-auto' : 'h-[300px] md:h-[550px]'}
+      
+      `"
+      @click="toggleHeight"
     />
     <div class="flex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
@@ -25,18 +23,28 @@
         class="flex sm:w-full md:w-auto justify-end items-center gap-2 mb-4 md:my-6 md:mr-6"
       >
         <div
-          v-if="isOwner && event.status === 'published' && event.eventType === 'promotion'"
+          v-if="
+            isOwner &&
+            event.status === 'published' &&
+            event.eventType === 'promotion'
+          "
           class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-red-500 bg-red-500 rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-red-500"
           @click="isOpen = { status: true, type: 'cancel' }"
         >
-          <p>{{ $t('cancelPromotionBTN')}}</p>
+          <p>{{ $t('cancelPromotionBTN') }}</p>
         </div>
         <div
-          v-if="!isAdmin && isOwner && event.status === 'draft' && event.eventType === 'promotion' && event.userId.activeSubscription.status === 'inactive'"
+          v-if="
+            !isAdmin &&
+            isOwner &&
+            event.status === 'draft' &&
+            event.eventType === 'promotion' &&
+            event.userId.activeSubscription.status === 'inactive'
+          "
           class="cursor-pointer p-2 px-4 mr-4 text-center border-2 min-w-[215px] border-primary bg-primary rounded-md hover:font-bold hover:px-1 hover:bg-transparent hover:border-primary"
           @click="() => handleSubscription(event.eventType)"
         >
-          <p>{{ $t('subscribePromotionBTN')}}</p>
+          <p>{{ $t('subscribePromotionBTN') }}</p>
         </div>
 
         <Share2
@@ -65,24 +73,35 @@
         <div class="flex justify-between">
           <div class="flex flex-col gap-1 mt-2">
             <h2 class="text-2xl font-semibold mt-4">
-              {{ event.eventType === 'event' ? $t('previewText.dateAndTime') : $t('previewText.author') }}
+              {{
+                event.eventType === 'event'
+                  ? $t('previewText.dateAndTime')
+                  : $t('previewText.author')
+              }}
             </h2>
-            <div v-if="event.eventType === 'event' && event.startTime" class="flex items-center gap-1">
+            <div
+              v-if="event.eventType === 'event' && event.startTime"
+              class="flex items-center gap-1"
+            >
               <Clock size="16" />
-              <span>{{ event.startTime }} {{event.endTime ? '-' : ''}} {{ event.endTime }}</span>
+              <span
+                >{{ event.startTime }} {{ event.endTime ? '-' : '' }}
+                {{ event.endTime }}</span
+              >
             </div>
             <div class="flex items-center gap-1">
               <Calendar v-if="event.eventType === 'event'" size="16" />
               <User v-else size="16" />
-              <span>{{ 
-                event.nameByAdmin && event.nameByAdmin !== '' ? 
-                event.nameByAdmin :
-                event.eventType === 'event' ? 
-                formattedDate : (
-                event.userId?.commercialName || 
-                event.userId?.companyName || 
-                event.userId?.username
-                )}}
+              <span
+                >{{
+                  event.nameByAdmin && event.nameByAdmin !== ''
+                    ? event.nameByAdmin
+                    : event.eventType === 'event'
+                    ? formattedDate
+                    : event.userId?.commercialName ||
+                      event.userId?.companyName ||
+                      event.userId?.username
+                }}
               </span>
             </div>
           </div>
@@ -129,16 +148,19 @@
         <div v-if="event.eventPrice" class="my-6">
           <TicketButton />
         </div>
-        <div v-if="event.eventType === 'event' && event.eventCapacity" class="my-6">
+        <div
+          v-if="event.eventType === 'event' && event.eventCapacity"
+          class="my-6"
+        >
           <h2 class="text-2xl font-semibold mt-4">
             {{ $t('previewText.capacity') }}
           </h2>
           <div class="flex items-center gap-1">
-              <Users size="16" />
-              <span>{{ event.eventCapacity }}</span>
-            </div>
+            <Users size="16" />
+            <span>{{ event.eventCapacity }}</span>
+          </div>
         </div>
-        <div 
+        <div
           v-if="event.externalSource"
           class="border border-primary w-fit p-2 rounded-md bg-primary"
         >
@@ -220,7 +242,16 @@
 </template>
 
 <script setup>
-import { Share2, Pencil, Trash, Clock, Calendar, MapPin, User, Users } from 'lucide-vue-next'
+import {
+  Share2,
+  Pencil,
+  Trash,
+  Clock,
+  Calendar,
+  MapPin,
+  User,
+  Users,
+} from 'lucide-vue-next'
 const { t } = useI18n()
 import { useToast } from '@/components/ui/toast/use-toast'
 const { toast } = useToast()
@@ -234,7 +265,6 @@ const paymentStore = usePaymentStore()
 const subscriptionStore = useSubscriptionStore()
 const route = useRoute()
 const router = useRouter()
-
 
 const isOpen = ref({
   status: false,
@@ -273,7 +303,6 @@ const isBasicPayment = computed(() => {
 const categoryServices = computed(() => {
   return eventStore.event?.categoriesOfServices
 })
-
 
 if (error) {
   console.error('Error fetching event:', error)
@@ -353,7 +382,7 @@ const publishEvent = async () => {
         console.error('Failed to publish promotion')
         toast({
           description: t('errorCreatingEvent'),
-          variant: 'destructive'
+          variant: 'destructive',
         })
       }
     }
@@ -412,8 +441,8 @@ const copyToClipboard = async () => {
 
 const share = () => {
   navigator.share({
-    text: "Vente a este evento!",
-    url: "/events/" + slug
+    text: 'Vente a este evento!',
+    url: '/events/' + slug,
   })
 }
 
@@ -432,7 +461,6 @@ const handleSubscription = (type) => {
   router.push(`/pricing/${type === 'promotion' ? 'promotions' : 'events'}`)
 }
 
-
 useSeoMeta({
   title: event.value?.eventName || 'Evento',
   description: event.value?.eventDescription
@@ -443,14 +471,16 @@ useSeoMeta({
     ? event.value.eventDescription.replace(/<[^>]+>/g, '').substring(0, 155)
     : 'Descripción del evento',
   ogImage: event.value?.coverImage || '/defaultImg.png',
-  ogUrl: event.value?.externalUrl || `https://evente.es/events/${event.value?.slug || ''}`,
+  ogUrl:
+    event.value?.externalUrl ||
+    `https://evente.es/events/${event.value?.slug || ''}`,
   ogType: 'event',
   twitterTitle: event.value?.eventName || 'Evento',
   twitterDescription: event.value?.eventDescription
     ? event.value.eventDescription.replace(/<[^>]+>/g, '').substring(0, 155)
     : 'Descripción del evento',
   twitterImage: event.value?.coverImage || '/defaultImg.png',
-  twitterCard: 'summary_large_image'
+  twitterCard: 'summary_large_image',
 })
 
 useHead({
@@ -458,15 +488,30 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '',
+      content:
+        event.value?.eventDescription
+          ?.replace(/<[^>]*>?/gm, '')
+          .slice(0, 155) || '',
     },
     { property: 'og:title', content: event.value?.eventName || '' },
-    { property: 'og:description', content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '' },
+    {
+      property: 'og:description',
+      content:
+        event.value?.eventDescription
+          ?.replace(/<[^>]*>?/gm, '')
+          .slice(0, 155) || '',
+    },
     { property: 'og:image', content: event.value?.coverImage || defaultImage },
     { property: 'og:url', content: `https://evente.es/events/${slug}` },
     { property: 'og:type', content: 'event' },
     { name: 'twitter:title', content: event.value?.eventName || '' },
-    { name: 'twitter:description', content: event.value?.eventDescription?.replace(/<[^>]*>?/gm, '').slice(0, 155) || '' },
+    {
+      name: 'twitter:description',
+      content:
+        event.value?.eventDescription
+          ?.replace(/<[^>]*>?/gm, '')
+          .slice(0, 155) || '',
+    },
     { name: 'twitter:image', content: event.value?.coverImage || defaultImage },
     { name: 'twitter:card', content: 'summary_large_image' },
   ],
@@ -484,7 +529,11 @@ useHead({
         '@type': 'Event',
         name: event.value?.eventName,
         description: event.value?.eventDescription?.replace(/<[^>]*>?/gm, ''),
-        startDate: `${event.value?.eventDate?.calendar?.year}-${String(event.value?.eventDate?.calendar?.month).padStart(2, '0')}-${String(event.value?.eventDate?.calendar?.day).padStart(2, '0')}T${event.value?.startTime}:00`,
+        startDate: `${event.value?.eventDate?.calendar?.year}-${String(
+          event.value?.eventDate?.calendar?.month
+        ).padStart(2, '0')}-${String(
+          event.value?.eventDate?.calendar?.day
+        ).padStart(2, '0')}T${event.value?.startTime}:00`,
         endDate: event.value?.eventEndDate || undefined,
         eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -512,4 +561,9 @@ useHead({
   ],
 })
 
+const isAutoHeight = ref(false)
+
+const toggleHeight = () => {
+  isAutoHeight.value = !isAutoHeight.value
+}
 </script>
