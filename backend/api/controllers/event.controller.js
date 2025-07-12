@@ -661,6 +661,7 @@ const saveScrapedEvent = async (event) => {
               externalSource: true,
               status: 'published',
               userId: event.userId,
+              musicType: event.musicType ? event.musicType : null,
               payment: '6702b0ef009a63bba556a209',
               slug: slugify(event.title, { lower: true, strict: true }),
             },
@@ -715,6 +716,7 @@ const saveScrapedEvent = async (event) => {
       externalSource: true,
       status: 'published',
       userId: event.userId,
+      musicType: event.musicType ? event.musicType : null,
       payment: '6702b0ef009a63bba556a209',
       slug: slugify(event.title, { lower: true, strict: true }),
     })

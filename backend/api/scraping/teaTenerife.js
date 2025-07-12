@@ -3,7 +3,7 @@ const connectDB = require('../config/db')
 const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
 const getLocationData = require('../services/geolocation')
-
+const { getMusicGenre } = require('../utils/index')
 const ACTIVIDADES_URL = process.env.TEA_TENERIFE_URL_ACT
 const CINE_URL = process.env.TEA_TENERIFE_URL_CINE
 
@@ -15,9 +15,153 @@ if (!ACTIVIDADES_URL || !CINE_URL) {
   )
 }
 
-const CATEGORY_IDS = {
-  actividades: '6702adf7009a63bba556a1fb',
-  cine: '6702adbd009a63bba556a1f8',
+const CATEGORY_KEYWORDS = {
+  '6702ad06009a63bba556a1f3': [
+    // music
+    'música',
+    'musica',
+    'concierto',
+    'banda',
+    'dj',
+    'recital',
+    'festival',
+    'rock',
+    'pop',
+    'jazz',
+    'electrónica',
+    'rap',
+    'trap',
+  ],
+  '6702ae1e009a63bba556a1fd': [
+    // cine
+    'cine',
+    'película',
+    'film',
+    'documental',
+    'proyección',
+    'cortometraje',
+    'largometraje',
+  ],
+  '6702adbd009a63bba556a1f8': [
+    // arts
+    'arte',
+    'pintura',
+    'escultura',
+    'exposición',
+    'galería',
+    'literatura',
+    'teatro',
+    'poesía',
+    'dramaturgia',
+    'artista',
+    'dibujo',
+    'obra',
+  ],
+  '6702ae2d009a63bba556a1fe': [
+    // museo
+    'museo',
+    'historia',
+    'arqueología',
+    'cultura',
+    'colección',
+    'visita museo',
+  ],
+  '6702adf7009a63bba556a1fb': [
+    // actividades
+    'actividades',
+    'visita guiada',
+    'ruta',
+    'tour',
+    'paseo',
+    'charla',
+    'encuentro',
+    'jornada',
+    'evento',
+    'experiencia',
+    'evento especial',
+  ],
+  '6702ae68009a63bba556a201': [
+    // taller
+    'taller',
+    'workshop',
+    'clase',
+    'curso',
+    'formación',
+    'aprendizaje',
+    'seminario',
+    'manualidades',
+  ],
+  '6702ae0c009a63bba556a1fc': [
+    // baile
+    'baile',
+    'danza',
+    'clase de baile',
+    'coreografía',
+    'salsa',
+    'tango',
+    'folklore',
+    'bailar',
+  ],
+  '6702ad49009a63bba556a1f4': [
+    // kids
+    'niños',
+    'infantil',
+    'familia',
+    'cuentos',
+    'juegos',
+    'títeres',
+    'payasos',
+    'taller infantil',
+    'actividad para niños',
+  ],
+  '6702ad82009a63bba556a1f5': [
+    // food & drinks
+    'comida',
+    'gastronomía',
+    'bebidas',
+    'vino',
+    'degustación',
+    'cata',
+    'cerveza',
+    'café',
+    'foodtruck',
+    'tapas',
+  ],
+  '6702ad9e009a63bba556a1f6': [
+    // nightlife
+    'fiesta',
+    'discoteca',
+    'bar',
+    'pub',
+    'copas',
+    'noche',
+    'after',
+    'nocturno',
+    'club',
+    'dj set',
+  ],
+  '6702adb0009a63bba556a1f7': [
+    // services
+    'servicio',
+    'reparación',
+    'soporte',
+    'asesoría',
+    'técnico',
+    'profesional',
+    'consultoría',
+  ],
+}
+
+const DEFAULT_CATEGORY = '6702adf7009a63bba556a1fb' // actividades
+
+const checkCategory = (text) => {
+  const txt = text.toLowerCase()
+  for (const [categoryId, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    for (const keyword of keywords) {
+      if (txt.includes(keyword)) return categoryId
+    }
+  }
+  return DEFAULT_CATEGORY
 }
 
 function parseEventDates(text) {
@@ -94,7 +238,7 @@ const scrapeEventDetails = async (url, scraper, isCine = false) => {
   }
 }
 
-const setupParser = async (scraper, url, categoryId, isCine = false) => {
+const setupParser = async (scraper, url, isCine = false) => {
   scraper.addParser(url, async ($) => {
     const events = []
     const items = $('.items .item.active')
@@ -136,10 +280,20 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
           scraper,
           isCine
         )
+        let category = null
+        if (isCine) {
+          category = '6702ae1e009a63bba556a1fd'
+        } else {
+          category = checkCategory(title)
+        }
+        let musicGenre = null
+        if (category === '6702ad06009a63bba556a1f3') {
+          musicGenre = getMusicGenre(`${title} ${description}`)
+        }
 
         events.push({
           title,
-          category: categoryId,
+          category,
           startYear: String(dateParsed.from.getFullYear()),
           lastYear: dateParsed.to
             ? String(dateParsed.to.getFullYear())
@@ -161,6 +315,7 @@ const setupParser = async (scraper, url, categoryId, isCine = false) => {
           postalCode: postalCode || '',
           imgUrl: isCine ? detailImg : imgUrl,
           link: fullLink,
+          musicType: musicGenre || null,
           island: 'Tenerife',
           userId: process.env.ADMIN_ID,
         })
@@ -180,8 +335,8 @@ const scrapeTeaTenerife = async () => {
   const scraper = new Scraper()
 
   // Parsers para actividades y cine
-  await setupParser(scraper, ACTIVIDADES_URL, CATEGORY_IDS.actividades, false)
-  await setupParser(scraper, CINE_URL, CATEGORY_IDS.cine, true)
+  await setupParser(scraper, ACTIVIDADES_URL, false)
+  await setupParser(scraper, CINE_URL, true)
 
   try {
     console.log('🔎 Scraping TEA Tenerife - Actividades...')

@@ -28,8 +28,6 @@
     "museums": "Museums",
     "sports": "Sports",
     "romerias": "Romerias",
-    "all": "All",
-    "other": "Other",
     "bands": "Djs & Bands",
     "catering": "Catering",
     "lighting": "Sound & Lighting",
@@ -38,12 +36,13 @@
     "furniture": "Furniture",
     "renting": "Places",
     "workshops": "Workshops",
-    "djs": "Djs",
-    "electronic": "Electronic",
-    "rock": "Rock/Heavy",
-    "jazz": "Jazz",
-    "metal": "Metal",
-    "latina": "Latin",
-    "classic": "Classic"
+  "other": "Other",
+  "djs": "DJs (Club / Sessions)",
+  "electronic": "Electronic (EDM / Techno)",
+  "rock": "Rock (Indie / Alternative)",
+  "jazz": "Jazz & Soul",
+  "metal": "Metal (Heavy / Hard)",
+  "latina": "Latin (Salsa / Reggaeton)",
+  "classic": "Classical (Opera / Symphony)"
   }
 }
