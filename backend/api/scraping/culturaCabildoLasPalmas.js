@@ -3,7 +3,7 @@ const connectDB = require('../config/db')
 const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
 const getLocationData = require('../services/geolocation')
-
+const { getMusicGenre } = require('../utils/index')
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const granCanScraper = new Scraper()
@@ -27,25 +27,151 @@ const monthMap = {
   diciembre: '12',
 }
 
-const CATEGORY_MAPPINGS = {
-  música: '6702ad06009a63bba556a1f3',
-  concierto: '6702ad06009a63bba556a1f3',
-  cine: '6702ae1e009a63bba556a1fd',
-  literatura: '6702adbd009a63bba556a1f8',
-  taller: '6702ae68009a63bba556a201',
-  exposición: '6702adbd009a63bba556a1f8',
-  museo: '6702ae2d009a63bba556a1fe',
-  actividades: '6702adf7009a63bba556a1fb',
-  arte: '6702adbd009a63bba556a1f8',
-  'visita guiada': '6702adf7009a63bba556a1fb',
-  baile: '6702ae0c009a63bba556a1fc',
+const CATEGORY_KEYWORDS = {
+  '6702ad06009a63bba556a1f3': [
+    // music
+    'música',
+    'musica',
+    'concierto',
+    'banda',
+    'dj',
+    'recital',
+    'festival',
+    'rock',
+    'pop',
+    'jazz',
+    'electrónica',
+    'rap',
+    'trap',
+  ],
+  '6702ae1e009a63bba556a1fd': [
+    // cine
+    'cine',
+    'película',
+    'film',
+    'documental',
+    'proyección',
+    'cortometraje',
+    'largometraje',
+  ],
+  '6702adbd009a63bba556a1f8': [
+    // arts
+    'arte',
+    'pintura',
+    'escultura',
+    'exposición',
+    'galería',
+    'literatura',
+    'teatro',
+    'poesía',
+    'dramaturgia',
+    'artista',
+    'dibujo',
+    'obra',
+  ],
+  '6702ae2d009a63bba556a1fe': [
+    // museo
+    'museo',
+    'historia',
+    'arqueología',
+    'cultura',
+    'colección',
+    'visita museo',
+  ],
+  '6702adf7009a63bba556a1fb': [
+    // actividades
+    'actividades',
+    'visita guiada',
+    'ruta',
+    'tour',
+    'paseo',
+    'charla',
+    'encuentro',
+    'jornada',
+    'evento',
+    'experiencia',
+    'evento especial',
+  ],
+  '6702ae68009a63bba556a201': [
+    // taller
+    'taller',
+    'workshop',
+    'clase',
+    'curso',
+    'formación',
+    'aprendizaje',
+    'seminario',
+    'manualidades',
+  ],
+  '6702ae0c009a63bba556a1fc': [
+    // baile
+    'baile',
+    'danza',
+    'clase de baile',
+    'coreografía',
+    'salsa',
+    'tango',
+    'folklore',
+    'bailar',
+  ],
+  '6702ad49009a63bba556a1f4': [
+    // kids
+    'niños',
+    'infantil',
+    'familia',
+    'cuentos',
+    'juegos',
+    'títeres',
+    'payasos',
+    'taller infantil',
+    'actividad para niños',
+  ],
+  '6702ad82009a63bba556a1f5': [
+    // food & drinks
+    'comida',
+    'gastronomía',
+    'bebidas',
+    'vino',
+    'degustación',
+    'cata',
+    'cerveza',
+    'café',
+    'foodtruck',
+    'tapas',
+  ],
+  '6702ad9e009a63bba556a1f6': [
+    // nightlife
+    'fiesta',
+    'discoteca',
+    'bar',
+    'pub',
+    'copas',
+    'noche',
+    'after',
+    'nocturno',
+    'club',
+    'dj set',
+  ],
+  '6702adb0009a63bba556a1f7': [
+    // services
+    'servicio',
+    'reparación',
+    'soporte',
+    'asesoría',
+    'técnico',
+    'profesional',
+    'consultoría',
+  ],
 }
-const DEFAULT_CATEGORY = '6702adf7009a63bba556a1fb'
+
+const DEFAULT_CATEGORY = '6702adf7009a63bba556a1fb' // actividades
 
 const checkCategory = (text) => {
   const txt = text.toLowerCase()
-  for (const [keyword, categoryId] of Object.entries(CATEGORY_MAPPINGS)) {
-    if (txt.includes(keyword)) return categoryId
+  for (const [categoryId, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    for (const keyword of keywords) {
+      if (txt.includes(keyword)) return categoryId
+    }
   }
   return DEFAULT_CATEGORY
 }
@@ -318,6 +444,11 @@ const scrapeCabildoGranCanaria = async () => {
           event.link || event.fullLink
         )
 
+        let musicGenre = null
+        if (event.category === '6702ad06009a63bba556a1f3') {
+          musicGenre = getMusicGenre(`${event.title} ${description}`)
+        }
+
         // Obtener datos de localización
         const { postalCode, coordinates, mapImageUrl } = await getLocationData(
           event.location,
@@ -333,6 +464,7 @@ const scrapeCabildoGranCanaria = async () => {
           postalCode: postalCode || '',
           coordinates: coordinates || null,
           mapImageUrl: mapImageUrl || '',
+          musicType: musicGenre || null,
           island: 'Gran Canaria',
           userId: process.env.ADMIN_ID,
         }

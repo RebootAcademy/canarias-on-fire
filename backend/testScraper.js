@@ -28,7 +28,7 @@ async function main() {
     //await scrapeAytoLasPalmas()
     //await scrapeAytoTenerife()
     //await scrapeTeaTenerife()
-    //await scrapeLaAgenda()
+    await scrapeLaAgenda()
     //await removeDuplicateEvents()
     //await updateSlugs()
     //await fixBrokenDates()

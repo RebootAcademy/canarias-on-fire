@@ -103,10 +103,7 @@ const fixBrokenDates = async () => {
 
       if (Object.keys(fixed).length > 0) {
         // Aquí usamos el método directo del driver MongoDB para evitar middleware y restricciones
-        await Event.collection.updateOne(
-          { _id: event._id },
-          { $set: fixed }
-        )
+        await Event.collection.updateOne({ _id: event._id }, { $set: fixed })
         console.log(`Corregido: ${event._id}`)
       }
     }
@@ -117,10 +114,30 @@ const fixBrokenDates = async () => {
   }
 }
 
+const getMusicGenre = (text) => {
+  const MUSIC_GENRES = {
+    djs: ['dj', 'dj set', 'pinchadiscos'],
+    electronic: ['electrónica', 'electro', 'techno', 'house', 'edm', 'trance'],
+    rock: ['rock', 'indie', 'punk', 'grunge'],
+    jazz: ['jazz', 'swing', 'bebop'],
+    metal: ['metal', 'heavy metal', 'black metal', 'thrash'],
+    latina: ['salsa', 'bachata', 'reggaetón', 'latina', 'cumbia', 'tropical'],
+    classic: ['clásica', 'orquesta', 'sinfónica', 'ópera', 'cámara'],
+  }
+  const txt = text.toLowerCase()
+  for (const [genre, keywords] of Object.entries(MUSIC_GENRES)) {
+    for (const keyword of keywords) {
+      if (txt.includes(keyword)) return genre
+    }
+  }
+  return 'other'
+}
+
 module.exports = {
   formatMonth,
   getDate,
   removeParenthesesContent,
   updateSlugs,
   fixBrokenDates,
+  getMusicGenre,
 }

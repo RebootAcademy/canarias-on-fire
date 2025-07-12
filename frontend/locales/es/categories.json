@@ -27,9 +27,6 @@
     "museums": "Museos",
     "sports": "Deportes",
     "romerias": "Romerías",
-    "all": "Todos",
-    "other": "Otros",
-    "bands": "Djs y grupos",
     "catering": "Catering",
     "lighting": "Sonido e Iluminación",
     "sound": "Sonido e Iluminación",
@@ -37,12 +34,15 @@
     "furniture": "Mobiliario",
     "renting": "Locales",
     "workshops": "Talleres",
-    "djs": "Djs",
-    "electronic": "Electrónica",
-    "rock": "Rock/Heavy",
-    "jazz": "Jazz",
-    "metal": "Metal",
-    "latina": "Latina",
-    "classic": "Clásica"
+    "bands": "Djs y grupos",
+    "all": "Todos",
+  "other": "Other",
+  "djs": "DJs (Club / Sessions)",
+  "electronic": "Electronic (EDM / Techno)",
+  "rock": "Rock (Indie / Alternative)",
+  "jazz": "Jazz & Soul",
+  "metal": "Metal (Heavy / Hard)",
+  "latina": "Latin (Salsa / Reggaeton)",
+  "classic": "Classical (Opera / Symphony)"
   }
 }
