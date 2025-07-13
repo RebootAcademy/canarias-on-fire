@@ -270,31 +270,32 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     async fetchEvents(lat, lng) {
-      if (!lat || !lng) {
-        const { data, error } = await useFetch(`/events`, {
+      this.isLoading = true
+      this.error = null
+
+      try {
+        const url = lat && lng ? `/events?lat=${lat}&lng=${lng}` : `/events`
+
+        const { data, error } = await useFetch(url, {
           baseURL: useRuntimeConfig().public.apiBaseUrl,
         })
+
         if (error.value) {
           console.error('Error fetching events:', error.value)
+          this.error = error.value
+          this.events = []
           return { error: error.value }
         }
-        this.events = data.value?.result || []
 
+        this.events = Array.isArray(data.value?.result) ? data.value.result : []
         return { data: this.events }
-      } else {
-        const { data, error } = await useFetch(
-          `/events?lat=${lat}&lng=${lng}`,
-          {
-            baseURL: useRuntimeConfig().public.apiBaseUrl,
-          }
-        )
-        if (error.value) {
-          console.error('Error fetching events:', error.value)
-          return { error: error.value }
-        }
-        this.events = data.value?.result || []
-
-        return { data: this.events }
+      } catch (error) {
+        console.error('Unexpected error fetching events:', error)
+        this.error = error
+        this.events = []
+        return { error }
+      } finally {
+        this.isLoading = false
       }
     },
 
