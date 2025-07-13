@@ -246,6 +246,7 @@ const adminEvents = computed(() => {
     selection = eventStore.events.filter(
       (event) =>
         (event.reviewed === false || !event.reviewed) &&
+        event.eventType !== 'promotion' &&
         (searchQuery.value
           ? event.eventName
               .toLowerCase()
