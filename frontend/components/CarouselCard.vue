@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg bg-[#1a1a1a]">
+  <div class="carousel w-full h-44 relative overflow-hidden rounded-t-lg bg-[#1a1a1a] z-0">
     <div class="relative">
       <img
         :src="imageSrc"
@@ -96,7 +96,7 @@ const loadImageWithFallback = (url) => {
   }
 
   let isHandled = false;
-  const timeout = 5000; // 5 segundos de timeout
+  const timeout = 10000; // 5 segundos de timeout
 
   const timeoutId = setTimeout(() => {
     if (!isHandled) {
@@ -130,6 +130,20 @@ watch(() => imagesToShow.value[currentImageIndex.value]?.url, (newUrl) => {
   loadImageWithFallback(newUrl);
 }, { immediate: true });
 
+
+watch(() => props.event.coverImage, (newUrl) => {
+  if (newUrl && isDefaultImage.value) {
+    loadImageWithFallback(newUrl);
+  }
+});
+
+
+onMounted(() => {
+  const realUrl = imagesToShow.value[currentImageIndex.value]?.url;
+  if (isDefaultImage.value && realUrl && realUrl !== defaultImage) {
+    loadImageWithFallback(realUrl);
+  }
+})
 
 // Función para ir a la imagen anterior
 const prevImage = () => {

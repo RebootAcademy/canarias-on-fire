@@ -1,7 +1,6 @@
 require('dotenv').config()
 const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
-const getLocationData = require('../services/geolocation')
 const { getMusicGenre } = require('../utils/index')
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -306,10 +305,6 @@ const scrapeLaAgenda = async () => {
           musicGenre = getMusicGenre(`${event.title} ${description}`)
         }
 
-        const { postalCode, coordinates, mapImageUrl } = await getLocationData(
-          event.location,
-          'Tenerife'
-        )
         const eventToSave = {
           ...event,
           description,
@@ -328,9 +323,6 @@ const scrapeLaAgenda = async () => {
           category: event.category,
            musicType: musicGenre || null,
           location: event.location || null,
-          postalCode: postalCode || '',
-          coordinates: coordinates || null,
-          mapImageUrl: mapImageUrl || '',
           island: 'Tenerife',
           userId: process.env.ADMIN_ID,
         }

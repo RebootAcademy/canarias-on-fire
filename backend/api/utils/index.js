@@ -116,20 +116,37 @@ const fixBrokenDates = async () => {
 
 const getMusicGenre = (text) => {
   const MUSIC_GENRES = {
-    djs: ['dj', 'dj set', 'pinchadiscos'],
-    electronic: ['electrónica', 'electro', 'techno', 'house', 'edm', 'trance'],
-    rock: ['rock', 'indie', 'punk', 'grunge'],
-    jazz: ['jazz', 'swing', 'bebop'],
-    metal: ['metal', 'heavy metal', 'black metal', 'thrash'],
-    latina: ['salsa', 'bachata', 'reggaetón', 'latina', 'cumbia', 'tropical'],
-    classic: ['clásica', 'orquesta', 'sinfónica', 'ópera', 'cámara'],
+    electronic: [
+      'electrónica', 'electro', 'techno', 'house', 'edm', 'trance', 'dj', 'dj set', 'pinchadiscos'
+    ],
+    rock: [
+      'rock', 'indie', 'alternativo', 'grunge', 'punk', 'metal', 'heavy metal', 'black metal', 'thrash'
+    ],
+    jazz: [
+      'jazz', 'soul', 'funk', 'swing', 'bebop'
+    ],
+    latina: [
+      'latina', 'salsa', 'reggaetón', 'regueton', 'bachata', 'cumbia', 'tropical'
+    ],
+    classic: [
+      'clásica', 'orquesta', 'sinfónica', 'ópera', 'opera', 'cámara', 'barroca'
+    ],
+    folklore: [
+      'folklore', 'tradicional', 'música andina', 'música regional', 'música del mundo', 'world', 'musica canaria'
+    ],
+    pop: [
+      'pop', 'comercial', 'synthpop', 'synth', 'mainstream', 'radio'
+    ],
   }
+
   const txt = text.toLowerCase()
+
   for (const [genre, keywords] of Object.entries(MUSIC_GENRES)) {
     for (const keyword of keywords) {
       if (txt.includes(keyword)) return genre
     }
   }
+
   return 'other'
 }
 

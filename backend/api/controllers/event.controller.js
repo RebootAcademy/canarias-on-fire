@@ -5,6 +5,7 @@ const Company = require('../models/company.model')
 const Subscription = require('../models/subscription.model')
 const Payment = require('../models/payment.model')
 const User = require('../models/user.model')
+const getLocationData = require('../services/geolocation')
 
 const createEvent = async (req, res) => {
   try {
@@ -590,8 +591,51 @@ const saveScrapedEvent = async (event) => {
   try {
     const existingEvents = await checkExistence(event)
 
-    if (existingEvents.length > 0) {
+    if (existingEvents.length > 0 && event.location) {
       // Ver si alguno tiene una fecha antigua y necesita actualización
+
+      //check dates eventLocation
+      const eventsWithOutLocation = existingEvents.filter((event) => {
+        const loc = event?.eventLocation
+        return (
+          !loc?.address ||
+          !loc?.mapImageUrl ||
+          !Array.isArray(loc?.coordinates) ||
+          loc.coordinates.length === 0
+        )
+      })
+
+      if (eventsWithOutLocation.length > 0 && event.location) {
+        console.log('Cogiendo datos para update getLocation')
+
+        const { postalCode, coordinates, mapImageUrl } = await getLocationData(
+          event.location,
+          event.island
+        )
+
+        const idsToUpdate = eventsWithOutLocation.map((ev) => ev._id)
+
+        await Event.updateMany(
+          { _id: { $in: idsToUpdate } },
+          {
+            $set: {
+              eventLocation: event.location
+                ? {
+                    type: 'Point',
+                    postalCode: (() => {
+                      const pc = Number(postalCode)
+                      return !isNaN(pc) ? pc : null
+                    })(),
+                    address: event.location,
+                    coordinates,
+                    mapImageUrl,
+                  }
+                : null,
+            },
+          }
+        )
+      }
+
       const shouldUpdate = existingEvents.some((ev) => {
         const currentEventEndDate = safeDate(ev.eventEndDate)
         const currentEventDate = safeDate(ev.eventDate)
@@ -641,18 +685,7 @@ const saveScrapedEvent = async (event) => {
                     day: event.lastDay,
                   }
                 : null,
-              eventLocation: event.location
-                ? {
-                    type: 'Point',
-                    postalCode: (() => {
-                      const pc = Number(event.postalCode)
-                      return !isNaN(pc) ? pc : null
-                    })(),
-                    address: event.location,
-                    coordinates: event.coordinates,
-                    mapImageUrl: event.mapImageUrl,
-                  }
-                : null,
+
               startTime: event.time || null,
               endTime: event.endTime || null,
               eventDescription: event.description,
@@ -671,6 +704,15 @@ const saveScrapedEvent = async (event) => {
       }
 
       return 'duplicated'
+    }
+
+    let postalCode, coordinates, mapImageUrl
+    if (event.location && event.island) {
+      console.log('Cogiendo datos para create getLocation')
+      ;({ postalCode, coordinates, mapImageUrl } = await getLocationData(
+        event.location,
+        event.island
+      ))
     }
 
     await Event.create({
@@ -700,12 +742,12 @@ const saveScrapedEvent = async (event) => {
       eventLocation: event.location
         ? {
             postalCode: (() => {
-              const pc = Number(event.postalCode)
+              const pc = Number(postalCode)
               return !isNaN(pc) ? pc : null
             })(),
             address: event.location,
-            coordinates: event.coordinates,
-            mapImageUrl: event.mapImageUrl,
+            coordinates,
+            mapImageUrl,
           }
         : null,
       startTime: event.time || null,

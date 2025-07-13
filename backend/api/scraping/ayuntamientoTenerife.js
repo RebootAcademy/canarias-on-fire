@@ -9,8 +9,6 @@ const { saveScrapedEvent } = require('../controllers/event.controller')
 
 const { formatMonth } = require('../utils')
 
-const getLocationData = require('../services/geolocation')
-
 const aytoTfScraper = new Scraper()
 
 const aytoTfUrl = process.env.AYTO_TF_URL
@@ -90,9 +88,6 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
             time,
           } = await getRemainingData(linkUrl)
 
-          const { postalCode, coordinates, mapImageUrl } =
-            await getLocationData(location, 'Tenerife')
-
           // const category = eventType.map((type) => checkCategory(type))
           const category = checkCategory()
 
@@ -108,11 +103,9 @@ aytoTfScraper.addParser(aytoTfUrl, async (page) => {
             time,
             description,
             location,
-            postalCode,
-            coordinates,
-            mapImageUrl,
             link,
             userId: process.env.ADMIN_ID,
+            island: 'Tenerife'
           }
         })
         .get() // Cheerio's .map needs .get() to convert the iterator to an array
