@@ -58,9 +58,18 @@
       </Button>
     </div>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+      class="relative w-full h-full"
+      :class="{
+        ' grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4':
+          !eventStore.isLoading,
+      }"
     >
+      <Spinner
+        v-if="eventStore.isLoading"
+        containerClasses="w-full h-full bg-background"
+      />
       <PromotionCard
+        v-else
         v-for="promotion in limitedPromotions"
         :key="promotion._id"
         :promotion="promotion"
@@ -97,10 +106,10 @@ const userStore = useUserStore()
 const eventStore = useEventStore()
 const subscriptionStore = useSubscriptionStore()
 const { filteredEvents } = storeToRefs(eventStore)
-const userData = computed(() => userStore.userData)
+const userData = computed(() => userStore?.userData)
 const tryToDelete = ref(false)
 
-const userRole = computed(() => userStore.userData?.role)
+const userRole = computed(() => userStore?.userData?.role)
 
 const selectOption = ref('all')
 const optionsFilters = computed(() => {
@@ -171,7 +180,7 @@ const limitedPromotions = computed(() => {
   }
 
   const filterSecond = filterDiscount
-    .filter((promotion) => promotion.eventType === 'promotion')
+    .filter((event) => event.eventType === 'promotion')
     .sort((a, b) => {
       const priorityA = getPromoPriority(a)
       const priorityB = getPromoPriority(b)
@@ -216,7 +225,7 @@ useHead({
   title: 'Promotions',
 })
 
-onMounted(() => {
-  eventStore.fetchEvents()
+onMounted(async () => {
+  await eventStore.fetchEvents()
 })
 </script>
