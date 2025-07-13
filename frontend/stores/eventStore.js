@@ -60,6 +60,7 @@ export const useEventStore = defineStore('eventStore', {
     loading: false,
     error: false,
     reviewed: false,
+    selectedGenres: [],
   }),
 
   actions: {
@@ -69,6 +70,36 @@ export const useEventStore = defineStore('eventStore', {
 
     removeEvent(eventId) {
       this.events = this.events.filter((event) => event._id !== eventId)
+    },
+
+    toggleGenre(genreValue) {
+      if (genreValue === 'all') {
+        const allIndex = this.selectedGenres.indexOf('all')
+        if (allIndex !== -1) {
+          // Si ya está seleccionado 'all', limpiamos la selección
+          this.selectedGenres = []
+        } else {
+          // Si no está seleccionado 'all', lo seleccionamos y quitamos otros géneros
+          this.selectedGenres = ['all']
+        }
+      } else {
+        // Si está 'all' seleccionado y el usuario selecciona otro género, quitar 'all'
+        const allIndex = this.selectedGenres.indexOf('all')
+        if (allIndex !== -1) {
+          this.selectedGenres.splice(allIndex, 1)
+        }
+
+        const index = this.selectedGenres.indexOf(genreValue)
+        if (index === -1) {
+          this.selectedGenres.push(genreValue)
+        } else {
+          this.selectedGenres.splice(index, 1)
+        }
+      }
+    },
+
+    clearGnre() {
+      this.selectedGenres = []
     },
 
     toggleCategory(category) {
@@ -308,9 +339,15 @@ export const useEventStore = defineStore('eventStore', {
 
         const eventData = data.value?.result
         if (eventData && eventData.categories && this.categories.length > 0) {
-          eventData.categories = eventData.categories.map(catId => {
-            return this.categories.find(c => c.id === catId || c._id === catId) || catId;
-          }).filter(Boolean);
+          eventData.categories = eventData.categories
+            .map((catId) => {
+              return (
+                this.categories.find(
+                  (c) => c.id === catId || c._id === catId
+                ) || catId
+              )
+            })
+            .filter(Boolean)
         }
 
         this.event = eventData
@@ -536,7 +573,6 @@ export const useEventStore = defineStore('eventStore', {
           body: { reviewed },
           baseURL: useRuntimeConfig().public.apiBaseUrl,
         })
-
 
         if (data.success) {
           this.event = data.result

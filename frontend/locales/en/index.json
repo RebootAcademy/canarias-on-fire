@@ -58,14 +58,14 @@
     "step2Genres": {
       "label": "Genres",
       "all": "See all",
-  "other": "Other",
-  "djs": "DJs (Club / Sessions)",
-  "electronic": "Electronic (EDM / Techno)",
-  "rock": "Rock (Indie / Alternative)",
-  "jazz": "Jazz & Soul",
-  "metal": "Metal (Heavy / Hard)",
-  "latina": "Latin (Salsa / Reggaeton)",
-  "classic": "Classical (Opera / Symphony)"
+  "djs": "Electronic / Techno / DJs",
+  "rock": "Rock / Indie / Alt. / Metal",
+  "jazz": "Jazz / Soul / Funk",
+  "latina": "Latin / Salsa / Reggaeton",
+  "classic": "Classical / Opera / Symphonic",
+  "folklore": "Folk / Traditional",
+  "pop": "Pop / Mainstream / Synth",
+  "other": "Other / Experimental / Fusion"
     },
     "step2BandMembers": "Band Members",
     "step2BandMembersPlaceholder": "e.g. John (Guitar), Sarah (Vocals)",

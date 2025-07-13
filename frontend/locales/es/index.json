@@ -58,14 +58,14 @@
     "step2Genres": {
       "label": "Géneros",
       "all": "Ver todos",
-  "other": "Other",
-  "djs": "DJs (Club / Sessions)",
-  "electronic": "Electronic (EDM / Techno)",
-  "rock": "Rock (Indie / Alternative)",
-  "jazz": "Jazz & Soul",
-  "metal": "Metal (Heavy / Hard)",
-  "latina": "Latin (Salsa / Reggaeton)",
-  "classic": "Classical (Opera / Symphony)"
+  "djs": "Electrónica / Techno / DJs",
+  "rock": "Rock / Indie / Alternativo / Metal",
+  "jazz": "Jazz / Soul / Funk",
+  "latina": "Latina / Salsa / Reguetón",
+  "classic": "Clásica / Ópera / Sinfónica",
+  "folklore": "Folklore / Tradicional",
+  "pop": "Pop / Comercial / Synth",
+  "other": "Otros"
     },
     "step2BandMembers": "Integrantes del grupo",
     "step2BandMembersPlaceholder": "ej. John (Bajo), Sarah (Vocalista)",

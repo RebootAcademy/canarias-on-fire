@@ -2,7 +2,6 @@ require('dotenv').config()
 const connectDB = require('../config/db')
 const Scraper = require('./scraperWithPuppeteer')
 const { saveScrapedEvent } = require('../controllers/event.controller')
-const getLocationData = require('../services/geolocation')
 const { getMusicGenre } = require('../utils/index')
 const ACTIVIDADES_URL = process.env.TEA_TENERIFE_URL_ACT
 const CINE_URL = process.env.TEA_TENERIFE_URL_CINE
@@ -246,10 +245,6 @@ const setupParser = async (scraper, url, isCine = false) => {
       `👀 Encontrados ${items.length} items en ${isCine ? 'CINE' : 'ACTIVIDADES'}`
     )
     const location = 'TEA Tenerife'
-    const { postalCode, coordinates, mapImageUrl } = await getLocationData(
-      location,
-      'Tenerife'
-    )
     for (let i = 0; i < items.length; i++) {
       const item = $(items[i])
       const dateText = item.find('.text .date').first().text().trim()
@@ -310,9 +305,6 @@ const setupParser = async (scraper, url, isCine = false) => {
           endTime: null,
           description,
           location,
-          coordinates: coordinates || null,
-          mapImageUrl: mapImageUrl || '',
-          postalCode: postalCode || '',
           imgUrl: isCine ? detailImg : imgUrl,
           link: fullLink,
           musicType: musicGenre || null,

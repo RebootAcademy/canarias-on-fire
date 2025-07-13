@@ -6,8 +6,6 @@ const Scraper = require('./scraper')
 
 const { saveScrapedEvent } = require('../controllers/event.controller')
 
-const getLocationData = require('../services/geolocation')
-
 const gobCanScraper = new Scraper()
 let page = 1
 const gobCanUrl = process.env.GOB_CAN_URL
@@ -93,8 +91,7 @@ gobCanScraper.addParser(gobCanUrl, async (page) => {
           const { startDay, month, year, time, lastDay } = handleDate(date)
 
           const category = checkCategory(eventType)
-          const { postalCode, coordinates, mapImageUrl } =
-            await getLocationData(location, island)
+ 
 
           return {
             title,
@@ -108,9 +105,6 @@ gobCanScraper.addParser(gobCanUrl, async (page) => {
             time,
             description,
             location,
-            postalCode,
-            coordinates,
-            mapImageUrl,
             imgUrl,
             link,
             island,

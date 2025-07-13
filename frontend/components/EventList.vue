@@ -39,6 +39,7 @@ const {
   searchQuery,
   selectedCategories,
   categories,
+  selectedGenres,
 } = storeToRefs(eventStore)
 const props = defineProps({
   type: {
@@ -74,6 +75,7 @@ const noFilterSelected = () => {
     !startTime &&
     !endTime &&
     !categories.length &&
+    !selectedGenres.length &&
     selectedEventFilter.value === 'all' &&
     musicFilter.value === 'all' &&
     selectedFilterByDate.value === 'all' &&
@@ -101,10 +103,23 @@ const limitedEvents = computed(() => {
     )
   }
 
-  if (eventStore.musicFilter !== 'all') {
-    filterEvents = filterEvents.filter(
-      (event) => event.musicType === eventStore.musicFilter
+  if (
+    eventStore?.selectedGenres?.length > 0 &&
+    !eventStore?.selectedGenres?.includes('all')
+  ) {
+    // Solo mostrar eventos que coincidan con los géneros seleccionados
+    filterEvents = filterEvents.filter((event) =>
+      eventStore?.selectedGenres?.includes(event?.musicType)
     )
+  } else if (eventStore?.selectedGenres?.includes('all')) {
+    filterEvents = filterEvents.filter((event) => {
+      if (!event.categories || !Array.isArray(event.categories)) {
+        return false
+      }
+      const ids = event.categories.map((cat) => cat._id)
+      const found = ids.includes('6702ad06009a63bba556a1f3')
+      return found
+    })
   }
 
   const eventsWithRandomOrder = filterEvents.map((event) => ({
@@ -131,7 +146,6 @@ const limitedEvents = computed(() => {
     }
   })
 })
-
 
 // Random Order By priority Event
 watch(
