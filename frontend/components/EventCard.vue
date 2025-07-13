@@ -38,7 +38,7 @@
           {{ event.status }}
         </span>
         <span
-          v-show="userStore?.userData && userStore.userData.role === 'admin'"
+          v-show="event && userStore?.userData && userStore.userData.role === 'admin'"
           :class="[
             'absolute top-2 right-2 text-xs font-semibold bg-secondary text-background rounded-xl px-2 py-1 z-[1]',
             { 'text-red-500 italic': !event.reviewed },
