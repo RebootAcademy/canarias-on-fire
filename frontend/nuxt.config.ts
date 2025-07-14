@@ -3,36 +3,7 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/v_logo.ico' },
-        { rel: 'canonical', href: 'https://evente.es' },
-      ],
-      title: 'Evente',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        {
-          hid: 'description',
-          name: 'description',
-          content:
-            'Descubre eventos emocionantes en tu área, desde conciertos hasta conferencias. ¡Únete a nuestra comunidad y no te pierdas ninguna promoción!',
-        },
-        {
-          property: 'og:title',
-          content: 'Evente - Tu página para encontrar y publicar eventos',
-        },
-        {
-          property: 'og:description',
-          content:
-            'Descubre eventos emocionantes en tu área, desde conciertos hasta conferencias. ¡Únete a nuestra comunidad y no te pierdas ninguna promoción!',
-        },
-        {
-          property: 'og:image',
-          content:
-            'https://res.cloudinary.com/drs1a2bso/image/upload/fl_preserve_transparency/v1725710854/logo_color_c8o0q3.jpg?_s=public-apps',
-        },
-        { property: 'og:url', content: 'https://evente.es' },
-      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/v_logo.ico' }],
       script: [
         {
           children: `
