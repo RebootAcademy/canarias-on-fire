@@ -492,7 +492,7 @@ useSeoMeta({
 })
 
 useHead({
-  title: event.value?.eventName || 'Evento | Evente',
+  title: event.value?.eventName || 'Evente',
   meta: [
     {
       name: 'description',
@@ -552,8 +552,6 @@ useHead({
             '@type': 'PostalAddress',
             streetAddress: event.value?.eventLocation?.address,
             postalCode: event.value?.eventLocation?.postalCode,
-            addressLocality: 'Puerto del Rosario',
-            addressRegion: 'Las Palmas',
             addressCountry: 'ES',
           },
         },

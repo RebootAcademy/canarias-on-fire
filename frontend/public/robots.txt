@@ -1,0 +1,11 @@
+User-agent: *
+# Permite todo el sitio
+Disallow:
+
+# Bloquear rutas internas que no deseas indexar (opcional)
+ Disallow: /dashboard/
+ Disallow: /profile/
+ Disallow: /payments/
+ Disallow: /users/
+# Muestra el sitemap para ayudar a los crawlers
+Sitemap: https://evente.es/sitemap.xml
