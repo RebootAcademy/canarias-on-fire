@@ -32,10 +32,7 @@
   <!-- Modal -->
   <div
     v-if="openModal"
-    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[70vh] md:h-[50vh] md:w-[80vw] xl:w-[50vw] bg-white bg-opacity-30 z-[70] rounded-sm text-black"
-    :class="[
-      theme === 'dark' ? 'bg-white bg-opacity-30' : 'bg-white bg-opacity-30 ',
-    ]"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[70vh] md:h-[50vh] md:w-[80vw] xl:w-[50vw] bg-primary/40 z-[70] rounded-sm text-black"
   >
     <div
       class="relative grid grid-cols-1 md:grid-rows-2 gap-y-1 md:gap-4 p-4 md:grid-cols-4 h-full"
@@ -45,7 +42,6 @@
         :key="genre.value"
         class="border flex items-center justify-center text-center text-black cursor-pointer rounded-sm bg-white bg-opacity-90 genre-item"
         :class="[
-          theme === 'dark' ? 'border-primary' : '',
           eventStore.selectedGenres.includes(genre.value)
             ? 'bg-primary-gradient text-white'
             : '',

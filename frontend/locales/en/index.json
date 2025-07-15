@@ -205,5 +205,14 @@
     "basic": "Basic",
     "free": "FREE",
     "plansInfo": "Plans Info"
+  },
+  "responsability": {
+    "title": "Disclaimer:",
+    "body": "The information published on this page regarding events and promotions is provided by third parties. Although we strive to keep the data up to date and accurate, we do not guarantee the truthfulness, accuracy, or timeliness of the content. We are not responsible for modifications, cancellations, errors, or omissions in this information. It is recommended to verify directly with the organizers or official sources before making any decisions based on the content published here."
+  },
+  "app":{
+    "step1": "Take us with you!",
+    "step2": "Download our app now"
   }
+  
 }
