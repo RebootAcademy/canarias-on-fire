@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex border-2 border-primary p-2 rounded-md flex justify-center items-center  gap-4"
+    class="flex border-2 border-primary p-2 rounded-md flex justify-center items-center gap-4"
   >
     <span>{{ $t('buttonsEvents.events') }}</span>
   </div>
@@ -16,7 +16,7 @@
       <button
         :key="selectedOption"
         type="button"
-        class="relative border-2 rounded-md border-primary bg-transparent text-secondary  bg-primary-gradient w-full flex items-center justify-center p-2 min-h-[2.5rem]"
+        class="relative border-2 rounded-md border-primary bg-transparent text-secondary bg-primary-gradient w-full flex items-center justify-center p-2 min-h-[2.5rem]"
         :class="open ? 'rounded-b-none' : 'rounded-b-md'"
         @click="toggleOpen"
       >
@@ -38,7 +38,10 @@
       <ul
         v-show="open"
         class="transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top absolute z-[100] w-full bg-black border border-primary border-t-0 rounded-b-md"
-        :class="{ 'opacity-100 scale-y-100': open }"
+        :class="{
+          'opacity-100 scale-y-100': open,
+          'bg-white': theme === 'light',
+        }"
         role="listbox"
       >
         <li
@@ -71,13 +74,13 @@
     <EventsHeader />
     <EventList />
   </div>
-
 </template>
 
 <script setup>
 const { t } = useI18n()
 const eventStore = useEventStore()
-
+const userStore = useUserStore()
+const theme = computed(() => userStore.themePreference)
 const eventCategories = computed(() => eventStore.eventCategories)
 
 const selectedOption = ref('promotions')
