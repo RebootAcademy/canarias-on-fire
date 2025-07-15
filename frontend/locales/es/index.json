@@ -205,5 +205,13 @@
     "basic": "Básica",
     "free": "GRATIS",
     "plansInfo": "Información de planes"
+  },
+    "responsability": {
+    "title": "Aviso de responsabilidad:",
+    "body": "La información publicada en esta página sobre eventos y promociones es proporcionada por terceros. Aunque procuramos mantener los datos actualizados y precisos, no garantizamos la veracidad, exactitud ni vigencia de los contenidos. No nos hacemos responsables por modificaciones, cancelaciones, errores u omisiones en dicha información. Se recomienda verificar directamente con los organizadores o las fuentes oficiales antes de tomar cualquier decisión basada en el contenido aquí publicado."
+  },
+    "app":{
+    "step1": "¡Llévanos contigo!",
+    "step2": "Descarga ya nuestra App"
   }
 }

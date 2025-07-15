@@ -101,7 +101,7 @@ export default defineNuxtConfig({
     '/api/**': { cors: true },
     // Redirects legacy urls
     '/old-page': { redirect: '/new-page' },
-    '/event/:slug': { ssr: true },
+    '/events/:slug': { ssr: true },
     '/api/clients/unsubscribe/**': {
       csurf: false,
     },

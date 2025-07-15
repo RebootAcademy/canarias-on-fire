@@ -54,6 +54,6 @@ const options = computed(() => [
   { label: t('buttonsEvents.kidsPromotion'), value: 'kids', image:"/boton_peques 2.png" },
   { label: t('buttonsEvents.activitiesPromotion'), value: 'activities', image: "/boton_actividades.png" },
   { label: t('buttonsEvents.plansPromotion'), value: 'plans', image: "/boton_escapada.png" },
-  { label: t('buttonsEvents.planYourParty'), value: 'createEvent', image: "/boton_fiesta.png" },
+  //{ label: t('buttonsEvents.planYourParty'), value: 'createEvent', image: "/boton_fiesta.png" },
 ])
 </script>
