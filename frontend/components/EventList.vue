@@ -118,6 +118,10 @@ const noFilterSelected = () => {
   )
 }
 
+const shouldApplyProximityFilter = computed(() => {
+  return userStore.acceptedGeolocation && !filters.value.islands?.length;
+});
+
 const showSeeMoreButton = computed(() => {
   return isPaginatedView.value
 })
@@ -153,7 +157,7 @@ const limitedEvents = computed(() => {
     )
   })
 
-  if (userStore.acceptedGeolocation && noFilterSelected()) {
+  if (shouldApplyProximityFilter.value) {
     filterEvents = filterEvents.filter(
       (event) => event.dist?.calculated < eventStore.radioLocation
     )
