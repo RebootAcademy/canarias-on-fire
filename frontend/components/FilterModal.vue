@@ -5,17 +5,30 @@
   >
     <div class="bg-background border-2 rounded-lg p-4 md:p-6 w-11/12 max-w-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="w-full text-xl font-semibold text-center ">{{ $t('modalFilter.label')}}</h2>
+        <h2 class="w-full text-xl font-semibold text-center">
+          {{ $t('modalFilter.label') }}
+        </h2>
         <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
           <span class="text-2xl">&times;</span>
         </button>
       </div>
       <div>
-        <h3 class="font-semibold">{{ $t('modalFilter.ubication')}}</h3>
-        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.selectIsland')}}</p>
+        <h3 class="font-semibold">{{ $t('modalFilter.ubication') }}</h3>
+        <p class="text-xs text-gray-500 mb-2">
+          {{ $t('modalFilter.selectIsland') }}
+        </p>
         <div class="grid grid-cols-2 md:grid-cols-3 md:gap-2 md:mb-4">
-          <label v-for="island in islands" :key="island" class="flex items-center">
-            <input type="checkbox" v-model="selectedIslands" :value="island" class="mr-2 accent-primary">
+          <label
+            v-for="island in islands"
+            :key="island"
+            class="flex items-center"
+          >
+            <input
+              type="checkbox"
+              v-model="selectedIslands"
+              :value="island"
+              class="mr-2 accent-primary"
+            />
             {{ island }}
           </label>
         </div>
@@ -25,35 +38,32 @@
           <DatePicker v-model="selectedDate" />
           <!-- <TimePicker v-model="startTime" /> -->
         </div>
-        <h3 class="font-semibold mt-4">{{ $t('modalFilter.categories')}}</h3>
-        <p class="text-xs text-gray-500 mb-2">{{ $t('modalFilter.categoriesDescription')}}</p>
+        <h3 class="font-semibold mt-4">{{ $t('modalFilter.categories') }}</h3>
+        <p class="text-xs text-gray-500 mb-2">
+          {{ $t('modalFilter.categoriesDescription') }}
+        </p>
         <div class="flex flex-wrap justify-center gap-2 mb-4">
           <div
-            v-for="category in getCategories"
+            v-for="category in displayCategories"
             :key="category.id"
-            @click="toggleCategory(category)"
-            :variant="selectedCategories.includes(category.id) ? 'default' : 'outline'"
+            @click="handleCategoryClick(category)"
+            :variant="
+              selectedCategories.includes(category.id) ? 'default' : 'outline'
+            "
             class="text-xs p-2 md:p-4 rounded-lg bg-gray border-0 hover:bg-primary hover:text-white select-none cursor-pointer"
-            :class="selectedCategories.includes(category.id) ? 'bg-primary text-white' : ''"
+            :class="{
+              'bg-primary text-white': isSelected(category),
+            }"
           >
             {{ $t(`values.${category.name}`) }}
           </div>
         </div>
-        <div v-if="isMusicSelected()" class="mt-4 w-full flex justify-center">
-          <CustomSelect
-            :items="genresItems"
-            :placeholder="placeholderSelect"
-            v-model:selected="selectedOption"
-            :optionDefault="selectedOption"
-            class="w-4/5 md:w-1/3"
-          />
-        </div>
+        <MusicFilterModal :openModal="openModal" @close="openModal = false" />
         <div class="flex justify-end gap-4 mt-4">
-          <Button @click="resetFilters" variant="ghost" class="bg-gray">{{ $t('buttons.reset')}}</Button>
-          <CustomBtn 
-            :title="$t('buttons.apply')"
-            @click="applyFilters"
-          />
+          <Button @click="resetFilters" variant="ghost" class="bg-gray">{{
+            $t('buttons.reset')
+          }}</Button>
+          <CustomBtn :title="$t('buttons.apply')" @click="applyFilters" />
         </div>
       </div>
     </div>
@@ -67,36 +77,45 @@ const { t } = useI18n()
 const props = defineProps({
   type: {
     type: String,
-    default: 'event'
-  }
+    default: 'event',
+  },
 })
 import CustomBtn from './CustomBtn.vue'
 const eventStore = useEventStore()
-const { isFilterModalOpen, filters, eventDate } = storeToRefs(eventStore)
+const { isFilterModalOpen, filters, eventDate, categories, selectedCategories } =
+  storeToRefs(eventStore)
 
 const selectedIslands = ref(filters.value.islands)
 const selectedDate = ref(eventDate.value)
-const selectedCategories = ref(filters.value.categories)
 const selectedOption = ref('all')
-
-watch(selectedOption, (value) => eventStore.musicFilter = value)
+const openModal = ref(false)
+watch(selectedOption, (value) => (eventStore.musicFilter = value))
 // const startTime = ref(null)
 
-const getCategories = computed(() => {
-  return eventStore.categories.filter((category) => category.type === props.type && category.name !== 'services')
-})
+const islands = [
+  'Gran Canaria',
+  'La Palma',
+  'El Hierro',
+  'Lanzarote',
+  'Tenerife',
+  'La Gomera',
+  'Fuerteventura',
+  'La Graciosa',
+]
 
-const islands = ['Gran Canaria', 'La Palma', 'El Hierro', 'Lanzarote', 'Tenerife', 'La Gomera', 'Fuerteventura', 'La Graciosa']
-
-const toggleCategory = (category) => {
-  if (isMusicSelected()){
+const handleCategoryClick = (category) => {
+  if (isMusicSelected()) {
     selectedOption.value = 'all'
   }
-  const index = selectedCategories.value.indexOf(category.id)
-  if (index === -1) {
-    selectedCategories.value.push(category.id)
+  if (props.type === 'event') {
+    eventStore.toggleCategory(category)
+  } else if (props.isCompany === true) {
+    eventStore.setTypeOfCompanyCategory(category)
   } else {
-    selectedCategories.value.splice(index, 1)
+    eventStore.toogleCategoryForPromotions(category)
+  }
+  if (category.name === 'music') {
+    openModal.value = true
   }
 }
 
@@ -105,18 +124,14 @@ const closeModal = () => {
 }
 
 const applyFilters = () => {
+  console.log(selectedCategories.value)
   eventStore.setFilters({
-    islands: selectedIslands.value,
+    islands: selectedIslands.value ? selectedIslands.value : null,
     date: selectedDate.value ? new Date(selectedDate.value) : null,
-    categories: selectedCategories.value
     // startTime: startTime.value,
   })
-  eventStore.selectedCategories = selectedCategories.value.map((category) => searchCategory(category))
+  console.log(eventStore.filters)
   closeModal()
-}
-
-const searchCategory = (id) => {
-  return eventStore.categories.find((category) => category.id === id)
 }
 
 const resetFilters = () => {
@@ -135,30 +150,39 @@ watch(selectedDate, (newDate) => {
   eventStore.eventDate = newDate
 })
 
-watch(isFilterModalOpen, (newValue) => {
-  if (newValue) {
-    selectedIslands.value = filters.value.islands
-    selectedCategories.value = [...filters.value.categories]
+
+
+const isMusicSelected = () => {
+  return selectedCategories.value.some((c) => c === '6702ad06009a63bba556a1f3')
+}
+
+const filterCategories = computed(() => {
+  if (props.type === 'event') {
+    return categories.value.filter((category) => category.type !== 'promotion')
+  } else {
+    return categories.value
   }
 })
 
-const isMusicSelected = () => {
-  return selectedCategories.value.some(
-      (c) => c === '6702ad06009a63bba556a1f3'
-    )
-}
-
-const genresItems = computed(() => {
-  return [
-    { value: 'all', label: t('onBoarding.step2Genres.all') },
-    { value: 'djs', label: t('onBoarding.step2Genres.djs') },
-    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
-    { value: 'electronic', label: t('onBoarding.step2Genres.electronic') },
-    { value: 'rock', label: t('onBoarding.step2Genres.rock') },
-    { value: 'jazz', label: t('onBoarding.step2Genres.jazz') },
-    { value: 'classic', label: t('onBoarding.step2Genres.classic') },
-    { value: 'other', label: t('onBoarding.step2Genres.other') },
-  ]
+const displayCategories = computed(() => {
+  if (!eventStore.categories) return []
+  return filterCategories.value.filter((cat) => cat.type === props.type)
 })
 
+const isSelected = (category) => {
+  if (category.name === 'music') {
+    return eventStore.selectedGenres.length > 0
+  }
+  if (props.type === 'event') {
+    return selectedCategories.value.some(
+      (c) => c.id === category.id && c.type !== 'promotions'
+    )
+  } else if (selectCategoryForFilterCompany.value && props.isCompany === true) {
+    return selectCategoryForFilterCompany.value?.id === category?.id
+  } else {
+    return selectedCategoriesForPromotion.value.some(
+      (c) => c.id === category.id && c.type === 'promotions'
+    )
+  }
+}
 </script>

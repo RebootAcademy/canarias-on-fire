@@ -21,7 +21,7 @@
           <div class="w-full lg:w-1/2 flex gap-4 items-center justify-end">
             <SearchInput v-model="searchQuery" />
             <CustomBtn :title="$t('filterBtn')" @click="openFilterModal" />
-            <FilterModal class="self-end" />
+            <FilterModal class="self-end" type="event"/>
           </div>
         </div>
         <div class="hidden md:flex flex-col">

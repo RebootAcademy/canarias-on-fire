@@ -116,7 +116,7 @@ const fixBrokenDates = async () => {
 
 const getMusicGenre = (text) => {
   const MUSIC_GENRES = {
-    electronic: [
+    djs: [
       'electrónica', 'electro', 'techno', 'house', 'edm', 'trance', 'dj', 'dj set', 'pinchadiscos'
     ],
     rock: [
