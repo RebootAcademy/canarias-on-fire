@@ -135,8 +135,8 @@ const isPaginatedView = computed(() => {
     musicFilter.value === 'all' &&
     selectedFilterByDate.value === 'all'
   const noSearch = !searchQuery.value
-
-  return noDateFilters && noListFilters && noDropdownFilters && noSearch
+  const hasEnoughEvents = shuffledEvents.value.length > 9
+  return noDateFilters && noListFilters && noDropdownFilters && noSearch &&  hasEnoughEvents
 })
 
 const limitedEvents = computed(() => {
