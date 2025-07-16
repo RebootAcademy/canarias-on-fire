@@ -5,7 +5,7 @@
         class="w-full grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
       >
         <EventCard
-          v-for="(event, index) in displayEvents"
+          v-for="event in displayEvents"
           :key="event._id"
           :event="event"
           class="xs:w-[80%] sm:w-full"
@@ -119,18 +119,24 @@ const noFilterSelected = () => {
 }
 
 const showSeeMoreButton = computed(() => {
-  return (
-    selectedEventFilter.value === 'all' &&
-    musicFilter.value === 'all' &&
-    selectedFilterByDate.value === 'all' &&
-    !searchQuery.value &&
-    !filters.value.date &&
-    !filters.value.startTime &&
-    !filters.value.endTime &&
+  return isPaginatedView.value
+})
+
+const isPaginatedView = computed(() => {
+  // La paginación solo se activa si TODAS estas condiciones son verdaderas
+  const noDateFilters =
+    !filters.value.date && !filters.value.startTime && !filters.value.endTime
+  const noListFilters =
     !filters.value.islands?.length &&
     !selectedCategories.value?.length &&
     !selectedGenres.value?.length
-  )
+  const noDropdownFilters =
+    selectedEventFilter.value === 'all' &&
+    musicFilter.value === 'all' &&
+    selectedFilterByDate.value === 'all'
+  const noSearch = !searchQuery.value
+
+  return noDateFilters && noListFilters && noDropdownFilters && noSearch
 })
 
 const limitedEvents = computed(() => {
@@ -161,6 +167,7 @@ const limitedEvents = computed(() => {
     filterEvents = filterEvents.filter((event) =>
       eventStore?.selectedGenres?.includes(event?.musicType)
     )
+    console.log(filterEvents)
   } else if (eventStore?.selectedGenres?.includes('all')) {
     filterEvents = filterEvents.filter((event) => {
       if (!event.categories || !Array.isArray(event.categories)) {
@@ -169,6 +176,13 @@ const limitedEvents = computed(() => {
       const ids = event.categories.map((cat) => cat._id)
       const found = ids.includes('6702ad06009a63bba556a1f3')
       return found
+    })
+  }
+  if (searchQuery?.value?.trim()) {
+    const text = searchQuery?.value?.toLowerCase()
+    filterEvents = filterEvents.filter((event) => {
+      const title = event?.eventName?.toLowerCase()
+      return title?.includes(text)
     })
   }
 
@@ -250,8 +264,9 @@ onUnmounted(() => {
 let numberViewPages = ref(9)
 let reverseViewPages = ref(false)
 const verButton = ref(null)
+
 const displayEvents = computed(() => {
-  if (noFilterSelected()) {
+  if (isPaginatedView.value) {
     return shuffledEvents.value.slice(0, numberViewPages.value)
   }
   return shuffledEvents.value

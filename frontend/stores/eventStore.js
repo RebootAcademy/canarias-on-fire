@@ -73,28 +73,49 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     toggleGenre(genreValue) {
+      // 1. Lógica para el género 'all'
       if (genreValue === 'all') {
-        const allIndex = this.selectedGenres.indexOf('all')
-        if (allIndex !== -1) {
-          // Si ya está seleccionado 'all', limpiamos la selección
+        // Si 'all' ya está seleccionado, lo deseleccionamos (limpiamos todo).
+        // Usar 'includes' es más seguro que comprobar length y el índice [0].
+        if (this.selectedGenres.includes('all')) {
           this.selectedGenres = []
         } else {
-          // Si no está seleccionado 'all', lo seleccionamos y quitamos otros géneros
+          // Si no está seleccionado, lo establecemos como el único filtro.
           this.selectedGenres = ['all']
         }
-      } else {
-        // Si está 'all' seleccionado y el usuario selecciona otro género, quitar 'all'
-        const allIndex = this.selectedGenres.indexOf('all')
-        if (allIndex !== -1) {
-          this.selectedGenres.splice(allIndex, 1)
-        }
+        return // Salimos de la función para no ejecutar el resto de la lógica.
+      }
 
-        const index = this.selectedGenres.indexOf(genreValue)
-        if (index === -1) {
-          this.selectedGenres.push(genreValue)
+      // 2. Lógica para el caso especial 'djs' (tu lógica original está bien)
+      if (genreValue === 'djs') {
+        const hasDjs = this.selectedGenres.includes('djs')
+        const hasElectronic = this.selectedGenres.includes('electronic')
+
+        // Primero, nos aseguramos de que 'all' no esté seleccionado.
+        this.selectedGenres = this.selectedGenres.filter((g) => g !== 'all')
+
+        if (hasDjs && hasElectronic) {
+          this.selectedGenres = this.selectedGenres.filter(
+            (g) => g !== 'djs' && g !== 'electronic'
+          )
         } else {
-          this.selectedGenres.splice(index, 1)
+          if (!hasDjs) this.selectedGenres.push('djs')
+          if (!hasElectronic) this.selectedGenres.push('electronic')
         }
+        return
+      }
+
+      // 3. Lógica para todos los demás géneros
+      // Nos aseguramos de que 'all' se deseleccione si elegimos un género específico.
+      this.selectedGenres = this.selectedGenres.filter((g) => g !== 'all')
+
+      const index = this.selectedGenres.indexOf(genreValue)
+      if (index === -1) {
+        // Si el género no está, lo añadimos.
+        this.selectedGenres.push(genreValue)
+      } else {
+        // Si ya está, lo quitamos.
+        this.selectedGenres.splice(index, 1)
       }
     },
 
