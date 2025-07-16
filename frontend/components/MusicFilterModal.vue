@@ -97,7 +97,6 @@ const genresItems = computed(() => {
 })
 const closeModal = () => {
   emit('close')
-  console.log('closeModal, selectedGenres:', eventStore.selectedGenres)
   const musicCategory = selectedCategories.value.find((c) => c.name === 'music')
 
   if (musicCategory && eventStore.selectedGenres.length === 0) {

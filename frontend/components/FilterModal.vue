@@ -124,13 +124,11 @@ const closeModal = () => {
 }
 
 const applyFilters = () => {
-  console.log(selectedCategories.value)
   eventStore.setFilters({
     islands: selectedIslands.value ? selectedIslands.value : null,
     date: selectedDate.value ? new Date(selectedDate.value) : null,
     // startTime: startTime.value,
   })
-  console.log(eventStore.filters)
   closeModal()
 }
 
