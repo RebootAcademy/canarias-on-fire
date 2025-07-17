@@ -136,6 +136,7 @@ const resetFilters = () => {
   selectedIslands.value = []
   selectedDate.value = null
   selectedCategories.value = []
+  eventStore.selectedGenres = []
   eventStore.resetFilters()
   selectedOption.value = 'all'
 }

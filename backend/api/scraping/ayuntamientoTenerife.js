@@ -55,6 +55,7 @@ const handleDate = (date) => {
 }
 
 aytoTfScraper.addParser(aytoTfUrl, async (page) => {
+  console.log('Iniciando Scraping Ayto Tenerife')
   try {
     const events = await Promise.all(
       page('.vevent')
@@ -127,7 +128,6 @@ const scrapeAytoTenerife = async () => {
       return
     }
 
-    console.log('creating events')
     for (const event of result) {
       try {
         const result = await saveScrapedEvent(event)

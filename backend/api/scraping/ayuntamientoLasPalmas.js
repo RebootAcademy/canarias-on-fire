@@ -74,6 +74,8 @@ const checkCategory = (cat) => {
 }
 
 aytoLpScraper.addParser(aytoLpUrl, async (page) => {
+
+  console.log('Scrapeando ayto las palmas')
   try {
     const events = await Promise.all(
       page('.show-event')
@@ -142,15 +144,14 @@ aytoLpScraper.addParser(aytoLpUrl, async (page) => {
 
 const scrapeAytoLasPalmas = async () => {
   try {
-    // await connectDB()
+    
     const result = await aytoLpScraper.scrape(aytoLpUrl, ``)
 
     if (!result || result.length === 0) {
       console.log('No events found')
       return
     }
-
-    console.log('creating events')
+    
     for (const event of result) {
       try {
         const result = await saveScrapedEvent(event)
