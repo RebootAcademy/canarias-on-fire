@@ -546,6 +546,22 @@ const saveScrapedEvent = async (event) => {
     return new Date(`${year}-${month}-${day}`)
   }
 
+  const normalizeTitle = (title) =>
+    title
+      .normalize('NFD') // elimina acentos
+      .replace(/[\u0300-\u036f]/g, '') // elimina diacríticos
+      .replace(/[^\w\s-]/g, '') // elimina cualquier cosa que no sea letra, número, espacio o guion
+      .trim()
+
+  let rawTitle = normalizeTitle(event.title)
+  let baseSlug = slugify(rawTitle, { lower: true, strict: true })
+  let finalSlug = baseSlug
+  let counter = 1
+  while (await Event.findOne({ slug: finalSlug })) {
+    finalSlug = `${baseSlug}-${counter}`
+    counter++
+  }
+
   const castIn = (value) => {
     const number = Number(value)
     return isNaN(number) ? [value] : [value, number]
@@ -554,7 +570,7 @@ const saveScrapedEvent = async (event) => {
   const checkExistence = async (event) => {
     try {
       const query = {
-        eventName: event.title,
+        eventName: rawTitle,
       }
 
       if (event.location) {
@@ -667,7 +683,7 @@ const saveScrapedEvent = async (event) => {
           {
             $set: {
               categories: event.category,
-              eventName: event.title,
+              eventName: rawTitle,
               eventType: 'event',
               eventDate: {
                 calendar: { type: 'gregory' },
@@ -696,7 +712,7 @@ const saveScrapedEvent = async (event) => {
               userId: event.userId,
               musicType: event.musicType ? event.musicType : null,
               payment: '6702b0ef009a63bba556a209',
-              slug: slugify(event.title, { lower: true, strict: true }),
+              slug: finalSlug,
             },
           }
         )
@@ -717,7 +733,7 @@ const saveScrapedEvent = async (event) => {
 
     await Event.create({
       categories: event.category,
-      eventName: event.title,
+      eventName: rawTitle,
       eventType: 'event',
       eventDate: {
         calendar: {
@@ -760,7 +776,7 @@ const saveScrapedEvent = async (event) => {
       userId: event.userId,
       musicType: event.musicType ? event.musicType : null,
       payment: '6702b0ef009a63bba556a209',
-      slug: slugify(event.title, { lower: true, strict: true }),
+      slug: finalSlug,
     })
 
     return {

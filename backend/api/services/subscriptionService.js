@@ -39,6 +39,7 @@ const createCheckoutSession = async (customer, company, subscriptionPlan, planId
         {
           price: planId,
           quantity: 1,
+          tax_rates: [process.env.TAX_RATES],
         },
       ],
       mode: 'subscription',

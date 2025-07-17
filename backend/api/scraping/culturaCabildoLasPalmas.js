@@ -146,9 +146,6 @@ const CATEGORY_KEYWORDS = {
     'pub',
     'copas',
     'noche',
-    'after',
-    'nocturno',
-    'club',
     'dj set',
   ],
   '6702adb0009a63bba556a1f7': [
