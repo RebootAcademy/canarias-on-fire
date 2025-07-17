@@ -329,6 +329,7 @@ const upgradeSubscription = async (req, res) => {
           {
             price: newPlanId,
             quantity: 1,
+            tax_rates: [process.env.TAX_RATES],
           },
         ],
         mode: 'subscription',

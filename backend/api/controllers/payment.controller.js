@@ -69,6 +69,7 @@ const assignPaymentToEvent = async (req, res) => {
         {
           price: paymentPlan.stripe.paymentId, // Use the Stripe price ID here
           quantity: 1,
+          tax_rates: [process.env.TAX_RATES],
         },
       ],
       mode: 'payment',
@@ -165,6 +166,7 @@ const createPaymentSession = async (req, res) => {
             unit_amount: amountInCents,
           },
           quantity: 1,
+          tax_rates: [process.env.TAX_RATES],
         },
       ],
       mode: 'payment',

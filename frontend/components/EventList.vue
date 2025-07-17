@@ -119,8 +119,8 @@ const noFilterSelected = () => {
 }
 
 const shouldApplyProximityFilter = computed(() => {
-  return userStore.acceptedGeolocation && !filters.value.islands?.length;
-});
+  return userStore?.acceptedGeolocation && !filters.value.islands?.length
+})
 
 const showSeeMoreButton = computed(() => {
   return isPaginatedView.value
@@ -140,7 +140,13 @@ const isPaginatedView = computed(() => {
     selectedFilterByDate.value === 'all'
   const noSearch = !searchQuery.value
   const hasEnoughEvents = shuffledEvents.value.length > 9
-  return noDateFilters && noListFilters && noDropdownFilters && noSearch &&  hasEnoughEvents
+  return (
+    noDateFilters &&
+    noListFilters &&
+    noDropdownFilters &&
+    noSearch &&
+    hasEnoughEvents
+  )
 })
 
 const limitedEvents = computed(() => {
@@ -158,9 +164,13 @@ const limitedEvents = computed(() => {
   })
 
   if (shouldApplyProximityFilter.value) {
-    filterEvents = filterEvents.filter(
+    const nearbyEvents = filterEvents.filter(
       (event) => event.dist?.calculated < eventStore.radioLocation
     )
+
+    if (nearbyEvents.length > 0) {
+      filterEvents = nearbyEvents
+    }
   }
 
   if (
@@ -171,7 +181,7 @@ const limitedEvents = computed(() => {
     filterEvents = filterEvents.filter((event) =>
       eventStore?.selectedGenres?.includes(event?.musicType)
     )
-    console.log(filterEvents)
+ 
   } else if (eventStore?.selectedGenres?.includes('all')) {
     filterEvents = filterEvents.filter((event) => {
       if (!event.categories || !Array.isArray(event.categories)) {
