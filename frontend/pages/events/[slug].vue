@@ -161,7 +161,7 @@
           </div>
         </div>
         <div
-          v-if="event.externalSource"
+          v-if="event?.externalUrl"
           class="border border-primary w-fit p-2 rounded-md bg-primary"
         >
           <a

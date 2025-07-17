@@ -309,7 +309,7 @@ const scrapeLaAgenda = async () => {
           ...event,
           description,
           imgUrl,
-          link: externalUrlDetails ? externalUrlDetails : event.link,
+          link: externalUrlDetails ? externalUrlDetails : null,
           startTime,
           lastDay: eventLastDay?.lastDay
             ? eventLastDay.lastDay

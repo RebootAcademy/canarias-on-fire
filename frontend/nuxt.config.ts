@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/v_logo.ico' }],
+
       script: [
         {
           children: `
@@ -17,6 +18,18 @@ export default defineNuxtConfig({
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '2716869701843648');
           fbq('track', 'PageView');
+          `,
+        },
+        {
+          async: true,
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-TBTNX59MYX',
+        },
+        {
+          children: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TBTNX59MYX');
           `,
         },
       ],
