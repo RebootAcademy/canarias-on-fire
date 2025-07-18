@@ -11,11 +11,23 @@ export const useUserStore = defineStore('userStore', {
     searchQuery: '',
     authError: {
       error: '',
-      message: ''
-    }
+      message: '',
+    },
+    location: {
+      latitude: null,
+      longitude: null,
+    },
   }),
 
   actions: {
+    setLocation(lat, lng) {
+      this.location.latitude = lat
+      this.location.longitude = lng
+    },
+    clearLocation() {
+      this.location.latitude = null
+      this.location.longitude = null
+    },
     setUser(data) {
       this.userData = data.result
       this.isAuthenticated = true

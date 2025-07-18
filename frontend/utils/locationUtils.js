@@ -11,6 +11,7 @@ export function getIslandFromPostalCode(postalCode) {
 }
 
 export function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+ /*  console.log(lat1,lon1, lat2, lon2) */
   const R = 6371; // Radio de la Tierra en km
   const dLat = deg2rad(lat2 - lat1);
   const dLon = deg2rad(lon2 - lon1);
@@ -26,4 +27,30 @@ export function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
+}
+
+
+export function getIslandFromCoordinates(lat, lon, maxDistanceKm = 100) {
+  const islandCenters = {
+    'Gran Canaria': { lat: 28.0997, lon: -15.4134 },
+    Tenerife: { lat: 28.2916, lon: -16.6291 },
+    Lanzarote: { lat: 29.0469, lon: -13.5899 },
+    Fuerteventura: { lat: 28.3587, lon: -14.0537 },
+    'La Palma': { lat: 28.6829, lon: -17.7644 },
+    'La Gomera': { lat: 28.0916, lon: -17.1133 },
+    'El Hierro': { lat: 27.7392, lon: -18.0208 },
+  }
+  let closestIsland = null
+  let minDistance = maxDistanceKm + 1 // Inicializamos con un valor mayor al máximo permitido
+
+  for (const [island, coords] of Object.entries(islandCenters)) {
+    const dist = getDistanceFromLatLonInKm(lat, lon, coords.lat, coords.lon)
+    if (dist < minDistance) {
+      minDistance = dist
+      closestIsland = island
+    }
+  }
+
+  // Si la isla más cercana está dentro del rango, la devolvemos, sino 'Unknown'
+  return minDistance <= maxDistanceKm ? closestIsland : 'Unknown'
 }
