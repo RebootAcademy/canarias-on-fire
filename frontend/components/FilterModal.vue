@@ -82,8 +82,13 @@ const props = defineProps({
 })
 import CustomBtn from './CustomBtn.vue'
 const eventStore = useEventStore()
-const { isFilterModalOpen, filters, eventDate, categories, selectedCategories } =
-  storeToRefs(eventStore)
+const {
+  isFilterModalOpen,
+  filters,
+  eventDate,
+  categories,
+  selectedCategories,
+} = storeToRefs(eventStore)
 
 const selectedIslands = ref(filters.value.islands)
 const selectedDate = ref(eventDate.value)
@@ -124,10 +129,17 @@ const closeModal = () => {
 }
 
 const applyFilters = () => {
+  const selectedDateObj = selectedDate.value
+  ? new Date(
+    selectedDate.value.year,
+    selectedDate.value.month - 1,
+    selectedDate.value.day
+  )
+  : null
+  
   eventStore.setFilters({
-    islands: selectedIslands.value ? selectedIslands.value : null,
-    date: selectedDate.value ? new Date(selectedDate.value) : null,
-    // startTime: startTime.value,
+    islands: selectedIslands.value,
+    date: selectedDateObj,
   })
   closeModal()
 }
@@ -148,8 +160,6 @@ watch(eventDate, (newDate) => {
 watch(selectedDate, (newDate) => {
   eventStore.eventDate = newDate
 })
-
-
 
 const isMusicSelected = () => {
   return selectedCategories.value.some((c) => c === '6702ad06009a63bba556a1f3')

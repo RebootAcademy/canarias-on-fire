@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { getIslandFromCoordinates } from '../utils/locationUtils'
 
 export const useEventStore = defineStore('eventStore', {
   state: () => ({
@@ -705,11 +706,157 @@ export const useEventStore = defineStore('eventStore', {
   },
 
   getters: {
+    filteredAndSortedEvents(state) {
+      let events =
+        state.events?.filter((event) => event.status === 'published') || []
+
+      const filters = state.filters
+      const userStore = useUserStore()
+
+      function parseDateSafely(dateObj) {
+        if (!dateObj || typeof dateObj.year === 'undefined') return null
+        return new Date(+dateObj.year, +dateObj.month - 1, +dateObj.day)
+      }
+
+      // Isla o proximidad
+      if (filters.islands?.length) {
+        events = events.filter((event) => {
+          let island = null
+          if (event.eventLocation?.postalCode) {
+            island = getIslandFromPostalCode(event.eventLocation.postalCode)
+          } else if (
+            Array.isArray(event.eventLocation?.coordinates) &&
+            event.eventLocation.coordinates.length === 2
+          ) {
+            island = getIslandFromCoordinates(
+              event.eventLocation.coordinates[0],
+              event.eventLocation.coordinates[1]
+            )
+          }
+          return (
+            island &&
+            filters.islands
+              .map((i) => i.toLowerCase())
+              .includes(island.toLowerCase())
+          )
+        })
+      } else if (userStore.acceptedGeolocation) {
+        events = events.filter((event) => {
+          const coords = event?.eventLocation?.coordinates
+          if (!coords || coords.length !== 2) return false
+          const dist = getDistanceFromLatLonInKm(
+            userStore.location.latitude,
+            userStore.location.longitude,
+            coords[0],
+            coords[1]
+          )
+          return dist < state.radioLocation / 1000
+        })
+      }
+
+      // Fecha exacta
+      if (filters.date && state.selectedFilterByDate === 'all') {
+        const selectedDate = parseDateSafely(filters.date)
+        events = events.filter((event) => {
+          const start = parseDateSafely(event.eventDate)
+          const end = parseDateSafely(event.eventEndDate) || start
+          return selectedDate >= start && selectedDate <= end
+        })
+      }
+
+      // Filtros relativos
+      switch (state.selectedFilterByDate) {
+        case 'today':
+          events = events.filter((event) => {
+            const start = parseDateSafely(event.eventDate)
+            const end = parseDateSafely(event.eventEndDate) || start
+            return (
+              start &&
+              (state.isSameDay(start, new Date()) ||
+                state.isWithinRange(start, end, new Date()))
+            )
+          })
+          break
+        case 'weekend':
+          const today = new Date()
+          const day = today.getDay()
+          const startOfWeek = new Date(today)
+          startOfWeek.setDate(today.getDate() - (day === 0 ? 6 : day - 1))
+          const endOfWeek = new Date(startOfWeek)
+          endOfWeek.setDate(startOfWeek.getDate() + 6)
+          events = events.filter((event) => {
+            const start = parseDateSafely(event.eventDate)
+            const end = parseDateSafely(event.eventEndDate) || start
+            return (
+              state.isWithinRange(startOfWeek, endOfWeek, start) ||
+              state.isWithinRange(start, end, endOfWeek)
+            )
+          })
+          break
+        case 'month':
+          const now = new Date()
+          events = events.filter((event) => {
+            const start = parseDateSafely(event.eventDate)
+            return (
+              start &&
+              start.getFullYear() === now.getFullYear() &&
+              start.getMonth() === now.getMonth()
+            )
+          })
+          break
+      }
+
+      // Categorías
+      const selectedCategoryIds = [
+        ...new Set([
+          ...(filters.categories || []),
+          ...state.selectedCategories.map((cat) =>
+            typeof cat === 'object' ? cat.id || cat._id : cat
+          ),
+        ]),
+      ]
+
+      if (selectedCategoryIds.length > 0) {
+        events = events.filter((event) => {
+          const eventCategoryIds = event.categories?.map((cat) =>
+            typeof cat === 'object' ? cat._id || cat.id : cat
+          )
+          return selectedCategoryIds.some((catId) =>
+            eventCategoryIds.includes(catId)
+          )
+        })
+      }
+
+      // Música
+      if (state.selectedGenres.length > 0) {
+        if (!state.selectedGenres.includes('all')) {
+          events = events.filter((event) =>
+            state.selectedGenres.includes(event.musicType)
+          )
+        } else {
+          events = events.filter((event) => {
+            const catIds = event.categories?.map((c) => c._id)
+            return catIds?.includes('6702ad06009a63bba556a1f3')
+          })
+        }
+      }
+
+      // Búsqueda
+      if (state.searchQuery?.trim()) {
+        const query = state.searchQuery.toLowerCase()
+        events = events.filter((event) =>
+          event.eventName?.toLowerCase().includes(query)
+        )
+      }
+
+      return events
+    },
     filteredEvents() {
       if (!this.events) return []
       const today = new Date()
       const lowercaseQuery = this.searchQuery?.toLowerCase() || ''
-      const hasCategoriesFilter = this.filters.categories.length > 0
+      const hasCategoriesFilter =
+        this.filters.categories.length > 0 || this.selectedCategories.length > 0
       const hasSelectedCategoriesFilter = this.selectedCategories.length > 0
       const hasIslandsFilter = this.filters.islands.length > 0
 
@@ -785,10 +932,31 @@ export const useEventStore = defineStore('eventStore', {
           }
         }
         if (hasIslandsFilter) {
-          const eventIsland = getIslandFromPostalCode(
-            event.eventLocation?.postalCode
-          )
-          if (!this.filters.islands.includes(eventIsland)) {
+          let eventIsland = null
+
+          if (event.eventLocation?.postalCode) {
+            eventIsland = getIslandFromPostalCode(
+              event.eventLocation.postalCode
+            )
+          }
+
+          if (
+            !eventIsland &&
+            Array.isArray(event.eventLocation?.coordinates) &&
+            event.eventLocation.coordinates.length === 2
+          ) {
+            eventIsland = getIslandFromCoordinates(
+              event.eventLocation.coordinates[0],
+              event.eventLocation.coordinates[1]
+            )
+          }
+
+          if (
+            !eventIsland ||
+            !this.filters.islands
+              .map((i) => i.toLowerCase())
+              .includes(eventIsland.toLowerCase())
+          ) {
             return false
           }
         }
@@ -874,9 +1042,39 @@ export const useEventStore = defineStore('eventStore', {
           )
         }
 
+        
+        if (state.filters?.date) {
+          if (state.filters?.date) {
+            const rawDate = state.filters.date
+
+            let selectedDate = null
+            if (
+              typeof rawDate === 'object' &&
+              'year' in rawDate &&
+              'month' in rawDate &&
+              'day' in rawDate
+            ) {
+              selectedDate = new Date(
+                rawDate.year,
+                rawDate.month - 1,
+                rawDate.day
+              )
+            }
+
+            if (!eventDate || !selectedDate) return false
+
+            // Si no hay eventEndDate, asumimos que el evento dura solo 1 día
+            const endDate = eventEndDate || eventDate
+
+            if (selectedDate < eventDate || selectedDate > endDate) {
+              return false
+            }
+          }
+        }
+       
         switch (state.selectedFilterByDate) {
           case 'all':
-            return true // Devuelve todos los eventos
+            return true
           case 'today':
             return (
               eventDate &&

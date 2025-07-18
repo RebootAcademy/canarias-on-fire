@@ -80,6 +80,7 @@ watch(permissionState, async (newState, oldState) => {
           const { latitude, longitude } = position.coords
           await eventStore.fetchEvents(latitude, longitude)
           await userStore.setAcceptedGeolocation(true)
+          userStore.setLocation(latitude, longitude)
           isLoading.value = false
         },
         async (error) => {
