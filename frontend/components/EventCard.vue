@@ -318,7 +318,7 @@ const editEvent = () => {
 
 const handleReviewed = async () => {
   if (props.event.reviewed === false || props.event.reviewed === undefined) {
-    await eventStore.updateEventReviewed(props.event._id, true)
+    await eventStore.updateEventReviewed(props.event._id, true, token)
   } else {
     null
   }
