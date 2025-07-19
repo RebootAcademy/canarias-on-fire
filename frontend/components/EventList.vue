@@ -87,13 +87,13 @@ function shuffleArray(array) {
 
 // 🔹 Paginación
 const displayEvents = computed(() => {
-  const isAll = eventStore.selectedFilterByDate === 'all' && !filters.value.date
+  const shouldPaginate = isPaginatedView.value
 
-  return isAll
+  return shouldPaginate
     ? reverseViewPages.value
       ? shuffledEvents.value
       : shuffledEvents.value.slice(0, numberViewPages.value)
-    : shuffledEvents.value // sin paginación si no estás en 'all'
+    : shuffledEvents.value
 })
 
 const showSeeMoreButton = computed(() => {
