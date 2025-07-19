@@ -48,7 +48,12 @@ const UserSchema = new mongoose.Schema(
     },
     registeredAt: {
       type: Date,
-      default: Date.now, 
+      default: Date.now,
+    },
+    auth0Id: {
+      type: String,
+      unique: true,
+      sparse: true, // importante para que no falle en usuarios antiguos sin auth0Id
     },
   },
   options

@@ -266,6 +266,10 @@ const userStore = useUserStore()
 const eventStore = useEventStore()
 const router = useRouter()
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
 const props = defineProps({
   event: Object,
   isRelatedEvent: {
@@ -321,7 +325,7 @@ const handleReviewed = async () => {
 }
 
 const deleteEvent = async () => {
-  const success = await eventStore.deleteEvent(props.event._id)
+  const success = await eventStore.deleteEvent(props.event._id, token)
   if (success) {
     toast({
       description:
@@ -375,9 +379,9 @@ const formattedDate = () => {
 
 const handleStatus = async () => {
   if (props.event.status === 'draft') {
-    await eventStore.updateEventStatus(props.event._id, 'published')
+    await eventStore.updateEventStatus(props.event._id, 'published', token)
   } else {
-    await eventStore.updateEventStatus(props.event._id, 'draft')
+    await eventStore.updateEventStatus(props.event._id, 'draft', token)
   }
 }
 </script>

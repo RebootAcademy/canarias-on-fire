@@ -1,46 +1,18 @@
-/* const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs') */
-
 const User = require('../models/user.model')
 
-/* const login = async (req, res) => {
-  try {
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
-
-    if (!user || !bcrypt.compare(password, user.password)) {
-      return res.status(401).send({ message: 'User or Password incorrect' })
-    }
-
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    )
-
-    const userObject = user.toObject()
-    delete userObject.password
-
-    return res.status(200).json({
-      success: true,
-      message: 'User logged in',
-      result: token
-    })
-  } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: 'Failed login in',
-      description: error.message
-    })
-  }
-} */
-
 const register = async (req, res) => {
-  const { email, username, role } = req.body
+  const { email, username, role, auth0Id } = req.body
 
   try {
     let user = await User.findOne({ email })
+
     if (user) {
+      // Si ya existe pero no tiene auth0Id, lo actualizamos
+      if (!user.auth0Id && auth0Id) {
+        user.auth0Id = auth0Id
+        await user.save()
+      }
+
       return res.status(200).json({
         success: true,
         message: 'User already exists',
@@ -48,10 +20,12 @@ const register = async (req, res) => {
       })
     }
 
+    // Crear usuario nuevo con auth0Id
     user = await User.create({
       email,
       username,
-      role
+      role,
+      auth0Id // nuevo campo
     })
 
     return res.status(200).json({

@@ -15,20 +15,24 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         const userData = {
           email: user.value.email,
           username: user.value.nickname,
-          role: roles[0]
+          role: roles[0],
+          auth0Id: user.value.sub,
         }
 
-        const response = await fetch(`${config.public.apiBaseUrl}/auth/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(userData)
-        })
+        const response = await fetch(
+          `${config.public.apiBaseUrl}/auth/register`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(userData),
+          }
+        )
 
         await userStore.fetchAndSetUser(user.value.email)
-        
+
         if (!response.ok) {
         } else {
         }
