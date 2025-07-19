@@ -433,7 +433,7 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async createEvent() {
+    async createEvent(token) {
       try {
         const eventData = this.getEventData()
 
@@ -441,11 +441,12 @@ export const useEventStore = defineStore('eventStore', {
           delete eventData.payment
         }
 
-        const { data } = await useFetch(`${this.apiBase}/events`, {
+        const { data } = await useFetch(`/events`, {
+          baseURL: useRuntimeConfig().public.apiBaseUrl,
           method: 'POST',
           headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
           },
           body: JSON.stringify(eventData),
         })
@@ -464,12 +465,12 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async saveEvent(isNew = true) {
+    async saveEvent(isNew = true, token = null) {
       const eventData = this.getEventData()
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'
 
-      //Deshacerse de la info que no queremos enviar al backend, para evitar sobreescribirla
+      // Deshacerse de info no deseada al editar
       if (!isNew) {
         delete eventData.userId
         delete eventData.payment
@@ -479,6 +480,10 @@ export const useEventStore = defineStore('eventStore', {
         method,
         body: eventData,
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
       })
 
       if (error.value) {
@@ -493,18 +498,26 @@ export const useEventStore = defineStore('eventStore', {
       return { data: this.event }
     },
 
-    createEvent() {
-      return this.saveEvent(true)
+    createEvent(token) {
+      if (token) {
+        return this.saveEvent(true, token)
+      }
     },
 
-    updateEvent() {
-      return this.saveEvent(false)
+    updateEvent(token = null) {
+      if (token) {
+        return this.saveEvent(false, token)
+      }
     },
 
-    async updateEventByAdmin(eventId) {
+    async updateEventByAdmin(eventId, token) {
       const { data, error } = await useFetch(`/events/admin/${eventId}`, {
         method: 'PATCH',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           adminPayment: this.adminPayment,
         }),
@@ -528,11 +541,15 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async updateEventStatus(eventId, status) {
+    async updateEventStatus(eventId, status, token) {
       const { data, error } = await useFetch(`/events/${eventId}`, {
         method: 'PATCH',
         body: { status },
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
       })
 
       if (error.value) {
@@ -558,11 +575,15 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async updatePromotion(eventId, status) {
+    async updatePromotion(eventId, status, token) {
       const { data, error } = await useFetch(`/events/cancel/${eventId}`, {
         method: 'PATCH',
         body: { status },
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
       })
       if (error.value) {
         console.error('Error updating event status:', error.value)
@@ -588,13 +609,16 @@ export const useEventStore = defineStore('eventStore', {
     },
 
     // new
-    async updateEventReviewed(eventId, reviewed) {
-      console.log('entrando en reviewed')
+    async updateEventReviewed(eventId, reviewed, token) {
       try {
         const data = await $fetch(`/events/${eventId}`, {
           method: 'PATCH',
           body: { reviewed },
           baseURL: useRuntimeConfig().public.apiBaseUrl,
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+            'Content-Type': 'application/json',
+          },
         })
 
         if (data.success) {
@@ -616,10 +640,14 @@ export const useEventStore = defineStore('eventStore', {
       }
     },
 
-    async deleteEvent(id) {
+    async deleteEvent(id, token) {
       const { error } = await useFetch(`/events/${id}`, {
         method: 'DELETE',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
       })
 
       if (error.value) {
@@ -631,10 +659,14 @@ export const useEventStore = defineStore('eventStore', {
       return { success: true }
     },
 
-    async deleteAllMyClosedEvents(id, type) {
+    async deleteAllMyClosedEvents(id, type, token) {
       const { data, error } = await useFetch(`/events/user/${id}/${type}`, {
         method: 'DELETE',
         baseURL: useRuntimeConfig().public.apiBaseUrl,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+          'Content-Type': 'application/json',
+        },
       })
       if (error.value) {
         console.error('Error deleting events:', error.value)
@@ -1042,7 +1074,6 @@ export const useEventStore = defineStore('eventStore', {
           )
         }
 
-        
         if (state.filters?.date) {
           if (state.filters?.date) {
             const rawDate = state.filters.date
@@ -1071,7 +1102,7 @@ export const useEventStore = defineStore('eventStore', {
             }
           }
         }
-       
+
         switch (state.selectedFilterByDate) {
           case 'all':
             return true

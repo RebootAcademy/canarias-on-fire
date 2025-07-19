@@ -17,6 +17,10 @@
 <script setup>
 import { toast } from './ui/toast'
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
 const { t } = useI18n()
 const eventStore = useEventStore()
 const userStore = useUserStore()
@@ -34,7 +38,7 @@ const closeModal = () => {
 }
 
 const deleteAll = async () => {
-  const result = await eventStore.deleteAllMyClosedEvents(userStore.userData._id, props.type)
+  const result = await eventStore.deleteAllMyClosedEvents(userStore.userData._id, props.type, token)
 
   if (result.success) {
     toast({

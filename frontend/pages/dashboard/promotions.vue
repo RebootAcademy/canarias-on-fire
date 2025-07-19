@@ -170,7 +170,7 @@ const limitedPromotions = computed(() => {
     filterDiscount = filterDiscount.filter(
       (event) => String(event.userId?._id) === String(userData.value?._id)
     )
-    console.log(filterDiscount)
+
   }
 
   if (selectOption.value !== 'all') {

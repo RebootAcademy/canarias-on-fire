@@ -7,15 +7,15 @@
       <ArrowLeft />
       <p>{{ $t('goEdit') }}</p>
     </div>
-  <img
-    :src="eventStore.event.coverImage || defaultImage"
-    alt="Event Image"
-    @click="toggleHeight"
-    :class="[
-      'w-full rounded-md object-cover cursor-pointer transition-all duration-300',
-      isAutoHeight ? 'h-auto' : 'h-[300px] md:h-[550px]'
-    ]"
-  />
+    <img
+      :src="eventStore.event.coverImage || defaultImage"
+      alt="Event Image"
+      @click="toggleHeight"
+      :class="[
+        'w-full rounded-md object-cover cursor-pointer transition-all duration-300',
+        isAutoHeight ? 'h-auto' : 'h-[300px] md:h-[550px]',
+      ]"
+    />
     <div class="lex flex-col md:flex-row gap-2 justify-between md:px-8 mt-4">
       <div class="flex p-8 gap-2">
         <span
@@ -149,6 +149,10 @@ const eventStore = useEventStore()
 const route = useRoute()
 const router = useRouter()
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
 const hasDayDiff = computed(() => localStorage.dayDiff)
 
 const slug = route.params.slug
@@ -176,7 +180,7 @@ const publishEvent = async () => {
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
 
     if (isAdmin) {
-      const result = await eventStore.updateEventByAdmin(eventId)
+      const result = await eventStore.updateEventByAdmin(eventId, token)
       if (result) {
         return router.push(`/events/${slug}`)
       } else {
@@ -193,7 +197,11 @@ const publishEvent = async () => {
         isSubscriptionValid &&
         (!hasPublishedPromotions || eventStore.event.subscription)
       ) {
-        const result = await eventStore.updateEventStatus(eventId, 'published')
+        const result = await eventStore.updateEventStatus(
+          eventId,
+          'published',
+          token
+        )
         if (result) {
           await eventStore.fetchEvents()
           router.push(`/events/${slug}`)
@@ -211,7 +219,23 @@ const publishEvent = async () => {
         )
       }
     } else if (eventStore.event.eventType === 'event') {
-      router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
+      if (eventStore.event.payment !== '6702b0ef009a63bba556a209') {
+        // Ya tiene pago → publicar directamente
+        const result = await eventStore.updateEventStatus(
+          eventId,
+          'published',
+          token
+        )
+        if (result) {
+          await eventStore.fetchEvents()
+          router.push(`/events/${slug}`)
+        } else {
+          console.error('Error publicando evento con pago ya hecho')
+        }
+      } else {
+        // Redirigir al pago porque no hay uno registrado
+        router.push(`/payment?id=${eventId}&type=${eventStore.event.eventType}`)
+      }
     }
   } catch (error) {
     console.log('Error al publicar el evento:', error)

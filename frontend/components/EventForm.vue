@@ -44,6 +44,10 @@ import { useToast } from '@/components/ui/toast/use-toast'
 import { useUserStore } from '../stores/userStore'
 import { useEventStore } from '../stores/eventStore'
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
 const { toast } = useToast()
 const props = defineProps({
   isEditing: {
@@ -61,7 +65,7 @@ const tariffItems = computed(() => [
     label: t('plansName.optima'),
     value: 'optima',
   },
- /*  {
+  /*  {
     label: t('plansName.optimaPlus'),
     value: 'optima plus',
   }, */
@@ -93,16 +97,18 @@ const onSubmit = async () => {
   if (!eventStore.event.externalSource) {
     validateFields(t)
   }
-  
-  if (eventStore.event.reviewed === false && props.isEditing && isAdmin) {
-    const { data } = await eventStore.updateEventReviewed(eventStore.event._id, true);
 
+  if (eventStore.event.reviewed === false && props.isEditing && isAdmin) {
+    const { data } = await eventStore.updateEventReviewed(
+      eventStore.event._id,
+      true,
+      token
+    )
   }
 
   if (Object.values(errors).every((error) => error === '')) {
-
     if (props.isEditing) {
-      await eventStore.updateEvent()
+      await eventStore.updateEvent(token)
 
       router.push(
         `/events/preview/${eventStore.event.slug}?type=${eventStore.eventType}`
@@ -112,7 +118,7 @@ const onSubmit = async () => {
       eventStore.setUserId(userStore.userData._id)
 
       if (!checkIfUserHasPromotions(eventStore.event) || isAdmin) {
-        const result = await eventStore.createEvent()
+        const result = await eventStore.createEvent(token)
         if (result?.error?.statusCode === 400) {
           toast({
             description: t('errorCreating'),
@@ -148,7 +154,7 @@ const onSaveAndRedirect = async () => {
   if (Object.values(errors).every((error) => error === '')) {
     eventStore.status = 'draft'
     eventStore.setUserId(userStore.userData._id)
-    const result = await eventStore.createEvent()
+    const result = await eventStore.createEvent(token)
     if (result) {
       router.replace('/dashboard/events')
     } else {

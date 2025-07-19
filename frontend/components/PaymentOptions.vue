@@ -1,8 +1,8 @@
 <template>
-  <div 
+  <div
     class="max-w-7xl mx-auto text-secondary text-xs md:text-base sm:px-6 lg:px-8"
     :class="isStripePayment ? 'py-4 sm:py-12' : 'sm:py-6 mb-12'"
-    >
+  >
     <Spinner v-if="isLoading" />
     <div v-else class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
@@ -13,20 +13,19 @@
         <div
           v-if="payment.name === 'optima plus'"
           class="absolute top-0 left-0 right-0 bg-primary-gradient font-bold text-lg text-center py-1 rounded-t-lg"
-         
-          >
-          {{ $t('recommended')}}
+        >
+          {{ $t('recommended') }}
         </div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
-          {{getNameSubscriptionPlan(payment.name) }}
+          {{ getNameSubscriptionPlan(payment.name) }}
         </h3>
         <div class="mt-4">
-          <span 
-            class="text-4xl font-extrabold bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] inline-block text-transparent bg-clip-text
-            ">
-              {{ payment.basePrice }}€  
-              <span class="text-base font-medium text-gray-500"> / MO</span>
-            </span>
+          <span
+            class="text-4xl font-extrabold bg-gradient-to-r from-[#FBB03B] via-[#F7931E] to-[#ED1C24] inline-block text-transparent bg-clip-text"
+          >
+            {{ payment.basePrice }}€
+            <span class="text-base font-medium text-gray-500"> / MO</span>
+          </span>
         </div>
 
         <ul class="mt-6 space-y-4 text-left">
@@ -70,23 +69,25 @@
               </svg>
             </div>
           </li>
-          <li v-for="(feature, index) in payment.features" 
-            :key="index" 
+          <li
+            v-for="(feature, index) in payment.features"
+            :key="index"
             v-show="typeof feature === 'string'"
           >
             <p class="ml-3 text-base text-gray-700">
-              {{ $t('featuresDescriptions.limitPhotos')}}
+              {{ $t('featuresDescriptions.limitPhotos') }}
               <span class="font-semibold">
                 {{ Number(feature) }}
               </span>
             </p>
           </li>
-          <li v-for="(feature, index) in payment.features" 
-            :key="index" 
+          <li
+            v-for="(feature, index) in payment.features"
+            :key="index"
             v-show="typeof feature === 'number'"
           >
             <p class="ml-3 text-base text-gray-700">
-              {{ $t('paymentsOption.readPriority')}}
+              {{ $t('paymentsOption.readPriority') }}
               <span class="font-semibold">{{
                 getReadingPriorityText(feature)
               }}</span>
@@ -99,9 +100,12 @@
             <NuxtLink
               @click="choosePayment(payment)"
               class="inline-block w-full bg-black text-white font-semibold py-4 px-4 rounded-lg text-center hover:bg-primary-gradient transition-colors"
-              :class="{ 'bg-primary-gradient hover:bg-primary': payment.name === 'optima plus' }"
-              >
-              {{ $t('buttons.subscribe')}}
+              :class="{
+                'bg-primary-gradient hover:bg-primary':
+                  payment.name === 'optima plus',
+              }"
+            >
+              {{ $t('buttons.subscribe') }}
             </NuxtLink>
           </div>
         </div>
@@ -118,10 +122,9 @@ const props = defineProps({
   },
   stripePayment: {
     type: Boolean,
-      default: false
-    }
+    default: false,
+  },
 })
-
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -129,7 +132,11 @@ const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
 const { t } = useI18n()
 
-const isLoading = ref(false);
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
+const isLoading = ref(false)
 
 const sortedPayments = computed(() => {
   return props.payments
@@ -139,8 +146,10 @@ const sortedPayments = computed(() => {
 
       // Eliminar la feature "rssPublication"
       const filteredFeatures = Object.fromEntries(
-        Object.entries(originalFeatures).filter(([key]) => key !== 'rssPublication')
+        Object.entries(originalFeatures).filter(
+          ([key]) => key !== 'rssPublication'
         )
+      )
 
       return {
         ...p,
@@ -158,8 +167,7 @@ const featureDescriptions = computed(() => ({
   websiteLink: t('featuresDescriptions.websiteLink'),
   offerPublication: t('featuresDescriptions.offerPublication'),
   rssPublication: t('featuresDescriptions.rssPublication'),
-  limitPhotos: t('featuresDescriptions.limitPhotos')
-
+  limitPhotos: t('featuresDescriptions.limitPhotos'),
 }))
 
 const getReadingPriorityText = (value) => {
@@ -186,26 +194,29 @@ const getUserId = () => {
 const formatDate = (dateObj) => {
   if (!dateObj || typeof dateObj !== 'object') return null
   const { year, month, day } = dateObj
-  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(
+    2,
+    '0'
+  )}`
 }
 
 const calculateFinalPrice = (basePrice, eventDate) => {
-  const today = new Date();
-  const event = new Date(eventDate);
+  const today = new Date()
+  const event = new Date(eventDate)
   const daysUntilEvent = Math.max(
     1,
     Math.ceil((event - today) / (1000 * 60 * 60 * 24))
-  );
+  )
 
   if (daysUntilEvent <= 30) {
-    return basePrice;
+    return basePrice
   } else {
-    const pricePerDay = basePrice / 30;
-    const extraDays = daysUntilEvent - 30;
-    const finalPrice = basePrice + extraDays * pricePerDay;
-    return Math.round(finalPrice * 100) / 100;
+    const pricePerDay = basePrice / 30
+    const extraDays = daysUntilEvent - 30
+    const finalPrice = basePrice + extraDays * pricePerDay
+    return Math.round(finalPrice * 100) / 100
   }
-};
+}
 
 const choosePayment = async (plan) => {
   try {
@@ -222,7 +233,11 @@ const choosePayment = async (plan) => {
       })
 
       if (result.success) {
-        const publishResult = await eventStore.updateEventStatus(eventId, 'published')
+        const publishResult = await eventStore.updateEventStatus(
+          eventId,
+          'published',
+          token
+        )
         if (publishResult) {
           router.push(`/events/${slug}`)
         } else {
@@ -262,7 +277,7 @@ const getNameSubscriptionPlan = (plan) => {
     default:
       break
   }
-};
+}
 </script>
 
 <style scoped>

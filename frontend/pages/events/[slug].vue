@@ -259,6 +259,10 @@ import { formatEventDate } from '@/utils/dateUtils'
 import { storeToRefs } from 'pinia'
 import DiscountSquare from '~/components/DiscountSquare.vue'
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { getAccessTokenSilently } = useAuth0()
+const token = await getAccessTokenSilently()
+
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
@@ -325,7 +329,7 @@ const editEvent = () => {
 }
 
 const deleteEvent = async () => {
-  await eventStore.deleteEvent(event.value._id)
+  await eventStore.deleteEvent(event.value._id, token)
   toast({
     description:
       eventType.value === 'event'
@@ -337,7 +341,7 @@ const deleteEvent = async () => {
 
 const cancelPromo = async () => {
   try {
-    await eventStore.updatePromotion(event.value._id, 'closed')
+    await eventStore.updatePromotion(event.value._id, 'closed', token)
     toast({
       description: t('cancelPromotionToast'),
     })
@@ -383,7 +387,7 @@ const publishEvent = async () => {
     const hasPublishedPromotions = checkIfUserHasPromotions(eventStore.event)
 
     if (isAdmin) {
-      const result = await eventStore.updateEventByAdmin(eventId)
+      const result = await eventStore.updateEventByAdmin(eventId, token)
       if (result) {
         router.push(`/events/${slug}`)
       } else {
@@ -397,7 +401,7 @@ const publishEvent = async () => {
 
     if (eventStore.event.eventType === 'promotion') {
       if (isSubscriptionValid && !hasPublishedPromotions) {
-        const result = await eventStore.updateEventStatus(eventId, 'published')
+        const result = await eventStore.updateEventStatus(eventId, 'published', token)
         if (result) {
           router.push(`/events/${slug}`)
         } else {
