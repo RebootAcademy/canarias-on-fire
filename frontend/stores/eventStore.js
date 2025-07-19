@@ -750,9 +750,14 @@ export const useEventStore = defineStore('eventStore', {
         return new Date(+dateObj.year, +dateObj.month - 1, +dateObj.day)
       }
 
-      // Isla o proximidad
-      if (filters.islands?.length) {
-        events = events.filter((event) => {
+      const isMusicEvent = (event) => {
+        const categoryIds = event.categories?.map((c) => c._id || c.id)
+        return categoryIds?.includes('6702ad06009a63bba556a1f3')
+      }
+
+      return events.filter((event) => {
+        // --- Isla o proximidad ---
+        if (filters.islands?.length) {
           let island = null
           if (event.eventLocation?.postalCode) {
             island = getIslandFromPostalCode(event.eventLocation.postalCode)
@@ -765,15 +770,15 @@ export const useEventStore = defineStore('eventStore', {
               event.eventLocation.coordinates[1]
             )
           }
-          return (
-            island &&
-            filters.islands
+          if (
+            !island ||
+            !filters.islands
               .map((i) => i.toLowerCase())
               .includes(island.toLowerCase())
-          )
-        })
-      } else if (userStore.acceptedGeolocation) {
-        events = events.filter((event) => {
+          ) {
+            return false
+          }
+        } else if (userStore.acceptedGeolocation) {
           const coords = event?.eventLocation?.coordinates
           if (!coords || coords.length !== 2) return false
           const dist = getDistanceFromLatLonInKm(
@@ -782,106 +787,123 @@ export const useEventStore = defineStore('eventStore', {
             coords[0],
             coords[1]
           )
-          return dist < state.radioLocation / 1000
-        })
-      }
+          if (!(dist < state.radioLocation / 1000)) {
+            return false
+          }
+        }
 
-      // Fecha exacta
-      if (filters.date && state.selectedFilterByDate === 'all') {
-        const selectedDate = parseDateSafely(filters.date)
-        events = events.filter((event) => {
+        // --- Fecha exacta ---
+        if (filters.date && state.selectedFilterByDate === 'all') {
+          const selectedDate = parseDateSafely(filters.date)
           const start = parseDateSafely(event.eventDate)
           const end = parseDateSafely(event.eventEndDate) || start
-          return selectedDate >= start && selectedDate <= end
-        })
-      }
+          if (!(selectedDate >= start && selectedDate <= end)) {
+            return false
+          }
+        }
 
-      // Filtros relativos
-      switch (state.selectedFilterByDate) {
-        case 'today':
-          events = events.filter((event) => {
+        // --- Filtros relativos ---
+        switch (state.selectedFilterByDate) {
+          case 'today': {
             const start = parseDateSafely(event.eventDate)
             const end = parseDateSafely(event.eventEndDate) || start
-            return (
-              start &&
-              (state.isSameDay(start, new Date()) ||
-                state.isWithinRange(start, end, new Date()))
-            )
-          })
-          break
-        case 'weekend':
-          const today = new Date()
-          const day = today.getDay()
-          const startOfWeek = new Date(today)
-          startOfWeek.setDate(today.getDate() - (day === 0 ? 6 : day - 1))
-          const endOfWeek = new Date(startOfWeek)
-          endOfWeek.setDate(startOfWeek.getDate() + 6)
-          events = events.filter((event) => {
+            if (
+              !(
+                start &&
+                (state.isSameDay(start, new Date()) ||
+                  state.isWithinRange(start, end, new Date()))
+              )
+            ) {
+              return false
+            }
+            break
+          }
+          case 'weekend': {
+            const today = new Date()
+            const day = today.getDay()
+            const startOfWeek = new Date(today)
+            startOfWeek.setDate(today.getDate() - (day === 0 ? 6 : day - 1))
+            const endOfWeek = new Date(startOfWeek)
+            endOfWeek.setDate(startOfWeek.getDate() + 6)
             const start = parseDateSafely(event.eventDate)
             const end = parseDateSafely(event.eventEndDate) || start
-            return (
-              state.isWithinRange(startOfWeek, endOfWeek, start) ||
-              state.isWithinRange(start, end, endOfWeek)
-            )
-          })
-          break
-        case 'month':
-          const now = new Date()
-          events = events.filter((event) => {
+            if (
+              !(
+                state.isWithinRange(startOfWeek, endOfWeek, start) ||
+                state.isWithinRange(start, end, endOfWeek)
+              )
+            ) {
+              return false
+            }
+            break
+          }
+          case 'month': {
+            const now = new Date()
             const start = parseDateSafely(event.eventDate)
-            return (
-              start &&
-              start.getFullYear() === now.getFullYear() &&
-              start.getMonth() === now.getMonth()
-            )
-          })
-          break
-      }
+            if (
+              !(
+                start &&
+                start.getFullYear() === now.getFullYear() &&
+                start.getMonth() === now.getMonth()
+              )
+            ) {
+              return false
+            }
+            break
+          }
+        }
 
-      // Categorías
-      const selectedCategoryIds = [
-        ...new Set([
-          ...(filters.categories || []),
-          ...state.selectedCategories.map((cat) =>
-            typeof cat === 'object' ? cat.id || cat._id : cat
-          ),
-        ]),
-      ]
-
-      if (selectedCategoryIds.length > 0) {
-        events = events.filter((event) => {
+        // --- Categorías ---
+        const selectedCategoryIds = [
+          ...new Set([
+            ...(filters.categories || []),
+            ...state.selectedCategories.map((cat) =>
+              typeof cat === 'object' ? cat.id || cat._id : cat
+            ),
+          ]),
+        ]
+        if (selectedCategoryIds.length > 0) {
           const eventCategoryIds = event.categories?.map((cat) =>
             typeof cat === 'object' ? cat._id || cat.id : cat
           )
-          return selectedCategoryIds.some((catId) =>
-            eventCategoryIds.includes(catId)
-          )
-        })
-      }
-
-      // Música
-      if (state.selectedGenres.length > 0) {
-        if (!state.selectedGenres.includes('all')) {
-          events = events.filter((event) =>
-            state.selectedGenres.includes(event.musicType)
-          )
-        } else {
-          events = events.filter((event) => {
-            const catIds = event.categories?.map((c) => c._id)
-            return catIds?.includes('6702ad06009a63bba556a1f3')
-          })
+          if (
+            !selectedCategoryIds.some((catId) =>
+              eventCategoryIds.includes(catId)
+            )
+          ) {
+            return false
+          }
         }
-      }
 
-      // Búsqueda
-      if (state.searchQuery?.trim()) {
-        const query = state.searchQuery.toLowerCase()
-        events = events.filter((event) =>
-          event.eventName?.toLowerCase().includes(query)
-        )
-      }
+        // --- Géneros musicales ---
+        if (state.selectedGenres.length > 0) {
+          if (isMusicEvent(event)) {
+            if (
+              !state.selectedGenres.includes('all') &&
+              !state.selectedGenres.includes(event.musicType)
+            ) {
+              return false
+            }
+          }
+          // Si no es música, este filtro no afecta.
+        }
 
-      return events
+        // --- Búsqueda ---
+        if (state.searchQuery?.trim()) {
+          const query = state.searchQuery.toLowerCase()
+          if (
+            !(
+              event.eventName?.toLowerCase().includes(query) ||
+              event.eventDescription?.toLowerCase().includes(query)
+            )
+          ) {
+            return false
+          }
+        }
+
+        // Pasa todos los filtros
+        return true
+      })
     },
     filteredEvents() {
       if (!this.events) return []

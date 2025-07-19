@@ -22,16 +22,7 @@
             ? 'bg-primary-gradient text-white'
             : '',
         ]"
-        @click="
-          () => {
-            eventStore.toggleGenre(genre.value)
-            if (genre.value === 'all') {
-              nextTick(() => {
-                closeModal()
-              })
-            }
-          }
-        "
+        @click="handleSelectGenre(genre.value)"
       >
         <span class="p-2">{{ $t(genre.label) }}</span>
       </div>
@@ -95,12 +86,40 @@ const genresItems = computed(() => {
     { value: 'other', label: t('onBoarding.step2Genres.other') },
   ]
 })
+
+const handleSelectGenre = (genreValue) => {
+  // Cambia el género normalmente
+  eventStore.toggleGenre(genreValue)
+
+  // Si elegimos un género diferente de 'all', asegura que la categoría music esté activa
+  const musicCategory = eventStore.categories.find((c) => c.name === 'music')
+  const musicIsActive = selectedCategories.value.some(
+    (c) => c.id === musicCategory.id || c._id === musicCategory.id
+  )
+
+  if (genreValue !== 'all' && musicCategory && !musicIsActive) {
+    eventStore.toggleCategory(musicCategory)
+  }
+
+  // Si elegimos 'all', puedes cerrar el modal (como ya tienes)
+  if (genreValue === 'all') {
+    nextTick(() => {
+      closeModal()
+    })
+  }
+}
+
 const closeModal = () => {
   emit('close')
-  const musicCategory = selectedCategories.value.find((c) => c.name === 'music')
-
-  if (musicCategory && eventStore.selectedGenres.length === 0) {
-    eventStore.toggleCategory(musicCategory)
+  const musicCategory = eventStore.categories.find((c) => c.name === 'music')
+  // Si la categoría music está activa y NO hay géneros seleccionados, la quitamos
+  if (musicCategory) {
+    const musicIsActive = selectedCategories.value.some(
+      (c) => c.id === musicCategory.id || c._id === musicCategory.id
+    )
+    if (musicIsActive && eventStore.selectedGenres.length === 0) {
+      eventStore.toggleCategory(musicCategory)
+    }
   }
 }
 </script>
