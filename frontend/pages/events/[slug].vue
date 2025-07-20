@@ -260,9 +260,11 @@ import { storeToRefs } from 'pinia'
 import DiscountSquare from '~/components/DiscountSquare.vue'
 
 import { useAuth0 } from '@auth0/auth0-vue'
-const { getAccessTokenSilently } = useAuth0()
-const token = await getAccessTokenSilently()
-
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+let token = null;
+if (isAuthenticated.value) {
+  token = await getAccessTokenSilently()
+}
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()

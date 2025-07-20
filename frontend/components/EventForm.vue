@@ -45,8 +45,11 @@ import { useUserStore } from '../stores/userStore'
 import { useEventStore } from '../stores/eventStore'
 
 import { useAuth0 } from '@auth0/auth0-vue'
-const { getAccessTokenSilently } = useAuth0()
-const token = await getAccessTokenSilently()
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+let token = null;
+if (isAuthenticated.value) {
+  token = await getAccessTokenSilently()
+}
 
 const { toast } = useToast()
 const props = defineProps({

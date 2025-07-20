@@ -150,8 +150,11 @@ const route = useRoute()
 const router = useRouter()
 
 import { useAuth0 } from '@auth0/auth0-vue'
-const { getAccessTokenSilently } = useAuth0()
-const token = await getAccessTokenSilently()
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+let token = null;
+if (isAuthenticated.value) {
+  token = await getAccessTokenSilently()
+}
 
 const hasDayDiff = computed(() => localStorage.dayDiff)
 
