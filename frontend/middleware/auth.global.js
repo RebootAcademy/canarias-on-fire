@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           email: user.value.email,
           username: user.value.nickname,
           role: roles[0],
-          auth0Id: user.value.sub,
+          auth0Id: user?.value?.sub,
         }
 
         const response = await fetch(

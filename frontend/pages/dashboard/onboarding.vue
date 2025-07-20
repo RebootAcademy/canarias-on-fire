@@ -60,34 +60,17 @@
 </template>
 
 <script setup>
-const userStore = useUserStore()
+import { ref, onMounted } from 'vue'
 import { BriefcaseBusiness, Music } from 'lucide-vue-next'
 import { useAuth0 } from '@auth0/auth0-vue'
+
+const userStore = useUserStore()
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
 
 const currentStep = ref(1)
 const selectedRole = ref(null)
 const isLoading = ref(true)
 const userVerified = ref(false)
-
-onMounted(async () => {
-  if (!isLoading.value) isLoading.value = true
-  const auth0 = useAuth0()
-  const config = useRuntimeConfig()
-  try {
-    const accessToken = await auth0.getAccessTokenSilently()
-
-    const response = await fetch(`https://${config.public.auth0Domain}/userinfo`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-    const user = await response.json()
-    userVerified.value = user.email_verified || false
-    isLoading.value = false
-  } catch (error) {
-    console.error('Error restoring session:', error)
-  }
-})
 
 const selectRole = (role) => {
   selectedRole.value = role
@@ -103,4 +86,25 @@ const goToStep = (step) => {
   currentStep.value = step
 }
 
+onMounted(async () => {
+  const config = useRuntimeConfig()
+  try {
+    if (isAuthenticated.value) {
+      const accessToken = await getAccessTokenSilently()
+
+      const response = await fetch(`https://${config.public.auth0Domain}/userinfo`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+
+      const user = await response.json()
+      userVerified.value = user.email_verified || false
+    }
+  } catch (error) {
+    console.error('Error fetching user info:', error)
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>

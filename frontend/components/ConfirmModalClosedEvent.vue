@@ -18,9 +18,11 @@
 import { toast } from './ui/toast'
 
 import { useAuth0 } from '@auth0/auth0-vue'
-const { getAccessTokenSilently } = useAuth0()
-const token = await getAccessTokenSilently()
-
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+let token = null;
+if (isAuthenticated.value) {
+  token = await getAccessTokenSilently()
+}
 const { t } = useI18n()
 const eventStore = useEventStore()
 const userStore = useUserStore()
