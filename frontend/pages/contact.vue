@@ -115,6 +115,25 @@ const {toast} = useToast()
 const {userData} = useUserStore()
 const {t} = useI18n()
 
+useHead({
+  title: 'Evente - Contacto',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Póngase en contacto con el equipo de Evente para cualquier duda o consulta.',
+    },
+    { property: 'og:title', content: 'Evente - Contacto' },
+    {
+      property: 'og:description',
+      content:
+        'Póngase en contacto con el equipo de Evente para cualquier duda o consulta.',
+    },
+    { property: 'og:url', content: 'https://evente.es/contact' },
+  ],
+  link: [{ rel: 'canonical', href: 'https://evente.es/contact' }],
+})
+
 
 const contactMail = ref({
   firstName: '',
