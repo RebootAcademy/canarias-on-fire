@@ -43,6 +43,11 @@ const optionsDashboard = computed(() => {
       path: '/dashboard/emails',
       roles: ['admin'],
     },
+            {
+      label: 'Añadir Emails',
+      path: '/dashboard/input-emails',
+      roles: ['admin'],
+    },
     {
       label: t('dashboardNav.promotions'),
       path: '/dashboard/promotions',

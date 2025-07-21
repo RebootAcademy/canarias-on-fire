@@ -15,50 +15,70 @@
       <ThemeSwitcher />
       <Button 
         v-if="!userStore?.isAuthenticated"
-        @click="login"
+        @click="openLoginModal"
         class="hover:underline text-secondary hover:text-primary hover:bg-transparent"
         variant="ghost"
       >
-      <img v-if="theme === 'dark'" src="/imagen-de-perfil.png" class="w-[2.2rem]" alt="Login Icon">
-      <img v-else src="/imagen-de-perfil-black.png" class="w-[2.2rem]" alt="Login Icon">
-
+        <img v-if="theme === 'dark'" src="/imagen-de-perfil.png" class="w-[2.2rem]" alt="Login Icon">
+        <img v-else src="/imagen-de-perfil-black.png" class="w-[2.2rem]" alt="Login Icon">
       </Button>
       <NuxtLink to="/dashboard" v-if="userStore?.isAuthenticated">
         <MenuDropdown />
       </NuxtLink>
     </div>
     <div class="flex justify-end xs:w-1/4 sm:w-1/3 md:hidden">
-   <!--  <BurgerMenu /> -->
-     <HamburgerMenu />
+      <!--  <BurgerMenu /> -->
+      <HamburgerMenu />
     </div>
+
+    <!-- Login Warning Modal -->
+    <ModalWarningLogin
+      v-model="showLoginModal"
+      @continuar="confirmLogin"
+      @cancelar="cancelLogin"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
-const userStore = useUserStore()
 
+const userStore = useUserStore()
+const router = useRouter()
 const auth0 = ref(null)
 const theme = computed(() => userStore.themePreference)
 
-function toggleTheme() {
-  if (theme.value === 'dark') {
-    document.body.classList.add('light');
-    theme.value = 'light';
-  } else {
-    document.body.classList.remove('light');
-    theme.value = 'dark';
+const showLoginModal = ref(false)
+
+function openLoginModal() {
+  showLoginModal.value = true
+}
+
+function cancelLogin() {
+  showLoginModal.value = false
+}
+
+function confirmLogin() {
+  showLoginModal.value = false
+  if (auth0.value) {
+    auth0.value.loginWithRedirect()
   }
 }
 
 onMounted(() => {
   auth0.value = useAuth0()
 })
-
-const login = () => {
-  if (auth0.value) {
-    auth0.value.loginWithRedirect()
-  }
-}
-
 </script>
+
+<style scoped>
+/* Animación sencilla para que el modal entre suave */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(40px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+.animate-fade-in {
+  animation: fade-in 0.25s;
+}
+</style>

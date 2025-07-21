@@ -8,7 +8,7 @@
           class="text-yellow-500 cursor-pointer mr-2"
         />
         <h1 class="text-2xl font-bold text-primary">
-          {{ $t('onBoarding.step2Company') }}
+         {{ $t('buttons.cancelAndLogout') }}
         </h1>
       </div>
       <p class="text-gray-400 mb-8">

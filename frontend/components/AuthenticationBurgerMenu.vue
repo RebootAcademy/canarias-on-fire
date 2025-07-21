@@ -2,20 +2,26 @@
   <div
     v-if="!auth0?.isAuthenticated"
     class="flex flex-row gap-2 px-2 py-2 font-bold text-lg cursor-pointer hover:text-primary"
-    @click="handleLogin"
+    @click="openLoginModal"
   >
     <span class="ml-1">{{ $t('login') }}</span>
-    <LogIn class="text-green-200"/>
+    <LogIn class="text-green-200" />
   </div>
-  <div 
-    v-else 
-    class="flex flex-row gap-2 px-2 font-bold text-md cursor-pointer hover:text-primary" 
+  <div
+    v-else
+    class="flex flex-row gap-2 px-2 font-bold text-md cursor-pointer hover:text-primary"
     @click="handleLogout"
   >
-      <span class="ml-1">{{ $t('logout') }}</span>
+    <span class="ml-1">{{ $t('logout') }}</span>
 
-    <LogOut class="text-red-400"/>
+    <LogOut class="text-red-400" />
+    <!-- Login Warning Modal -->
   </div>
+  <ModalWarningLogin
+    v-model="showLoginModal"
+    @continuar="confirmLogin"
+    @cancelar="cancelLogin"
+  />
 </template>
 
 <script setup>
@@ -35,11 +41,28 @@ onMounted(() => {
   }
 })
 
-const handleLogin = () => {
+const showLoginModal = ref(false)
+
+function openLoginModal() {
+  showLoginModal.value = true
+}
+
+function cancelLogin() {
+  showLoginModal.value = false
+}
+
+function confirmLogin() {
+  showLoginModal.value = false
   if (auth0.value) {
     auth0.value.loginWithRedirect()
   }
 }
+
+/* const handleLogin = () => {
+  if (auth0.value) {
+    auth0.value.loginWithRedirect()
+  }
+} */
 
 const handleLogout = () => {
   if (auth0.value) {

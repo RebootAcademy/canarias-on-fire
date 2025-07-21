@@ -124,7 +124,8 @@
     "step2CodRef": "Código de vendedor",
     "step2TermsPart1": "Acepto los  ",
     "step2TermsPart2": "términos y condiciones",
-    "step2TermsRequired": "* Debes aceptar términos y condiciones"
+    "step2TermsRequired": "* Debes aceptar términos y condiciones",
+    "checkVerification": "Comprobar ahora"
   },
   "buttons": {
     "seeMore": "VER MÁS",
@@ -162,7 +163,8 @@
     "download": "Descargar",
     "deleteAll": "Borrar los finalizados",
     "reviewed": "Revisado",
-    "notAvailable": "No disponible"
+    "notAvailable": "No disponible",
+    "cancelAndLogout": "Cancelar y cerrar sesión"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",
