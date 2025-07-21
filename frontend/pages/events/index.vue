@@ -46,6 +46,25 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+
+useHead({
+  title: 'Eventos - Evente',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Explora todos los eventos publicados en Evente y encuentra actividades cercanas a ti.',
+    },
+    { property: 'og:title', content: 'Eventos - Evente' },
+    {
+      property: 'og:description',
+      content:
+        'Explora todos los eventos publicados en Evente y encuentra actividades cercanas a ti.',
+    },
+    { property: 'og:url', content: 'https://evente.es/events' },
+  ],
+  link: [{ rel: 'canonical', href: 'https://evente.es/events' }],
+})
 const userStore = useUserStore()
 const eventStore = useEventStore()
 const paymentStore = usePaymentStore()
