@@ -62,6 +62,7 @@
   "dashboardNav": {
     "events": "Eventos",
     "emails": "Enviar Correo",
+    "inputEmail": "Añadir Emails",
     "eventsAndPromotions": "Eventos y Promociones",
     "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",
