@@ -78,6 +78,31 @@ const { article } = storeToRefs(articleStore)
 
 const articleId = route.params.id
 
+useHead(() => ({
+  title: article.value?.title || 'Evente',
+  meta: [
+    {
+      name: 'description',
+      content:
+        article.value?.content
+          ? article.value.content.replace(/<[^>]*>?/gm, '').slice(0, 155)
+          : '',
+    },
+    { property: 'og:title', content: article.value?.title || 'Evente' },
+    {
+      property: 'og:description',
+      content:
+        article.value?.content
+          ? article.value.content.replace(/<[^>]*>?/gm, '').slice(0, 155)
+          : '',
+    },
+    { property: 'og:image', content: article.value?.coverImage || '/defaultImg.png' },
+    { property: 'og:url', content: `https://evente.es/articles/${articleId}` },
+    { property: 'og:type', content: 'article' },
+  ],
+  link: [{ rel: 'canonical', href: `https://evente.es/articles/${articleId}` }],
+}))
+
 
 onMounted(
   async () => (article.value = await articleStore.fetchArticleById(articleId))

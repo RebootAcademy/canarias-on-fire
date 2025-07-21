@@ -13,5 +13,24 @@
 </template>
 
 <script setup>
-const {t} = useI18n()
+const { t } = useI18n()
+
+useHead({
+  title: 'Evente - Sobre nosotros',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Descubre la misión y valores de Evente. Conectamos a organizadores y asistentes en Canarias.',
+    },
+    { property: 'og:title', content: 'Evente - Sobre nosotros' },
+    {
+      property: 'og:description',
+      content:
+        'Descubre la misión y valores de Evente. Conectamos a organizadores y asistentes en Canarias.',
+    },
+    { property: 'og:url', content: 'https://evente.es/about' },
+  ],
+  link: [{ rel: 'canonical', href: 'https://evente.es/about' }],
+})
 </script>
