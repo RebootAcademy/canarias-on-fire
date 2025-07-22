@@ -105,9 +105,9 @@
       <h2 class="text-2xl font-semibold">
         {{ $t(`musicType`) }}
       </h2>
-      <p>
-        {{ $t(`values.${eventStore.musicType}`) }}
-      </p>
+<p>
+  {{ eventStore.musicType.map(type => capitalize(type)).join(', ') }}
+</p>
     </div>
     <div v-if="eventStore.eventCodePromo" class="flex flex-col gap-2">
       <h2 class="text-2xl font-semibold">{{ $t('eventCodePromo') }}</h2>
@@ -154,6 +154,11 @@ const { isAuthenticated, getAccessTokenSilently } = useAuth0()
 let token = null;
 if (isAuthenticated.value) {
   token = await getAccessTokenSilently()
+}
+
+const capitalize = (str) => {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 const hasDayDiff = computed(() => localStorage.dayDiff)

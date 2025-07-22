@@ -546,6 +546,13 @@ const saveScrapedEvent = async (event) => {
     return new Date(`${year}-${month}-${day}`)
   }
 
+  // Normaliza musicType a array
+  const musicTypeArr = Array.isArray(event.musicType)
+    ? event.musicType
+    : event.musicType
+      ? [event.musicType]
+      : []
+
   const normalizeTitle = (title) =>
     title
       .normalize('NFD') // elimina acentos
@@ -710,7 +717,7 @@ const saveScrapedEvent = async (event) => {
               externalSource: true,
               status: 'published',
               userId: event.userId,
-              musicType: event.musicType ? event.musicType : null,
+              musicType: musicTypeArr,
               payment: '6702b0ef009a63bba556a209',
               slug: finalSlug,
             },
@@ -774,7 +781,7 @@ const saveScrapedEvent = async (event) => {
       externalSource: true,
       status: 'published',
       userId: event.userId,
-      musicType: event.musicType ? event.musicType : null,
+      musicType: musicTypeArr,
       payment: '6702b0ef009a63bba556a209',
       slug: finalSlug,
     })

@@ -49,11 +49,11 @@
           'bg-transparent border-primary text-primary' :
           'bg-gray text-secondary'
           "
-          @click="toggleMusicCategory(category.value)"
+          @click="eventStore.addMusicType(category.value)"
           variant="secondary"
           class="p-2 px-4 cursor-pointer hover:bg-secondary hover:text-primary"
           >
-          {{ $t(`values.${category.value}`) }}
+          {{ $t(`${category.label}`) }}
           </Badge>
         </div>
     </div>
@@ -83,13 +83,12 @@ const typeOfServices = computed(() => [
 const musicTypes = computed(() => {
   return [
     { value: 'djs', label: t('onBoarding.step2Genres.djs') },
-    { value: 'electronic', label: t('onBoarding.step2Genres.electronic') },
+    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
+    { value: 'folklore', label: t('onBoarding.step2Genres.folklore') },
     { value: 'rock', label: t('onBoarding.step2Genres.rock') },
     { value: 'jazz', label: t('onBoarding.step2Genres.jazz') },
-    { value: 'metal', label: t('onBoarding.step2Genres.metal') },
-    { value: 'latina', label: t('onBoarding.step2Genres.latina') },
     { value: 'classic', label: t('onBoarding.step2Genres.classic') },
-    { value: 'other', label: t('onBoarding.step2Genres.other') }
+    { value: 'other', label: t('onBoarding.step2Genres.other') },
   ]
 })
 
@@ -216,7 +215,7 @@ const toggleMusicCategory = (value) => {
 }
 
 const isMusicTypeSelected = (value) => {
-  return value === eventStore.musicType
+  return eventStore.musicType.includes(value)
 }
 
 </script>
