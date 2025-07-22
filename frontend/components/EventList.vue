@@ -13,7 +13,7 @@
     </div>
 
     <!-- Mensaje si no hay eventos -->
-    <p v-if="filteredAndSortedEvents.length === 0" class="text-gray-500 mt-4">
+    <p v-if="filteredByType.length === 0" class="text-gray-500 mt-4">
       {{ $t('notEventsFound') }}
     </p>
 
@@ -70,6 +70,23 @@ const {
   selectedFilterByDate,
   searchQuery
 } = storeToRefs(eventStore)
+
+const props = defineProps({
+  type: String
+})
+
+const filteredByType = computed(() => {
+  if (!props.type) return filteredAndSortedEvents.value
+
+  if (props.type === 'kids') {
+    return filteredAndSortedEvents.value.filter(event =>
+      Array.isArray(event.categories) &&
+      event.categories.some(cat => cat._id === "6702ad49009a63bba556a1f4")
+    )
+  }
+
+  return filteredAndSortedEvents.value
+})
 
 // 🔹 Número de eventos a mostrar y control de paginación
 const numberViewPages = ref(9)
@@ -169,7 +186,7 @@ function getEventPriority(event) {
   }
   const noPriority = []
 
-  filteredAndSortedEvents.value.forEach((event) => {
+  filteredByType.value.forEach((event) => {
     const priority = getEventPriority(event)
     if (priority && priorities[priority]) {
       priorities[priority].push(event)
