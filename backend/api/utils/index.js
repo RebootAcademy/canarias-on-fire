@@ -132,7 +132,7 @@ const getMusicGenre = (text) => {
       'clásica', 'orquesta', 'sinfónica', 'ópera', 'opera', 'cámara', 'barroca'
     ],
     folklore: [
-      'folklore', 'tradicional', 'música andina', 'música regional', 'música del mundo', 'world', 'musica canaria'
+      'folklore', 'tradicional', 'música andina', 'música regional', 'música del mundo', 'world', 'musica canaria',
     ],
     pop: [
       'pop', 'comercial', 'synthpop', 'synth', 'mainstream', 'radio'

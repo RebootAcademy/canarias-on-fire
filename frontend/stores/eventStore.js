@@ -14,7 +14,7 @@ export const useEventStore = defineStore('eventStore', {
     selectedCategoriesByServices: [],
     selectCategoryForFilterCompany: 'all',
     selectedFilterByDate: 'all',
-    musicType: null,
+    musicType: [],
     searchQuery: '',
     eventName: '',
     eventType: '',
@@ -65,6 +65,20 @@ export const useEventStore = defineStore('eventStore', {
   }),
 
   actions: {
+    addMusicType(type) {
+      const index = this.musicType.indexOf(type)
+      if (index === -1) {
+        this.musicType.push(type)
+      } else {
+        this.musicType.splice(index, 1)
+      }
+      console.log(
+        `Music type ${type} ${
+          index === -1 ? 'added' : 'removed'
+        }. Current types:`,
+        this.musicType
+      )
+    },
     updateState(key, value) {
       this[key] = value
     },
@@ -467,6 +481,7 @@ export const useEventStore = defineStore('eventStore', {
 
     async saveEvent(isNew = true, token = null) {
       const eventData = this.getEventData()
+      console.log(eventData)
       const url = isNew ? '/events' : `/events/${this.event._id}`
       const method = isNew ? 'POST' : 'PATCH'
 
@@ -880,7 +895,9 @@ export const useEventStore = defineStore('eventStore', {
           if (isMusicEvent(event)) {
             if (
               !state.selectedGenres.includes('all') &&
-              !state.selectedGenres.includes(event.musicType)
+              !event.musicType?.some((genre) =>
+                state.selectedGenres.includes(genre)
+              )
             ) {
               return false
             }

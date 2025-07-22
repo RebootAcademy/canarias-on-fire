@@ -10,7 +10,7 @@ const EventSchema = new mongoose.Schema(
       },
     ],
     musicType: {
-      type: String,
+      type: [String],
     },
     eventName: {
       type: String,
