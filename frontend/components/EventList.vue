@@ -68,20 +68,21 @@ const {
   selectedEventFilter,
   musicFilter,
   selectedFilterByDate,
-  searchQuery
+  searchQuery,
 } = storeToRefs(eventStore)
 
 const props = defineProps({
-  type: String
+  type: String,
 })
 
 const filteredByType = computed(() => {
   if (!props.type) return filteredAndSortedEvents.value
 
   if (props.type === 'kids') {
-    return filteredAndSortedEvents.value.filter(event =>
-      Array.isArray(event.categories) &&
-      event.categories.some(cat => cat._id === "6702ad49009a63bba556a1f4")
+    return filteredAndSortedEvents.value.filter(
+      (event) =>
+        Array.isArray(event.categories) &&
+        event.categories.some((cat) => cat._id === '6702ad49009a63bba556a1f4')
     )
   }
 
@@ -131,12 +132,14 @@ const isPaginatedView = computed(() => {
     selectedFilterByDate.value === 'all'
   const noSearch = !searchQuery.value
   const hasEnoughEvents = shuffledEvents.value.length > 9
+  const noProps = !props.type
   return (
     noDateFilters &&
     noListFilters &&
     noDropdownFilters &&
     noSearch &&
-    hasEnoughEvents
+    hasEnoughEvents &&
+    noProps
   )
 })
 
@@ -172,12 +175,12 @@ const handleNumberViewPages = () => {
 }
 
 const shuffledEvents = computed(() => {
-function getEventPriority(event) {
-  const paymentId = event.type === 'event' ? event.payment?._id : event.payment
-  const payment = paymentStore.getPaymentById(paymentId?._id)
-  return payment?.features?.readPriority
-}
-
+  function getEventPriority(event) {
+    const paymentId =
+      event.type === 'event' ? event.payment?._id : event.payment
+    const payment = paymentStore.getPaymentById(paymentId?._id)
+    return payment?.features?.readPriority
+  }
 
   const priorities = {
     3: [],
