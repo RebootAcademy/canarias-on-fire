@@ -215,6 +215,13 @@ const { toast } = useToast()
 const { t } = useI18n()
 import { MoreVertical, Pencil, Trash, BookCheck, BookDashed, Share2 } from 'lucide-vue-next'
 
+import { useAuth0 } from '@auth0/auth0-vue'
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+let token = null;
+if (isAuthenticated.value) {
+  token = await getAccessTokenSilently()
+}
+
 const props = defineProps({
   promotion: {
     type: Object,
@@ -270,7 +277,7 @@ const editEvent = () => {
 }
 
 const deleteEvent = async () => {
-  const success = await eventStore.deleteEvent(props.promotion._id)
+  const success = await eventStore.deleteEvent(props.promotion._id, token)
   if (success) {
     toast({
       description:
@@ -313,7 +320,7 @@ const checkIfUserHasPromotions = () => {
 const handleStatus = async () => {
   if (props.promotion.status === 'draft') {
     if (isAdmin.value || !checkIfUserHasPromotions()) {
-      await eventStore.updatePromotion(props.promotion._id, 'published')
+      await eventStore.updatePromotion(props.promotion._id, 'published', token)
     } else {
       toast({
         description: t('userHasPromotions'),
@@ -321,7 +328,7 @@ const handleStatus = async () => {
       })
     }
   } else {
-    await eventStore.updatePromotion(props.promotion._id, 'draft')
+    await eventStore.updatePromotion(props.promotion._id, 'draft', token)
   }
 }
 

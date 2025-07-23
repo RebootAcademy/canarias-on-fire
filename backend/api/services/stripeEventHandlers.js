@@ -3,31 +3,47 @@ const Company = require('../models/company.model')
 const User = require('../models/user.model')
 const Event = require('../models/event.model')
 const Subscription = require('../models/subscription.model')
-const { addSubscriptionToCompany } = require('../controllers/subscription.controller')
+const {
+  addSubscriptionToCompany,
+} = require('../controllers/subscription.controller')
 const sendEmail = require('../services/nodemailer/nodemailer.service')
 
 const handleCheckoutSessionCompleted = async (session) => {
   console.log(`session`)
-  if (session.metadata && session.mode === 'subscription' && session.metadata.firstHire === 'true') {
-      const paymentInvoice = await stripe.invoices.retrieve(session.invoice)
-      const { payment_intent, total } = paymentInvoice
-      const paid_at = new Date(
-        parseInt(paymentInvoice.status_transitions.paid_at) * 1000
-      )
-      const subscriptionId = session.subscription
+  if (
+    session.metadata &&
+    session.mode === 'subscription' &&
+    session.metadata.firstHire === 'true'
+  ) {
+    const paymentInvoice = await stripe.invoices.retrieve(session.invoice)
+    const { payment_intent, total } = paymentInvoice
+    const paid_at = new Date(
+      parseInt(paymentInvoice.status_transitions.paid_at) * 1000
+    )
+    const subscriptionId = session.subscription
 
-      const { userId, planId } = session.metadata
-      await stripe.subscriptions.update(subscriptionId, {
-        metadata: session.metadata,
-      })
-      console.log('Session guardada')
+    const { userId, planId } = session.metadata
+    await stripe.subscriptions.update(subscriptionId, {
+      metadata: session.metadata,
+    })
+    console.log('Session guardada')
 
-      await addSubscriptionToCompany(userId, planId, paid_at, subscriptionId)
-
+    // Añadir la suscripción a la compañía
+    await addSubscriptionToCompany(userId, planId, paid_at, subscriptionId)
+    
+    // Añadimos Trial a la compañía si no se ha usado
+    const company = await Company.findById(userId)
+    if (company && !company.trialUsed) {
+      company.trialUsed = true
+      await company.save()
+      console.log('✅ Trial marcada como usada para la empresa:', company._id)
+    }
   }
   if (session.metadata && session.metadata.isUpgrade === 'true') {
     try {
-      const company = await Company.findOne({ 'stripe.customerId': session.customer })
+      const company = await Company.findOne({
+        'stripe.customerId': session.customer,
+      })
       if (!company) {
         // console.error('Company not found for customer:', session.customer)
         return
@@ -35,23 +51,28 @@ const handleCheckoutSessionCompleted = async (session) => {
 
       console.log('Session guardada')
 
-
       const oldSubscriptionId = session.metadata.oldSubscriptionId
       const newPlanId = session.metadata.newPlanId
 
       // Obtener la suscripción actual de Stripe
-      const currentSubscription = await stripe.subscriptions.retrieve(oldSubscriptionId)
+      const currentSubscription =
+        await stripe.subscriptions.retrieve(oldSubscriptionId)
 
       // Obtener el ID del elemento de suscripción actual
       const currentSubscriptionItemId = currentSubscription.items.data[0].id
 
       // Actualizar la suscripción existente con el nuevo plan
-      const updatedSubscription = await stripe.subscriptions.update(oldSubscriptionId, {
-        items: [{ id: currentSubscriptionItemId, price: newPlanId }],
-        proration_behavior: 'always_invoice',
-      })
+      const updatedSubscription = await stripe.subscriptions.update(
+        oldSubscriptionId,
+        {
+          items: [{ id: currentSubscriptionItemId, price: newPlanId }],
+          proration_behavior: 'always_invoice',
+        }
+      )
 
-      const newSubscriptionPlan = await Subscription.findOne({ 'stripe.planId': newPlanId })
+      const newSubscriptionPlan = await Subscription.findOne({
+        'stripe.planId': newPlanId,
+      })
       if (!newSubscriptionPlan) {
         throw new Error('New subscription plan not found in database')
       }
@@ -59,10 +80,14 @@ const handleCheckoutSessionCompleted = async (session) => {
       company.activeSubscription = {
         status: 'active',
         plan: newSubscriptionPlan._id,
-        currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+        currentPeriodStart: new Date(
+          updatedSubscription.current_period_start * 1000
+        ),
+        currentPeriodEnd: new Date(
+          updatedSubscription.current_period_end * 1000
+        ),
         cancelAtPeriodEnd: false,
-        canceledAt: null
+        canceledAt: null,
       }
 
       // Actualizar la información de Stripe en la compañía
@@ -70,7 +95,10 @@ const handleCheckoutSessionCompleted = async (session) => {
       company.stripe.subscriptionItemId = updatedSubscription.items.data[0].id
 
       await company.save()
-      console.log('Company saved after upgrade. New plan:', company.activeSubscription.plan)
+      console.log(
+        'Company saved after upgrade. New plan:',
+        company.activeSubscription.plan
+      )
 
       // console.log('Company subscription upgraded:', company._id, 'New plan:', newSubscriptionPlan.name, newSubscriptionPlan)
     } catch (error) {
@@ -104,7 +132,7 @@ const handleCheckoutSessionCompleted = async (session) => {
         amount: session.amount_total,
         currency: session.currency,
         description: `Payment for event: ${event.name}`,
-        invoice: invoice.id
+        invoice: invoice.id,
       })
 
       //Añadir pequeño tiempo de espera para asegurar la creación de la factura
@@ -152,7 +180,7 @@ const handleCheckoutSessionCompleted = async (session) => {
   }
 }
 
-const handleInvoicePaymentSucceeded = async (invoice) => {  
+const handleInvoicePaymentSucceeded = async (invoice) => {
   const { invoice_pdf, amount_paid } = invoice
 
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
@@ -200,7 +228,7 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
       id: invoice.id,
       amount: amount_paid,
       pdf: invoice_pdf,
-      date: new Date()
+      date: new Date(),
     }
 
     console.log('New invoice created:', newInvoice)
@@ -212,17 +240,17 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
     }
 
     // Añade la nueva factura al array de facturas
-    
+
     // Update other subscription details
-    company.activeSubscription.currentPeriodStart = new Date(period_start * 1000)
+    company.activeSubscription.currentPeriodStart = new Date(
+      period_start * 1000
+    )
     company.activeSubscription.currentPeriodEnd = new Date(period_end * 1000)
     company.activeSubscription.lastInvoice = newInvoice
     company.invoices.push(newInvoice)
     await sendEmail('sendInvoice', company)
 
-
     await company.save()
-
   } catch (error) {
     console.error('Error in handleInvoicePaymentSucceeded:', error)
   }

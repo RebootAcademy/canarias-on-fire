@@ -2,8 +2,9 @@ require('dotenv').config()
 
 const dbConnect = require('./api/config/db')
 const slugify = require('slugify')
+const User = require('./api/models/user.model.js')
 const Event = require('./api/models/event.model.js')
-
+const Company = require('./api/models/company.model.js')
 const { updateSlugs, fixBrokenDates } = require('./api/utils/index.js')
 const scrapperGobiernoExpo = require('./api/scraping/gobiernoCanariasExpo')
 const scrapeAytoTenerife = require('./api/scraping/ayuntamientoTenerife.js')
@@ -83,21 +84,50 @@ const normalizeAllEventNames = async () => {
   }
 }
 
+async function checkDuplicateCifs() {
+  const duplicates = await User.aggregate([
+    {
+      $group: {
+        _id: "$cif",
+        count: { $sum: 1 },
+        docs: { $push: "$_id" },
+      },
+    },
+    {
+      $match: {
+        count: { $gt: 1 },
+      },
+    },
+  ])
+
+  if (duplicates.length > 0) {
+    console.log("🔁 CIFs duplicados encontrados:")
+    for (const dup of duplicates) {
+      console.log(`- CIF "${dup._id}" tiene ${dup.count} registros`)
+    }
+  } else {
+    console.log("✅ No hay duplicados de CIF")
+  }
+
+
+}
+
 async function main() {
   try {
     await dbConnect()
     //await migrateMusicType()
-    await scrapeGobCanarias()
+   /*  await scrapeGobCanarias()
     await scrapeAytoLasPalmas()
     await scrapeAytoTenerife()
     await scrapeTeaTenerife()
     await scrapeLaAgenda()
     await scrapeCabildoGranCanaria() 
-    await removeDuplicateEvents()
+    await removeDuplicateEvents() */
     //await updateSlugs()
     //await fixBrokenDates()
     //await normalizeAllEventNames()
-    await closePassedEvents()
+    await Company.init()
+    //await closePassedEvents()
     console.log('Scraping completed successfully.')
   } catch (error) {
     console.error('Error during scraping:', error)

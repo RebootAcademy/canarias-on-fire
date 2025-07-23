@@ -62,7 +62,7 @@ const createSubscription = async (req, res) => {
         subscription: company.activeSubscription,
       })
     }
-    
+
     let customer
     if (company.stripe && company.stripe.customerId) {
       customer = await stripe.customers.retrieve(company.stripe.customerId)
@@ -77,10 +77,14 @@ const createSubscription = async (req, res) => {
       company.activeSubscription.status === 'active'
     ) {
       req.body.newPlanId = planId
-      console.log('upgradeSubscription called with params:', req.params, 'and body:', req.body)
+      console.log(
+        'upgradeSubscription called with params:',
+        req.params,
+        'and body:',
+        req.body
+      )
       return upgradeSubscription(req, res)
     }
-
 
     if (!company.stripe) {
       company.stripe = {}
@@ -88,15 +92,19 @@ const createSubscription = async (req, res) => {
     if (!company.stripe.customerId) {
       company.stripe.customerId = customer.id
     }
-    return await createCheckoutSession(customer, company, subscriptionPlan, planId, res)
+    return await createCheckoutSession(
+      customer,
+      company,
+      subscriptionPlan,
+      planId,
+      res
+    )
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: 'Error creating subscription',
-        message: error.message,
-      })
+    res.status(500).json({
+      success: false,
+      error: 'Error creating subscription',
+      message: error.message,
+    })
   }
 }
 
@@ -144,18 +152,17 @@ const cancelSubscription = async (req, res) => {
         .json({ success: false, error: 'Company not found' })
     }
 
-
-
-    if (!company ) {
+    if (!company) {
       return res.status(404).json({ error: 'Not company found' })
     }
 
-    let basicSubscription = await Subscription.findOne({name: 'basic'})
+    let basicSubscription = await Subscription.findOne({ name: 'basic' })
     console.log(basicSubscription._id)
     console.log(company.activeSubscription.plan)
 
-    if (String(basicSubscription._id) === String(company.activeSubscription.plan)) {
-      
+    if (
+      String(basicSubscription._id) === String(company.activeSubscription.plan)
+    ) {
       company.activeSubscription = {
         status: 'inactive',
       }
@@ -167,24 +174,23 @@ const cancelSubscription = async (req, res) => {
         message:
           'Subscription scheduled for cancellation at the end of the current period',
       })
-
     } else {
       const stripeSubscriptionId = company.stripe.subscriptionId
-  
+
       console.log('Hola')
       let subscription = await checkSubscriptionInStripe(stripeSubscriptionId)
-  
+
       if (!subscription) {
         return res.status(404).json({ error: 'Subscription not found' })
       }
-  
+
       const updatedSubscription = await stripe.subscriptions.update(
         stripeSubscriptionId,
         {
           cancel_at_period_end: true,
         }
       )
-  
+
       return res.json({
         success: true,
         message:
@@ -192,7 +198,6 @@ const cancelSubscription = async (req, res) => {
         cancelDate: new Date(updatedSubscription.current_period_end * 1000),
       })
     }
-
   } catch (error) {
     console.error('Error canceling subscription:', error)
     res
@@ -316,7 +321,7 @@ const upgradeSubscription = async (req, res) => {
         success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
       }) */
-     await createCheckoutSession(customer, company, newPlan, newPlanId, res)
+      await createCheckoutSession(customer, company, newPlan, newPlanId, res)
     } else {
       // Actualizar la suscripción existente
       const subscription = await stripe.subscriptions.retrieve(
@@ -332,6 +337,11 @@ const upgradeSubscription = async (req, res) => {
             tax_rates: [process.env.TAX_RATES],
           },
         ],
+        subscription_data: !company.trialUsed
+          ? {
+              trial_period_days: 60,
+            }
+          : {},
         mode: 'subscription',
         success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,
@@ -348,7 +358,6 @@ const upgradeSubscription = async (req, res) => {
     }
     await company.save() */
 
-
     /* return res.json({
       success: true,
       sessionId: session.id,
@@ -356,13 +365,11 @@ const upgradeSubscription = async (req, res) => {
     }) */
   } catch (error) {
     console.error('Error in upgradeSubscription:', error)
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: 'Error upgrading subscription',
-        message: error.message,
-      })
+    res.status(500).json({
+      success: false,
+      error: 'Error upgrading subscription',
+      message: error.message,
+    })
   }
 }
 
@@ -473,7 +480,6 @@ const updateExpiredSubscriptions = async () => {
     console.error('Error updating expired subscriptions:', error)
   }
 }
-
 
 module.exports = {
   getSubscriptions,
