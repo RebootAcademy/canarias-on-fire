@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/*"
+  to = "https://evente.es/:splat"
+  status = 301
+  force = true
