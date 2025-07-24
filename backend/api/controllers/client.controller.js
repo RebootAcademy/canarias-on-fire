@@ -4,22 +4,28 @@ const handleAddClient = async (req, res) => {
   try {
     const ClientModel = await getClientModel()
     const clientData = req.body
+    let email = clientData.correo || clientData.email
+    // 1. Validar o autocompletar nombre usando el correo o email
+    if (!clientData.nombre && (clientData.correo || clientData.email)) {
+      clientData.nombre = email.split('@')[0]
+    }
 
-    // 1. Validar o autocompletar nombre usando el email
-    if (!clientData.nombre && clientData.correo) {
-      clientData.nombre = clientData.correo.split('@')[0]
+    if (!clientData.correo && email) {
+      clientData.correo = email
     }
-    // 3.  Validar que el ID esté presente
-    // (si no lo envían, lo generamos automáticamente)
+
+    // 2. Validar que el ID esté presente (si no lo envían, lo generamos automáticamente)
     if (!clientData._id) {
-      clientData._id = clientData.correo // o usa uuid, nanoid, etc.
+      clientData._id = email // o usa uuid, nanoid, etc.
     }
+
     // 3. Traer los tipos válidos de la base de datos
     let tiposValidos = await getTiposClients()
     tiposValidos = tiposValidos.map((t) => t.toUpperCase()) // Para que sea insensible a mayúsculas/minúsculas
 
     // 4. Añadir 'GROUPON' como tipo válido extra
     tiposValidos.push('GROUPON')
+    tiposValidos.push('NEWSLETTER')
 
     // 5. Validar el tipo enviado por el usuario
     const tipoCliente = (clientData.tipo || '').toUpperCase()
@@ -30,9 +36,9 @@ const handleAddClient = async (req, res) => {
       })
     }
 
-    // Validar que el cliente no exista (¡por el campo correcto! veo que usas 'email' pero tu modelo tiene 'correo')
+    // 6. Validar que el cliente no exista (por el campo correo o email)
     const existingClient = await ClientModel.findOne({
-      correo: clientData.correo,
+      correo: clientData.correo, // Solo busca por correo, ya que ahora es el campo oficial
     })
     if (existingClient) {
       return res.status(400).json({
@@ -40,6 +46,7 @@ const handleAddClient = async (req, res) => {
         message: 'Ya existe un cliente con ese correo.',
       })
     }
+
     // Crear un nuevo cliente
     const newClient = new ClientModel(clientData)
     await newClient.save()

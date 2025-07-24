@@ -164,7 +164,8 @@
     "deleteAll": "Borrar los finalizados",
     "reviewed": "Revisado",
     "notAvailable": "No disponible",
-    "cancelAndLogout": "Cancelar y cerrar sesión"
+    "cancelAndLogout": "Cancelar y cerrar sesión",
+    "close": "Cerrar"
   },
   "successView": {
     "paymentTitle": "Su pago se ha realizado correctamente",

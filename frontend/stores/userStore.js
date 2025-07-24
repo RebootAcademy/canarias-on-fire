@@ -327,7 +327,7 @@ export const useUserStore = defineStore('userStore', {
           `${useRuntimeConfig().public.apiBaseUrl}/newsletter/add`,
           {
             method: 'POST',
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ email, tipo: 'NEWSLETTER' }),
             headers: {
               'Content-Type': 'application/json',
             },

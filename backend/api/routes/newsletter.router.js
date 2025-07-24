@@ -8,7 +8,7 @@ const {
   handleSendEmail,
 } = require('../controllers/newsletter.controller')
 router.post('/add-email',isAuth, handleAddClient)
-router.post('/add', addEmailToList)
+router.post('/add', handleAddClient)
 router.patch('/unsubscribe/:id', handleUnsubscribe)
 router.post('/send-email', handleSendEmail)
 
