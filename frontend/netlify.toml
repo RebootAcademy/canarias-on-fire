@@ -3,3 +3,4 @@
   to = "https://evente.es/:splat"
   status = 301
   force = true
+  conditions = { Host = "evente.netlify.app" }
