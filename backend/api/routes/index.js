@@ -11,6 +11,7 @@ const PaymentRouter = require('./payment.router')
 const NewsletterRouter = require('./newsletter.router')
 const Auth0CreateUser = require('../services/auth0-create-user')
 const brevoWebhookRouter = require('./brevoWebhook.router')
+const stripePromoRouter = require('./stripePromo.router')
 
 router
   .use('/auth', AuthRouter)
@@ -24,5 +25,6 @@ router
   .use('/newsletter', NewsletterRouter)
   .use('/services/auth0-create-user', Auth0CreateUser)
   .use('/brevo-webhooks', brevoWebhookRouter)
+  .use('/stripe-promo', stripePromoRouter)
 
 module.exports = router

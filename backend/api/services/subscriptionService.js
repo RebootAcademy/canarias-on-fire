@@ -48,10 +48,7 @@ const createCheckoutSession = async (
           tax_rates: [process.env.TAX_RATES],
         },
       ],
-      subscription_data: !company.trialUsed
-        ? {
-        trial_period_days: 60, 
-      } : {},
+      allow_promotion_codes: true,
       mode: 'subscription',
       metadata: {
         userId: String(company._id),

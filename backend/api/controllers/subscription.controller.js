@@ -337,11 +337,7 @@ const upgradeSubscription = async (req, res) => {
             tax_rates: [process.env.TAX_RATES],
           },
         ],
-        subscription_data: !company.trialUsed
-          ? {
-              trial_period_days: 60,
-            }
-          : {},
+        allow_promotion_codes: true,
         mode: 'subscription',
         success_url: `${process.env.FRONTEND_URL}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.FRONTEND_URL}/subscription/canceled`,

@@ -9,7 +9,7 @@ const {
 const sendEmail = require('../services/nodemailer/nodemailer.service')
 
 const handleCheckoutSessionCompleted = async (session) => {
-  console.log(`session`)
+  console.log(`session`, session)
   if (
     session.metadata &&
     session.mode === 'subscription' &&
@@ -30,13 +30,36 @@ const handleCheckoutSessionCompleted = async (session) => {
 
     // Añadir la suscripción a la compañía
     await addSubscriptionToCompany(userId, planId, paid_at, subscriptionId)
-    
-    // Añadimos Trial a la compañía si no se ha usado
-    const company = await Company.findById(userId)
-    if (company && !company.trialUsed) {
-      company.trialUsed = true
-      await company.save()
-      console.log('✅ Trial marcada como usada para la empresa:', company._id)
+
+    // Si existe un descuento, verifica si es un cupón o un código promocional
+    let appliedCoupons = null
+
+    // Recorremos el array discounts para buscar un coupon o un promotion_code
+    if (session.discounts && Array.isArray(session.discounts)) {
+      // Buscamos el primer objeto que tenga un coupon o un promotion_code
+      const couponObj = session.discounts.find(
+        (d) => d.coupon || d.promotion_code
+      )
+      if (couponObj) {
+        appliedCoupons = couponObj.coupon || couponObj.promotion_code
+      }
+    }
+
+    if (appliedCoupons) {
+      // Si hay cupón aplicado, marcamos `trialUsed` como `true`
+      const company = await Company.findById(userId)
+      if (company && !company.trialUsed) {
+        company.trialUsed = true
+        company.activeSubscription.trialEnd = new Date(
+          Date.now() + 2 * 30 * 24 * 60 * 60 * 1000
+        ) // Dos meses de prueba
+        await company.save()
+        console.log('✅ Trial marcada como usada para la empresa:', company._id)
+      }
+    } else {
+      console.log(
+        'No se ha aplicado un descuento, no se marcará como trial usado'
+      )
     }
   }
   if (session.metadata && session.metadata.isUpgrade === 'true') {
@@ -182,12 +205,32 @@ const handleCheckoutSessionCompleted = async (session) => {
 
 const handleInvoicePaymentSucceeded = async (invoice) => {
   const { invoice_pdf, amount_paid } = invoice
-
+  const customer = await stripe.customers.retrieve(invoice.customer)
   if (!invoice.lines.data || invoice.lines.data.length === 0) {
     console.error('Invoice lines data is empty or undefined')
     return
   }
+  console.log('Invoice amount paid:', amount_paid)
+  console.log('customer:', customer.id)
 
+  if (amount_paid > 0) {
+    // Obtener la empresa asociada al cliente de Stripe
+
+    const company = await Company.findOne({ 'stripe.customerId': customer.id })
+
+    if (company) {
+      // Si la factura es mayor a 0, marca `trialUsed` como `false`
+      if (company.trialUsed) {
+        company.trialUsed = false
+        await company.save() // Solo guardamos si trialUsed estaba en true
+        console.log(`✅ Trial set to false for company: ${company._id}`)
+      } else {
+        console.log(`Trial already set to false for company: ${company._id}`)
+      }
+    } else {
+      console.error(`Company not found for customer: ${customer.id}`)
+    }
+  }
   const lineItem = invoice.lines.data[0]
 
   if (!lineItem.period) {
@@ -198,7 +241,6 @@ const handleInvoicePaymentSucceeded = async (invoice) => {
   const { start: period_start, end: period_end } = lineItem.period
 
   try {
-    const customer = await stripe.customers.retrieve(invoice.customer)
     let userId = customer.metadata.userId
 
     if (!userId) {

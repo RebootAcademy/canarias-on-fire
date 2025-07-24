@@ -103,6 +103,9 @@ const CompanySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'subscription',
     },
+    trialEnd: {
+      type: Date, // Fecha en la que termina el período de prueba gratuito
+    },
   },
   stripe: {
     customerId: String,
