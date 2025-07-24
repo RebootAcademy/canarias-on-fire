@@ -62,7 +62,7 @@
   "dashboardNav": {
     "events": "Eventos",
     "emails": "Enviar Correo",
-    "inputEmail": "Añadir Emails",
+    "input-emails": "Añadir Emails",
     "eventsAndPromotions": "Eventos y Promociones",
     "manageEvents": "Gestionar eventos",
     "myEvents": "Mis eventos",
@@ -77,7 +77,8 @@
     "users": "Listado de usuarios",
     "dashboard": "Dashboard",
     "home": "Home",
-    "help": "Ayuda"
+    "help": "Ayuda",
+    "create-cupon": "Crear Cupón"
   },
   "sideBarHelp": {
     "label": "Ayuda",

@@ -41,6 +41,37 @@
       <SubscribeNewsletter />
     </div>
   </div>
+<div
+  v-if="openModalApp"
+  class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[500px] h-fit border-2 border-primary bg-background rounded-lg z-50 shadow-xl p-6"
+>
+  <!-- Botón de cerrar X -->
+  <div class="absolute top-[-12px] right-[-12px]">
+    <button @click="closeModalApp()" class="text-background hover:text-secondary bg-primary rounded-full p-1">
+      <LucideIcons.X class="w-5 h-5" />
+    </button>
+  </div>
+
+  <!-- Contenido del modal -->
+  <div class="flex flex-col items-center text-center gap-4">
+    <span class="text-primary">Para una mejor experiencia <br>Recuerda activar la ubicación en tu movil.</span>
+    <img src="/qrApp.png" alt="QR para descargar la app" class="w-32 h-32 mt-2" />
+    <h2 class="text-secondary text-xl font-semibold">¡Descarga nuestra app!</h2>
+    <p class="text-secondary text-sm px-2">
+
+      Escanea el código QR para descargar la aplicación de Evente y disfrutar de todas las funciones en tu móvil.
+    </p>
+
+    <!-- Botón de aceptar -->
+    <button
+      @click="closeModalApp()"
+      class="bg-primary hover:bg-opacity-90 text-background font-medium px-4 py-2 rounded-lg mt-4"
+    >
+      {{$t('buttons.close')}}
+    </button>
+  </div>
+</div>
+
 </template>
 
 <script setup>
@@ -86,6 +117,7 @@ const user = useNuxtApp().$user
 
 const users = ref([])
 const isLoading = ref(true)
+const openModalApp = ref(false)
 
 async function fetchUsers() {
   try {
@@ -125,6 +157,10 @@ onMounted(async () => {
     delete localStorage.originalDate
     delete localStorage.plan
   }
+  if (!sessionStorage.getItem('modalAppShown')) {
+  openModalApp.value = true
+  sessionStorage.setItem('modalAppShown', 'true')
+}
 })
 
 const searchQuery = computed({
@@ -134,5 +170,9 @@ const searchQuery = computed({
 
 const openFilterModal = () => {
   eventStore.setFilterModalOpen(true)
+}
+
+const closeModalApp = () => {
+  openModalApp.value = false
 }
 </script>

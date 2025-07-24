@@ -19,28 +19,34 @@ function generateUnsubscribeToken(email, secret) {
 async function sendWithRetry(sendSmtpEmail, maxAttempts = 5, backoff = 5000) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const { response } = await brevoClient.sendTransacEmail(sendSmtpEmail)
+      console.log(`Intentando enviar correo... Intento #${attempt}`);
+      const { response } = await brevoClient.sendTransacEmail(sendSmtpEmail);
+
       if (
         (Array.isArray(response) &&
-          response.every(
-            (r) => r.statusCode === 201 || r.statusCode === 202
-          )) ||
+          response.every((r) => r.statusCode === 201 || r.statusCode === 202)) ||
         (!Array.isArray(response) &&
           (response.statusCode === 201 || response.statusCode === 202))
       ) {
-        return response
+        return response;
       }
-      throw new Error(`Estado ${response.statusCode}`)
+
+      throw new Error(`Estado ${response.statusCode}`);
     } catch (error) {
-      if (attempt === maxAttempts) {
-        throw error
+      console.error(`Error en intento ${attempt}: ${error.message}`);
+      if (error.response) {
+        console.error('Detalles del error de Brevo:', error.response.body);  // Log de la respuesta completa
+      } else {
+        console.error('Error sin respuesta:', error);  // Si no hay un cuerpo de respuesta, mostrar todo el error
       }
-      console.log(`Intento ${attempt} fallido, reintentando en ${backoff}ms...`)
-      await new Promise((resolve) => setTimeout(resolve, backoff))
+      if (attempt === maxAttempts) {
+        throw error;
+      }
+      console.log(`Reintentando en ${backoff}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, backoff));
     }
   }
 }
-
 async function sendEmailWithBrevo(type, subject, imageUrl, test) {
   const Client = await getClientModel()
   const EmailLog = await getEmailLogModel()
@@ -81,7 +87,7 @@ async function sendEmailWithBrevo(type, subject, imageUrl, test) {
           { unsubscribeToken: client.unsubscribeToken }
         )
       }
-
+      console.log(`Preparando correo para ${client.correo}`)
       const unsubscribeUrl = `${process.env.FRONTEND_URL}/newsletter/unsubscribe/${client._id}?token=${client.unsubscribeToken}`
 
       const html = template

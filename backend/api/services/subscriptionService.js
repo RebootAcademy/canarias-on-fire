@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const updateExpiredSubscriptions = async () => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-/*   const now = new Date()
+  /*   const now = new Date()
   const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60000) */
 
   try {
@@ -26,7 +26,13 @@ const updateExpiredSubscriptions = async () => {
   }
 }
 
-const createCheckoutSession = async (customer, company, subscriptionPlan, planId, res) => {
+const createCheckoutSession = async (
+  customer,
+  company,
+  subscriptionPlan,
+  planId,
+  res
+) => {
   console.log(`subscriptionPlan id: ${subscriptionPlan._id}`)
   console.log(`planId: ${planId}`)
   console.log(`customer id: ${customer.id}`)
@@ -42,6 +48,7 @@ const createCheckoutSession = async (customer, company, subscriptionPlan, planId
           tax_rates: [process.env.TAX_RATES],
         },
       ],
+      allow_promotion_codes: true,
       mode: 'subscription',
       metadata: {
         userId: String(company._id),

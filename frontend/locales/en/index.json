@@ -164,7 +164,8 @@
     "deleteAll": "Delete all finished",
     "reviewed": "Reviewed",
     "notAvailable": "Not available",
-    "cancelAndLogout": "Cancel and Logout"
+    "cancelAndLogout": "Cancel and Logout",
+    "close": "Close"
 },
   
   "successView": {

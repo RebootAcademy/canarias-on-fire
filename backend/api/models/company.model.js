@@ -13,6 +13,7 @@ const CompanySchema = new mongoose.Schema({
   cif: {
     type: String,
     required: true,
+    unique: true,
   },
   companyEmail: {
     type: String,
@@ -37,15 +38,34 @@ const CompanySchema = new mongoose.Schema({
   },
   sector: {
     type: String,
-    enum: ['restoration', 'services', 'nightlife', 'activities', 'promoter', 'hotels','others'],
+    enum: [
+      'restoration',
+      'services',
+      'nightlife',
+      'activities',
+      'promoter',
+      'hotels',
+      'others',
+    ],
     required: true,
   },
   type: {
     type: String,
-    enum: ['family', 'mexican', 'asian', 'vegan', 'vegetarian', 'fastfood', 'tapas', 'italian', 'spanish', 'other'],
+    enum: [
+      'family',
+      'mexican',
+      'asian',
+      'vegan',
+      'vegetarian',
+      'fastfood',
+      'tapas',
+      'italian',
+      'spanish',
+      'other',
+    ],
   },
   serviceType: {
-    type: String
+    type: String,
   },
   preferredLocations: [
     {
@@ -83,6 +103,9 @@ const CompanySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'subscription',
     },
+    trialEnd: {
+      type: Date, // Fecha en la que termina el período de prueba gratuito
+    },
   },
   stripe: {
     customerId: String,
@@ -95,7 +118,7 @@ const CompanySchema = new mongoose.Schema({
       amount: Number,
       pdf: String,
       date: Date,
-      status: String
+      status: String,
     },
   ],
   companyLogoUrl: {
@@ -116,10 +139,14 @@ const CompanySchema = new mongoose.Schema({
   },
   foodType: {
     type: String,
-  }
+  },
+  trialUsed: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-CompanySchema.pre('validate', function(next) {
+CompanySchema.pre('validate', function (next) {
   if (this.isNew && !this.companyEmail) {
     this.companyEmail = this.email
   }

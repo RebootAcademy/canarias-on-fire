@@ -94,11 +94,15 @@ const subscriptionInformation = computed(() => {
 
 const nextPaymentDate = computed(() => {
   if (!userStore.userData?.activeSubscription) return null
-  return new Date(
-    userStore.userData.activeSubscription.currentPeriodEnd
-  ).toLocaleDateString()
+  // Verifica si el cliente está en el período de prueba y si su `trialEnd` es mayor que la fecha actual
+  if (
+    userStore.userData?.activeSubscription?.trialEnd &&
+    new Date(userStore.userData?.activeSubscription?.trialEnd) > new Date()
+  ) {
+    return new Date(userStore.userData.activeSubscription.trialEnd).toLocaleDateString()
+  }
+  return new Date(userStore.userData.activeSubscription.currentPeriodEnd).toLocaleDateString()
 })
-
 
 const formattedInvoices = computed(() => {
   if (!userStore.userData?.invoices?.length) return []

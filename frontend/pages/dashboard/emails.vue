@@ -227,7 +227,7 @@ const selectedOptionTest = ref(null)
 const lastCheck = ref(false)
 
 /* Opciones de tipo y prueba */
-const optionsType = ['AYTO', 'CIAS', 'PROMOTORES', 'SURFSCHOOL', 'TEMATICOS', 'GROUPON']
+const optionsType = ['AYTO', 'CIAS', 'PROMOTORES', 'SURFSCHOOL', 'TEMATICOS', 'GROUPON', 'NEWSLETTER']
 const optionTest = ['SI', 'NO']
 
 /* Modal: promesa que espera confirmación */
