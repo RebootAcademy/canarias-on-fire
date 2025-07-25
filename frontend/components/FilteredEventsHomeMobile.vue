@@ -7,12 +7,7 @@
 
   <div class="mt-4">
     <CategoriesFilter type="event" />
-    <div
-      class="mt-4 w-full md:w-[200px] relative"
-      role="combobox"
-      :aria-expanded="open"
-      aria-haspopup="listbox"
-    >
+    <div class="mt-4 w-full md:w-[200px] relative">
       <button
         :key="selectedOption"
         type="button"
@@ -21,39 +16,15 @@
         @click="toggleOpen"
       >
         <span class="text-[0.875rem] font-semibold">
-          {{
-            selectedOption
-              ? options.find((opt) => opt.value === selectedOption)?.label
-              : 'Selecciona un tipo'
-          }}
+          {{ selectedLabel }}
         </span>
-        <img
-          src="/caret-abajo.png"
-          alt="Caret Icon"
-          class="absolute top-3 right-2 w-3 transition-transform duration-300"
-          :class="{ 'rotate-180': open }"
-        />
       </button>
-
-      <ul
-        v-show="open"
-        class="transition-all duration-300 ease-out opacity-0 scale-y-95 origin-top absolute z-[100] w-full bg-black border border-primary border-t-0 rounded-b-md"
-        :class="{
-          'opacity-100 scale-y-100': open,
-          'bg-white': theme === 'light',
-        }"
-        role="listbox"
-      >
-        <li
-          v-for="option in options"
-          :key="option.value"
-          class="p-2 text-secondary hover:bg-primary-gradient cursor-pointer"
-          @click="selectOption(option.value)"
-          :aria-selected="selectedOption === option.value"
-        >
-          {{ option.label }}
-        </li>
-      </ul>
+      <FilterPromotionModal
+        :openModal="open"
+        @close="open = false"
+        @select="selectOption"
+        :options="options"
+      />
     </div>
     <div
       v-if="
@@ -82,22 +53,13 @@ const eventStore = useEventStore()
 const userStore = useUserStore()
 const theme = computed(() => userStore.themePreference)
 const eventCategories = computed(() => eventStore.eventCategories)
-
+const selectedLabel = computed(() => {
+  return (
+    options.value.find((opt) => opt.value === selectedOption.value)?.label ||
+    'Promociones'
+  )
+})
 const selectedOption = ref('promotions')
-
-const options = computed(() => [
-  { label: t('buttonsEvents.promotions'), value: 'promotions' },
-
-  { label: t('buttonsEvents.nightlifePromotion'), value: 'nightlife' },
-  {
-    label: t('buttonsEvents.food&DrinksPromotion'),
-    value: 'food&drinks',
-  },
-  { label: t('buttonsEvents.kidsPromotion'), value: 'kids' },
-  { label: t('buttonsEvents.activitiesPromotion'), value: 'activities' },
-  { label: t('buttonsEvents.plansPromotion'), value: 'plans' },
-  { label: t('buttonsEvents.planYourParty'), value: 'createEvent' },
-])
 
 const open = ref(false)
 
@@ -109,4 +71,14 @@ const selectOption = (option) => {
 const toggleOpen = () => {
   open.value = !open.value
 }
+
+const options = computed(() => [
+  { label: t('buttonsEvents.promotions'), value: 'promotions' },
+  {
+    label: t('buttonsEvents.food&DrinksPromotion'),
+    value: 'food&drinks', image: '/boton_bares.png'
+  },
+  { label: t('buttonsEvents.activitiesPromotion'), value: 'activities', image: "/boton_actividades.png"  },
+  { label: t('buttonsEvents.plansPromotion'), value: 'plans', image: "/boton_escapada.png" },
+])
 </script>

@@ -59,7 +59,7 @@
     <h2 class="text-secondary text-xl font-semibold">¡Descarga nuestra app!</h2>
     <p class="text-secondary text-sm px-2">
 
-      Escanea el código QR para descargar la aplicación de Evente y disfrutar de todas las funciones en tu móvil.
+      Escanea el código QR para descargar la aplicación  y disfrutar de todas las funciones en tu móvil.
     </p>
 
     <!-- Botón de aceptar -->
