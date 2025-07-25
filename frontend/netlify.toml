@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "/*"
+  from = "https://evente.netlify.app/*"
   to = "https://evente.es/:splat"
   status = 301
   force = true
