@@ -5,10 +5,11 @@
       class="grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-4"
     >
       <EventCard
-        v-for="event in displayEvents"
+        v-for="(event, index) in displayEvents"
         :key="event._id"
         :event="event"
         class="xs:w-[80%] sm:w-full"
+        v-bind:ref="index === displayEvents.length - 1 ? setLastEventRef : null"
       />
     </div>
 
@@ -143,6 +144,11 @@ const isPaginatedView = computed(() => {
   )
 })
 
+const lastEventCard = ref(null)
+
+function setLastEventRef(el) {
+  lastEventCard.value = el
+}
 // 🔹 Ver más / Ver menos
 const handleNumberViewPages = () => {
   if (
@@ -153,6 +159,22 @@ const handleNumberViewPages = () => {
     if (numberViewPages.value >= filteredAndSortedEvents.value.length) {
       reverseViewPages.value = true
     }
+
+    nextTick(() => {
+      if (lastEventCard.value?.$el) {
+        // Si es un componente hijo
+        lastEventCard.value.$el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      } else if (lastEventCard.value?.scrollIntoView) {
+        // Si es un DOM element directamente
+        lastEventCard.value.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      }
+    })
   } else {
     reverseViewPages.value = false
     numberViewPages.value = 9

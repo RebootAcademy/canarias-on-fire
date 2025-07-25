@@ -80,5 +80,6 @@ const options = computed(() => [
   },
   { label: t('buttonsEvents.activitiesPromotion'), value: 'activities', image: "/boton_actividades.png"  },
   { label: t('buttonsEvents.plansPromotion'), value: 'plans', image: "/boton_escapada.png" },
+   { label: t('buttonsEvents.nightlifePromotion'), value: 'nightlife', image: "/boton_nocturno.png" },
 ])
 </script>
